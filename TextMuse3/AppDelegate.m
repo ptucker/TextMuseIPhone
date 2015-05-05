@@ -1,12 +1,13 @@
 //
 //  AppDelegate.m
-//  TextMuse3
+//  TextMuse2
 //
-//  Created by Peter Tucker on 4/20/15.
+//  Created by Peter Tucker on 4/18/15.
 //  Copyright (c) 2015 LaLoosh. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import "Settings.h"
 
 @interface AppDelegate ()
 
@@ -14,10 +15,111 @@
 
 @implementation AppDelegate
 
+-(void)initialize {
+    NSString* path = [[NSBundle mainBundle] bundlePath];
+    NSString* pListPath = [path stringByAppendingPathComponent:@"Settings.bundle/Root.plist"];
+    NSDictionary* pList = [NSDictionary dictionaryWithContentsOfFile:pListPath];
+    NSMutableArray* prefsArray = [pList objectForKey:@"PreferenceSpecifiers"];
+    NSMutableDictionary* regDict = [NSMutableDictionary dictionary];
+    for (NSDictionary* dict in prefsArray) {
+        NSString* key = [dict objectForKey:@"Key"];
+        if (key) {
+            id value = [dict objectForKey:@"DefaultValue"];
+            [regDict setObject:value forKey:key];
+        }
+    }
+    [[NSUserDefaults standardUserDefaults] registerDefaults:regDict];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [self setupNavigationBar:application];
+    
+    [GlobalState init];
+    
+    Class userNotification = NSClassFromString(@"UIUserNotificationSettings");
+    
+    UIUserNotificationSettings *settings =
+    [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
+    UIApplication* app = [UIApplication sharedApplication];
+    if ([app respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        [app registerUserNotificationSettings:settings];
+    }
+    
+    if (userNotification)
+    {
+        UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+    
+    [Settings LoadSettings];
+
     return YES;
+}
+
+-(void)setupNavigationBar:(UIApplication*) application {
+    [application setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];
+    NSDictionary* txtAttrs =[NSDictionary dictionaryWithObjectsAndKeys:
+                             [UIColor whiteColor], NSForegroundColorAttributeName,
+                             [UIFont fontWithName:@"Lato-Regular" size:21.0], NSFontAttributeName, nil];
+    [[UINavigationBar appearance] setTitleTextAttributes:txtAttrs];
+    
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0]];
+}
+
+-(void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    NotificationRegistered = ([notificationSettings types] != UIUserNotificationTypeNone);
+}
+
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    /*
+    NSCharacterSet *angleBrackets = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
+    NSString* token = [[deviceToken description] stringByTrimmingCharactersInSet:angleBrackets];
+    [self setDeviceToken: token];
+    
+    NSString* conn = @"Endpoint=sb://textmusehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=9hnIUk/Qjj9zusMfK570F10o5mXY1F9eXVS8REI3ZCw=";
+    //NSString*conn2 = @"Endpoint=sb://textmusehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=0aoaY8qFpFQkDvxF6ntqKtVEHoqlzeuZGpYDL+2pblw=";
+    SBNotificationHub* hub = [[SBNotificationHub alloc] initWithConnectionString:conn
+                                                             notificationHubPath:@"textmusehub"];
+    
+    [hub registerNativeWithDeviceToken:deviceToken tags:nil completion:^(NSError* error) {
+        if (error != nil) {
+            NSLog(@"Error registering for notifications: %@", error);
+        }
+    }];
+     */
+}
+
+// Handle any failure to register. In this case we set the deviceToken to an empty
+// string to prevent the insert from failing.
+- (void)application:(UIApplication *)application
+didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Failed to register for remote notifications: %@", error);
+    //[self setDeviceToken:@""];
+}
+
+// Because toast alerts don't work when the app is running, the app handles them.
+// This uses the userInfo in the payload to display a UIAlertView.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    if (NotificationOn) {
+        /*
+         NSMutableString* msgs = [[NSMutableString alloc] init];
+         for (NSString* k in [userInfo keyEnumerator]) {
+         [msgs appendFormat:@"\n%@: %@", k, [userInfo objectForKey:k]];
+         }
+         */
+        NSString* msg = [userInfo objectForKey:@"alert"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
+                                                        message:msg delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                              otherButtonTitles:nil, nil];
+        [alert show];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

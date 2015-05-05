@@ -1,0 +1,116 @@
+/* 
+  Localizable.strings
+  TextMuse
+
+  Created by Peter Tucker on 12/12/14.
+  Copyright (c) 2014 WhitworthCS. All rights reserved.
+*/
+
+//Common Strings
+"TextMuse Label" = "TextMuse";
+"OK Button" = "OK";
+"Cancel Button" = "Cancel";
+"Done Button" = "Done";
+"Submit Button" = "Submit";
+"Send Button" = "Send";
+"Why Button" = "Why";
+"Not Now Button" = "Not now";
+
+"Maximum Contacts Error Title" = "Maximum Contacts";
+"Maximum Contacts Error Message" = "You cannot send a message to more than 10 users.";
+
+"Name Group Title" = "Name Group";
+"Name Group Message" = "Give this group a name";
+
+"Delete Group Title" = "Delete Group";
+"Delete Group Message" = "Delete '%@'?";
+
+"Recent Messages Title" = "Recent Messages";
+"Your Photos Title" = "Your Photos";
+"Your Messages Title" = "Your Messages";
+
+"Notification Title" = "Notification";
+"Notification 1" = "Don't forget to send a text today";
+"Notification 2" = "Send a text to {RecentContact}";
+"Notification 3" = "Send {RecentNote} to a friend";
+"Notification 4" = "Remember to send a text today";
+"Notification suffix" = "a text";
+
+//Walkthrough Messages
+"Initial Walkthrough Message" = "Welcome to TextMuse! In this walkthrough, we’ll guide you through the process of sending a text to one of your contacts.\n\nFirst, tap on this window and when it disappears, tap 'CHOOSE A TEXT'.";
+"Contact Walkthrough Message" = "Now choose a friend from your contacts list. If you want to send it to several people, select them using the buttons on the left.\n\nTap on one name now to send a text.";
+"Category Walkthrough Message" = "This screen lists all the categories you can choose texts from. Categories with new texts list the number of next texts in a circle at the right.\n\nNow, tap on the screen, then tap 'TRENDING' to see the most popular texts.";
+"Text Walkthrough Message" = "Here are texts for the category %@. Swipe the screen to see the texts and tap on the button at the top to select one.";
+"Message Walkthrough Message" = "Almost done! Make sure your text has what you want and press the send button. If not, you can hit the home button and make changes.";
+"Congratulations Message" = "Congratulations! Now, look at the texts in other categories, create groups ... have fun!";
+"End Walkthrough Label" = "End the walkthrough";
+
+//Start Menu View
+"Send Caption" = "Send ...";
+"Send Text Caption" = "Send a text to\n%@ ...";
+"Choose a Text Caption" = "CHOOSE A TEXT";
+"Choose a Friend Caption" = "CHOOSE A FRIEND";
+
+//Introduction View
+"Welcome Title Caption" = "Welcome to TextMuse!";
+"Introduction Description" = "TextMuse is a revolutionary app that allows you to effortlessly send texts to designated people in your contacts (family, friends, social groups, or business associates).\n\nIt automatically generates text messages for you, from categories of your choice, then alerts you at specific times, and allows you to send those messages at the touch of a button.";
+"Stop Showing Intro Label" = "Stop showing this introduction";
+"Start Walkthough Caption" = "WALK ME THROUGH";
+"Start Exploration Caption" = "LET ME EXPLORE";
+
+//Splash View
+"Version Label" = "Version %@";
+
+//Quote View
+"Edit Message Placeholder" = "Add your message";
+
+//Reminder View
+"Set Reminder Label" = "Set Reminder";
+"Cancel Label" = "Cancel";
+"Phone Count Label" = "%lu phone numbers";
+"Contact Count Label" = "%lu contacts";
+"Send Message Reminder Text" = "Send a message to %@: %@";
+"No Contacts Text" = "No contacts chosen";
+
+//Contacts View
+"Recent Contacts Label" = "Recent Contacts";
+"Groups Label" = "Groups";
+"Add Group Label" = "Add";
+"No Contacts Title" = "No Contacts";
+"No Contacts Message" = "TextMuse needs access to your contacts so that it can send messages to the people that you know.";
+"Why Contacts" = "TextMuse uses your contacts to allow you select recipients and create groups. We don't save or access your contacts or have any access to your data.";
+
+//Settings View
+"Chosen Categories Title" = "Chosen Categories";
+"Save Recent Contacts Title" = "Save Recent Contacts";
+"Recent Contacts Title" = "Recent Contacts (%d)";
+"Save Recent Notes Title" = "Save Recent Notes";
+"Recent Notes Title" = "Recent Notes (%d)";
+"Notification Title" = "Notification";
+"Register Button" = "Register";
+"Feedback Button" = "Feedback";
+"Refresh Button" = "Refresh Notes";
+
+//Register View
+"Dont Ask Anymore Button" = "Don't ask again";
+"Register Button" = "Register";
+"Name Placeholder" = "Name";
+"Email Placeholder" = "Email";
+"Month Placeholder" = "Birth month (0-12)";
+"Year Placeholder" = "Birth year";
+"Register Title" = "Get the most out of TextMuse!";
+"Register Explain" = "Register today and help us make it better. Our full privacy statement is available at www.textmuse.com, but we promise not to sell or distribute your registration information. We do not collect any personally identifiable information about the text you choose.";
+"Too Young Title" = "Cannot Register";
+"Too Young Description" = "TextMuse is not intended for anyone under the age of 13";
+"privacy statement" = "privacy statement";
+
+//Feedback View
+"Feedback Label" = "Feedback";
+
+//Send Message View
+"No Message Chosen Label" = "No message chosen";
+"Send Failed Title" = "Send Message Failed";
+"Send Failed Text" = "Your text message failed to send";
+
+//Category View
+"Pull to refresh" = "Pull to refresh";
