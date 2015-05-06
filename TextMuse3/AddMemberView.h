@@ -14,5 +14,6 @@
 }
 
 @property (retain) UITableView* sourceTable;
+@property (retain) UINavigationItem* navItem;
 
 @end

@@ -255,19 +255,23 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 }
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-    long section = [indexPath section];
-
     UITableViewRowAction* actChoose =
     [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                        title:@"Choose number"
                                      handler:^(UITableViewRowAction* action, NSIndexPath* indexPath) {
-                                         UserContact*contact;
+                                         NSArray* cs;
                                          long section = [indexPath section];
                                          if (section == 0 && showRecentContacts)
-                                             contact = [Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]];
+                                             cs = [NSArray arrayWithObject:[Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]]];
                                          else if ((section == 0 && !showRecentContacts) ||
-                                                  (section == 1 && showRecentContacts))
-                                             contact = nil;
+                                                  (section == 1 && showRecentContacts)) {
+                                             NSArray* grp = [NamedGroups objectForKey:[groups objectAtIndex:[indexPath row]]];
+                                             NSMutableArray* users = [[NSMutableArray alloc] init];
+                                             for (NSString*phone in grp) {
+                                                 [users addObject:[Data findUserByPhone:phone]];
+                                             }
+                                             cs = [NSArray arrayWithArray:users];
+                                         }
                                          else {
                                              section--;
                                              if ((section == 0 && !showRecentContacts) ||
@@ -275,10 +279,10 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
                                                  section--;
                                              NSArray* headings = [Data getContactHeadings];
                                              NSArray* cs = [Data getContactsForHeading:[headings objectAtIndex:section]];
-                                             contact = [cs objectAtIndex:[indexPath row]];
+                                             cs = [NSArray arrayWithObject: [cs objectAtIndex:[indexPath row]]];
                                          }
-                                         if (contact != nil)
-                                             [self choosePhone:contact];
+                                         if (cs != nil && [cs count] > 0)
+                                             [self choosePhone:cs];
                                      }];
     return [NSArray arrayWithObjects:actChoose, nil];
 }
@@ -286,7 +290,7 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
--(void)choosePhone:(UserContact*)uc {
+-(void)choosePhone:(NSArray*)users {
     CGRect frm = [[self view] frame];
     CGRect frmNav = [[[self navigationController] navigationBar] frame];
     CGFloat topmargin = frmNav.origin.y + frmNav.size.height;
@@ -295,7 +299,7 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
     frm.size.width -= 16;
     frm.size.height -= 28;
     ChoosePhoneView* choosephone = [[ChoosePhoneView alloc] initWithFrame:frm];
-    [choosephone setUser:uc];
+    [choosephone setUsers:users];
     [choosephone setNavItem:[self navigationItem]];
     [[self view] addSubview:choosephone];
 
@@ -305,7 +309,6 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
         [choosephone setFrame:frmDest];
     }];
     
-    //[[[self navigationItem] backBarButtonItem] setEnabled:NO];
     [[self navigationItem] setHidesBackButton:YES animated:YES];
 }
 

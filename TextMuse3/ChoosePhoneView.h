@@ -11,7 +11,7 @@
 
 @interface ChoosePhoneView : UIView <UITableViewDataSource, UITableViewDelegate>
 
-@property (retain) UserContact* user;
+@property (retain) NSArray* users;
 @property (retain) UINavigationItem* navItem;
 
 @end

@@ -64,11 +64,16 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return [[self users] count];
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return [[[self users] objectAtIndex:section] description];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[[self user] phones] count];
+    UserContact* uc = [[self users] objectAtIndex:section];
+    return [[uc phones] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -85,8 +90,9 @@
         [cell addSubview:lblName];
     }
     
-    NSString* chosen = [[self user] numberToUse];
-    UserPhone* p = [[[self user] phones] objectAtIndex:[indexPath row]];
+    UserContact* uc = [[self users] objectAtIndex:[indexPath section]];
+    NSString* chosen = [uc numberToUse];
+    UserPhone* p = [[uc phones] objectAtIndex:[indexPath row]];
     NSString* phone = [NSString stringWithFormat:@"%@: %@",
                        [p label],
                        [p number]];
@@ -99,10 +105,11 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UserPhone* p = [[[self user] phones] objectAtIndex:[indexPath row]];
-    [[self user] setPhoneToUse:[p number]];
+    UserContact* uc = [[self users] objectAtIndex:[indexPath section]];
+    UserPhone* p = [[uc phones] objectAtIndex:[indexPath row]];
+    [uc setPhoneToUse:[p number]];
     
-    [self close:self];
+    [tableView reloadData];
 }
 
 /*

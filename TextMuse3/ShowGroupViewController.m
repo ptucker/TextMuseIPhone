@@ -79,6 +79,7 @@
     frm.size.height -= topmargin;
     AddMemberView* add = [[AddMemberView alloc] initWithFrame: frm];
     [add setSourceTable:tableview];
+    [add setNavItem:[self navigationItem]];
     
     [[self view] addSubview:add];
     CGRect frmDest = frm;
@@ -86,6 +87,8 @@
     [UIView animateWithDuration:0.3f animations:^{
         [add setFrame:frmDest];
     }];
+
+    [[self navigationItem] setHidesBackButton:YES animated:YES];
 }
 
 /*

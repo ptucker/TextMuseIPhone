@@ -90,6 +90,8 @@
     [UIView animateWithDuration:0.3f
                      animations:^{ [self setFrame:frmDest]; }
                      completion:^(BOOL f) { [self removeFromSuperview]; } ];
+    
+    [[self navItem] setHidesBackButton:NO animated:YES];
 }
 
 /*
