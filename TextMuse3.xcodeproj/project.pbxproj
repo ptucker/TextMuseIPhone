@@ -15,6 +15,7 @@
 		2DC6253E1AF2F92400D23CE8 /* MemberTableData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6253D1AF2F92400D23CE8 /* MemberTableData.m */; };
 		2DC6523C1AF081A500B0912F /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523B1AF081A500B0912F /* GroupsViewController.m */; };
 		2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */; };
+		2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC959071AFBAED000BAB0A7 /* ImageUtil.m */; };
 		2DCDFC451AEC7F4C002DA914 /* bluebackarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCDFC411AEC7F4C002DA914 /* bluebackarrow.png */; };
 		2DCDFC461AEC7F4C002DA914 /* bluecheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCDFC421AEC7F4C002DA914 /* bluecheck.png */; };
 		2DCDFC471AEC7F4C002DA914 /* emptycheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCDFC431AEC7F4C002DA914 /* emptycheck.png */; };
@@ -84,6 +85,8 @@
 		2DC6523B1AF081A500B0912F /* GroupsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsViewController.m; sourceTree = "<group>"; };
 		2DC6523D1AF09D4700B0912F /* ShowGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowGroupViewController.h; sourceTree = "<group>"; };
 		2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowGroupViewController.m; sourceTree = "<group>"; };
+		2DC959061AFBAED000BAB0A7 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
+		2DC959071AFBAED000BAB0A7 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
 		2DCDFC411AEC7F4C002DA914 /* bluebackarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluebackarrow.png; sourceTree = "<group>"; };
 		2DCDFC421AEC7F4C002DA914 /* bluecheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluecheck.png; sourceTree = "<group>"; };
 		2DCDFC431AEC7F4C002DA914 /* emptycheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emptycheck.png; sourceTree = "<group>"; };
@@ -189,6 +192,8 @@
 			children = (
 				2DCDFC491AEC98EB002DA914 /* UICheckButton.h */,
 				2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */,
+				2DC959061AFBAED000BAB0A7 /* ImageUtil.h */,
+				2DC959071AFBAED000BAB0A7 /* ImageUtil.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -493,6 +498,7 @@
 				2DF080B91AE625FC0003A277 /* MessageView.m in Sources */,
 				2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */,
 				2DF080A41AE625FC0003A277 /* AppDelegate.m in Sources */,
+				2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */,
 				2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */,
 				2DF080BE1AE625FC0003A277 /* UserContact.m in Sources */,
 				2DF0804E1AE625410003A277 /* main.m in Sources */,

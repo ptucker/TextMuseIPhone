@@ -7,6 +7,7 @@
 //
 
 #import "MessageView.h"
+#import "ImageUtil.h"
 
 @implementation MessageView
 
@@ -44,9 +45,10 @@
     }
     else {
         imgContent = [[UIButton alloc] initWithFrame:frmImgContent];
-        [imgContent setImage:[UIImage imageWithData:[msg img]] forState:UIControlStateNormal];
-        //[imgContent setContentMode:UIViewContentModeScaleAspectFit];
+        UIImage* img = [ImageUtil scaleImage:[UIImage imageWithData:[msg img]] forFrame:frmImgContent];
+        [imgContent setImage:img forState:UIControlStateNormal];
         [[imgContent imageView] setContentMode:UIViewContentModeScaleAspectFit];
+        [imgContent setBackgroundColor:[UIColor clearColor]];
         [self addSubview:imgContent];
         
         [imgContent addTarget:msg action:@selector(action:) forControlEvents:UIControlEventTouchUpInside];
