@@ -12,6 +12,7 @@
 //  Copyright (c) 2014 WhitworthCS. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "DataAccess.h"
 #import "Settings.h"
 #import "GlobalState.h"
@@ -185,6 +186,18 @@ NSString* localNotes = @"notes.xml";
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     //NSLog([error localizedDescription]);
+    
+    for (NSObject* l in listeners) {
+        if ([l respondsToSelector:@selector(dataRefresh)])
+            [l performSelector:@selector(dataRefresh)];
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Download Error"
+                                                    message:[error localizedDescription]
+                                                   delegate:nil
+                                          cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                          otherButtonTitles:nil, nil];
+    [alert show];
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection*) conn {
