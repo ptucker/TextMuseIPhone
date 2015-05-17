@@ -17,6 +17,8 @@
     IBOutlet UISwitch* notes;
     IBOutlet UISlider* notesCount;
     IBOutlet UIView* viewBottomContainer;
+    
+    NSArray* chosen;
 }
 
 -(IBAction)switchContacts:(id)sender;

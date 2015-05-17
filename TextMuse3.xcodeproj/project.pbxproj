@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
+		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
+		2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC52F011B0846C300E95D15 /* BirthPickerView.m */; };
 		2DC612031AF2E300000896EA /* AddMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC612021AF2E300000896EA /* AddMemberView.m */; };
 		2DC624B31AF1FF51006E806C /* greyHighlighter.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC624B01AF1FF51006E806C /* greyHighlighter.png */; };
 		2DC624B41AF1FF51006E806C /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC624B11AF1FF51006E806C /* link.png */; };
@@ -72,8 +75,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D0C2CF31B07E2F8001D6E9B /* ContactUsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactUsViewController.h; sourceTree = "<group>"; };
+		2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUsViewController.m; sourceTree = "<group>"; };
+		2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
+		2DC52F001B0846C300E95D15 /* BirthPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BirthPickerView.h; sourceTree = "<group>"; };
+		2DC52F011B0846C300E95D15 /* BirthPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BirthPickerView.m; sourceTree = "<group>"; };
 		2DC612011AF2E300000896EA /* AddMemberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMemberView.h; sourceTree = "<group>"; };
 		2DC612021AF2E300000896EA /* AddMemberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMemberView.m; sourceTree = "<group>"; };
 		2DC624B01AF1FF51006E806C /* greyHighlighter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greyHighlighter.png; sourceTree = "<group>"; };
@@ -203,6 +212,12 @@
 			children = (
 				2DCDFC511AECAA80002DA914 /* SettingsViewController.h */,
 				2DCDFC521AECAA80002DA914 /* SettingsViewController.m */,
+				2D0C2CF31B07E2F8001D6E9B /* ContactUsViewController.h */,
+				2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */,
+				2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */,
+				2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */,
+				2DC52F001B0846C300E95D15 /* BirthPickerView.h */,
+				2DC52F011B0846C300E95D15 /* BirthPickerView.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -498,9 +513,12 @@
 				2DF080B91AE625FC0003A277 /* MessageView.m in Sources */,
 				2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */,
 				2DF080A41AE625FC0003A277 /* AppDelegate.m in Sources */,
+				2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */,
 				2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */,
+				2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */,
 				2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */,
 				2DF080BE1AE625FC0003A277 /* UserContact.m in Sources */,
+				2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */,
 				2DF0804E1AE625410003A277 /* main.m in Sources */,
 				2DF080AA1AE625FC0003A277 /* ContactsTableViewController.m in Sources */,
 				2DF080AD1AE625FC0003A277 /* GlobalState.m in Sources */,

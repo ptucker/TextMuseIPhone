@@ -402,7 +402,7 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
             }
         }
         
-        [self presentViewController:msgcontroller animated:YES completion:^{}];
+        [self presentViewController:msgcontroller animated:YES completion:^{ }];
     }
 }
 
@@ -438,6 +438,7 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
         [msgcontroller dismissViewControllerAnimated:YES completion:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissViewControllerAnimated:YES completion:nil];
+                [[self navigationController] popToRootViewControllerAnimated:YES];
             });
         }];
     
