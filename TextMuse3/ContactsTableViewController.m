@@ -274,14 +274,12 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
                                          }
                                          else {
                                              section--;
-                                             if ((section == 0 && !showRecentContacts) ||
-                                                 (section == 1 && showRecentContacts))
-                                                 section--;
+                                             if (showRecentContacts) section--;
                                              NSArray* headings = [Data getContactHeadings];
-                                             NSArray* cs = [Data getContactsForHeading:[headings objectAtIndex:section]];
-                                             cs = [NSArray arrayWithObject: [cs objectAtIndex:[indexPath row]]];
+                                             NSArray* users = [Data getContactsForHeading:[headings objectAtIndex:section]];
+                                             cs = [NSArray arrayWithObject: [users objectAtIndex:[indexPath row]]];
                                          }
-                                         if (cs != nil && [cs count] > 0)
+                                         if (cs != nil/* && [cs count] > 0*/)
                                              [self choosePhone:cs];
                                      }];
     return [NSArray arrayWithObjects:actChoose, nil];

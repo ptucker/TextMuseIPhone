@@ -68,8 +68,10 @@ NSString* localNotes = @"notes.xml";
 -(void)initCategories {
     currentMsgId = 0;
     
-    if (categories == nil || [categories count] == 0)
+    if (categories == nil || [categories count] == 0) {
+        
         [self loadFromFile];
+    }
     
     [self loadFromInternet];
     
@@ -79,13 +81,29 @@ NSString* localNotes = @"notes.xml";
 
 -(void) loadFromFile {
     NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:file])
+    if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
         [self createFile];
+    }
 
     //Initialize Categories to an empty dictionary
     categoryOrder = [[NSMutableArray alloc] init];
     inetdata = [NSMutableData dataWithContentsOfFile:file];
+    
     [self parseMessageData];
+
+    for (NSObject* l in listeners) {
+        if ([l respondsToSelector:@selector(dataRefresh)])
+            [l performSelector:@selector(dataRefresh)];
+    }
+
+    /*
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"** Debug **"
+                                                    message:[NSString stringWithFormat:@"cached category count: %ld bytes", [[self getCategories] count]]
+                                                   delegate:nil
+                                          cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                          otherButtonTitles:nil, nil];
+    [alert show];
+     */
 }
 
 -(void)createFile {

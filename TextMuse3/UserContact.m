@@ -41,8 +41,10 @@
             ilabel = 5;
         }
     }
+    if (ilabel > 5 && [ps count] > 0)
+        numberToUse = [[ps objectAtIndex:0] number];
     
-    return ((ilabel <= 5) ? self : nil);
+    return ((numberToUse != nil) ? self : nil);
 }
 
 -(id)initWithGroupName:(NSString*)group {
