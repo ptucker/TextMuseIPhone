@@ -370,7 +370,7 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
         NSString* text = ([CurrentMessage text] == nil ? @"" : [CurrentMessage text]);
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
         //if (arc4random() % 10 == 0)
-        message = [message stringByAppendingString:@"\n\nSent by TextMuse - http://apple.co/1zz4Q5A"];
+        message = [message stringByAppendingString:@"\n\nSent by TextMuse - http://www.textmuse.com/download"];
         if (([CurrentMessage mediaUrl] == nil || [[CurrentMessage mediaUrl] length] == 0) &&
             [CurrentMessage img] == nil)
             [msgcontroller setBody: message];

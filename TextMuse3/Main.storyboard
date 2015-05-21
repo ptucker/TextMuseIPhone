@@ -368,6 +368,37 @@
             </objects>
             <point key="canvasLocation" x="-1457" y="284"/>
         </scene>
+        <!--Walkthrough-->
+        <scene sceneID="Udb-u8-BcS">
+            <objects>
+                <viewController title="Walkthrough" id="BxU-SA-flI" customClass="WalkthroughViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="K0g-fl-oas">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="fIp-yo-lNh">
+                                <rect key="frame" x="0.0" y="65" width="320" height="438"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </scrollView>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" id="lA8-LB-ZBe">
+                                <rect key="frame" x="16" y="511" width="288" height="37"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </pageControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="VfL-z0-d4u"/>
+                    <connections>
+                        <outlet property="pages" destination="lA8-LB-ZBe" id="zqI-bl-yly"/>
+                        <outlet property="scroller" destination="fIp-yo-lNh" id="Jsv-pf-0q7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gHs-u3-FNr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-745" y="-434"/>
+        </scene>
         <!--TextMuse-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
@@ -391,7 +422,6 @@
                                         </state>
                                         <connections>
                                             <action selector="sendRandomMessage:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="COb-lZ-biZ"/>
-                                            <segue destination="A8v-W0-SOT" kind="push" id="5I3-F3-vpD"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Rew-6w-6Fo">
@@ -437,6 +467,7 @@
                         <outlet property="categories" destination="q0J-8q-bfb" id="Lur-C8-oIH"/>
                         <segue destination="A8v-W0-SOT" kind="push" identifier="SelectMessage" id="91J-mQ-crv"/>
                         <segue destination="54f-mb-IwZ" kind="push" identifier="Settings" id="NV5-cF-qMn"/>
+                        <segue destination="BxU-SA-flI" kind="push" identifier="Walkthrough" id="JzH-Pp-btM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

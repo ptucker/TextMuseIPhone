@@ -37,9 +37,7 @@
     [notesCount setValue:MaxRecentMessages];
     
     if (ChosenCategories == nil)
-        chosen = [NSArray arrayWithArray:[Data getCategories]];
-    else
-        chosen = [NSArray arrayWithArray:ChosenCategories];
+        ChosenCategories = [NSMutableArray arrayWithArray:[Data getCategories]];
     
     [chosenCategories setDataSource:self];
     [chosenCategories setDelegate:self];

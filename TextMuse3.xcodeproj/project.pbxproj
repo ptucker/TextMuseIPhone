@@ -19,12 +19,18 @@
 		2DC6523C1AF081A500B0912F /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523B1AF081A500B0912F /* GroupsViewController.m */; };
 		2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */; };
 		2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC959071AFBAED000BAB0A7 /* ImageUtil.m */; };
+		2DCAF9C91B0D8B2C000637E9 /* WalkthroughViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCAF9C81B0D8B2C000637E9 /* WalkthroughViewController.m */; };
+		2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CA1B0D8BF4000637E9 /* categories.png */; };
+		2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CB1B0D8BF4000637E9 /* contacts.png */; };
+		2DCAF9D01B0D8BF4000637E9 /* message_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CC1B0D8BF4000637E9 /* message_edit.png */; };
+		2DCAF9D11B0D8BF4000637E9 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CD1B0D8BF4000637E9 /* message.png */; };
 		2DCDFC451AEC7F4C002DA914 /* bluebackarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCDFC411AEC7F4C002DA914 /* bluebackarrow.png */; };
 		2DCDFC461AEC7F4C002DA914 /* bluecheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCDFC421AEC7F4C002DA914 /* bluecheck.png */; };
 		2DCDFC471AEC7F4C002DA914 /* emptycheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCDFC431AEC7F4C002DA914 /* emptycheck.png */; };
 		2DCDFC481AEC7F4C002DA914 /* rightfacingsmallarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCDFC441AEC7F4C002DA914 /* rightfacingsmallarrow.png */; };
 		2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */; };
 		2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC521AECAA80002DA914 /* SettingsViewController.m */; };
+		2DD045871B0D9C3C00A1A9CF /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DD045861B0D9C3C00A1A9CF /* settings.png */; };
 		2DF0804E1AE625410003A277 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF0804D1AE625410003A277 /* main.m */; };
 		2DF080591AE625410003A277 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DF080581AE625410003A277 /* Images.xcassets */; };
 		2DF080681AE625410003A277 /* TextMuse3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF080671AE625410003A277 /* TextMuse3Tests.m */; };
@@ -96,6 +102,12 @@
 		2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowGroupViewController.m; sourceTree = "<group>"; };
 		2DC959061AFBAED000BAB0A7 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
 		2DC959071AFBAED000BAB0A7 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
+		2DCAF9C71B0D8B2C000637E9 /* WalkthroughViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WalkthroughViewController.h; sourceTree = "<group>"; };
+		2DCAF9C81B0D8B2C000637E9 /* WalkthroughViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WalkthroughViewController.m; sourceTree = "<group>"; };
+		2DCAF9CA1B0D8BF4000637E9 /* categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = categories.png; sourceTree = "<group>"; };
+		2DCAF9CB1B0D8BF4000637E9 /* contacts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contacts.png; sourceTree = "<group>"; };
+		2DCAF9CC1B0D8BF4000637E9 /* message_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message_edit.png; sourceTree = "<group>"; };
+		2DCAF9CD1B0D8BF4000637E9 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		2DCDFC411AEC7F4C002DA914 /* bluebackarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluebackarrow.png; sourceTree = "<group>"; };
 		2DCDFC421AEC7F4C002DA914 /* bluecheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluecheck.png; sourceTree = "<group>"; };
 		2DCDFC431AEC7F4C002DA914 /* emptycheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emptycheck.png; sourceTree = "<group>"; };
@@ -104,6 +116,7 @@
 		2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICheckButton.m; sourceTree = "<group>"; };
 		2DCDFC511AECAA80002DA914 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2DCDFC521AECAA80002DA914 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		2DD045861B0D9C3C00A1A9CF /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		2DF080481AE625410003A277 /* TextMuse3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMuse3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DF0804C1AE625410003A277 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DF0804D1AE625410003A277 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -196,6 +209,15 @@
 			name = Groups;
 			sourceTree = "<group>";
 		};
+		2DCAF9C61B0D8B13000637E9 /* Walkthrough */ = {
+			isa = PBXGroup;
+			children = (
+				2DCAF9C71B0D8B2C000637E9 /* WalkthroughViewController.h */,
+				2DCAF9C81B0D8B2C000637E9 /* WalkthroughViewController.m */,
+			);
+			name = Walkthrough;
+			sourceTree = "<group>";
+		};
 		2DCDFC4C1AEC98F5002DA914 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,6 +265,7 @@
 		2DF0804A1AE625410003A277 /* TextMuse3 */ = {
 			isa = PBXGroup;
 			children = (
+				2DCAF9C61B0D8B13000637E9 /* Walkthrough */,
 				2DCDFC4C1AEC98F5002DA914 /* UI */,
 				2DF080C81AE626700003A277 /* Data */,
 				2DF080C71AE626580003A277 /* Messages */,
@@ -292,6 +315,11 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2DD045861B0D9C3C00A1A9CF /* settings.png */,
+				2DCAF9CA1B0D8BF4000637E9 /* categories.png */,
+				2DCAF9CB1B0D8BF4000637E9 /* contacts.png */,
+				2DCAF9CC1B0D8BF4000637E9 /* message_edit.png */,
+				2DCAF9CD1B0D8BF4000637E9 /* message.png */,
 				2DC624B01AF1FF51006E806C /* greyHighlighter.png */,
 				2DC624B11AF1FF51006E806C /* link.png */,
 				2DC624B21AF1FF51006E806C /* yellowHighlighter.png */,
@@ -466,6 +494,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DD045871B0D9C3C00A1A9CF /* settings.png in Resources */,
 				2DCDFC451AEC7F4C002DA914 /* bluebackarrow.png in Resources */,
 				2DC624B41AF1FF51006E806C /* link.png in Resources */,
 				2DF080591AE625410003A277 /* Images.xcassets in Resources */,
@@ -484,9 +513,13 @@
 				2DF080741AE6257D0003A277 /* Localizable.strings in Resources */,
 				2DF080B01AE625FC0003A277 /* largebluebubble.png in Resources */,
 				2DF080B51AE625FC0003A277 /* Lato-Regular.ttf in Resources */,
+				2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */,
 				2DF080AE1AE625FC0003A277 /* greyheart.png in Resources */,
 				2DCDFC461AEC7F4C002DA914 /* bluecheck.png in Resources */,
+				2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */,
 				2DF080C01AE625FC0003A277 /* whitecategorybubble.png in Resources */,
+				2DCAF9D11B0D8BF4000637E9 /* message.png in Resources */,
+				2DCAF9D01B0D8BF4000637E9 /* message_edit.png in Resources */,
 				2DC624B51AF1FF51006E806C /* yellowHighlighter.png in Resources */,
 				2DCDFC471AEC7F4C002DA914 /* emptycheck.png in Resources */,
 				2DF080CB1AE626E10003A277 /* LaunchScreen.xib in Resources */,
@@ -521,6 +554,7 @@
 				2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */,
 				2DF0804E1AE625410003A277 /* main.m in Sources */,
 				2DF080AA1AE625FC0003A277 /* ContactsTableViewController.m in Sources */,
+				2DCAF9C91B0D8B2C000637E9 /* WalkthroughViewController.m in Sources */,
 				2DF080AD1AE625FC0003A277 /* GlobalState.m in Sources */,
 				2DC612031AF2E300000896EA /* AddMemberView.m in Sources */,
 				2DF080BB1AE625FC0003A277 /* Settings.m in Sources */,

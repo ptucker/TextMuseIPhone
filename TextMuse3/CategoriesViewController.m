@@ -55,6 +55,13 @@ NSArray* colors;
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
     [Data addListener:self];
+
+    if (ShowIntro) {
+        [self performSegueWithIdentifier:@"Walkthrough" sender:self];
+        
+        ShowIntro = NO;
+        [Settings SaveSetting:SettingShowIntro withValue:@"0"];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
