@@ -39,9 +39,23 @@
     CGFloat txtHeight = 120;
     frmScroll.size.height -= frmScroll.origin.y;
     for (int i=0; i<pagecount; i++) {
+        CGRect frmHeader = CGRectMake(x + 10, 10, frmScroll.size.width - 20, 24);
         CGRect frmText = CGRectMake(x + 10, frmScroll.size.height - txtHeight,
                                     frmScroll.size.width - 20, txtHeight);
-        CGRect frmImg = CGRectMake(x, 0, frmScroll.size.width, frmScroll.size.height - txtHeight);
+        CGRect frmImg = CGRectMake(x, 10, frmScroll.size.width, frmScroll.size.height - txtHeight);
+        if (i == 0) {
+            frmImg.origin.y = 32;
+            frmImg.size.height -= 32;
+
+            UILabel* lbl = [[UILabel alloc] initWithFrame:frmHeader];
+            [lbl setText:@"Welcome to TextMuse!"];
+            [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
+            [lbl setTextColor:[UIColor blackColor]];
+            [lbl setTextAlignment:NSTextAlignmentCenter];
+            [lbl setNumberOfLines:0];
+            [scroller addSubview:lbl];
+        }
+        
         UIImageView* img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[i]]];
         [img setFrame:frmImg];
         [img setContentMode:UIViewContentModeScaleAspectFit];

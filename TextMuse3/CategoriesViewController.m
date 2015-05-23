@@ -7,6 +7,7 @@
 //
 
 #import "CategoriesViewController.h"
+#import "WalkthroughViewController.h"
 #import "CategoriesTableViewCell.h"
 #import "MessageCategory.h"
 #import "Message.h"
@@ -23,7 +24,7 @@ NSArray* colors;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     if (colors == nil)
         colors = [NSArray arrayWithObjects:
                   //Green
@@ -54,22 +55,22 @@ NSArray* colors;
     [[self navigationItem] setRightBarButtonItem: rightButton];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
-    [Data addListener:self];
-
     if (ShowIntro) {
-        [self performSegueWithIdentifier:@"Walkthrough" sender:self];
-        
+        [self showWalkthrough];
+    
         ShowIntro = NO;
         [Settings SaveSetting:SettingShowIntro withValue:@"0"];
     }
-}
+    
+    [Data addListener:self];
 
-- (void)viewDidAppear:(BOOL)animated {
     [categories setDelegate:self];
     [categories setDataSource:self];
     
     [categories reloadData];
+}
 
+- (void)viewDidAppear:(BOOL)animated {
     reminderButtonState = SHOW_TEXT;
     if (timerReminder == nil) {
         timerReminder = [NSTimer scheduledTimerWithTimeInterval:2.0
@@ -280,6 +281,111 @@ NSArray* colors;
         [btnSuggestion1 setFrame:frmDest1];
         [btnSuggestion2 setFrame:frmDest2];
     }];
+}
+
+-(void)showWalkthrough {
+    CGRect frmView = [[self view] frame];
+    frmView.origin.y += 60;
+    frmView.size.height -= 60;
+    walkthroughView = [[UIView alloc] initWithFrame:frmView];
+    [walkthroughView setBackgroundColor:[UIColor whiteColor]];
+    [[self view] addSubview:walkthroughView];
+    frmView = [walkthroughView frame];
+    
+    CGRect frmClose = CGRectMake(frmView.size.width-60, 10, 50, 30);
+    UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
+    [btnClose setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [btnClose setTitle:@"done" forState:UIControlStateNormal];
+    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:15]];
+    [btnClose addTarget:self action:@selector(closeWalkthrough:)
+       forControlEvents:UIControlEventTouchUpInside];
+    [walkthroughView addSubview:btnClose];
+    
+    CGRect frmPages = CGRectMake(10, frmView.size.height-57, frmView.size.width-20, 37);
+    pages = [[UIPageControl alloc] initWithFrame:frmPages];
+    [pages setPageIndicatorTintColor:[UIColor lightGrayColor]];
+    [pages setCurrentPageIndicatorTintColor:[UIColor blackColor]];
+    [pages addTarget:self action:@selector(pageTurn:) forControlEvents:UIControlEventValueChanged];
+    [walkthroughView addSubview:pages];
+    
+    CGRect frmScroll = CGRectMake(0, 50, frmView.size.width, frmPages.origin.y - 60);
+    scroller = [[UIScrollView alloc] initWithFrame:frmScroll];
+    [scroller setShowsHorizontalScrollIndicator:NO];
+    [scroller setShowsVerticalScrollIndicator:NO];
+    [scroller setPagingEnabled:YES];
+    [scroller setDelegate:self];
+    [walkthroughView addSubview:scroller];
+    
+    int pagecount = 5;
+    [pages setNumberOfPages:pagecount];
+    int x = 0;
+    NSString* images[] = {
+        @"categories.png", @"message.png", @"contacts.png", @"message_edit.png", @"settings.png"
+    };
+    NSString* txts[] = {
+        @"Choose a category to find a text message you want to send your friends.",
+        @"Swipe through and touch the text message you want to send.",
+        @"After choosing a text, your contacts will appear. Choose a contact or select a few and touch 'SEND'.",
+        @"... and before you send it, you can make edits to give it that personal touch.",
+        @"Touch the cog to personalize TextMuse – choose your favorite categories, adjust settings and send us your feedback!"
+    };
+    CGFloat txtHeight = 50;
+    frmScroll.size.height -= frmScroll.origin.y;
+    for (int i=0; i<pagecount; i++) {
+        CGRect frmHeader = CGRectMake(x + 10, 10, frmScroll.size.width - 20, 24);
+        CGRect frmText = CGRectMake(x + 10, frmScroll.size.height - txtHeight,
+                                    frmScroll.size.width - 20, txtHeight);
+        CGRect frmImg = CGRectMake(x, 10, frmScroll.size.width, frmScroll.size.height - txtHeight - 10);
+        if (i == 0) {
+            frmImg.origin.y = 40;
+            frmImg.size.height -= 40;
+            
+            UILabel* hdr = [[UILabel alloc] initWithFrame:frmHeader];
+            [hdr setText:@"Welcome to TextMuse!"];
+            [hdr setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+            [hdr setTextColor:[UIColor blackColor]];
+            [hdr setTextAlignment:NSTextAlignmentCenter];
+            [scroller addSubview:hdr];
+        }
+        
+        UIImageView* img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:images[i]]];
+        [img setFrame:frmImg];
+        [img setContentMode:UIViewContentModeScaleAspectFit];
+        [scroller addSubview:img];
+        
+        UILabel* lbl = [[UILabel alloc] initWithFrame:frmText];
+        [lbl setText:txts[i]];
+        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
+        [lbl setTextColor:[UIColor blackColor]];
+        [lbl setTextAlignment:NSTextAlignmentCenter];
+        [lbl setNumberOfLines:0];
+        [scroller addSubview:lbl];
+        
+        x += frmScroll.size.width;
+    }
+    [scroller setContentSize:CGSizeMake(frmScroll.size.width*pagecount, frmScroll.size.height)];
+
+    [[[self navigationItem] rightBarButtonItem] setEnabled:NO];
+}
+
+-(IBAction)closeWalkthrough:(id)sender {
+    [walkthroughView removeFromSuperview];
+    [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+    // Update the page when more than 50% of the previous/next page is visible
+    CGFloat pageWidth = [scroller frame].size.width;
+    int page = floor(([scroller contentOffset].x - pageWidth / 2) / pageWidth) + 1;
+    
+    [pages setCurrentPage: page];
+}
+
+- (IBAction)pageTurn:(id)sender {
+    long page = [pages currentPage];
+    CGRect frm = [scroller frame];
+    CGPoint p = [scroller contentOffset];
+    [scroller setContentOffset:CGPointMake(page * frm.size.width, p.y)];
 }
 
 @end

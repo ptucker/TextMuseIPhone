@@ -22,11 +22,16 @@
 
 extern NSArray* colors;
 
-@interface CategoriesViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,  DataRefreshDelegate> {
+@interface CategoriesViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,
+                                                        DataRefreshDelegate, UIScrollViewDelegate,
+                                                        UIPageViewControllerDelegate> {
     IBOutlet UITableView* categories;
     IBOutlet UIButton* btnSuggestion1;
     IBOutlet UIButton* btnSuggestion2;
     UIRefreshControl *refreshControl;
+    UIView* walkthroughView;
+    UIPageControl* pages;
+    UIScrollView* scroller;
     
     UserContact* randomContact;
     Message* randomMessage;

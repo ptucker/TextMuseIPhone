@@ -19,7 +19,6 @@
 		2DC6523C1AF081A500B0912F /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523B1AF081A500B0912F /* GroupsViewController.m */; };
 		2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */; };
 		2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC959071AFBAED000BAB0A7 /* ImageUtil.m */; };
-		2DCAF9C91B0D8B2C000637E9 /* WalkthroughViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCAF9C81B0D8B2C000637E9 /* WalkthroughViewController.m */; };
 		2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CA1B0D8BF4000637E9 /* categories.png */; };
 		2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CB1B0D8BF4000637E9 /* contacts.png */; };
 		2DCAF9D01B0D8BF4000637E9 /* message_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CC1B0D8BF4000637E9 /* message_edit.png */; };
@@ -102,8 +101,6 @@
 		2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowGroupViewController.m; sourceTree = "<group>"; };
 		2DC959061AFBAED000BAB0A7 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
 		2DC959071AFBAED000BAB0A7 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
-		2DCAF9C71B0D8B2C000637E9 /* WalkthroughViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WalkthroughViewController.h; sourceTree = "<group>"; };
-		2DCAF9C81B0D8B2C000637E9 /* WalkthroughViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WalkthroughViewController.m; sourceTree = "<group>"; };
 		2DCAF9CA1B0D8BF4000637E9 /* categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = categories.png; sourceTree = "<group>"; };
 		2DCAF9CB1B0D8BF4000637E9 /* contacts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contacts.png; sourceTree = "<group>"; };
 		2DCAF9CC1B0D8BF4000637E9 /* message_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message_edit.png; sourceTree = "<group>"; };
@@ -209,15 +206,6 @@
 			name = Groups;
 			sourceTree = "<group>";
 		};
-		2DCAF9C61B0D8B13000637E9 /* Walkthrough */ = {
-			isa = PBXGroup;
-			children = (
-				2DCAF9C71B0D8B2C000637E9 /* WalkthroughViewController.h */,
-				2DCAF9C81B0D8B2C000637E9 /* WalkthroughViewController.m */,
-			);
-			name = Walkthrough;
-			sourceTree = "<group>";
-		};
 		2DCDFC4C1AEC98F5002DA914 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,7 +253,6 @@
 		2DF0804A1AE625410003A277 /* TextMuse3 */ = {
 			isa = PBXGroup;
 			children = (
-				2DCAF9C61B0D8B13000637E9 /* Walkthrough */,
 				2DCDFC4C1AEC98F5002DA914 /* UI */,
 				2DF080C81AE626700003A277 /* Data */,
 				2DF080C71AE626580003A277 /* Messages */,
@@ -554,7 +541,6 @@
 				2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */,
 				2DF0804E1AE625410003A277 /* main.m in Sources */,
 				2DF080AA1AE625FC0003A277 /* ContactsTableViewController.m in Sources */,
-				2DCAF9C91B0D8B2C000637E9 /* WalkthroughViewController.m in Sources */,
 				2DF080AD1AE625FC0003A277 /* GlobalState.m in Sources */,
 				2DC612031AF2E300000896EA /* AddMemberView.m in Sources */,
 				2DF080BB1AE625FC0003A277 /* Settings.m in Sources */,

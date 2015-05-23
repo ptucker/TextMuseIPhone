@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Settings.h"
-
+#import "WalkthroughViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -123,8 +123,100 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [self addNotification];
+    [self checkForReminder];
+    
+    [Settings SaveCachedMapFile];
+}
+
++ (BOOL)checkNotificationType:(UIUserNotificationType)type
+{
+    UIApplication* app = [UIApplication sharedApplication];
+    if ([app respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        return (currentSettings.types & type);
+    }
+    else
+        return true;
+}
+
+-(void)addNotification {
+    if (!NotificationOn) return;
+    
+    [Settings LoadSettings];
+    BOOL n = (NotificationDate == nil);
+    if (NotificationDate != nil) {
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+        [formatter setDateFormat:NotificationDateFormat];
+        NSDate* notification = [formatter dateFromString:NotificationDate];
+        n = ([notification compare:[NSDate date]] == NSOrderedAscending);
+    }
+    if (!n)
+        return;
+    
+    NSDate* notify = [NSDate dateWithTimeIntervalSinceNow:(60*60*24)];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+    [formatter setDateFormat:NotificationDateFormat];
+    NSString* notifyString = [formatter stringFromDate:notify];
+    NSDate* notifyDate = [formatter dateFromString:notifyString];
+    
+    if ([AppDelegate checkNotificationType:UIUserNotificationTypeBadge])
+    {
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        
+        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        [localNotification setApplicationIconBadgeNumber:1];
+        [localNotification setFireDate: notifyDate];
+        NSString* alertMsg = [Settings GetNotificationText: Data];
+        [localNotification setAlertBody: alertMsg];
+        [localNotification setTimeZone: [NSTimeZone defaultTimeZone]];
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    }
+    
+    [Settings SaveSetting:SettingNotificationDate withValue:notifyString];
+}
+
+-(void)checkForReminder {
+    /*
+    //If there's a reminder message and its date has passed, push the message screen to the navigation stack
+    if (ReminderMessages != nil && [ReminderMessages count] > 0 &&
+        ReminderContactLists != nil && [ReminderContactLists count] > 0) {
+        for (int i=(int)[ReminderMessages count]-1; i>=0; i--) {
+            NSString* reminderString = [ReminderDates objectAtIndex:i];
+            NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+            [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+            [formatter setDateFormat:ReminderDateFormat];
+            NSDate* reminder = [formatter dateFromString:reminderString];
+            NSDate* now = [NSDate date];
+            if (reminder != nil && [reminder compare:now] == NSOrderedAscending) {
+                SendMsgViewController* mc = [[SendMsgViewController alloc] init];
+                CurrentMessage = [[Message alloc] initFromStorage:[ReminderMessages objectAtIndex:i]];
+                
+                NSMutableArray* contacts = [[NSMutableArray alloc] init];
+                for (NSString* p in [ReminderContactLists objectAtIndex:i]) {
+                    UserContact* uc = [Data findUserByPhone:p];
+                    if (uc != nil)
+                        [contacts addObject:uc];
+                }
+                
+                CurrentContactList = contacts;
+                
+                [Settings RemoveSettingFromArray:SettingReminderMessages atIndex:i];
+                [Settings RemoveSettingFromArray:SettingReminderContactLists atIndex:i];
+                [Settings RemoveSettingFromArray:SettingReminderDates atIndex:i];
+                
+                [navController pushViewController:mc animated:YES];
+            }
+        }
+    }
+    if ([AppDelegate checkNotificationType:UIUserNotificationTypeBadge])
+    {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    }
+     */
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
