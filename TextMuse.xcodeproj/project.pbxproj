@@ -10,6 +10,8 @@
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
+		2DC1F1A31B12D5C4000CC30A /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */; };
+		2DC1F1A51B12D63A000CC30A /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */; };
 		2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC52F011B0846C300E95D15 /* BirthPickerView.m */; };
 		2DC612031AF2E300000896EA /* AddMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC612021AF2E300000896EA /* AddMemberView.m */; };
 		2DC624B31AF1FF51006E806C /* greyHighlighter.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC624B01AF1FF51006E806C /* greyHighlighter.png */; };
@@ -86,6 +88,8 @@
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
+		2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMobileServices.framework"; sourceTree = "<group>"; };
+		2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMessaging.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMessaging.framework"; sourceTree = "<group>"; };
 		2DC52F001B0846C300E95D15 /* BirthPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BirthPickerView.h; sourceTree = "<group>"; };
 		2DC52F011B0846C300E95D15 /* BirthPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BirthPickerView.m; sourceTree = "<group>"; };
 		2DC612011AF2E300000896EA /* AddMemberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMemberView.h; sourceTree = "<group>"; };
@@ -114,11 +118,11 @@
 		2DCDFC511AECAA80002DA914 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2DCDFC521AECAA80002DA914 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2DD045861B0D9C3C00A1A9CF /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
-		2DF080481AE625410003A277 /* TextMuse3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMuse3.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DF080481AE625410003A277 /* TextMuse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMuse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DF0804C1AE625410003A277 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DF0804D1AE625410003A277 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2DF080581AE625410003A277 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		2DF080611AE625410003A277 /* TextMuse3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextMuse3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DF080611AE625410003A277 /* TextMuseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextMuseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DF080661AE625410003A277 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DF080671AE625410003A277 /* TextMuse3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextMuse3Tests.m; sourceTree = "<group>"; };
 		2DF080731AE6257D0003A277 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -178,6 +182,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DC1F1A51B12D63A000CC30A /* WindowsAzureMessaging.framework in Frameworks */,
+				2DC1F1A31B12D5C4000CC30A /* WindowsAzureMobileServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +241,8 @@
 		2DF0803F1AE625410003A277 = {
 			isa = PBXGroup;
 			children = (
+				2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */,
+				2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */,
 				2DF0804A1AE625410003A277 /* TextMuse3 */,
 				2DF080641AE625410003A277 /* TextMuse3Tests */,
 				2DF080491AE625410003A277 /* Products */,
@@ -244,8 +252,8 @@
 		2DF080491AE625410003A277 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2DF080481AE625410003A277 /* TextMuse3.app */,
-				2DF080611AE625410003A277 /* TextMuse3Tests.xctest */,
+				2DF080481AE625410003A277 /* TextMuse.app */,
+				2DF080611AE625410003A277 /* TextMuseTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -403,9 +411,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2DF080471AE625410003A277 /* TextMuse3 */ = {
+		2DF080471AE625410003A277 /* TextMuse */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2DF0806B1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuse3" */;
+			buildConfigurationList = 2DF0806B1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuse" */;
 			buildPhases = (
 				2DF080441AE625410003A277 /* Sources */,
 				2DF080451AE625410003A277 /* Frameworks */,
@@ -415,14 +423,14 @@
 			);
 			dependencies = (
 			);
-			name = TextMuse3;
+			name = TextMuse;
 			productName = TextMuse3;
-			productReference = 2DF080481AE625410003A277 /* TextMuse3.app */;
+			productReference = 2DF080481AE625410003A277 /* TextMuse.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2DF080601AE625410003A277 /* TextMuse3Tests */ = {
+		2DF080601AE625410003A277 /* TextMuseTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2DF0806E1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuse3Tests" */;
+			buildConfigurationList = 2DF0806E1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuseTests" */;
 			buildPhases = (
 				2DF0805D1AE625410003A277 /* Sources */,
 				2DF0805E1AE625410003A277 /* Frameworks */,
@@ -433,9 +441,9 @@
 			dependencies = (
 				2DF080631AE625410003A277 /* PBXTargetDependency */,
 			);
-			name = TextMuse3Tests;
+			name = TextMuseTests;
 			productName = TextMuse3Tests;
-			productReference = 2DF080611AE625410003A277 /* TextMuse3Tests.xctest */;
+			productReference = 2DF080611AE625410003A277 /* TextMuseTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -457,7 +465,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2DF080431AE625410003A277 /* Build configuration list for PBXProject "TextMuse3" */;
+			buildConfigurationList = 2DF080431AE625410003A277 /* Build configuration list for PBXProject "TextMuse" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -470,8 +478,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2DF080471AE625410003A277 /* TextMuse3 */,
-				2DF080601AE625410003A277 /* TextMuse3Tests */,
+				2DF080471AE625410003A277 /* TextMuse */,
+				2DF080601AE625410003A277 /* TextMuseTests */,
 			);
 		};
 /* End PBXProject section */
@@ -573,7 +581,7 @@
 /* Begin PBXTargetDependency section */
 		2DF080631AE625410003A277 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2DF080471AE625410003A277 /* TextMuse3 */;
+			target = 2DF080471AE625410003A277 /* TextMuse */;
 			targetProxy = 2DF080621AE625410003A277 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -665,10 +673,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/petertucker/Documents/Consulting/azuresdk-iOS-v1.2.4",
+				);
 				INFOPLIST_FILE = TextMuse3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TextMuse;
 			};
 			name = Debug;
 		};
@@ -678,10 +690,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/petertucker/Documents/Consulting/azuresdk-iOS-v1.2.4",
+				);
 				INFOPLIST_FILE = TextMuse3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TextMuse;
 			};
 			name = Release;
 		};
@@ -699,8 +715,8 @@
 				);
 				INFOPLIST_FILE = TextMuse3Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextMuse3.app/TextMuse3";
+				PRODUCT_NAME = TextMuseTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextMuse.app/TextMuse";
 			};
 			name = Debug;
 		};
@@ -714,15 +730,15 @@
 				);
 				INFOPLIST_FILE = TextMuse3Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextMuse3.app/TextMuse3";
+				PRODUCT_NAME = TextMuseTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextMuse.app/TextMuse";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2DF080431AE625410003A277 /* Build configuration list for PBXProject "TextMuse3" */ = {
+		2DF080431AE625410003A277 /* Build configuration list for PBXProject "TextMuse" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2DF080691AE625410003A277 /* Debug */,
@@ -731,7 +747,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2DF0806B1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuse3" */ = {
+		2DF0806B1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuse" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2DF0806C1AE625410003A277 /* Debug */,
@@ -740,7 +756,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2DF0806E1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuse3Tests" */ = {
+		2DF0806E1AE625410003A277 /* Build configuration list for PBXNativeTarget "TextMuseTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2DF0806F1AE625410003A277 /* Debug */,

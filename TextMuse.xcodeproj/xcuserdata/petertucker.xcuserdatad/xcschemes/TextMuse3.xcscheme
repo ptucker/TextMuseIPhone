@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2DF080471AE625410003A277"
-               BuildableName = "TextMuse3.app"
-               BlueprintName = "TextMuse3"
-               ReferencedContainer = "container:TextMuse3.xcodeproj">
+               BuildableName = "TextMuse.app"
+               BlueprintName = "TextMuse"
+               ReferencedContainer = "container:TextMuse.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2DF080601AE625410003A277"
-               BuildableName = "TextMuse3Tests.xctest"
-               BlueprintName = "TextMuse3Tests"
-               ReferencedContainer = "container:TextMuse3.xcodeproj">
+               BuildableName = "TextMuseTests.xctest"
+               BlueprintName = "TextMuseTests"
+               ReferencedContainer = "container:TextMuse.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2DF080601AE625410003A277"
-               BuildableName = "TextMuse3Tests.xctest"
-               BlueprintName = "TextMuse3Tests"
-               ReferencedContainer = "container:TextMuse3.xcodeproj">
+               BuildableName = "TextMuseTests.xctest"
+               BlueprintName = "TextMuseTests"
+               ReferencedContainer = "container:TextMuse.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2DF080471AE625410003A277"
-            BuildableName = "TextMuse3.app"
-            BlueprintName = "TextMuse3"
-            ReferencedContainer = "container:TextMuse3.xcodeproj">
+            BuildableName = "TextMuse.app"
+            BlueprintName = "TextMuse"
+            ReferencedContainer = "container:TextMuse.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -77,9 +77,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2DF080471AE625410003A277"
-            BuildableName = "TextMuse3.app"
-            BlueprintName = "TextMuse3"
-            ReferencedContainer = "container:TextMuse3.xcodeproj">
+            BuildableName = "TextMuse.app"
+            BlueprintName = "TextMuse"
+            ReferencedContainer = "container:TextMuse.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,9 +96,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2DF080471AE625410003A277"
-            BuildableName = "TextMuse3.app"
-            BlueprintName = "TextMuse3"
-            ReferencedContainer = "container:TextMuse3.xcodeproj">
+            BuildableName = "TextMuse.app"
+            BlueprintName = "TextMuse"
+            ReferencedContainer = "container:TextMuse.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

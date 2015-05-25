@@ -77,7 +77,6 @@
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    /*
     NSCharacterSet *angleBrackets = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
     NSString* token = [[deviceToken description] stringByTrimmingCharactersInSet:angleBrackets];
     [self setDeviceToken: token];
@@ -92,7 +91,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
             NSLog(@"Error registering for notifications: %@", error);
         }
     }];
-     */
 }
 
 // Handle any failure to register. In this case we set the deviceToken to an empty
@@ -114,6 +112,24 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
          }
          */
         NSString* msg = [userInfo objectForKey:@"alert"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
+                                                        message:msg delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                              otherButtonTitles:nil, nil];
+        [alert show];
+    }
+}
+
+- (void)application:(UIApplication *)application
+        didReceiveLocalNotification:(UILocalNotification *)notification {
+    if (NotificationOn) {
+        /*
+         NSMutableString* msgs = [[NSMutableString alloc] init];
+         for (NSString* k in [userInfo keyEnumerator]) {
+         [msgs appendFormat:@"\n%@: %@", k, [userInfo objectForKey:k]];
+         }
+         */
+        NSString* msg = [notification alertBody];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
                                                         message:msg delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
@@ -212,11 +228,11 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
             }
         }
     }
+     */
     if ([AppDelegate checkNotificationType:UIUserNotificationTypeBadge])
     {
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     }
-     */
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
