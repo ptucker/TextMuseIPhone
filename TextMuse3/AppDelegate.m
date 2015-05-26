@@ -15,7 +15,9 @@
 
 @implementation AppDelegate
 
--(void)initialize {
+-(id)init {
+    self = [super init];
+    
     NSString* path = [[NSBundle mainBundle] bundlePath];
     NSString* pListPath = [path stringByAppendingPathComponent:@"Settings.bundle/Root.plist"];
     NSDictionary* pList = [NSDictionary dictionaryWithContentsOfFile:pListPath];
@@ -29,6 +31,10 @@
         }
     }
     [[NSUserDefaults standardUserDefaults] registerDefaults:regDict];
+
+    [Settings LoadSettings];
+    
+    return self;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -54,8 +60,6 @@
     else
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
     
-    [Settings LoadSettings];
-
     return YES;
 }
 
