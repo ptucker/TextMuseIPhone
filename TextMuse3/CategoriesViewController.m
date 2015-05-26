@@ -72,6 +72,7 @@ NSArray* colors;
 
 - (void)viewDidAppear:(BOOL)animated {
     reminderButtonState = SHOW_TEXT;
+    
     if (timerReminder == nil) {
         timerReminder = [NSTimer scheduledTimerWithTimeInterval:2.0
                                                          target:self
@@ -79,6 +80,8 @@ NSArray* colors;
                                                        userInfo:nil
                                                         repeats:YES];
     }
+    //Call this right away
+    [self setReminder:timerReminder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -174,7 +177,6 @@ NSArray* colors;
     if (reminderButtonState == TIMER_PAUSED)
         return;
     
-    reminderButtonState = (reminderButtonState + 1) % BUTTON_STATES;
     if (reminderButtonState == SHOW_CONTACT && [Data getContacts] == nil)
         reminderButtonState = SHOW_TEXT;
     unsigned long colorcount = [colors count];
@@ -239,6 +241,7 @@ NSArray* colors;
             
             break;
     }
+    reminderButtonState = (reminderButtonState + 1) % BUTTON_STATES;
 }
 
 -(void)fadein {

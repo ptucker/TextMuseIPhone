@@ -200,8 +200,6 @@ NSString* localNotes = @"notes.xml";
     }];
 }
 
-
-
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
     [inetdata appendData:data];
 }
