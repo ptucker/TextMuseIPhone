@@ -137,9 +137,10 @@ NSString* localNotes = @"notes.xml";
     if (!notificationOnly)
         LastNoteDownload = [dateformat stringFromDate:[NSDate date]];
     NSURL* url = [NSURL URLWithString:surl];
-    NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
-    inetdata = [[NSMutableData alloc] init];
+    NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
+    inetdata = [[NSMutableData alloc] initWithCapacity:60000];
     categoryOrder = [[NSMutableArray alloc] init];
+    
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
                                                             delegate:self
                                                     startImmediately:YES];
@@ -149,6 +150,7 @@ NSString* localNotes = @"notes.xml";
                                                selector:@selector(autoReloadMessages)
                                                userInfo:nil
                                                 repeats:NO];
+    
 }
 
 -(void)autoReloadMessages {
@@ -225,7 +227,7 @@ NSString* localNotes = @"notes.xml";
     [[NSFileManager defaultManager] createFileAtPath:file
                                             contents:inetdata
                                           attributes:nil];
-    
+
     //Now that we have data from the server, re-initialize Categories to an empty dictionary
     [self parseMessageData];
     

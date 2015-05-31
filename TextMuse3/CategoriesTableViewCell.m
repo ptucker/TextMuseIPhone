@@ -56,6 +56,15 @@
     [[self lblTitle] setBackgroundColor:[UIColor whiteColor]];
     [[self lblTitle] setTextColor:color];
     [[self lblTitle] setText:title];
+    [[self lblTitle] sizeToFit];
+    frmTitle = [[self lblTitle] frame];
+    CGFloat fntSize = 20;
+    while (frmTitle.size.width > (width-134)) {
+        fntSize-=1;
+        [[self lblTitle] setFont:[UIFont fontWithName:@"Lato-Regular" size:fntSize]];
+        [[self lblTitle] sizeToFit];
+        frmTitle = [[self lblTitle] frame];
+    }
     
     NSString* newLabel = [NSString stringWithFormat:@"%d NEW", cnt];
     if ([self lblNew] == nil) {

@@ -18,7 +18,7 @@
 -(void)dataRefresh;
 @end
 
-@interface DataAccess : NSObject<NSXMLParserDelegate, NSURLConnectionDelegate> {
+@interface DataAccess : NSObject<NSXMLParserDelegate, NSURLConnectionDataDelegate, NSURLConnectionDelegate> {
     NSMutableDictionary* categories;
     NSMutableDictionary* tmpCategories;
     NSMutableArray* localImages;

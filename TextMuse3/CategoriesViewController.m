@@ -122,7 +122,7 @@ NSArray* colors;
     NSArray* cs = [Data getCategories];
     category = [cs objectAtIndex:icategory];
     msg = [[Data getMessagesForCategory:category] objectAtIndex:0];
-    
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [cell showForWidth:[[self view] frame].size.width
              withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
                  title:category
@@ -357,8 +357,10 @@ NSArray* colors;
         [scroller addSubview:img];
         
         UILabel* lbl = [[UILabel alloc] initWithFrame:frmText];
+        //[lbl sizeToFit];
         [lbl setText:txts[i]];
-        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
+        CGFloat fntSize = frmText.size.width > 320 ? 20 : 16;
+        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:fntSize]];
         [lbl setTextColor:[UIColor blackColor]];
         [lbl setTextAlignment:NSTextAlignmentCenter];
         [lbl setNumberOfLines:0];

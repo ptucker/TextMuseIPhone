@@ -71,7 +71,8 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [scrollview scrollRectToVisible:frameStart animated:animated];
+    if (frameStart.origin.x >= frameStart.size.width)
+        [scrollview scrollRectToVisible:frameStart animated:animated];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -63,6 +63,8 @@
         
         fontSize = 18;
     }
+    if (frame.size.height < 350)
+        fontSize -= 4;
     
     if ([[msg mediaUrl] isEqualToString:@"usertext://"]) {
         imgLeftQuote = [[UIImageView alloc] initWithFrame:frmLeftQuote];

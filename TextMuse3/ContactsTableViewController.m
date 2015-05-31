@@ -177,7 +177,7 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
             [lname setFont:!SortLastName ? fontLight : fontBold];
             UICheckButton* btncheck = (UICheckButton*)[cell viewWithTag:102];
             if (btncheck == nil)
-                btncheck = [[UICheckButton alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+                btncheck = [[UICheckButton alloc] initWithFrame:CGRectMake(3, 3, 28, 28)];
             [btncheck setHidden:NO];
             [fname setText:[contact firstName]];
             [fname sizeToFit];
@@ -369,14 +369,15 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
                             [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
         NSString* text = ([CurrentMessage text] == nil ? @"" : [CurrentMessage text]);
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
+        NSString* tagline = @"\n\nSent by TextMuse - http://www.textmuse.com/download";
         //if (arc4random() % 10 == 0)
-        message = [message stringByAppendingString:@"\n\nSent by TextMuse - http://www.textmuse.com/download"];
+        message = [message stringByAppendingString:tagline];
         if (([CurrentMessage mediaUrl] == nil || [[CurrentMessage mediaUrl] length] == 0) &&
             [CurrentMessage img] == nil)
             [msgcontroller setBody: message];
         else {
             if ([CurrentMessage isVideo])
-                message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
+                message = [NSString stringWithFormat:@"%@%@%@", text, urlAdd, tagline];
             [msgcontroller setBody:message];
             if ([CurrentMessage assetURL] != nil) {
                 ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
