@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
+		2D4AC7E21B22BC6400749074 /* LaunchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E11B22BC6400749074 /* LaunchImage.png */; };
+		2D4AC7E41B22BCAC00749074 /* LaunchImage_750.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */; };
+		2D4AC7E61B22BD6100749074 /* LaunchImage_640.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E51B22BD6100749074 /* LaunchImage_640.png */; };
+		2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */; };
+		2D4AC7EA1B22BE2900749074 /* TextMuseIcon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */; };
+		2D4AC7EC1B22BE5700749074 /* TextMuseIcon_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
 		2DC1F1A31B12D5C4000CC30A /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */; };
 		2DC1F1A51B12D63A000CC30A /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */; };
@@ -90,6 +96,12 @@
 		2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUsViewController.m; sourceTree = "<group>"; };
 		2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		2D4AC7E11B22BC6400749074 /* LaunchImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage.png; sourceTree = "<group>"; };
+		2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_750.png; sourceTree = "<group>"; };
+		2D4AC7E51B22BD6100749074 /* LaunchImage_640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_640.png; sourceTree = "<group>"; };
+		2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_640_2.png; sourceTree = "<group>"; };
+		2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_58.png; sourceTree = "<group>"; };
+		2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_87.png; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
 		2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMobileServices.framework"; sourceTree = "<group>"; };
@@ -318,6 +330,12 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */,
+				2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */,
+				2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */,
+				2D4AC7E51B22BD6100749074 /* LaunchImage_640.png */,
+				2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */,
+				2D4AC7E11B22BC6400749074 /* LaunchImage.png */,
 				2DC6EC661B18208400C527BA /* TransparentButterfly.png */,
 				2DC636B71B17CF700087376D /* TextMuseIcon_80.png */,
 				2DC636B11B17CDE60087376D /* TextMuseIcon_2x.png */,
@@ -503,13 +521,17 @@
 			files = (
 				2DD045871B0D9C3C00A1A9CF /* settings.png in Resources */,
 				2DC9EFD31B16EB2C0045C0F0 /* link.png in Resources */,
+				2D4AC7EA1B22BE2900749074 /* TextMuseIcon_58.png in Resources */,
 				2DCDFC451AEC7F4C002DA914 /* bluebackarrow.png in Resources */,
+				2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */,
 				2DF080591AE625410003A277 /* Images.xcassets in Resources */,
 				2DC636B81B17CF700087376D /* TextMuseIcon_80.png in Resources */,
+				2D4AC7EC1B22BE5700749074 /* TextMuseIcon_87.png in Resources */,
 				2DF080B41AE625FC0003A277 /* Lato-Medium.ttf in Resources */,
 				2DF080A51AE625FC0003A277 /* blackleftquote.png in Resources */,
 				2DF080B11AE625FC0003A277 /* largegreenbubble.png in Resources */,
 				2DF080BD1AE625FC0003A277 /* TextMuse.jpg in Resources */,
+				2D4AC7E61B22BD6100749074 /* LaunchImage_640.png in Resources */,
 				2DC6EC671B18208400C527BA /* TransparentButterfly.png in Resources */,
 				2DF080C11AE625FC0003A277 /* whitecategoryleftquote.png in Resources */,
 				2DF080C21AE625FC0003A277 /* whitecategoryrightquote.png in Resources */,
@@ -521,8 +543,10 @@
 				2DF080A81AE625FC0003A277 /* CategoriesTableViewCell.xib in Resources */,
 				2DF080741AE6257D0003A277 /* Localizable.strings in Resources */,
 				2DF080B01AE625FC0003A277 /* largebluebubble.png in Resources */,
+				2D4AC7E21B22BC6400749074 /* LaunchImage.png in Resources */,
 				2DC636B51B17CDE60087376D /* TextMuseIcon_3x.png in Resources */,
 				2DF080B51AE625FC0003A277 /* Lato-Regular.ttf in Resources */,
+				2D4AC7E41B22BCAC00749074 /* LaunchImage_750.png in Resources */,
 				2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */,
 				2DF080AE1AE625FC0003A277 /* greyheart.png in Resources */,
 				2DCDFC461AEC7F4C002DA914 /* bluecheck.png in Resources */,

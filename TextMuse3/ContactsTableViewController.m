@@ -19,6 +19,7 @@
 @end
 
 NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
+NSMutableArray* searchContacts;
 
 @implementation ContactsTableViewController
 
@@ -71,20 +72,27 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[Data getContactHeadings] count]+1 + (showRecentContacts ? 1 : 0);
+    if (tableView == [[self searchDisplayController] searchResultsTableView])
+        return 1;
+    else
+        return [[Data getContactHeadings] count]+1 + (showRecentContacts ? 1 : 0);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ((section == 0 && showRecentContacts))
-        return [RecentContacts count];
-    else if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))
-        return [groups count];
+    if (tableView == [[self searchDisplayController] searchResultsTableView])
+        return [searchContacts count];
     else {
-        // Return the number of rows in the section.
-        NSArray* headings = [Data getContactHeadings];
-        section--;
-        if (showRecentContacts) section--;
-        return [[Data getContactsForHeading:[headings objectAtIndex:section]] count];
+        if ((section == 0 && showRecentContacts))
+            return [RecentContacts count];
+        else if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))
+            return [groups count];
+        else {
+            // Return the number of rows in the section.
+            NSArray* headings = [Data getContactHeadings];
+            section--;
+            if (showRecentContacts) section--;
+            return [[Data getContactsForHeading:[headings objectAtIndex:section]] count];
+        }
     }
 }
 
@@ -143,11 +151,23 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;
     long section = [indexPath section];
-    if (tableView == contacts) {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"contacts"
-                                               forIndexPath:indexPath];
+    if (tableView == contacts || tableView == [[self searchDisplayController] searchResultsTableView]) {
+        if (tableView == contacts)
+            cell = [tableView dequeueReusableCellWithIdentifier:@"contacts"
+                                                   forIndexPath:indexPath];
+        else {
+            cell = [[UITableViewCell alloc] init];
+            CGRect frmLeft = CGRectMake(8, 8, [tableView frame].size.width/2 - 4, 44);
+            CGRect frmRight = CGRectMake(8, [tableView frame].size.width/2 + 4, frmLeft.size.width, 44);
+            UILabel* left = [[UILabel alloc] initWithFrame:frmLeft];
+            UILabel* right = [[UILabel alloc] initWithFrame:frmRight];
+            [left setTag:100];
+            [right setTag:101];
+            [cell addSubview:left];
+            [cell addSubview:right];
+        }
 
-        if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts)) {
+        if (tableView == contacts && ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))) {
             UILabel* fname = (UILabel*)[cell viewWithTag:100];
             [fname setText:[groups objectAtIndex:[indexPath row]]];
             [fname sizeToFit];
@@ -160,19 +180,26 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
         else {
             UserContact* contact;
             
-            if (showRecentContacts && section == 0) {
-                contact = [Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]];
+            if (tableView == [[self searchDisplayController] searchResultsTableView]) {
+                contact = [searchContacts objectAtIndex:[indexPath row]];
             }
             else {
-                section--;
-                if (showRecentContacts) section--;
-            
-                NSArray* headings = [Data getContactHeadings];
-                NSArray* cs = [Data getContactsForHeading:[headings objectAtIndex:section]];
-                contact = [cs objectAtIndex:[indexPath row]];
+                if (showRecentContacts && section == 0) {
+                    contact = [Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]];
+                }
+                else {
+                    section--;
+                    if (showRecentContacts) section--;
+                
+                    NSArray* headings = [Data getContactHeadings];
+                    NSArray* cs = [Data getContactsForHeading:[headings objectAtIndex:section]];
+                    contact = [cs objectAtIndex:[indexPath row]];
+                }
             }
             UILabel* fname = (UILabel*)[cell viewWithTag:100];
             UILabel* lname = (UILabel*)[cell viewWithTag:101];
+            [fname setTextColor:[UIColor blackColor]];
+            [lname setTextColor:[UIColor blackColor]];
             [fname setFont:SortLastName ? fontLight : fontBold];
             [lname setFont:!SortLastName ? fontLight : fontBold];
             UICheckButton* btncheck = (UICheckButton*)[cell viewWithTag:102];
@@ -193,7 +220,7 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
             [btncheck addTarget:self action:@selector(check:) forControlEvents:UIControlEventTouchUpInside];
             [btncheck setExtra:contact];
         
-            if ([btncheck tag] == 0) {
+            if ([btncheck tag] == 0 && tableView == contacts) {
                 [btncheck setTag:102];
                 [cell addSubview:btncheck];
             }
@@ -226,31 +253,39 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     long section = [indexPath section];
     
-    if (section == 0 && showRecentContacts) {
-        UserContact* contact = [Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]];
+    if (tableView == [[self searchDisplayController] searchResultsTableView]) {
+        UserContact* contact = [searchContacts objectAtIndex:[indexPath row]];
         
         NSArray* contactlist = [NSArray arrayWithObject:contact];
         [self sendMessageTo:contactlist];
-    }
-    else if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts)) {
-        NSArray* grp = [NamedGroups objectForKey:[groups objectAtIndex:[indexPath row]]];
-        NSMutableArray* users = [[NSMutableArray alloc] init];
-        for (NSString*phone in grp) {
-            [users addObject:[Data findUserByPhone:phone]];
-        }
-        if ([users count] > 0)
-            [self sendMessageTo:users];
     }
     else {
-        section--;
-        if (showRecentContacts) section--;
-        
-        NSArray* headings = [Data getContactHeadings];
-        NSArray* cs = [Data getContactsForHeading:[headings objectAtIndex:section]];
-        UserContact* contact = [cs objectAtIndex:[indexPath row]];
+        if (section == 0 && showRecentContacts) {
+            UserContact* contact = [Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]];
+            
+            NSArray* contactlist = [NSArray arrayWithObject:contact];
+            [self sendMessageTo:contactlist];
+        }
+        else if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts)) {
+            NSArray* grp = [NamedGroups objectForKey:[groups objectAtIndex:[indexPath row]]];
+            NSMutableArray* users = [[NSMutableArray alloc] init];
+            for (NSString*phone in grp) {
+                [users addObject:[Data findUserByPhone:phone]];
+            }
+            if ([users count] > 0)
+                [self sendMessageTo:users];
+        }
+        else {
+            section--;
+            if (showRecentContacts) section--;
+            
+            NSArray* headings = [Data getContactHeadings];
+            NSArray* cs = [Data getContactsForHeading:[headings objectAtIndex:section]];
+            UserContact* contact = [cs objectAtIndex:[indexPath row]];
 
-        NSArray* contactlist = [NSArray arrayWithObject:contact];
-        [self sendMessageTo:contactlist];
+            NSArray* contactlist = [NSArray arrayWithObject:contact];
+            [self sendMessageTo:contactlist];
+        }
     }
 }
 
@@ -286,6 +321,27 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
+    [self filterContentForSearchText:[searchString lowercaseString]];
+    return true;
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
+    [self filterContentForSearchText:[[controller searchBar] text]];
+    return true;
+}
+
+-(void)filterContentForSearchText:(NSString*)searchText {
+    NSMutableArray* filtered = [[NSMutableArray alloc] init];
+    NSArray* cs = [Data getContacts];
+    for (UserContact* uc in cs) {
+        NSString* compare = [[uc description] lowercaseString];
+        if ([compare containsString:searchText])
+            [filtered addObject: uc];
+    }
+    searchContacts = filtered;
 }
 
 -(void)choosePhone:(NSArray*)users {

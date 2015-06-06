@@ -86,12 +86,16 @@ NSString* localNotes = @"notes.xml";
         inetdata = [NSMutableData dataWithData:[[self createFile] dataUsingEncoding:NSUTF8StringEncoding]];
     }
     else {
-        //Initialize Categories to an empty dictionary
         inetdata = [NSMutableData dataWithContentsOfFile:file];
     }
     
-    [self parseMessageData];
-
+    @try {
+        [self parseMessageData];
+    }
+    @catch (id ex) {
+        inetdata = [NSMutableData dataWithData:[[self createFile] dataUsingEncoding:NSUTF8StringEncoding]];
+        [self parseMessageData];
+    }
     for (NSObject* l in listeners) {
         if ([l respondsToSelector:@selector(dataRefresh)])
             [l performSelector:@selector(dataRefresh)];

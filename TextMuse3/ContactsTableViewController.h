@@ -10,7 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import "ImageDownloader.h"
 
-@interface ContactsTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate> {
+@interface ContactsTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate, UISearchBarDelegate, UISearchDisplayDelegate> {
     MFMessageComposeViewController *msgcontroller;
     ImageDownloader* loader;
     NSMutableData* inetdata;

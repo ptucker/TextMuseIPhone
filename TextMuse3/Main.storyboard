@@ -331,7 +331,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email (optional)" minimumFontSize="17" id="R1q-ce-m4D">
-                                <rect key="frame" x="164" y="308" width="140" height="30"/>
+                                <rect key="frame" x="164.00000005449564" y="308" width="140" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
@@ -580,9 +580,17 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" showsCancelButton="YES" id="cYi-RY-cDL">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="ngF-ER-qsv" id="g4A-4W-rpS"/>
+                                    </connections>
+                                </searchBar>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="contacts" id="SJg-RX-hXW">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="130" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SJg-RX-hXW" id="CiA-qZ-79R">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -615,10 +623,20 @@
                     </navigationItem>
                     <connections>
                         <outlet property="contacts" destination="VtD-60-UKm" id="got-SX-BEh"/>
+                        <outlet property="searchDisplayController" destination="LfP-Zf-C2x" id="IRk-m1-tyg"/>
                         <segue destination="ehy-AJ-lyu" kind="push" identifier="ShowGroups" id="qmB-NK-YC8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kNv-u3-vaA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="LfP-Zf-C2x">
+                    <connections>
+                        <outlet property="delegate" destination="ngF-ER-qsv" id="0EI-ig-JcX"/>
+                        <outlet property="searchBar" destination="cYi-RY-cDL" id="kqZ-k4-lMj"/>
+                        <outlet property="searchContentsController" destination="ngF-ER-qsv" id="IaV-ie-mOH"/>
+                        <outlet property="searchResultsDataSource" destination="ngF-ER-qsv" id="WK8-OP-VRf"/>
+                        <outlet property="searchResultsDelegate" destination="ngF-ER-qsv" id="jvU-c9-uIZ"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="13" y="1250"/>
         </scene>
@@ -636,7 +654,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="group" id="Kns-rY-DH0">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Kns-rY-DH0" id="bMp-mn-ViW">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>

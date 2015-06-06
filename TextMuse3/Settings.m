@@ -118,142 +118,140 @@ NSString* AppID;
 +(void)LoadSettings {
     NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
     
-    if ([defs stringForKey:SettingInitialCategory] != nil &&
-            [[defs stringForKey:SettingInitialCategory] length] > 0)
-        InitialCategory = [defs stringForKey:SettingInitialCategory];
-
-    if ([defs stringForKey:SettingSaveRecentContacts] != nil &&
-            [[defs stringForKey:SettingSaveRecentContacts] isEqualToString:@"NO"])
-        SaveRecentContacts = false;
-    if ([defs stringForKey:SettingRecentContactsCount] != nil)
-        MaxRecentContacts = [[defs stringForKey:SettingRecentContactsCount] intValue];
-    if ([defs stringForKey:SettingSaveRecentMessages] != nil &&
-        [[defs stringForKey:SettingSaveRecentMessages] isEqualToString:@"YES"])
-        SaveRecentMessages = true;
-    if ([defs stringForKey:SettingRecentMessagesCount] != nil)
-        MaxRecentMessages = [[defs stringForKey:SettingRecentMessagesCount] intValue];
-    if ([defs stringForKey:SettingSaveRecentMessages] != nil &&
-            [[defs stringForKey:SettingSaveRecentMessages] isEqualToString:@"YES"])
-        SaveRecentMessages = true;
-    if ([defs arrayForKey:SettingRecentContacts] != nil)
-        RecentContacts = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingRecentContacts]];
-    else
-        RecentContacts = [[NSMutableArray alloc] init];
-    if ([defs dictionaryForKey:SettingRecentCategories] != nil)
-        RecentCategories = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingRecentCategories]];
-    else
-        RecentCategories = [[NSMutableDictionary alloc] init];
-    
+    //Defaults
+    RecentContacts = [[NSMutableArray alloc] init];
+    RecentCategories = [[NSMutableDictionary alloc] init];
+    RecentMessages = [[NSMutableArray alloc] init];
     SortLastName = NO;
-    [Settings SaveSetting:SettingSortLastName withValue:SortLastName ? @"YES" : @"NO"];
-    if ([defs stringForKey:SettingSortLastName] != nil)
-        SortLastName = [[defs stringForKey:SettingSortLastName] isEqualToString:@"NO"];
-
-    SortLastName = NO;
-    //[defs setObject:nil forKey:SettingRecentMessages];
-    if ([defs arrayForKey:SettingRecentMessages] != nil) {
-        NSMutableArray* rmsgs = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingRecentMessages]];
-        RecentMessages = [[NSMutableArray alloc] init];
-        for (NSString*rmsg in rmsgs) {
-            [RecentMessages addObject:[[Message alloc] initFromStorage:rmsg]];
-        }
-    }
-    else
-        RecentMessages = [[NSMutableArray alloc] init];
-    if ([defs arrayForKey:SettingYourMessages] != nil) {
-        NSMutableArray* rmsgs = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingYourMessages]];
-        YourMessages = [[NSMutableArray alloc] init];
-        for (int i=0; i<[rmsgs count]; i++) {
-            NSString* rmsg = [rmsgs objectAtIndex:i];
-            [YourMessages addObject:[[Message alloc] initFromUserText:rmsg atIndex:i]];
-        }
-    }
-    else {
-        YourMessages = [[NSMutableArray alloc] init];
-        for (int i=0; i<10; i++)
-            [YourMessages addObject:[[Message alloc] initFromUserText:@"" atIndex:i]];
-    }
-    
-    if ([defs arrayForKey:SettingReminderMessages] != nil)
-        ReminderMessages = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingReminderMessages]];
-    if ([defs arrayForKey:SettingReminderContactLists] != nil)
-        ReminderContactLists =
-            [NSMutableArray arrayWithArray:[defs arrayForKey:SettingReminderContactLists]];
-    if ([defs arrayForKey:SettingReminderDates] != nil)
-        ReminderDates = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingReminderDates]];
-
-    if ([defs stringForKey:SettingNotificationDate] != nil &&
-            [[defs stringForKey:SettingNotificationDate] length] > 0)
-        NotificationDate = [defs stringForKey:SettingNotificationDate];
     NotificationOn = YES;
-    if ([defs stringForKey:SettingNotificationOn] != nil &&
-        [[defs stringForKey:SettingNotificationOn] length] == 1)
-        NotificationOn = [[defs stringForKey:SettingNotificationOn] isEqualToString:@"1"];
-    if ([defs arrayForKey:SettingNotificationMsgs] != nil)
-        NotificationMsgs = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingNotificationMsgs]];
-    
-    if ([defs stringForKey:SettingShowIntro] != nil &&
-        [[defs stringForKey:SettingShowIntro] length] == 1)
-        ShowIntro = [[defs stringForKey:SettingShowIntro] isEqualToString:@"1"];
-    if ([defs stringForKey:SettingAskRegistration] != nil &&
-        [[defs stringForKey:SettingAskRegistration] length] == 1)
-        AskRegistration = [[defs stringForKey:SettingAskRegistration] isEqualToString:@"1"];
-    
+    YourMessages = [[NSMutableArray alloc] init];
+    for (int i=0; i<10; i++)
+        [YourMessages addObject:[[Message alloc] initFromUserText:@"" atIndex:i]];
     NamedGroups = [[NSMutableDictionary alloc] init];
-    //[defs setObject:nil forKey:SettingNamedGroups];
-    if ([defs arrayForKey:SettingNamedGroups] != nil) {
-        NSArray* grps = [defs arrayForKey:SettingNamedGroups];
-        for (NSString* grp in grps) {
-            //[defs removeObjectForKey:grp];
-            NSArray* names = [defs arrayForKey:grp];
-            if (names != nil)
-                [NamedGroups setObject:names forKey:grp];
-        }
-    }
-    //[defs removeObjectForKey:SettingNamedGroups];
-    
-    //[defs removeObjectForKey:SettingChosenCategories];
-    if ([defs arrayForKey:SettingChosenCategories] != nil) {
-        ChosenCategories = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingChosenCategories]];
-        //remove duplicates
-        NSOrderedSet *mySet = [[NSOrderedSet alloc] initWithArray:ChosenCategories];
-        ChosenCategories = [[NSMutableArray alloc] initWithArray:[mySet array]];
-    }
-    else
-        ChosenCategories = nil;
-    if ([defs dictionaryForKey:SettingKnownCategories] != nil)
-        KnownCategories = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingKnownCategories]];
-    else
-        KnownCategories = [[NSMutableDictionary alloc] init];
+    ChosenCategories = nil;
+    KnownCategories = [[NSMutableDictionary alloc] init];
 
-    LastNoteDownload = nil;
-    if ([defs stringForKey:SettingLastNoteDownload] != nil &&
-        [[defs stringForKey:SettingLastNoteDownload] length] == 1)
-        LastNoteDownload = [defs stringForKey:SettingLastNoteDownload];
-    
-    //[defs removeObjectForKey:SettingUserName];
-    //[defs removeObjectForKey:SettingUserEmail];
-    //[defs removeObjectForKey:SettingUserAge];
-    if ([defs stringForKey:SettingUserName] != nil &&
-        [[defs stringForKey:SettingUserName] length] > 0)
-        UserName = [defs stringForKey:SettingUserName];
-    if ([defs stringForKey:SettingUserEmail] != nil &&
-        [[defs stringForKey:SettingUserEmail] length] > 0)
-        UserEmail = [defs stringForKey:SettingUserEmail];
-    if ([defs stringForKey:SettingUserAge] != nil &&
-        [[defs stringForKey:SettingUserAge] length] > 0)
-        UserAge = [defs stringForKey:SettingUserAge];
-    if ([defs stringForKey:SettingUserBirthMonth] != nil &&
-        [[defs stringForKey:SettingUserBirthMonth] length] > 0)
-        UserBirthMonth = [defs stringForKey:SettingUserBirthMonth];
-    if ([defs stringForKey:SettingUserBirthYear] != nil &&
-        [[defs stringForKey:SettingUserBirthYear] length] > 0)
-        UserBirthYear = [defs stringForKey:SettingUserBirthYear];
-    if ([defs stringForKey:SettingAppID] != nil &&
-        [[defs stringForKey:SettingAppID] length] > 0)
-        AppID = [defs stringForKey:SettingAppID];
-    
-    [self LoadCachedMapping];
+    @try {
+        //Load from settings
+        if ([defs stringForKey:SettingInitialCategory] != nil &&
+                [[defs stringForKey:SettingInitialCategory] length] > 0)
+            InitialCategory = [defs stringForKey:SettingInitialCategory];
+
+        if ([defs stringForKey:SettingSaveRecentContacts] != nil &&
+                [[defs stringForKey:SettingSaveRecentContacts] isEqualToString:@"NO"])
+            SaveRecentContacts = false;
+        if ([defs stringForKey:SettingRecentContactsCount] != nil)
+            MaxRecentContacts = [[defs stringForKey:SettingRecentContactsCount] intValue];
+        if ([defs stringForKey:SettingSaveRecentMessages] != nil &&
+            [[defs stringForKey:SettingSaveRecentMessages] isEqualToString:@"YES"])
+            SaveRecentMessages = true;
+        if ([defs stringForKey:SettingRecentMessagesCount] != nil)
+            MaxRecentMessages = [[defs stringForKey:SettingRecentMessagesCount] intValue];
+        if ([defs stringForKey:SettingSaveRecentMessages] != nil &&
+                [[defs stringForKey:SettingSaveRecentMessages] isEqualToString:@"YES"])
+            SaveRecentMessages = true;
+        if ([defs arrayForKey:SettingRecentContacts] != nil)
+            RecentContacts = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingRecentContacts]];
+        if ([defs dictionaryForKey:SettingRecentCategories] != nil)
+            RecentCategories = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingRecentCategories]];
+
+        //[Settings SaveSetting:SettingSortLastName withValue:SortLastName ? @"YES" : @"NO"];
+        if ([defs stringForKey:SettingSortLastName] != nil)
+            SortLastName = [[defs stringForKey:SettingSortLastName] isEqualToString:@"NO"];
+
+        //[defs setObject:nil forKey:SettingRecentMessages];
+        if ([defs arrayForKey:SettingRecentMessages] != nil) {
+            NSMutableArray* rmsgs = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingRecentMessages]];
+            RecentMessages = [[NSMutableArray alloc] init];
+            for (NSString*rmsg in rmsgs) {
+                [RecentMessages addObject:[[Message alloc] initFromStorage:rmsg]];
+            }
+        }
+        if ([defs arrayForKey:SettingYourMessages] != nil) {
+            NSMutableArray* rmsgs = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingYourMessages]];
+            YourMessages = [[NSMutableArray alloc] init];
+            for (int i=0; i<[rmsgs count]; i++) {
+                NSString* rmsg = [rmsgs objectAtIndex:i];
+                [YourMessages addObject:[[Message alloc] initFromUserText:rmsg atIndex:i]];
+            }
+        }
+
+        if ([defs arrayForKey:SettingReminderMessages] != nil)
+            ReminderMessages = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingReminderMessages]];
+        if ([defs arrayForKey:SettingReminderContactLists] != nil)
+            ReminderContactLists =
+                [NSMutableArray arrayWithArray:[defs arrayForKey:SettingReminderContactLists]];
+        if ([defs arrayForKey:SettingReminderDates] != nil)
+            ReminderDates = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingReminderDates]];
+
+        if ([defs stringForKey:SettingNotificationDate] != nil &&
+                [[defs stringForKey:SettingNotificationDate] length] > 0)
+            NotificationDate = [defs stringForKey:SettingNotificationDate];
+        if ([defs stringForKey:SettingNotificationOn] != nil &&
+            [[defs stringForKey:SettingNotificationOn] length] == 1)
+            NotificationOn = [[defs stringForKey:SettingNotificationOn] isEqualToString:@"1"];
+        if ([defs arrayForKey:SettingNotificationMsgs] != nil)
+            NotificationMsgs = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingNotificationMsgs]];
+
+        if ([defs stringForKey:SettingShowIntro] != nil &&
+            [[defs stringForKey:SettingShowIntro] length] == 1)
+            ShowIntro = [[defs stringForKey:SettingShowIntro] isEqualToString:@"1"];
+        if ([defs stringForKey:SettingAskRegistration] != nil &&
+            [[defs stringForKey:SettingAskRegistration] length] == 1)
+            AskRegistration = [[defs stringForKey:SettingAskRegistration] isEqualToString:@"1"];
+
+        //[defs setObject:nil forKey:SettingNamedGroups];
+        if ([defs arrayForKey:SettingNamedGroups] != nil) {
+            NSArray* grps = [defs arrayForKey:SettingNamedGroups];
+            for (NSString* grp in grps) {
+                //[defs removeObjectForKey:grp];
+                NSArray* names = [defs arrayForKey:grp];
+                if (names != nil)
+                    [NamedGroups setObject:names forKey:grp];
+            }
+        }
+        //[defs removeObjectForKey:SettingNamedGroups];
+
+        //[defs removeObjectForKey:SettingChosenCategories];
+        if ([defs arrayForKey:SettingChosenCategories] != nil) {
+            ChosenCategories = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingChosenCategories]];
+            //remove duplicates
+            NSOrderedSet *mySet = [[NSOrderedSet alloc] initWithArray:ChosenCategories];
+            ChosenCategories = [[NSMutableArray alloc] initWithArray:[mySet array]];
+        }
+        if ([defs dictionaryForKey:SettingKnownCategories] != nil)
+            KnownCategories = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingKnownCategories]];
+
+        LastNoteDownload = nil;
+        if ([defs stringForKey:SettingLastNoteDownload] != nil &&
+            [[defs stringForKey:SettingLastNoteDownload] length] == 1)
+            LastNoteDownload = [defs stringForKey:SettingLastNoteDownload];
+
+        //[defs removeObjectForKey:SettingUserName];
+        //[defs removeObjectForKey:SettingUserEmail];
+        //[defs removeObjectForKey:SettingUserAge];
+        if ([defs stringForKey:SettingUserName] != nil &&
+            [[defs stringForKey:SettingUserName] length] > 0)
+            UserName = [defs stringForKey:SettingUserName];
+        if ([defs stringForKey:SettingUserEmail] != nil &&
+            [[defs stringForKey:SettingUserEmail] length] > 0)
+            UserEmail = [defs stringForKey:SettingUserEmail];
+        if ([defs stringForKey:SettingUserAge] != nil &&
+            [[defs stringForKey:SettingUserAge] length] > 0)
+            UserAge = [defs stringForKey:SettingUserAge];
+        if ([defs stringForKey:SettingUserBirthMonth] != nil &&
+            [[defs stringForKey:SettingUserBirthMonth] length] > 0)
+            UserBirthMonth = [defs stringForKey:SettingUserBirthMonth];
+        if ([defs stringForKey:SettingUserBirthYear] != nil &&
+            [[defs stringForKey:SettingUserBirthYear] length] > 0)
+            UserBirthYear = [defs stringForKey:SettingUserBirthYear];
+        if ([defs stringForKey:SettingAppID] != nil &&
+            [[defs stringForKey:SettingAppID] length] > 0)
+            AppID = [defs stringForKey:SettingAppID];
+
+        [self LoadCachedMapping];
+    }
+    @catch (id ex) { ;} //ignore exceptions
 }
 
 +(void)LoadCachedMapping {
