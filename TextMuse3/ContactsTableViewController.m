@@ -209,11 +209,14 @@ NSMutableArray* searchContacts;
             [fname setText:[contact firstName]];
             [fname sizeToFit];
             CGRect frmLName = [fname frame];
-            frmLName.origin.x = [fname frame].origin.x + [fname frame].size.width + 8;
+            frmLName.origin.x = [fname frame].origin.x;
+            if ([[contact firstName] length] != 0)
+                frmLName.origin.x += 8;
             frmLName.size.width = [cell frame].size.width - 8 - frmLName.origin.x;
             [lname setHidden:NO];
             [lname setFrame:frmLName];
             [lname setText:[contact lastName]];
+            [lname sizeToFit];
             CGRect frmBtn = [btncheck frame];
             frmBtn.origin.y = [fname frame].origin.y + 2;
             [btncheck setFrame:frmBtn];
@@ -295,27 +298,34 @@ NSMutableArray* searchContacts;
                                        title:@"Choose number"
                                      handler:^(UITableViewRowAction* action, NSIndexPath* indexPath) {
                                          NSArray* cs;
-                                         long section = [indexPath section];
-                                         if (section == 0 && showRecentContacts)
-                                             cs = [NSArray arrayWithObject:[Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]]];
-                                         else if ((section == 0 && !showRecentContacts) ||
-                                                  (section == 1 && showRecentContacts)) {
-                                             NSArray* grp = [NamedGroups objectForKey:[groups objectAtIndex:[indexPath row]]];
-                                             NSMutableArray* users = [[NSMutableArray alloc] init];
-                                             for (NSString*phone in grp) {
-                                                 [users addObject:[Data findUserByPhone:phone]];
-                                             }
-                                             cs = [NSArray arrayWithArray:users];
+                                         int topMargin = 8;
+                                         if (tableView == [[self searchDisplayController] searchResultsTableView]) {
+                                             cs = [NSArray arrayWithObject:[searchContacts objectAtIndex:[indexPath row]]];
+                                             topMargin += 40;
                                          }
                                          else {
-                                             section--;
-                                             if (showRecentContacts) section--;
-                                             NSArray* headings = [Data getContactHeadings];
-                                             NSArray* users = [Data getContactsForHeading:[headings objectAtIndex:section]];
-                                             cs = [NSArray arrayWithObject: [users objectAtIndex:[indexPath row]]];
+                                             long section = [indexPath section];
+                                             if (section == 0 && showRecentContacts)
+                                                 cs = [NSArray arrayWithObject:[Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]]];
+                                             else if ((section == 0 && !showRecentContacts) ||
+                                                      (section == 1 && showRecentContacts)) {
+                                                 NSArray* grp = [NamedGroups objectForKey:[groups objectAtIndex:[indexPath row]]];
+                                                 NSMutableArray* users = [[NSMutableArray alloc] init];
+                                                 for (NSString*phone in grp) {
+                                                     [users addObject:[Data findUserByPhone:phone]];
+                                                 }
+                                                 cs = [NSArray arrayWithArray:users];
+                                             }
+                                             else {
+                                                 section--;
+                                                 if (showRecentContacts) section--;
+                                                 NSArray* headings = [Data getContactHeadings];
+                                                 NSArray* users = [Data getContactsForHeading:[headings objectAtIndex:section]];
+                                                 cs = [NSArray arrayWithObject: [users objectAtIndex:[indexPath row]]];
+                                             }
                                          }
                                          if (cs != nil/* && [cs count] > 0*/)
-                                             [self choosePhone:cs];
+                                             [self choosePhone:cs withMargin:topMargin];
                                      }];
     return [NSArray arrayWithObjects:actChoose, nil];
 }
@@ -344,21 +354,21 @@ NSMutableArray* searchContacts;
     searchContacts = filtered;
 }
 
--(void)choosePhone:(NSArray*)users {
+-(void)choosePhone:(NSArray*)users withMargin:(int)margin {
     CGRect frm = [[self view] frame];
     CGRect frmNav = [[[self navigationController] navigationBar] frame];
     CGFloat topmargin = frmNav.origin.y + frmNav.size.height;
     frm.origin.x += 8;
     frm.origin.y += frm.size.height;
     frm.size.width -= 16;
-    frm.size.height -= 28;
+    frm.size.height -= 20 - margin;
     ChoosePhoneView* choosephone = [[ChoosePhoneView alloc] initWithFrame:frm];
     [choosephone setUsers:users];
     [choosephone setNavItem:[self navigationItem]];
     [[self view] addSubview:choosephone];
 
     CGRect frmDest = frm;
-    frmDest.origin.y = topmargin + 8;
+    frmDest.origin.y = topmargin + margin;
     [UIView animateWithDuration:0.3f animations:^{
         [choosephone setFrame:frmDest];
     }];
