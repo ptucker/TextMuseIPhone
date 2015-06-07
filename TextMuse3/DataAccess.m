@@ -74,8 +74,11 @@ NSString* localNotes = @"notes.xml";
     
     [self loadFromInternet];
     
-    if (!notificationOnly)
-        [self loadLocalImages];
+    if (!notificationOnly) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self loadLocalImages];
+        });
+    }
 }
 
 -(void) loadFromFile {

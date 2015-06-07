@@ -209,9 +209,7 @@ NSMutableArray* searchContacts;
             [fname setText:[contact firstName]];
             [fname sizeToFit];
             CGRect frmLName = [fname frame];
-            frmLName.origin.x = [fname frame].origin.x;
-            if ([[contact firstName] length] != 0)
-                frmLName.origin.x += 8;
+            frmLName.origin.x = [fname frame].origin.x + [fname frame].size.width + 8;
             frmLName.size.width = [cell frame].size.width - 8 - frmLName.origin.x;
             [lname setHidden:NO];
             [lname setFrame:frmLName];
