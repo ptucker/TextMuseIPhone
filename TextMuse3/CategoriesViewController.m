@@ -40,8 +40,20 @@ NSArray* colors;
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [categories addSubview:refreshControl];
     
-    [[btnSuggestion1 titleLabel] setNumberOfLines:0];
-    [[btnSuggestion2 titleLabel] setNumberOfLines:0];
+    //[[btnSuggestion1 titleLabel] setNumberOfLines:0];
+    //[[btnSuggestion2 titleLabel] setNumberOfLines:0];
+    [btnSuggestion2 setFrame:CGRectMake([btnSuggestion2 frame].origin.x, [btnSuggestion2 frame].origin.y, [btnSuggestion1 frame].size.width, [btnSuggestion1 frame].size.height)];
+    CGRect frmLabel = CGRectMake(0, 0, [btnSuggestion1 frame].size.width, [btnSuggestion1 frame].size.height);
+    lblSuggestion1 = [[UILabel alloc] initWithFrame:frmLabel];
+    lblSuggestion2 = [[UILabel alloc] initWithFrame:frmLabel];
+    [lblSuggestion1 setFont:[[btnSuggestion1 titleLabel] font]];
+    [lblSuggestion2 setFont:[[btnSuggestion2 titleLabel] font]];
+    [lblSuggestion1 setTextAlignment:NSTextAlignmentCenter];
+    [lblSuggestion2 setTextAlignment:NSTextAlignmentCenter];
+    [lblSuggestion1 setTextColor:[UIColor whiteColor]];
+    [lblSuggestion2 setTextColor:[UIColor whiteColor]];
+    [btnSuggestion1 addSubview:lblSuggestion1];
+    [btnSuggestion2 addSubview:lblSuggestion2];
     
     UIImage* settings = [UIImage imageNamed:@"gear.png"];
     UIImage *scaledSettings =
@@ -100,7 +112,11 @@ NSArray* colors;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return ((ChosenCategories == nil) ? [[Data getCategories] count] : [ChosenCategories count]);
+    NSInteger c = ((ChosenCategories == nil) ? [[Data getCategories] count] : [ChosenCategories count]);
+    if (c > [ChosenCategories count])
+        NSLog(@"why am i here?");
+    
+    return c;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -147,8 +163,7 @@ NSArray* colors;
     if (ChosenCategories != nil) {
         NSArray* cats = [Data getCategories];
         icategory = 0;
-        int ichosen = 0;
-        for (; icategory<[cats count] && ichosen <= selectedCategory; icategory++) {
+        for (int ichosen = 0; icategory<[cats count] && ichosen <= [cats count]; icategory++) {
             NSString* tmp = [cats objectAtIndex:icategory];
             if ([ChosenCategories containsObject:tmp]) {
                 if (ichosen == selectedCategory)
@@ -199,17 +214,32 @@ NSArray* colors;
                 [load load];
                 randomMessage = [Data chooseRandomMessage];
             }
-            if (([randomMessage text] == nil) || [[randomMessage text] length] == 0)
-                [btnSuggestion1 setTitle:@"" forState:UIControlStateNormal];
-            else
-                [btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
-            if ([randomMessage mediaUrl] == nil) {
-                [btnSuggestion1 setBackgroundImage:nil forState:UIControlStateNormal];
-                [btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
+            if (([randomMessage text] == nil) || [[randomMessage text] length] == 0) {
+                //[btnSuggestion1 setTitle:@"" forState:UIControlStateNormal];
+                [lblSuggestion1 setText:@""];
+                [lblSuggestion1 setHidden:YES];
             }
             else {
+                //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
+                [lblSuggestion1 setText:[randomMessage text]];
+                [lblSuggestion1 setHidden:NO];
+            }
+            if ([randomMessage mediaUrl] == nil) {
+                [btnSuggestion1 setBackgroundImage:nil forState:UIControlStateNormal];
+                [lblSuggestion1 setFrame:CGRectMake(4, 4, [btnSuggestion1 frame].size.width-8, [btnSuggestion1 frame].size.height-8)];
+                //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
+                [lblSuggestion1 setBackgroundColor:[UIColor clearColor]];
+                [lblSuggestion1 setNumberOfLines:0];
+                [lblSuggestion1 setAlpha:1];
+            }
+            else {
+                CGRect frm = CGRectMake(0, [btnSuggestion1 frame].size.height-22, [btnSuggestion1 frame].size.width, 22);
+                [lblSuggestion1 setFrame:frm];
                 [btnSuggestion1 setBackgroundImage:[UIImage imageWithData:[randomMessage img]]
                                          forState:UIControlStateNormal];
+                [lblSuggestion1 setNumberOfLines:1];
+                [lblSuggestion1 setBackgroundColor:[UIColor grayColor]];
+                [lblSuggestion1 setAlpha:0.70];
             }
             
             [self fadein];
@@ -224,18 +254,34 @@ NSArray* colors;
                 [load load];
                 randomMessage = [Data chooseRandomMessage];
             }
-            if (([randomMessage text] == nil) || [[randomMessage text] length] == 0)
-                [btnSuggestion2 setTitle:@"" forState:UIControlStateNormal];
-            else
-                [btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
-            if ([randomMessage img] == nil) {
-                [btnSuggestion2 setBackgroundImage:nil forState:UIControlStateNormal];
-                [btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
+            if (([randomMessage text] == nil) || [[randomMessage text] length] == 0) {
+                //[btnSuggestion2 setTitle:@"" forState:UIControlStateNormal];
+                [lblSuggestion2 setText:@""];
+                [lblSuggestion2 setHidden:YES];
             }
             else {
+                //[btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
+                [lblSuggestion2 setText:[randomMessage text]];
+                [lblSuggestion2 setHidden:NO];
+            }
+            if ([randomMessage img] == nil) {
+                [btnSuggestion2 setBackgroundImage:nil forState:UIControlStateNormal];
+                [lblSuggestion2 setFrame:CGRectMake(4, 4, [btnSuggestion2 frame].size.width-8, [btnSuggestion2 frame].size.height-8)];
+                //[btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
+                [lblSuggestion2 setBackgroundColor:[UIColor clearColor]];
+                [lblSuggestion2 setNumberOfLines:0];
+                [lblSuggestion2 setAlpha:1];
+            }
+            else {
+                CGRect frm = CGRectMake(0, [btnSuggestion2 frame].size.height-22, [btnSuggestion2 frame].size.width, 22);
+                [lblSuggestion2 setFrame:frm];
                 [btnSuggestion2 setBackgroundImage:[UIImage imageWithData:[randomMessage img]]
                                           forState:UIControlStateNormal];
+                [lblSuggestion2 setBackgroundColor:[UIColor grayColor]];
+                [lblSuggestion2 setNumberOfLines:1];
+                [lblSuggestion2 setAlpha:0.70];
             }
+            
             
             [self fadeout];
             
@@ -298,7 +344,7 @@ NSArray* colors;
     CGRect frmClose = CGRectMake(frmView.size.width-60, 10, 50, 30);
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [btnClose setTitle:@"done" forState:UIControlStateNormal];
+    [btnClose setTitle:@"Done" forState:UIControlStateNormal];
     [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:15]];
     [btnClose addTarget:self action:@selector(closeWalkthrough:)
        forControlEvents:UIControlEventTouchUpInside];
@@ -328,9 +374,9 @@ NSArray* colors;
     NSString* txts[] = {
         @"Choose a category to find a text message you want to send your friends.",
         @"Swipe through and touch the text message you want to send.",
-        @"After choosing a text, your contacts will appear. Choose a contact or select a few and touch 'SEND'.",
+        @"After choosing a text, choose a contact or select a few and touch 'SEND'.",
         @"... and before you send it, you can make edits to give it that personal touch.",
-        @"Touch the cog to personalize TextMuse – choose your favorite categories, adjust settings and send us your feedback!"
+        @"Touch the cog to personalize TextMuse. Adjust settings and send us your feedback!"
     };
     CGFloat txtHeight = 50;
     frmScroll.size.height -= frmScroll.origin.y;
@@ -359,7 +405,7 @@ NSArray* colors;
         UILabel* lbl = [[UILabel alloc] initWithFrame:frmText];
         //[lbl sizeToFit];
         [lbl setText:txts[i]];
-        CGFloat fntSize = frmText.size.width > 320 ? 20 : 16;
+        CGFloat fntSize = frmText.size.width > 330 ? 18 : 14;
         [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:fntSize]];
         [lbl setTextColor:[UIColor blackColor]];
         [lbl setTextAlignment:NSTextAlignmentCenter];

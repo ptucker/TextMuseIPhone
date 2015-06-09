@@ -157,7 +157,7 @@ NSString* AppID;
 
         //[Settings SaveSetting:SettingSortLastName withValue:SortLastName ? @"YES" : @"NO"];
         if ([defs stringForKey:SettingSortLastName] != nil)
-            SortLastName = [[defs stringForKey:SettingSortLastName] isEqualToString:@"NO"];
+            SortLastName = [[defs stringForKey:SettingSortLastName] isEqualToString:@"YES"];
 
         //[defs setObject:nil forKey:SettingRecentMessages];
         if ([defs arrayForKey:SettingRecentMessages] != nil) {

@@ -33,12 +33,12 @@
     [lbl setText:@"Choose phone"];
     [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
     
-    CGRect frmClose = frmLbl;
-    frmClose.origin.x = 8;
-    frmClose.size.width = 22;
+    CGRect frmClose = CGRectMake(8, 0, 28, 28); // frmLbl;
+    //frmClose.origin.x = 8;
+    //frmClose.size.width = 22;
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitle:@"X" forState:UIControlStateNormal];
-    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
     [btnClose setTitleColor:[UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0]
                    forState:UIControlStateNormal];
     [btnClose addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];

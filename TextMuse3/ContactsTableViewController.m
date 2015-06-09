@@ -220,6 +220,7 @@ NSMutableArray* searchContacts;
             [btncheck setFrame:frmBtn];
             [btncheck addTarget:self action:@selector(check:) forControlEvents:UIControlEventTouchUpInside];
             [btncheck setExtra:contact];
+            [btncheck setSelected:[checkedContacts containsObject:contact]];
         
             if ([btncheck tag] == 0 && tableView == contacts) {
                 [btncheck setTag:102];

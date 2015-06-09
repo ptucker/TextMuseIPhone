@@ -28,6 +28,8 @@ extern NSArray* colors;
     IBOutlet UITableView* categories;
     IBOutlet UIButton* btnSuggestion1;
     IBOutlet UIButton* btnSuggestion2;
+    IBOutlet UILabel* lblSuggestion1;
+    IBOutlet UILabel* lblSuggestion2;
     UIRefreshControl *refreshControl;
     UIView* walkthroughView;
     UIPageControl* pages;

@@ -85,14 +85,15 @@ NSString* localNotes = @"notes.xml";
     NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
     categoryOrder = [[NSMutableArray alloc] init];
 
-    if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
-        inetdata = [NSMutableData dataWithData:[[self createFile] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    else {
-        inetdata = [NSMutableData dataWithContentsOfFile:file];
-    }
-    
     @try {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
+            inetdata = [NSMutableData dataWithData:[[self createFile]
+                                                    dataUsingEncoding:NSUTF8StringEncoding]];
+        }
+        else {
+            inetdata = [NSMutableData dataWithContentsOfFile:file];
+        }
+    
         [self parseMessageData];
     }
     @catch (id ex) {
@@ -230,18 +231,21 @@ NSString* localNotes = @"notes.xml";
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection*) conn {
-    NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
-    [[NSFileManager defaultManager] createFileAtPath:file
-                                            contents:inetdata
-                                          attributes:nil];
-
     //Now that we have data from the server, re-initialize Categories to an empty dictionary
-    [self parseMessageData];
-    
-    for (NSObject* l in listeners) {
-        if ([l respondsToSelector:@selector(dataRefresh)])
-            [l performSelector:@selector(dataRefresh)];
+    @try {
+        [self parseMessageData];
+        
+        NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
+        [[NSFileManager defaultManager] createFileAtPath:file
+                                                contents:inetdata
+                                              attributes:nil];
+        
+        for (NSObject* l in listeners) {
+            if ([l respondsToSelector:@selector(dataRefresh)])
+                [l performSelector:@selector(dataRefresh)];
+        }
     }
+    @catch(id ex) {; }
 }
 
 -(void)parseMessageData {
@@ -645,12 +649,15 @@ NSString* localNotes = @"notes.xml";
             [Settings SaveSetting:SettingKnownCategories withValue:KnownCategories];
             [Settings SaveSetting:SettingNotificationMsgs withValue:NotificationMsgs];
             
+            NSMutableArray* removeChosen = [[NSMutableArray alloc] init];
             for (NSString* c in ChosenCategories) {
                 //Need to make sure the chosen categories are in the content
                 if ([tmpCategories objectForKey:c] == nil && ![c isEqualToString:@"Your Photos"] &&
                     ![c isEqualToString:@"Your Messages"])
-                    [ChosenCategories removeObject:c];
+                    [removeChosen addObject:c];
             }
+            for (NSString* r in removeChosen)
+                [ChosenCategories removeObject:r];
             [Settings SaveSetting:SettingChosenCategories withValue:ChosenCategories];
         }
     }
