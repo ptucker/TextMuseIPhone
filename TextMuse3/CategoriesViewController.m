@@ -113,8 +113,6 @@ NSArray* colors;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger c = ((ChosenCategories == nil) ? [[Data getCategories] count] : [ChosenCategories count]);
-    if (c > [ChosenCategories count])
-        NSLog(@"why am i here?");
     
     return c;
 }
