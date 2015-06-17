@@ -81,6 +81,7 @@ NSArray* colors;
 
 - (void)viewDidAppear:(BOOL)animated {
     reminderButtonState = SHOW_TEXT;
+    [[[self  navigationItem] backBarButtonItem] setTitle:@"Back"];
     
     if (timerReminder == nil) {
         timerReminder = [NSTimer scheduledTimerWithTimeInterval:2.0
@@ -417,6 +418,8 @@ NSArray* colors;
 -(IBAction)closeWalkthrough:(id)sender {
     [walkthroughView removeFromSuperview];
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
+    [[[self  navigationItem] backBarButtonItem] setTitle:@"Skip"];
+    ShowIntro = NO;
     [self performSegueWithIdentifier:@"registerInitial" sender:self];
     
     [Settings SaveSetting:SettingShowIntro withValue:@"0"];
