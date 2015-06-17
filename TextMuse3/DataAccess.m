@@ -45,6 +45,16 @@ NSString* localNotes = @"notes.xml";
 }
 
 -(void)reloadData {
+    //We're already downloading. Knock it off!
+    if (conn != nil) {
+        for (NSObject* l in listeners) {
+            if ([l respondsToSelector:@selector(dataRefresh)])
+                [l performSelector:@selector(dataRefresh)];
+        }
+
+        return;
+    }
+    
     selectContacts = [[NSMutableArray alloc] init];
     
     notificationOnly = false;
@@ -95,10 +105,12 @@ NSString* localNotes = @"notes.xml";
         }
     
         [self parseMessageData];
+        categories = tmpCategories;
     }
     @catch (id ex) {
         inetdata = [NSMutableData dataWithData:[[self createFile] dataUsingEncoding:NSUTF8StringEncoding]];
         [self parseMessageData];
+        categories = tmpCategories;
     }
     for (NSObject* l in listeners) {
         if ([l respondsToSelector:@selector(dataRefresh)])
@@ -149,9 +161,9 @@ NSString* localNotes = @"notes.xml";
     inetdata = [[NSMutableData alloc] initWithCapacity:60000];
     categoryOrder = [[NSMutableArray alloc] init];
     
-    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
-                                                            delegate:self
-                                                    startImmediately:YES];
+    conn = [[NSURLConnection alloc] initWithRequest:req
+                                           delegate:self
+                                   startImmediately:YES];
 
     timerLoad = [NSTimer scheduledTimerWithTimeInterval:7200
                                                  target:self
@@ -228,13 +240,21 @@ NSString* localNotes = @"notes.xml";
                                           cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
                                           otherButtonTitles:nil, nil];
     [alert show];
+    
+    conn = nil;
 }
 
--(void)connectionDidFinishLoading:(NSURLConnection*) conn {
+-(void)connectionDidFinishLoading:(NSURLConnection*) connection {
     //Now that we have data from the server, re-initialize Categories to an empty dictionary
     @try {
         [self parseMessageData];
         
+        if (!notificationOnly) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                categories = tmpCategories;
+            });
+        }
+
         NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
         [[NSFileManager defaultManager] createFileAtPath:file
                                                 contents:inetdata
@@ -246,6 +266,7 @@ NSString* localNotes = @"notes.xml";
         }
     }
     @catch(id ex) {; }
+    conn = nil;
 }
 
 -(void)parseMessageData {
@@ -254,9 +275,6 @@ NSString* localNotes = @"notes.xml";
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:inetdata];
     [parser setDelegate:self];
     [parser parse];
-
-    if (!notificationOnly)
-        categories = tmpCategories;
 }
 
 -(void)initContacts {
@@ -644,6 +662,8 @@ NSString* localNotes = @"notes.xml";
     else if ([elementName isEqualToString:@"notes"]) {
         if (!notificationOnly) {
             for (NSString* c in [tmpCategories keyEnumerator]) {
+                if ([KnownCategories objectForKey:c] == nil && ![ChosenCategories containsObject:c])
+                    [ChosenCategories addObject:c];
                 [KnownCategories setObject:@"" forKey:c];
             }
             [Settings SaveSetting:SettingKnownCategories withValue:KnownCategories];

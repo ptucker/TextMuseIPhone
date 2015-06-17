@@ -34,6 +34,7 @@
     
     NSMutableArray* listeners;
 
+    NSURLConnection* conn;
     NSMutableData* inetdata;
     
     NSMutableString* xmldata;

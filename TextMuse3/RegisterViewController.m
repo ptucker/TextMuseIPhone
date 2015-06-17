@@ -45,6 +45,11 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
     if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0) {
         
     }
+    
+    if (ShowIntro == YES) {
+        [[[[self navigationController] navigationItem] backBarButtonItem] setTitle:@"Skip"];
+        ShowIntro = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

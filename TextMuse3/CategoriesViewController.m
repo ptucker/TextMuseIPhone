@@ -69,9 +69,6 @@ NSArray* colors;
     
     if (ShowIntro) {
         [self showWalkthrough];
-    
-        ShowIntro = NO;
-        [Settings SaveSetting:SettingShowIntro withValue:@"0"];
     }
     
     [Data addListener:self];
@@ -420,6 +417,9 @@ NSArray* colors;
 -(IBAction)closeWalkthrough:(id)sender {
     [walkthroughView removeFromSuperview];
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
+    [self performSegueWithIdentifier:@"registerInitial" sender:self];
+    
+    [Settings SaveSetting:SettingShowIntro withValue:@"0"];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
