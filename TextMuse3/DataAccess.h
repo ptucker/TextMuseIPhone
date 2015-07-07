@@ -59,8 +59,6 @@
 -(void)initContacts;
 -(void)addListener:(id)listener;
 -(NSArray*)getCategories;
--(NSArray*)getChosenCategories;
--(NSArray*)getOptionalCategories;
 -(NSArray*)getRequiredCategories;
 -(MessageCategory*)getCategory:(NSString*)c;
 -(SponsorInfo*)getSponsorForCategory:(NSString*)category;

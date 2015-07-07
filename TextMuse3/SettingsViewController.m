@@ -36,8 +36,11 @@
     [notesCount setEnabled:SaveRecentMessages];
     [notesCount setValue:MaxRecentMessages];
     
-    if (ChosenCategories == nil)
-        ChosenCategories = [NSMutableArray arrayWithArray:[Data getCategories]];
+    if (CategoryList == nil) {
+        for (NSString*c in [Data getCategories]) {
+            [CategoryList setObject:@"1" forKey:c];
+        }
+    }
     
     [chosenCategories setDataSource:self];
     [chosenCategories setDelegate:self];
@@ -81,7 +84,9 @@
         [btncheck setFrame:frmBtn];
         [btncheck addTarget:self action:@selector(check:) forControlEvents:UIControlEventTouchUpInside];
         [btncheck setExtra:categoryName];
-        BOOL selected = [ChosenCategories containsObject:categoryName];
+        if ([CategoryList objectForKey:categoryName] == nil)
+            [CategoryList setObject:@"1" forKey:categoryName];
+        BOOL selected = [[CategoryList objectForKey:categoryName] isEqualToString: @"1"];
         [btncheck setSelected:selected];
     
         if ([btncheck tag] == 0) {
@@ -100,13 +105,16 @@
 
 -(IBAction)check:(id)sender {
     UICheckButton* btn = (UICheckButton*)sender;
-    [btn setSelected:![btn isSelected]];
-    
     NSString* categoryName = [btn extra];
+    [btn setSelected:![btn isSelected]];
+    [CategoryList setObject:[btn isSelected] ? @"1" : @"0" forKey:categoryName];
+    
+    /*
     if ([btn isSelected] && ![ChosenCategories containsObject:categoryName])
         [ChosenCategories addObject:categoryName];
     else if (![btn isSelected] && [ChosenCategories containsObject:categoryName])
         [ChosenCategories removeObject:categoryName];
+     */
 }
 
 -(IBAction)registerUser:(id)sender {
@@ -126,10 +134,11 @@
 }
 
 -(void)saveSettings {
-    [Settings SaveSetting:SettingChosenCategories withValue:ChosenCategories];
+    //[Settings SaveSetting:SettingChosenCategories withValue:ChosenCategories];
+    [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
     for (NSString*c in [Data getCategories]) {
         MessageCategory*mc = [Data getCategory:c];
-        [mc setChosen:[ChosenCategories containsObject:c]];
+        [mc setChosen:[[CategoryList objectForKey:c] isEqualToString:@"1"]];
     }
     
     if (SortLastName != [sortContacts isOn]) {

@@ -26,7 +26,7 @@
     CGRect frmLblContent = CGRectMake(66, frame.size.height/8,
                                       frame.size.width-132, frame.size.height - 80);
     CGFloat fontSize = 24.0;
-    CGRect frmBtnDetails = CGRectMake(frame.size.width-79, frame.size.height-20, 67, 20);
+    CGRect frmBtnDetails = CGRectMake(frame.size.width-95, frame.size.height-25, 83, 25);
     
     if ([msg img] == nil) {
         imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
@@ -118,6 +118,7 @@
         [self addSubview:btnDetails];
     }
     [btnDetails setImage:[UIImage imageNamed:@"link.png"] forState:UIControlStateNormal];
+    [btnDetails setContentMode:UIViewContentModeScaleAspectFit];
     [btnDetails setFrame:frmBtnDetails];
     [btnDetails setHidden:[msg url] == nil];
 

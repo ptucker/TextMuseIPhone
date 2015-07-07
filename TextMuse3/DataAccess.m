@@ -361,26 +361,6 @@ NSString* localNotes = @"notes.xml";
     return cs;
 }
 
--(NSArray*)getChosenCategories {
-    NSMutableArray* ret = [[NSMutableArray alloc] init];
-    NSArray* sorted = [[[categories keyEnumerator] allObjects] sortedArrayUsingComparator:categoryCmp];
-    for (NSString* c in sorted) {
-        if (![[categories objectForKey:c] required] && [[categories objectForKey:c] chosen])
-            [ret addObject:c];
-    }
-    return ret;
-}
-
--(NSArray*)getOptionalCategories {
-    NSMutableArray* ret = [[NSMutableArray alloc] init];
-    NSArray* sorted = [[[categories keyEnumerator] allObjects] sortedArrayUsingComparator:categoryCmp];
-    for (NSString* c in sorted) {
-        if (![[categories objectForKey:c] required])
-            [ret addObject:c];
-    }
-    return ret;
-}
-
 -(NSArray*)getRequiredCategories {
     NSArray* sorted = [[[categories keyEnumerator] allObjects] sortedArrayUsingComparator:categoryCmp];
     NSMutableArray* cs = [[NSMutableArray alloc] init];
@@ -584,8 +564,9 @@ NSString* localNotes = @"notes.xml";
                                       [[attributeDict objectForKey:@"required"] isEqualToString:@"1"])];
         [currentCategory setNewCategory:([[attributeDict allKeys] containsObject:@"new"] &&
                                          [[attributeDict objectForKey:@"new"] isEqualToString:@"1"])];
-        [currentCategory setChosen:(ChosenCategories == nil ||
-                                    [ChosenCategories containsObject:[currentCategory name]] ||
+        [currentCategory setChosen:(CategoryList == nil ||
+                                    [CategoryList objectForKey:[currentCategory name]] == nil ||
+                                    [[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"1"] ||
                                     [currentCategory newCategory])];
         [currentCategory setMessages:[[NSMutableArray alloc] init]];
         if ([currentCategory required]) {
@@ -594,7 +575,7 @@ NSString* localNotes = @"notes.xml";
                 //CurrentCategory = [currentCategory name];
                 [Settings SaveSetting:InitialCategory withValue:[currentCategory name]];
             }
-
+            [CategoryList setObject:@"1" forKey:[currentCategory name]];
         }
         if ([[attributeDict allKeys] containsObject:@"url"] &&
                 [[attributeDict allKeys] containsObject:@"icon"]) {
@@ -607,8 +588,8 @@ NSString* localNotes = @"notes.xml";
                 [currentCategory setSponsor:sponsor];
             }
         }
-        if (ChosenCategories != nil && [currentCategory newCategory]) {
-            [ChosenCategories addObject:[currentCategory name]];
+        if (CategoryList != nil && [currentCategory newCategory]) {
+            [CategoryList setObject:@"1" forKey:[currentCategory name]];
         }
 
         [tmpCategories setValue:currentCategory forKey:name];
@@ -662,6 +643,11 @@ NSString* localNotes = @"notes.xml";
     else if ([elementName isEqualToString:@"notes"]) {
         if (!notificationOnly) {
             for (NSString* c in [tmpCategories keyEnumerator]) {
+                if ([CategoryList objectForKey:c] == nil)
+                    [CategoryList setObject:@"1" forKey:c];
+            }
+            /*
+            for (NSString* c in [tmpCategories keyEnumerator]) {
                 if ([KnownCategories objectForKey:c] == nil && ![ChosenCategories containsObject:c])
                     [ChosenCategories addObject:c];
                 [KnownCategories setObject:@"" forKey:c];
@@ -679,6 +665,7 @@ NSString* localNotes = @"notes.xml";
             for (NSString* r in removeChosen)
                 [ChosenCategories removeObject:r];
             [Settings SaveSetting:SettingChosenCategories withValue:ChosenCategories];
+             */
         }
     }
     else if ([elementName isEqualToString:@"text"] && [partsdata length] > 0)

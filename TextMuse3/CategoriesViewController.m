@@ -110,7 +110,16 @@ NSArray* colors;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger c = ((ChosenCategories == nil) ? [[Data getCategories] count] : [ChosenCategories count]);
+//    NSInteger c = ((ChosenCategories == nil) ? [[Data getCategories] count] : [ChosenCategories count]);
+    NSInteger c = [[Data getCategories] count];
+    if (CategoryList != nil) {
+        int cnt = 0;
+        for (NSString* cat in [CategoryList keyEnumerator]) {
+            if ([[CategoryList objectForKey:cat] isEqualToString: @"1"])
+                cnt++;
+        }
+        c = cnt;
+    }
     
     return c;
 }
@@ -156,12 +165,12 @@ NSArray* colors;
 
 -(long) chosenCategory:(long)selectedCategory {
     long icategory = selectedCategory;
-    if (ChosenCategories != nil) {
+    if (CategoryList != nil) {
         NSArray* cats = [Data getCategories];
         icategory = 0;
         for (int ichosen = 0; icategory<[cats count] && ichosen <= [cats count]; icategory++) {
             NSString* tmp = [cats objectAtIndex:icategory];
-            if ([ChosenCategories containsObject:tmp]) {
+            if ([[CategoryList objectForKey:tmp] isEqualToString:@"1"]) {
                 if (ichosen == selectedCategory)
                     break;
                 else

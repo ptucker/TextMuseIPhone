@@ -38,6 +38,7 @@ NSString* SettingAskRegistration = @"SettingAskRegistration";
 NSString* SettingNamedGroups = @"SettingNamedGroups";
 NSString* SettingChosenCategories = @"SettingChosenCategories";
 NSString* SettingKnownCategories = @"SettingKnownCategories";
+NSString* SettingCategoryList = @"SettingCategoryList";
 NSString* SettingLastNoteDownload = @"SettingLastNoteDownload";
 NSString* SettingUserName=@"SettingUserName";
 NSString* SettingUserEmail=@"SettingUserEmail";
@@ -67,6 +68,7 @@ NSMutableDictionary* NamedGroups = nil;
 BOOL SortLastName = YES;
 NSMutableArray* ChosenCategories = nil;
 NSMutableDictionary* KnownCategories = nil;
+NSMutableDictionary* CategoryList = nil;
 
 NSString* CachedMediaMappingFile = @"media.dat";
 NSMutableDictionary* CachedMediaMapping  = nil;
@@ -130,6 +132,7 @@ NSString* AppID;
     NamedGroups = [[NSMutableDictionary alloc] init];
     ChosenCategories = nil;
     KnownCategories = [[NSMutableDictionary alloc] init];
+    CategoryList = [[NSMutableDictionary alloc] init];
 
     @try {
         //Load from settings
@@ -210,18 +213,27 @@ NSString* AppID;
                     [NamedGroups setObject:names forKey:grp];
             }
         }
-        //[defs removeObjectForKey:SettingNamedGroups];
 
-        //[defs removeObjectForKey:SettingChosenCategories];
-        if ([defs arrayForKey:SettingChosenCategories] != nil) {
-            ChosenCategories = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingChosenCategories]];
-            //remove duplicates
-            NSOrderedSet *mySet = [[NSOrderedSet alloc] initWithArray:ChosenCategories];
-            ChosenCategories = [[NSMutableArray alloc] initWithArray:[mySet array]];
+        if ([defs dictionaryForKey:SettingCategoryList] != nil) {
+            CategoryList = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingCategoryList]];
         }
-        if ([defs dictionaryForKey:SettingKnownCategories] != nil)
-            KnownCategories = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingKnownCategories]];
-
+        else {
+            CategoryList = [[NSMutableDictionary alloc] init];
+            if ([defs arrayForKey:SettingChosenCategories] != nil) {
+                ChosenCategories = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingChosenCategories]];
+                //remove duplicates
+                NSOrderedSet *mySet = [[NSOrderedSet alloc] initWithArray:ChosenCategories];
+                ChosenCategories = [[NSMutableArray alloc] initWithArray:[mySet array]];
+            }
+            if ([defs dictionaryForKey:SettingKnownCategories] != nil)
+                KnownCategories = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingKnownCategories]];
+            for (NSString* c in [KnownCategories keyEnumerator]) {
+                [CategoryList setObject:[ChosenCategories containsObject:c] ? @"1" : @"0" forKey:c];
+            }
+        }
+        [CategoryList setObject:@"1" forKey:NSLocalizedString(@"Your Photos Title", nil)];
+        [CategoryList setObject:@"1" forKey:NSLocalizedString(@"Your Messages Title", nil)];
+        
         LastNoteDownload = nil;
         if ([defs stringForKey:SettingLastNoteDownload] != nil &&
             [[defs stringForKey:SettingLastNoteDownload] length] == 1)
