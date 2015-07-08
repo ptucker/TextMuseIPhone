@@ -27,17 +27,6 @@ NSString* localNotes = @"notes.xml";
 
 -(id)init {
     timerLoad = nil;
-    categoryCmp = ^NSComparisonResult(id c1, id c2) {
-        MessageCategory* cat1 = [categories objectForKey:c1];
-        MessageCategory* cat2 = [categories objectForKey:c2];
-        if ([cat1 required] != [cat2 required]) {
-            return ([cat1 required]) ? NSOrderedAscending : NSOrderedDescending;
-        }
-        
-        return ([cat1 order] > [cat2 order]) ? NSOrderedDescending :
-            (([cat1 order] < [cat2 order]) ? NSOrderedAscending : NSOrderedSame);
-    };
-    
     
     [self reloadData];
     
@@ -92,10 +81,10 @@ NSString* localNotes = @"notes.xml";
 }
 
 -(void) loadFromFile {
-    NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
-    categoryOrder = [[NSMutableArray alloc] init];
-
     @try {
+        NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
+        categoryOrder = [[NSMutableArray alloc] init];
+
         if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
             inetdata = [NSMutableData dataWithData:[[self createFile]
                                                     dataUsingEncoding:NSUTF8StringEncoding]];
@@ -195,6 +184,7 @@ NSString* localNotes = @"notes.xml";
         if (group) {
             [group setAssetsFilter:[ALAssetsFilter allPhotos]];
             [group enumerateAssetsUsingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop){
+                @try {
                 if (asset){
                     int i=0;
                     NSDate* pdate = [asset valueForProperty:ALAssetPropertyDate];
@@ -215,6 +205,8 @@ NSString* localNotes = @"notes.xml";
                 }
                 if ([localImages count] > 15)
                     [localImages removeObjectsInRange:NSMakeRange(15, [localImages count] - 15)];
+                }
+                @catch (id ex) {;}
             }];
         }
     } failureBlock:^(NSError *error) {
@@ -344,15 +336,29 @@ NSString* localNotes = @"notes.xml";
     contacts = [contacts sortedArrayUsingSelector:@selector(compareName:)];
 }
 
+-(NSArray*) sortCategories {
+    NSComparisonResult (^categoryCmp)(id, id);
+    categoryCmp = ^NSComparisonResult(id c1, id c2) {
+        MessageCategory* cat1 = [categories objectForKey:c1];
+        MessageCategory* cat2 = [categories objectForKey:c2];
+        if ([cat1 required] != [cat2 required]) {
+            return ([cat1 required]) ? NSOrderedAscending : NSOrderedDescending;
+        }
+        
+        return ([cat1 order] > [cat2 order]) ? NSOrderedDescending :
+        (([cat1 order] < [cat2 order]) ? NSOrderedAscending : NSOrderedSame);
+    };
+
+    NSArray* sortedCats = [[[categories keyEnumerator] allObjects] sortedArrayUsingComparator: categoryCmp];
+    return sortedCats;
+}
+
 -(NSArray*)getCategories {
-    NSArray* sorted = [[[categories keyEnumerator] allObjects] sortedArrayUsingComparator:categoryCmp];
+    NSArray* sorted = [self sortCategories];
     NSMutableArray* cs = [[NSMutableArray alloc] init];
     for (NSString* m in sorted)
         [cs addObject:m];
-    //int i=0;
-    //if (localImages != nil && [localImages count] > 0)
-    //    [cs insertObject:NSLocalizedString(@"Your Photos Title", nil) atIndex:i++];
-    //[cs insertObject:NSLocalizedString(@"Your Messages Title", nil) atIndex:i];
+
     if (localImages != nil && [localImages count] > 0)
         [cs addObject:NSLocalizedString(@"Your Photos Title", nil)];
     [cs addObject:NSLocalizedString(@"Your Messages Title", nil)];
@@ -362,7 +368,7 @@ NSString* localNotes = @"notes.xml";
 }
 
 -(NSArray*)getRequiredCategories {
-    NSArray* sorted = [[[categories keyEnumerator] allObjects] sortedArrayUsingComparator:categoryCmp];
+    NSArray* sorted = [self sortCategories];
     NSMutableArray* cs = [[NSMutableArray alloc] init];
     for (NSString*c in sorted) {
         if ([[categories objectForKey:c] required])

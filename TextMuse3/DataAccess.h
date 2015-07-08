@@ -30,8 +30,6 @@
     NSTimer* timerLoad;
     BOOL notificationOnly;
     
-    NSComparisonResult (^categoryCmp)(id, id);
-    
     NSMutableArray* listeners;
 
     NSURLConnection* conn;

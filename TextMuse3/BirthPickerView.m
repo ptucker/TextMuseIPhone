@@ -190,13 +190,13 @@ const NSInteger numberOfComponents = 2;
     CGRect frame = CGRectMake(0.f, 0.f, [self componentWidth],rowHeight);
     
     UILabel *label = [[UILabel alloc] initWithFrame:frame];
-    label.textAlignment = UITextAlignmentCenter;
-    label.backgroundColor = [UIColor clearColor];
-    label.textColor = selected ? [UIColor blueColor] : [UIColor blackColor];
-    label.font = [UIFont fontWithName:@"Lato-Regular" size:16.0];
-    label.userInteractionEnabled = NO;
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setBackgroundColor: [UIColor clearColor]];
+    [label setTextColor: selected ? [UIColor blueColor] : [UIColor blackColor]];
+    [label setFont: [UIFont fontWithName:@"Lato-Regular" size:16.0]];
+    [label setUserInteractionEnabled: NO];
     
-    label.tag = LABEL_TAG;
+    [label setTag: LABEL_TAG];
     
     return label;
 }

@@ -129,7 +129,7 @@
     [[self imgRightQuote] setFrame:frmRightQuote];
     [[self imgRightQuote] setImage:[UIImage imageNamed:@"whitecategoryrightquote"]];
     [[self imgRightQuote] setContentMode:UIViewContentModeScaleToFill];
-    BOOL fImage = [msg img] != nil;
+    BOOL fImage = (msg != nil && [msg img] != nil);
     if ([self lblContent] == nil) {
         [self setLblContent:[[UILabel alloc] init]];
         [[self viewContent] addSubview:[self lblContent]];
@@ -147,7 +147,7 @@
     [[self lblContent] setFont:[UIFont fontWithName:@"Lato-Regular" size:fontSize]];
     [[self lblContent] setTextColor:[UIColor whiteColor]];
     [[self lblContent] setTextAlignment:NSTextAlignmentCenter];
-    if ([msg text] != nil && [[msg text] length] > 0) {
+    if (msg != nil && [msg text] != nil && [[msg text] length] > 0) {
         [[self lblContent] setHidden:NO];
         [[self lblContent] setText:[msg text]];
     }

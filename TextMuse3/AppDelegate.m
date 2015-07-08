@@ -45,7 +45,7 @@
     Class userNotification = NSClassFromString(@"UIUserNotificationSettings");
     
     UIUserNotificationSettings *settings =
-    [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
+        [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
     UIApplication* app = [UIApplication sharedApplication];
     if ([app respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         [app registerUserNotificationSettings:settings];

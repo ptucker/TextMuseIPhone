@@ -110,7 +110,6 @@ NSArray* colors;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    NSInteger c = ((ChosenCategories == nil) ? [[Data getCategories] count] : [ChosenCategories count]);
     NSInteger c = [[Data getCategories] count];
     if (CategoryList != nil) {
         int cnt = 0;
@@ -139,10 +138,13 @@ NSArray* colors;
     long icategory = [self chosenCategory:[indexPath row]];
 
     NSString* category;
-    Message* msg;
+    Message* msg = nil;
     NSArray* cs = [Data getCategories];
+    if (icategory >= [[Data getCategories] count])
+        icategory = [[Data getCategories] count] - 1;
     category = [cs objectAtIndex:icategory];
-    msg = [[Data getMessagesForCategory:category] objectAtIndex:0];
+    if ([[Data getMessagesForCategory:category] count] != 0)
+        msg = [[Data getMessagesForCategory:category] objectAtIndex:0];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [cell showForWidth:[[self view] frame].size.width
              withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
@@ -157,6 +159,8 @@ NSArray* colors;
     long icategory = [self chosenCategory:[indexPath row]];
 
     CurrentColorIndex = icategory % [colors count];
+    if (icategory >= [[Data getCategories] count])
+        icategory = [[Data getCategories] count] - 1;
     CurrentCategory = [[Data getCategories] objectAtIndex:icategory];
     CurrentMessage = nil;
     
