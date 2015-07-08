@@ -652,26 +652,19 @@ NSString* localNotes = @"notes.xml";
                 if ([CategoryList objectForKey:c] == nil)
                     [CategoryList setObject:@"1" forKey:c];
             }
-            /*
-            for (NSString* c in [tmpCategories keyEnumerator]) {
-                if ([KnownCategories objectForKey:c] == nil && ![ChosenCategories containsObject:c])
-                    [ChosenCategories addObject:c];
-                [KnownCategories setObject:@"" forKey:c];
-            }
-            [Settings SaveSetting:SettingKnownCategories withValue:KnownCategories];
-            [Settings SaveSetting:SettingNotificationMsgs withValue:NotificationMsgs];
             
-            NSMutableArray* removeChosen = [[NSMutableArray alloc] init];
-            for (NSString* c in ChosenCategories) {
-                //Need to make sure the chosen categories are in the content
-                if ([tmpCategories objectForKey:c] == nil && ![c isEqualToString:@"Your Photos"] &&
-                    ![c isEqualToString:@"Your Messages"])
-                    [removeChosen addObject:c];
+            NSString* photos = NSLocalizedString(@"Your Photos Title", nil);
+            NSString* msgs = NSLocalizedString(@"Your Messages Title", nil);
+            NSMutableArray* removes = [[NSMutableArray alloc] init];
+            for (NSString* c in [CategoryList keyEnumerator]) {
+                if ([tmpCategories objectForKey:c] == nil && ![c isEqualToString:photos] &&
+                        ![c isEqualToString:msgs])
+                    [removes addObject:c];
             }
-            for (NSString* r in removeChosen)
-                [ChosenCategories removeObject:r];
-            [Settings SaveSetting:SettingChosenCategories withValue:ChosenCategories];
-             */
+            for (NSString* r in removes)
+                [CategoryList removeObjectForKey:r];
+            
+            [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
         }
     }
     else if ([elementName isEqualToString:@"text"] && [partsdata length] > 0)
