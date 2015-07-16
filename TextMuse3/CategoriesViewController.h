@@ -20,6 +20,8 @@
 #define BUTTON_STATES 4
 #define TIMER_PAUSED -1
 
+#define HIGHLIGHTED_INTERVAL (4.0)
+
 extern NSArray* colors;
 
 @interface CategoriesViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,

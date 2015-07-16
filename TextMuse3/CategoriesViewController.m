@@ -84,7 +84,7 @@ NSArray* colors;
     [[[self  navigationItem] backBarButtonItem] setTitle:@"Back"];
     
     if (timerReminder == nil) {
-        timerReminder = [NSTimer scheduledTimerWithTimeInterval:2.0
+        timerReminder = [NSTimer scheduledTimerWithTimeInterval:HIGHLIGHTED_INTERVAL
                                                          target:self
                                                        selector:@selector(setReminder:)
                                                        userInfo:nil
@@ -171,8 +171,8 @@ NSArray* colors;
     long icategory = selectedCategory;
     if (CategoryList != nil) {
         NSArray* cats = [Data getCategories];
-        icategory = 0;
-        for (int ichosen = 0; icategory<[cats count] && ichosen <= [cats count]; icategory++) {
+        int ichosen = 0;
+        for (icategory = 0; icategory<[cats count]; icategory++) {
             NSString* tmp = [cats objectAtIndex:icategory];
             if ([[CategoryList objectForKey:tmp] isEqualToString:@"1"]) {
                 if (ichosen == selectedCategory)
@@ -181,6 +181,8 @@ NSArray* colors;
                     ichosen++;
             }
         }
+        if (icategory == [cats count])
+            NSLog(@"I don't expect to be here ...");
     }
 
     return icategory;

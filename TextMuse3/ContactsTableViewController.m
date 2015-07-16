@@ -53,6 +53,9 @@ NSMutableArray* searchContacts;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    if (msgcontroller == nil)
+        msgcontroller = [[MFMessageComposeViewController alloc] init];
+
     if ([NamedGroups count] > 0) {
         NSMutableArray* gs = [[NSMutableArray alloc] init];
         for (NSString* k in [NamedGroups keyEnumerator]) {
@@ -425,8 +428,6 @@ NSMutableArray* searchContacts;
             [phones addObject:[c getPhone]];
             [Settings AddRecentContact:[c getPhone]];
         }
-        if (msgcontroller == nil)
-            msgcontroller = [[MFMessageComposeViewController alloc] init];
         [msgcontroller setRecipients: phones];
         [msgcontroller setMessageComposeDelegate: self];
         

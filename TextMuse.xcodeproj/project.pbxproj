@@ -30,6 +30,7 @@
 		2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */; };
 		2DC6EC671B18208400C527BA /* TransparentButterfly.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC6EC661B18208400C527BA /* TransparentButterfly.png */; };
 		2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC959071AFBAED000BAB0A7 /* ImageUtil.m */; };
+		2DCA7A061B58530000698E97 /* text.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA7A051B58530000698E97 /* text.xml */; };
 		2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CA1B0D8BF4000637E9 /* categories.png */; };
 		2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CB1B0D8BF4000637E9 /* contacts.png */; };
 		2DCAF9D01B0D8BF4000637E9 /* message_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CC1B0D8BF4000637E9 /* message_edit.png */; };
@@ -124,6 +125,7 @@
 		2DC6EC661B18208400C527BA /* TransparentButterfly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TransparentButterfly.png; sourceTree = "<group>"; };
 		2DC959061AFBAED000BAB0A7 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
 		2DC959071AFBAED000BAB0A7 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
+		2DCA7A051B58530000698E97 /* text.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = text.xml; path = ../../../../../Dropbox/text.xml; sourceTree = "<group>"; };
 		2DCAF9CA1B0D8BF4000637E9 /* categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = categories.png; sourceTree = "<group>"; };
 		2DCAF9CB1B0D8BF4000637E9 /* contacts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contacts.png; sourceTree = "<group>"; };
 		2DCAF9CC1B0D8BF4000637E9 /* message_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message_edit.png; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 		2DF0803F1AE625410003A277 = {
 			isa = PBXGroup;
 			children = (
+				2DCA7A051B58530000698E97 /* text.xml */,
 				2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */,
 				2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */,
 				2DF0804A1AE625410003A277 /* TextMuse3 */,
@@ -543,6 +546,7 @@
 				2DF080741AE6257D0003A277 /* Localizable.strings in Resources */,
 				2DD06FF61B4B706B00F8DD3B /* link.png in Resources */,
 				2DF080B01AE625FC0003A277 /* largebluebubble.png in Resources */,
+				2DCA7A061B58530000698E97 /* text.xml in Resources */,
 				2D4AC7E21B22BC6400749074 /* LaunchImage.png in Resources */,
 				2DC636B51B17CDE60087376D /* TextMuseIcon_3x.png in Resources */,
 				2DF080B51AE625FC0003A277 /* Lato-Regular.ttf in Resources */,

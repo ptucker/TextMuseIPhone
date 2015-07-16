@@ -78,7 +78,7 @@
     if (![[Data getRequiredCategories] containsObject:categoryName]) {
         UICheckButton* btncheck = (UICheckButton*)[cell viewWithTag:102];
         if (btncheck == nil)
-            btncheck = [[UICheckButton alloc] initWithFrame:CGRectMake(10, 10, 20, 20)];
+            btncheck = [[UICheckButton alloc] initWithFrame:CGRectMake(5, 5, 25, 25)];
         CGRect frmBtn = [btncheck frame];
         frmBtn.origin.y = [category frame].origin.y + 2;
         [btncheck setFrame:frmBtn];
@@ -101,6 +101,13 @@
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+    UICheckButton* chk = (UICheckButton*) [cell viewWithTag:102];
+    if (chk != nil)
+        [self check:chk];
 }
 
 -(IBAction)check:(id)sender {

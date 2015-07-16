@@ -206,7 +206,9 @@ NSString* localNotes = @"notes.xml";
                 if ([localImages count] > 15)
                     [localImages removeObjectsInRange:NSMakeRange(15, [localImages count] - 15)];
                 }
-                @catch (id ex) {;}
+                @catch (id ex) {
+                    NSLog(@"Exception occurred");
+                }
             }];
         }
     } failureBlock:^(NSError *error) {
@@ -241,23 +243,25 @@ NSString* localNotes = @"notes.xml";
     @try {
         [self parseMessageData];
         
-        if (!notificationOnly) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!notificationOnly) {
                 categories = tmpCategories;
-            });
-        }
+            }
 
-        NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
-        [[NSFileManager defaultManager] createFileAtPath:file
-                                                contents:inetdata
-                                              attributes:nil];
-        
-        for (NSObject* l in listeners) {
-            if ([l respondsToSelector:@selector(dataRefresh)])
-                [l performSelector:@selector(dataRefresh)];
-        }
+            NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
+            [[NSFileManager defaultManager] createFileAtPath:file
+                                                    contents:inetdata
+                                                  attributes:nil];
+            
+            for (NSObject* l in listeners) {
+                if ([l respondsToSelector:@selector(dataRefresh)])
+                    [l performSelector:@selector(dataRefresh)];
+            }
+        });
     }
-    @catch(id ex) {; }
+    @catch(id ex) {
+        NSLog(@"Exception loading from Internet");
+    }
     conn = nil;
 }
 
@@ -364,6 +368,7 @@ NSString* localNotes = @"notes.xml";
     [cs addObject:NSLocalizedString(@"Your Messages Title", nil)];
     if (SaveRecentMessages && [RecentMessages count] > 0)
         [cs addObject:NSLocalizedString(@"Recent Messages Title", nil)];
+    
     return cs;
 }
 
@@ -380,6 +385,7 @@ NSString* localNotes = @"notes.xml";
     [cs insertObject:NSLocalizedString(@"Your Messages Title", nil) atIndex:i++];
     if (SaveRecentMessages && [RecentMessages count] > 0)
         [cs insertObject:NSLocalizedString(@"Recent Messages Title", nil) atIndex:i];
+
     return cs;
 }
 
@@ -544,6 +550,12 @@ NSString* localNotes = @"notes.xml";
 
 -(void)clearSelectedUsers {
     [selectContacts removeAllObjects];
+}
+
+-(void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
+    //abort the data load
+    tmpCategories = categories;
+    NSLog(@"parsing failed");
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
