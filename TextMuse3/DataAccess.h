@@ -35,6 +35,7 @@
     NSURLConnection* conn;
     NSMutableData* inetdata;
     
+    BOOL parseFailed;
     NSMutableString* xmldata;
     NSMutableString* partsdata;
     MessageCategory* currentCategory;

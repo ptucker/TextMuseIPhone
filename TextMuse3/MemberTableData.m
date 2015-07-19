@@ -73,7 +73,10 @@
     }
     UserContact* uc = [contactsSorted objectAtIndex:[indexPath row]];
     NSArray* group = [NamedGroups objectForKey:CurrentGroup];
-    [btnCheck setSelected:[group containsObject:[uc numberToUse]]];
+    BOOL selected = ([group containsObject:[uc numberToUse]] &&
+                        ![[self removes] containsObject:[uc numberToUse]])
+                    || [[self adds] containsObject:[uc numberToUse]];
+    [btnCheck setSelected:selected];
     
     UILabel* lblName = (UILabel*)[cell viewWithTag:101];
     if (lblName == nil) {
@@ -112,13 +115,17 @@
     NSArray* group = [NamedGroups objectForKey:CurrentGroup];
     
     UILabel* lbl = (UILabel*)[[btn superview] viewWithTag:102];
-    if ([btn isSelected] && ![group containsObject:[lbl text]]) {
-        if (![[self adds] containsObject:[lbl text]])
+    if ([btn isSelected]) {
+        if (![group containsObject:[lbl text]] && ![[self adds] containsObject:[lbl text]])
             [[self adds] addObject:[lbl text]];
+        if ([[self removes] containsObject:[lbl text]])
+            [[self removes] removeObject:[lbl text]];
     }
-    else if (![btn isSelected] && [group containsObject:[lbl text]]) {
-        if (![[self removes] containsObject:[lbl text]])
+    else if (![btn isSelected]) {
+        if ([group containsObject:[lbl text]] && ![[self removes] containsObject:[lbl text]])
             [[self removes] addObject:[lbl text]];
+        if ([[self adds] containsObject:[lbl text]])
+            [[self adds] removeObject:[lbl text]];
     }
 }
 

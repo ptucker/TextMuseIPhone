@@ -404,8 +404,35 @@ NSMutableArray* searchContacts;
 }
 
 -(IBAction)sendMessages:(id)sender {
+    if ([checkedContacts count] > 1) {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:NSLocalizedString(@"Name Group Title", nil)
+                              message:NSLocalizedString(@"Name Group Details", nil)
+                              delegate:self
+                              cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
+                              otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+        [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [[alert textFieldAtIndex:0] setPlaceholder:@"Group name"];
+        [alert show];
+    }
+    else
+        [self sendMessageTo:checkedContacts];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSString* grp = [[alertView textFieldAtIndex:0] text];
+    if (buttonIndex == 0 && [grp length] > 0 && [NamedGroups objectForKey:grp] == nil) {
+        NSMutableArray* cs = [[NSMutableArray alloc] init];
+        for (NSString* p in checkedContacts) {
+            [cs addObject:p];
+        }
+        [Settings AddGroup:grp withContacts:cs];
+    }
+
     [self sendMessageTo:checkedContacts];
 }
+
+
 
 -(void)syncSendButton {
     [btnSend setHidden:[checkedContacts count] == 0];

@@ -82,6 +82,8 @@
     }
     
     [[self sourceTable] reloadData];
+    
+    [self close:sender];
 }
 
 -(IBAction)close:(id)sender {

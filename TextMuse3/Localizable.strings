@@ -10,6 +10,8 @@
 "TextMuse Label" = "TextMuse";
 "OK Button" = "OK";
 "Cancel Button" = "Cancel";
+"Yes Button" = "Yes";
+"No Button" = "No";
 "Done Button" = "Done";
 "Submit Button" = "Submit";
 "Send Button" = "Send";
@@ -21,6 +23,7 @@
 
 "Name Group Title" = "Name Group";
 "Name Group Message" = "Give this group a name";
+"Name Group Details" = "You can give this group a name and save it for future use. Name and save now?";
 
 "Delete Group Title" = "Delete Group";
 "Delete Group Message" = "Delete '%@'?";

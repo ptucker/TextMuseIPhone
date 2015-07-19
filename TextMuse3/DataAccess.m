@@ -94,6 +94,10 @@ NSString* localNotes = @"notes.xml";
         }
     
         [self parseMessageData];
+        if (parseFailed) {
+            inetdata = [NSMutableData dataWithData:[[self createFile] dataUsingEncoding:NSUTF8StringEncoding]];
+            [self parseMessageData];
+        }
         categories = tmpCategories;
     }
     @catch (id ex) {
@@ -241,6 +245,8 @@ NSString* localNotes = @"notes.xml";
 -(void)connectionDidFinishLoading:(NSURLConnection*) connection {
     //Now that we have data from the server, re-initialize Categories to an empty dictionary
     @try {
+        //NSString* result = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
+        //NSLog(result);
         [self parseMessageData];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -267,6 +273,7 @@ NSString* localNotes = @"notes.xml";
 
 -(void)parseMessageData {
     tmpCategories = [[NSMutableDictionary alloc] init];
+    parseFailed = false;
     
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:inetdata];
     [parser setDelegate:self];
@@ -555,6 +562,7 @@ NSString* localNotes = @"notes.xml";
 -(void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
     //abort the data load
     tmpCategories = categories;
+    parseFailed = true;
     NSLog(@"parsing failed");
 }
 
