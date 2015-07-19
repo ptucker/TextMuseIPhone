@@ -74,6 +74,7 @@
     mediaUrl = @"userphoto://";
     img = UIImagePNGRepresentation([UIImage imageWithCGImage:[a thumbnail]]);
     //img = UIImagePNGRepresentation([UIImage imageWithCGImage:[[a defaultRepresentation] fullResolutionImage]]);
+    //img = UIImagePNGRepresentation([UIImage imageWithCGImage:[[a defaultRepresentation] fullScreenImage]]);
     assetURL = [a valueForProperty:ALAssetPropertyAssetURL];
     
     return self;
@@ -88,6 +89,14 @@
     text = msg;
     
     return self;
+}
+
+-(void)loadUserImage {
+    ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
+    [library assetForURL:assetURL resultBlock:^(ALAsset* asset) {
+        CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
+        img = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
+    } failureBlock:^(NSError*err) { }];
 }
 
 -(NSString*)stringForStorage {

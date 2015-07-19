@@ -45,6 +45,7 @@
 //-(id)initWithId:(int)i message:(NSString*)m forCategory:(NSString*)c isNew:(BOOL)n;
 -(id)initFromStorage:(NSString*)stored;
 -(id)initFromUserPhoto:(ALAsset*)imgfile;
+-(void)loadUserImage;
 -(id)initFromUserText:(NSString*)msg atIndex:(int)i;
 
 -(NSString*)stringForStorage;

@@ -215,6 +215,12 @@ NSString* localNotes = @"notes.xml";
                 }
             }];
         }
+        else {
+            //NSLog(@"All photos loaded");
+            for (Message*m in localImages) {
+                [m loadUserImage];
+            }
+        }
     } failureBlock:^(NSError *error) {
         NSLog(@"error enumerating AssetLibrary groups %@\n", error);
     }];
