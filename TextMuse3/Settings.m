@@ -31,6 +31,7 @@ NSString* SettingReminderContactLists = @"SettingReminderContactLists";
 NSString* SettingSortLastName = @"SettigSortLastName";
 NSString* SettingReminderDates = @"SettingReminderDates";
 NSString* SettingNotificationDate = @"SettingNotificationDate";
+NSString* SettingNotificationDates = @"SettingNotificationDates";
 NSString* SettingNotificationOn = @"SettingNotificationOn";
 NSString* SettingNotificationMsgs = @"SettingNotificationMsgs";
 NSString* SettingShowIntro = @"SettingShowIntro";
@@ -63,6 +64,7 @@ NSMutableArray* ReminderMessages = nil;
 NSMutableArray* ReminderContactLists = nil;
 NSMutableArray* ReminderDates = nil;
 NSString* NotificationDate = nil;
+NSMutableArray* NotificationDates = nil;
 NSMutableArray* NotificationMsgs = nil;
 NSMutableDictionary* NamedGroups = nil;
 BOOL SortLastName = YES;
@@ -187,9 +189,13 @@ NSString* AppID;
         if ([defs arrayForKey:SettingReminderDates] != nil)
             ReminderDates = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingReminderDates]];
 
-        if ([defs stringForKey:SettingNotificationDate] != nil &&
-                [[defs stringForKey:SettingNotificationDate] length] > 0)
+        if ([defs arrayForKey:SettingNotificationDates] != nil)
+            NotificationDates = [NSMutableArray arrayWithArray:[defs arrayForKey:SettingNotificationDates]];
+        else if ([defs stringForKey:SettingNotificationDate] != nil &&
+                 [[defs stringForKey:SettingNotificationDate] length] > 0) {
             NotificationDate = [defs stringForKey:SettingNotificationDate];
+            NotificationDates = [[NSMutableArray alloc] initWithObjects:NotificationDate, nil];
+        }
         if ([defs stringForKey:SettingNotificationOn] != nil &&
             [[defs stringForKey:SettingNotificationOn] length] == 1)
             NotificationOn = [[defs stringForKey:SettingNotificationOn] isEqualToString:@"1"];

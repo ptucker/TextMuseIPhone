@@ -72,9 +72,6 @@
     newMsg = NO;
     category = NSLocalizedString(@"Your Photos Title", nil);
     mediaUrl = @"userphoto://";
-    img = UIImagePNGRepresentation([UIImage imageWithCGImage:[a thumbnail]]);
-    //img = UIImagePNGRepresentation([UIImage imageWithCGImage:[[a defaultRepresentation] fullResolutionImage]]);
-    //img = UIImagePNGRepresentation([UIImage imageWithCGImage:[[a defaultRepresentation] fullScreenImage]]);
     assetURL = [a valueForProperty:ALAssetPropertyAssetURL];
     
     return self;

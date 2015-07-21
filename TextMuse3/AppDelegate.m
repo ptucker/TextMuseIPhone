@@ -165,38 +165,85 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     if (!NotificationOn) return;
     
     [Settings LoadSettings];
-    BOOL n = (NotificationDate == nil);
-    if (NotificationDate != nil) {
+    BOOL n = (NotificationDates == nil || [NotificationDates count] == 0);
+    NSDate* notification;
+    if (NotificationDates != nil && [NotificationDates count] > 0) {
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
         [formatter setDateFormat:NotificationDateFormat];
-        NSDate* notification = [formatter dateFromString:NotificationDate];
+        NSString* lastNotify = [NotificationDates objectAtIndex:[NotificationDates count] - 1];
+        notification = [formatter dateFromString:lastNotify];
         n = ([notification compare:[NSDate date]] == NSOrderedAscending);
     }
     if (!n)
         return;
     
-    NSDate* notify = [NSDate dateWithTimeIntervalSinceNow:(60*60*24)];
-    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-    [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
-    [formatter setDateFormat:NotificationDateFormat];
-    NSString* notifyString = [formatter stringFromDate:notify];
-    NSDate* notifyDate = [formatter dateFromString:notifyString];
+    if (NotificationDates == nil)
+        NotificationDates = [[NSMutableArray alloc] init];
     
-    if ([AppDelegate checkNotificationType:UIUserNotificationTypeBadge])
-    {
-        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    NSDate* notify = [self getNextNotifyDate: [NSDate date]];
+    while (notify != nil) {
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
+        [formatter setDateFormat:NotificationDateFormat];
+        NSString* notifyString = [formatter stringFromDate:notify];
+        NSDate* notifyDate = [formatter dateFromString:notifyString];
         
-        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-        [localNotification setApplicationIconBadgeNumber:1];
-        [localNotification setFireDate: notifyDate];
-        NSString* alertMsg = [Settings GetNotificationText: Data];
-        [localNotification setAlertBody: alertMsg];
-        [localNotification setTimeZone: [NSTimeZone defaultTimeZone]];
-        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        if ([AppDelegate checkNotificationType:UIUserNotificationTypeBadge])
+        {
+            UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+            [localNotification setApplicationIconBadgeNumber:1];
+            [localNotification setFireDate: notifyDate];
+            NSString* alertMsg = [Settings GetNotificationText: Data];
+            [localNotification setAlertBody: alertMsg];
+            [localNotification setTimeZone: [NSTimeZone defaultTimeZone]];
+            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+            [NotificationDates addObject:notifyString];
+        }
+
+        notify = [self getNextNotifyDate: notify];
     }
     
-    [Settings SaveSetting:SettingNotificationDate withValue:notifyString];
+    [Settings SaveSetting:SettingNotificationDates withValue:NotificationDates];
+}
+
+-(NSDate*)getNextNotifyDate:(NSDate*)dateOfInterest {
+    NSDate* ret;
+    const NSTimeInterval day = 60*60*24;
+    
+    //If we're looking one week ahead, we're done
+    if ([dateOfInterest timeIntervalSinceNow] > day*7)
+        return nil;
+    
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *weekdayComponents =[gregorian components:NSWeekdayCalendarUnit fromDate:dateOfInterest];
+    NSInteger weekday = [weekdayComponents weekday];
+    // weekday 1 = Sunday for Gregorian calendar
+    switch (weekday) {
+        case 1: //Sunday
+            ret = [dateOfInterest dateByAddingTimeInterval:day];
+            break;
+        case 2: //Monday
+            ret = [dateOfInterest dateByAddingTimeInterval:2*day];
+            break;
+        case 3: //Tuesday
+            ret = [dateOfInterest dateByAddingTimeInterval:day];
+            break;
+        case 4: //Wednesday
+            ret = [dateOfInterest dateByAddingTimeInterval:2*day];
+            break;
+        case 5: //Thursday
+            ret = [dateOfInterest dateByAddingTimeInterval:day];
+            break;
+        case 6: //Friday
+            ret = [dateOfInterest dateByAddingTimeInterval:2*day];
+            break;
+        case 7: //Saturday
+            ret = [dateOfInterest dateByAddingTimeInterval:day];
+            break;
+    }
+    
+    return ret;
 }
 
 -(void)checkForReminder {
@@ -242,6 +289,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [self addNotification];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -254,6 +302,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [self addNotification];
 }
 
 @end
