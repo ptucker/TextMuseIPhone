@@ -14,6 +14,7 @@
 @end
 
 @implementation RegisterViewController
+@synthesize singleTapRecognizer = _singleTapRecognizer;
 
 NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
 
@@ -45,11 +46,47 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
     if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0) {
         
     }
+    
+    [[self view] addGestureRecognizer:[self singleTapRecognizer]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (UITapGestureRecognizer *)singleTapRecognizer
+{
+    if (nil == _singleTapRecognizer) {
+        _singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapToDismissKeyboard:)];
+        _singleTapRecognizer.cancelsTouchesInView = NO; // absolutely required, otherwise "tap" eats events.
+    }
+    return _singleTapRecognizer;
+}
+
+// Something inside this VC's view was tapped (except the navbar/toolbar)
+- (void)singleTapToDismissKeyboard:(UITapGestureRecognizer *)sender
+{
+    NSLog(@"singleTap");
+    [self hideKeyboard:sender];
+}
+
+// When the "Return" key is pressed on the on-screen keyboard, hide the keyboard.
+// for protocol UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField*)textField
+{
+    NSLog(@"Return pressed");
+    [self hideKeyboard:textField];
+    return YES;
+}
+
+- (IBAction)hideKeyboard:(id)sender
+{
+    // Just call resignFirstResponder on all UITextFields and UITextViews in this VC
+    // Why? Because it works and checking which one was last active gets messy.
+    [txtEmail resignFirstResponder];
+    [txtName resignFirstResponder];
+    NSLog(@"keyboard hidden");
 }
 
 -(IBAction)btnPrivacy:(id)sender {

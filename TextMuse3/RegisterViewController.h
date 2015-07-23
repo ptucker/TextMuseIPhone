@@ -9,13 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "BirthPickerView.h"
 
-@interface RegisterViewController : UIViewController {
+@interface RegisterViewController : UIViewController<UITextFieldDelegate> {
     IBOutlet UITextField* txtName;
     IBOutlet UITextField* txtEmail;
     IBOutlet UILabel* lblBirth;
     IBOutlet UIButton* btnPrivacy;
     
     BirthPickerView* birthPicker;
+    UITapGestureRecognizer* _singleTapRecognizer;
 }
+
+@property (nonatomic, strong, readonly) UITapGestureRecognizer* singleTapRecognizer;
 
 @end

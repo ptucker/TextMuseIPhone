@@ -31,9 +31,11 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     UIColor* currColor = [colors objectAtIndex:CurrentColorIndex];
     [header setBackgroundColor:currColor];
     [headerLabel setBackgroundColor:currColor];
+    [headerLabel setTextColor:[colorsText objectAtIndex:CurrentColorIndex]];
     [headerLabel setText:CurrentCategory];
 
     [selectButton setBackgroundColor:currColor];
+    [selectButton setTitleColor:[colorsText objectAtIndex:CurrentColorIndex] forState:UIControlStateNormal];
     
     [scrollview setDelegate:self];
 

@@ -13,8 +13,8 @@
 #import "Message.h"
 #import "ImageDownloader.h"
 #import "Settings.h"
-
 NSArray* colors;
+NSArray* colorsText;
 
 @interface CategoriesViewController ()
 
@@ -26,16 +26,8 @@ NSArray* colors;
     [super viewDidLoad];
 
     if (colors == nil)
-        colors = [NSArray arrayWithObjects:
-                  //Green
-                  [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0],
-                  //Orange
-                  [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0],
-                  //Blue
-                  [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0],
-                  nil];
+        [self setColors];
 
-    
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [categories addSubview:refreshControl];
@@ -77,6 +69,29 @@ NSArray* colors;
     [categories setDataSource:self];
     
     [categories reloadData];
+    
+#ifdef WHITWORTH
+    [[self navigationItem] setTitle:@"Whitworth TextMuse"];
+#endif
+#ifdef UOREGON
+    [[self navigationItem] setTitle:@"Oregon TextMuse"];
+#endif
+}
+
+-(void)setColors {
+    colorsText = [NSArray arrayWithObjects:[UIColor whiteColor], [UIColor whiteColor], [UIColor whiteColor], nil];
+#ifdef WHITWORTH
+    //Crimson, Black, Grey
+    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:194/255.0 green:2/255.0 blue:2/255.0 alpha:1.0], [UIColor blackColor], [UIColor colorWithRed:68/255.0 green:68/255.0 blue:68/255.0 alpha:1.0], nil];
+#endif
+#ifdef UOREGON
+    //Yellow, Green, Grey
+    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:255/255.0 green:2382/255.0 blue:2/255.0 alpha:1.0], [UIColor colorWithRed:0/255.0 green:73/255.0 blue:0/255.0 alpha:1.0], [UIColor colorWithRed:105/255.0 green:107/255.0 blue:106/255.0 alpha:1.0], nil];
+    colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor whiteColor], [UIColor whiteColor], nil];
+#endif
+    if (colors == nil)
+        //Green, Orange, Blue
+        colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -148,6 +163,7 @@ NSArray* colors;
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [cell showForWidth:[[self view] frame].size.width
              withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
+             textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
                  title:category
               newCount:[Data getNewMessageCountForCategory:category]
                message:msg];

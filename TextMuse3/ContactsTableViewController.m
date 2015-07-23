@@ -462,7 +462,14 @@ NSMutableArray* searchContacts;
                             [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
         NSString* text = ([CurrentMessage text] == nil ? @"" : [CurrentMessage text]);
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
-        NSString* tagline = @"\n\nSent by TextMuse - http://www.textmuse.com/download";
+        NSString* sponsor = @"";
+#ifdef WHITWORTH
+        sponsor = @" Whitworth";
+#endif
+#ifdef UOREGON
+        sponsor = @" Oregon";
+#endif
+        NSString* tagline = [NSString stringWithFormat: @"\n\nSent by%@ TextMuse - http://www.textmuse.com/download", sponsor];
         //if (arc4random() % 10 == 0)
         message = [message stringByAppendingString:tagline];
         if (([CurrentMessage mediaUrl] == nil || [[CurrentMessage mediaUrl] length] == 0) &&

@@ -60,6 +60,13 @@
     else
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
 
+#ifdef WHITWORTH
+    sleep(2.0);
+#endif
+#ifdef UOREGON
+    sleep(2.0);
+#endif
+
     return YES;
 }
 

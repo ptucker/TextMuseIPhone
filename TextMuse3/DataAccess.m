@@ -146,7 +146,14 @@ NSString* localNotes = @"notes.xml";
     lastDownload = [lastDownload stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
     NSString* appid = (AppID != nil) ? [NSString stringWithFormat:@"&app=%@", AppID] : @"";
     NSString* notif = (notificationOnly) ? @"&notifyonly=1" : @"";
-    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1", urlNotes, lastDownload, appid, notif];
+    NSString* sponsor = @"";
+#ifdef WHITWORTH
+    sponsor = @"&sponsor=6";
+#endif
+#ifdef UOREGON
+    sponsor = @"&sponsor=7";
+#endif
+    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@", urlNotes, lastDownload, appid, notif, sponsor];
     if (!notificationOnly)
         LastNoteDownload = [dateformat stringFromDate:[NSDate date]];
     NSURL* url = [NSURL URLWithString:surl];

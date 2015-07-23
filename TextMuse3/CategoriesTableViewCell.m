@@ -26,6 +26,7 @@
 
 -(void)showForWidth:(CGFloat)width
           withColor:(UIColor*)color
+          textColor:(UIColor*)colorText
               title:(NSString *)title
            newCount:(int)cnt
             message:(Message*)msg {
@@ -145,7 +146,7 @@
     [[self lblContent] setNumberOfLines:fImage ? 1 : 0];
     CGFloat fontSize = fImage ? 14 : 16;
     [[self lblContent] setFont:[UIFont fontWithName:@"Lato-Regular" size:fontSize]];
-    [[self lblContent] setTextColor:[UIColor whiteColor]];
+    [[self lblContent] setTextColor:colorText];
     [[self lblContent] setTextAlignment:NSTextAlignmentCenter];
     if (msg != nil && [msg text] != nil && [[msg text] length] > 0) {
         [[self lblContent] setHidden:NO];
