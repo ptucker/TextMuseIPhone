@@ -169,10 +169,10 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
     [req setHTTPMethod:@"POST"];
     NSString* urlStr;
     if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0)
-        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&bmonth=%@&byear=%@",
-                  UserName, UserEmail, UserBirthMonth, UserBirthYear];
+        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&bmonth=%@&byear=%@&appid=%@",
+                  UserName, UserEmail, UserBirthMonth, UserBirthYear, AppID];
     else
-        urlStr = [NSString stringWithFormat:@"name=%@&email=%@", UserName, UserEmail];
+        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&appid=%@", UserName, UserEmail, AppID];
     NSData* urlData = [urlStr dataUsingEncoding:NSUTF8StringEncoding];
     [req setHTTPBody:urlData];
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
