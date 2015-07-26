@@ -48,8 +48,8 @@ NSString* SettingUserBirthMonth=@"SettingBirthMonth";
 NSString* SettingUserBirthYear=@"SettingBirthYear";
 NSString* SettingAppID=@"SettingAppID";
 
-NSString* ReminderDateFormat = @"dd/MM/yyyy hh:mm:ss a";
-NSString* NotificationDateFormat = @"dd/MM/yyyy 12:00:00 a";
+NSString* ReminderDateFormat = @"dd/MM/yyyy hh:mm:ss";
+NSString* NotificationDateFormat = @"dd/MM/yyyy 12:00:00";
 BOOL NotificationOn = YES;
 BOOL NotificationRegistered = YES;
 
@@ -196,6 +196,7 @@ NSString* AppID;
             NotificationDate = [defs stringForKey:SettingNotificationDate];
             NotificationDates = [[NSMutableArray alloc] initWithObjects:NotificationDate, nil];
         }
+
         if ([defs stringForKey:SettingNotificationOn] != nil &&
             [[defs stringForKey:SettingNotificationOn] length] == 1)
             NotificationOn = [[defs stringForKey:SettingNotificationOn] isEqualToString:@"1"];
