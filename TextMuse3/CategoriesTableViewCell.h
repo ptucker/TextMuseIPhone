@@ -26,6 +26,7 @@
 -(void)showForWidth:(CGFloat)width
           withColor:(UIColor*)color
           textColor:(UIColor*)colorText
+         titleColor:(UIColor*)colorTitle
           title:(NSString*)title
            newCount:(int)cnt
             message:(Message*)msg;

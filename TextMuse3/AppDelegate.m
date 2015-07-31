@@ -79,7 +79,19 @@
                              [UIFont fontWithName:@"Lato-Regular" size:21.0], NSFontAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:txtAttrs];
     
-    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0]];
+    UIColor* colorTint = nil;
+#ifdef UOREGON
+    //ffef01
+    colorTint = [UIColor colorWithRed:255.0/256 green:239.0/256 blue:1.0/256 alpha:1.0];
+#endif
+#ifdef WHITWORTH
+    //c20202
+    colorTint = [UIColor colorWithRed:194.0/256 green:2.0/256 blue:2.0/256 alpha:1.0];
+#endif
+    if (colorTint == nil)
+        colorTint = [UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0];
+    
+    [[UINavigationBar appearance] setTintColor:colorTint];
 }
 
 -(void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {

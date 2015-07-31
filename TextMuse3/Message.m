@@ -185,6 +185,8 @@
 
 -(void)follow:(id)sender {
     if (url != nil) {
+        if ([[url lowercaseString] hasPrefix:@"http://www.textmuse.com"] && [url containsString:@"%appid%"])
+            url = [url stringByReplacingOccurrencesOfString:@"%appid%" withString:AppID];
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]])
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
         else

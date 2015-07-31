@@ -14,7 +14,7 @@
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    
+
     return self;
 }
 
@@ -27,6 +27,7 @@
 -(void)showForWidth:(CGFloat)width
           withColor:(UIColor*)color
           textColor:(UIColor*)colorText
+         titleColor:(UIColor*)colorTitle
               title:(NSString *)title
            newCount:(int)cnt
             message:(Message*)msg {
@@ -55,7 +56,7 @@
     [[self lblTitle] setFrame:frmTitle];
     [[self lblTitle] setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
     [[self lblTitle] setBackgroundColor:[UIColor whiteColor]];
-    [[self lblTitle] setTextColor:color];
+    [[self lblTitle] setTextColor:colorTitle];
     [[self lblTitle] setText:title];
     [[self lblTitle] sizeToFit];
     frmTitle = [[self lblTitle] frame];
@@ -73,7 +74,7 @@
         [self addSubview:[self lblNew]];
     }
     [[self lblNew] setFrame:frmLblNew];
-    [[self lblNew] setBackgroundColor:color];
+    [[self lblNew] setBackgroundColor:colorTitle];
     [[self lblNew] setFont:[UIFont fontWithName:@"Lato-Light" size:14]];
     [[self lblNew] setTextColor:[UIColor whiteColor]];
     [[self lblNew] setTextAlignment:NSTextAlignmentCenter];

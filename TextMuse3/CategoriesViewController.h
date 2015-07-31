@@ -33,6 +33,8 @@ extern NSArray* colorsText;
     IBOutlet UIButton* btnSuggestion2;
     IBOutlet UILabel* lblSuggestion1;
     IBOutlet UILabel* lblSuggestion2;
+    IBOutlet UIImageView* ivSuggestion1;
+    IBOutlet UIImageView* ivSuggestion2;
     UIRefreshControl *refreshControl;
     UIView* walkthroughView;
     UIPageControl* pages;

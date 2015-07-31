@@ -15,6 +15,7 @@
 #import "Settings.h"
 NSArray* colors;
 NSArray* colorsText;
+NSArray* colorsTitle;
 
 @interface CategoriesViewController ()
 
@@ -36,6 +37,7 @@ NSArray* colorsText;
     //[[btnSuggestion2 titleLabel] setNumberOfLines:0];
     [btnSuggestion2 setFrame:CGRectMake([btnSuggestion2 frame].origin.x, [btnSuggestion2 frame].origin.y, [btnSuggestion1 frame].size.width, [btnSuggestion1 frame].size.height)];
     CGRect frmLabel = CGRectMake(0, 0, [btnSuggestion1 frame].size.width, [btnSuggestion1 frame].size.height);
+
     lblSuggestion1 = [[UILabel alloc] initWithFrame:frmLabel];
     lblSuggestion2 = [[UILabel alloc] initWithFrame:frmLabel];
     [lblSuggestion1 setFont:[[btnSuggestion1 titleLabel] font]];
@@ -44,20 +46,30 @@ NSArray* colorsText;
     [lblSuggestion2 setTextAlignment:NSTextAlignmentCenter];
     [lblSuggestion1 setTextColor:[UIColor whiteColor]];
     [lblSuggestion2 setTextColor:[UIColor whiteColor]];
+    
+    ivSuggestion1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [btnSuggestion1 frame].size.width,
+                                                                  [btnSuggestion1 frame].size.height)];
+    [ivSuggestion1 setContentMode:UIViewContentModeScaleAspectFit];
+    ivSuggestion2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [btnSuggestion2 frame].size.width,
+                                                                  [btnSuggestion2 frame].size.height)];
+    [ivSuggestion2 setContentMode:UIViewContentModeScaleAspectFit];
+    
+    [btnSuggestion1 addSubview:ivSuggestion1];
+    [btnSuggestion2 addSubview:ivSuggestion2];
     [btnSuggestion1 addSubview:lblSuggestion1];
     [btnSuggestion2 addSubview:lblSuggestion2];
     
     UIImage* settings = [UIImage imageNamed:@"gear.png"];
-    UIImage *scaledSettings =
-    [UIImage imageWithCGImage:[settings CGImage]
-                        scale:73.0/30
-                  orientation:(settings.imageOrientation)];
+    UIImage *scaledSettings = [UIImage imageWithCGImage:[settings CGImage]
+                                                  scale:73.0/30
+                                            orientation:(settings.imageOrientation)];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
                                                                    action:@selector(settings:)];
     [[self navigationItem] setRightBarButtonItem: rightButton];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
+    
     
     if (ShowIntro) {
         [self showWalkthrough];
@@ -69,17 +81,38 @@ NSArray* colorsText;
     [categories setDataSource:self];
     
     [categories reloadData];
-    
+    [categories setBackgroundColor:[UIColor whiteColor]];
 #ifdef WHITWORTH
     [[self navigationItem] setTitle:@"Whitworth TextMuse"];
+
+    UIImage* o = [UIImage imageNamed:@"w.png"];
+    UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
+                                           scale:174.0/30
+                                     orientation:(o.imageOrientation)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(website:)];
+    [[self navigationItem] setLeftBarButtonItem:leftButton];
 #endif
 #ifdef UOREGON
     [[self navigationItem] setTitle:@"Oregon TextMuse"];
+
+    UIImage* o = [UIImage imageNamed:@"o.png"];
+    UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
+                                           scale:263.0/30
+                                     orientation:(o.imageOrientation)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(website:)];
+    [[self navigationItem] setLeftBarButtonItem:leftButton];
 #endif
 }
 
 -(void)setColors {
-    colorsText = [NSArray arrayWithObjects:[UIColor whiteColor], [UIColor whiteColor], [UIColor whiteColor], nil];
+    colorsText = [NSArray arrayWithObjects:[UIColor whiteColor], [UIColor whiteColor], [UIColor whiteColor],
+                  nil];
 #ifdef WHITWORTH
     //Crimson, Black, Grey
     colors = [NSArray arrayWithObjects: [UIColor colorWithRed:194/255.0 green:2/255.0 blue:2/255.0 alpha:1.0], [UIColor blackColor], [UIColor colorWithRed:68/255.0 green:68/255.0 blue:68/255.0 alpha:1.0], nil];
@@ -88,10 +121,15 @@ NSArray* colorsText;
     //Yellow, Green, Grey
     colors = [NSArray arrayWithObjects: [UIColor colorWithRed:255/255.0 green:2382/255.0 blue:2/255.0 alpha:1.0], [UIColor colorWithRed:0/255.0 green:73/255.0 blue:0/255.0 alpha:1.0], [UIColor colorWithRed:105/255.0 green:107/255.0 blue:106/255.0 alpha:1.0], nil];
     colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor whiteColor], [UIColor whiteColor], nil];
+    colorsTitle = [NSArray arrayWithObjects:[UIColor blackColor], [colors objectAtIndex:1], [colors objectAtIndex:2], nil];
 #endif
     if (colors == nil)
         //Green, Orange, Blue
         colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
+    if (colorsTitle == nil)
+        colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
+                       [colors objectAtIndex:2], nil];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -105,6 +143,7 @@ NSArray* colorsText;
                                                        userInfo:nil
                                                         repeats:YES];
     }
+
     //Call this right away
     [self setReminder:timerReminder];
 }
@@ -164,6 +203,7 @@ NSArray* colorsText;
     [cell showForWidth:[[self view] frame].size.width
              withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
              textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
+            titleColor:[colorsTitle objectAtIndex:[indexPath row]%[colors count]]
                  title:category
               newCount:[Data getNewMessageCountForCategory:category]
                message:msg];
@@ -215,6 +255,17 @@ NSArray* colorsText;
     [self performSegueWithIdentifier:@"Settings" sender:self];
 }
 
+#ifdef UOREGON
+-(IBAction)website:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.goducks.com"]];
+}
+#endif
+#ifdef WHITWORTH
+-(IBAction)website:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.whitworthpirates.com"]];
+}
+#endif
+
 -(void)setReminder:(NSTimer*)timer {
     if (reminderButtonState == TIMER_PAUSED)
         return;
@@ -249,21 +300,24 @@ NSArray* colorsText;
             else {
                 //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
                 [lblSuggestion1 setText:[randomMessage text]];
+                [lblSuggestion1 setTextColor:[colorsText objectAtIndex:icolor]];
                 [lblSuggestion1 setHidden:NO];
             }
             if ([randomMessage mediaUrl] == nil) {
                 [btnSuggestion1 setBackgroundImage:nil forState:UIControlStateNormal];
                 [lblSuggestion1 setFrame:CGRectMake(4, 4, [btnSuggestion1 frame].size.width-8, [btnSuggestion1 frame].size.height-8)];
                 //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
+                [ivSuggestion1 setHidden:YES];
                 [lblSuggestion1 setBackgroundColor:[UIColor clearColor]];
                 [lblSuggestion1 setNumberOfLines:0];
                 [lblSuggestion1 setAlpha:1];
             }
             else {
-                CGRect frm = CGRectMake(0, [btnSuggestion1 frame].size.height-22, [btnSuggestion1 frame].size.width, 22);
+                CGRect frm = CGRectMake(0, [btnSuggestion1 frame].size.height-22,
+                                        [btnSuggestion1 frame].size.width, 22);
+                [ivSuggestion1 setImage:[UIImage imageWithData:[randomMessage img]]];
+                [ivSuggestion1 setHidden:NO];
                 [lblSuggestion1 setFrame:frm];
-                [btnSuggestion1 setBackgroundImage:[UIImage imageWithData:[randomMessage img]]
-                                         forState:UIControlStateNormal];
                 [lblSuggestion1 setNumberOfLines:1];
                 [lblSuggestion1 setBackgroundColor:[UIColor grayColor]];
                 [lblSuggestion1 setAlpha:0.70];
@@ -289,12 +343,14 @@ NSArray* colorsText;
             else {
                 //[btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
                 [lblSuggestion2 setText:[randomMessage text]];
+                [lblSuggestion2 setTextColor:[colorsText objectAtIndex:icolor]];
                 [lblSuggestion2 setHidden:NO];
             }
             if ([randomMessage img] == nil) {
                 [btnSuggestion2 setBackgroundImage:nil forState:UIControlStateNormal];
                 [lblSuggestion2 setFrame:CGRectMake(4, 4, [btnSuggestion2 frame].size.width-8, [btnSuggestion2 frame].size.height-8)];
                 //[btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
+                [ivSuggestion2 setHidden:YES];
                 [lblSuggestion2 setBackgroundColor:[UIColor clearColor]];
                 [lblSuggestion2 setNumberOfLines:0];
                 [lblSuggestion2 setAlpha:1];
@@ -302,8 +358,8 @@ NSArray* colorsText;
             else {
                 CGRect frm = CGRectMake(0, [btnSuggestion2 frame].size.height-22, [btnSuggestion2 frame].size.width, 22);
                 [lblSuggestion2 setFrame:frm];
-                [btnSuggestion2 setBackgroundImage:[UIImage imageWithData:[randomMessage img]]
-                                          forState:UIControlStateNormal];
+                [ivSuggestion2 setImage:[UIImage imageWithData:[randomMessage img]]];
+                [ivSuggestion2 setHidden:NO];
                 [lblSuggestion2 setBackgroundColor:[UIColor grayColor]];
                 [lblSuggestion2 setNumberOfLines:1];
                 [lblSuggestion2 setAlpha:0.70];
