@@ -9,6 +9,9 @@
 #import "Message.h"
 #import "ImageDownloader.h"
 #import "Settings.h"
+#import "YTPlayerView.h"
+
+YTPlayerView* globalYTPlayer = nil;
 
 @implementation Message
 @synthesize msgId, newMsg, img, assetURL, imgType, msgUrl, category, text, mediaUrl, url, liked;
@@ -122,10 +125,20 @@
             appUrl = [NSString stringWithFormat:@"youtube://%@", ytid];
         
         if (ytid != nil) {
-            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appUrl]])
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appUrl]];
+            UIButton* btn = (UIButton*)sender;
+            CGRect ytframe = CGRectMake(0, 0, [btn frame].size.width, [btn frame].size.height);
+            if (globalYTPlayer != nil)
+                [globalYTPlayer removeFromSuperview];
             else
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:msgUrl]];
+                globalYTPlayer = [[YTPlayerView alloc] init];
+            [globalYTPlayer setFrame:ytframe];
+            [btn addSubview:globalYTPlayer];
+            
+            NSDictionary *playerVars = @{
+                                         @"playsinline" : @1,
+                                         @"autoplay" : @1,
+                                         };
+            [globalYTPlayer loadWithVideoId:ytid playerVars:playerVars];
         }
         else {
             //pop up the image within this app, rather than in safari
@@ -209,6 +222,15 @@
     [viewWeb setBackgroundColor:[UIColor whiteColor]];
     CGFloat closeHeight = close ? 50 : 0;
     if (close) {
+        if ([self text] != nil && [[self text] length] > 0) {
+            CGRect frmTitle = CGRectMake(20, 20, frmView.size.width - 60, 30);
+            UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
+            [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+            [lblTitle setTextColor:[UIColor blackColor]];
+            [lblTitle setText:[self text]];
+            [viewWeb addSubview:lblTitle];
+        }
+        
         CGRect frmButton = CGRectMake(frmView.size.width - 40, 20, 30, 30);
         UIButton* btnClose = [[UIButton alloc] initWithFrame:frmButton];
         [btnClose setTitle:@"X" forState:UIControlStateNormal];

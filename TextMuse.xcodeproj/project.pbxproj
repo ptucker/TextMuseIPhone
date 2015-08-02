@@ -31,6 +31,8 @@
 		2DC6EC671B18208400C527BA /* TransparentButterfly.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC6EC661B18208400C527BA /* TransparentButterfly.png */; };
 		2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC959071AFBAED000BAB0A7 /* ImageUtil.m */; };
 		2DCA58F11B6E8F670011FCDB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DCA58F01B6E8F670011FCDB /* UIKit.framework */; };
+		2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCA58F41B6EA53D0011FCDB /* YTPlayerView.m */; };
+		2DCA58F71B6EA54D0011FCDB /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA58F61B6EA54D0011FCDB /* Assets */; };
 		2DCA7A061B58530000698E97 /* text.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA7A051B58530000698E97 /* text.xml */; };
 		2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CA1B0D8BF4000637E9 /* categories.png */; };
 		2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CB1B0D8BF4000637E9 /* contacts.png */; };
@@ -127,6 +129,9 @@
 		2DC959061AFBAED000BAB0A7 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
 		2DC959071AFBAED000BAB0A7 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
 		2DCA58F01B6E8F670011FCDB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2DCA58F31B6EA53D0011FCDB /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPlayerView.h; sourceTree = "<group>"; };
+		2DCA58F41B6EA53D0011FCDB /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPlayerView.m; sourceTree = "<group>"; };
+		2DCA58F61B6EA54D0011FCDB /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		2DCA7A051B58530000698E97 /* text.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = text.xml; path = ../../../../../Dropbox/text.xml; sourceTree = "<group>"; };
 		2DCAF9CA1B0D8BF4000637E9 /* categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = categories.png; sourceTree = "<group>"; };
 		2DCAF9CB1B0D8BF4000637E9 /* contacts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contacts.png; sourceTree = "<group>"; };
@@ -237,6 +242,16 @@
 			name = Groups;
 			sourceTree = "<group>";
 		};
+		2DCA58F21B6EA24F0011FCDB /* YTPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				2DCA58F61B6EA54D0011FCDB /* Assets */,
+				2DCA58F31B6EA53D0011FCDB /* YTPlayerView.h */,
+				2DCA58F41B6EA53D0011FCDB /* YTPlayerView.m */,
+			);
+			name = YTPlayer;
+			sourceTree = "<group>";
+		};
 		2DCDFC4C1AEC98F5002DA914 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -288,6 +303,7 @@
 		2DF0804A1AE625410003A277 /* TextMuse3 */ = {
 			isa = PBXGroup;
 			children = (
+				2DCA58F21B6EA24F0011FCDB /* YTPlayer */,
 				2DCDFC4C1AEC98F5002DA914 /* UI */,
 				2DF080C81AE626700003A277 /* Data */,
 				2DF080C71AE626580003A277 /* Messages */,
@@ -563,6 +579,7 @@
 				2DF080C01AE625FC0003A277 /* whitecategorybubble.png in Resources */,
 				2DCAF9D11B0D8BF4000637E9 /* message.png in Resources */,
 				2DCAF9D01B0D8BF4000637E9 /* message_edit.png in Resources */,
+				2DCA58F71B6EA54D0011FCDB /* Assets in Resources */,
 				2DC624B51AF1FF51006E806C /* yellowHighlighter.png in Resources */,
 				2DCDFC471AEC7F4C002DA914 /* emptycheck.png in Resources */,
 				2DF080CB1AE626E10003A277 /* LaunchScreen.xib in Resources */,
@@ -602,6 +619,7 @@
 				2DF080BB1AE625FC0003A277 /* Settings.m in Sources */,
 				2DF080AB1AE625FC0003A277 /* DataAccess.m in Sources */,
 				2DF080A91AE625FC0003A277 /* CategoriesViewController.m in Sources */,
+				2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */,
 				2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */,
 				2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */,
 				2DF080B81AE625FC0003A277 /* MessagesViewController.m in Sources */,
