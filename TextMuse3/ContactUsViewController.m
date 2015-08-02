@@ -7,6 +7,7 @@
 //
 
 #import "ContactUsViewController.h"
+#import "Settings.h"
 
 @interface ContactUsViewController ()
 
@@ -23,6 +24,11 @@ NSString* urlFeedback = @"http://www.textmuse.com/admin/postfeedback.php";
     [[self feedback] setTextColor:[UIColor lightGrayColor]]; //optional
     [[self feedback] setDelegate:self];
     
+    if ([UserName length] > 0)
+        [[self name] setText:UserName];
+    if ([UserEmail length] > 0)
+        [[self email] setText:UserEmail];
+
     UIBarButtonItem* rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Send"
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self

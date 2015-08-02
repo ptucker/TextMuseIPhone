@@ -13,6 +13,7 @@
 #import "Message.h"
 #import "ImageDownloader.h"
 #import "Settings.h"
+
 NSArray* colors;
 NSArray* colorsText;
 NSArray* colorsTitle;
@@ -33,32 +34,6 @@ NSArray* colorsTitle;
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [categories addSubview:refreshControl];
     
-    //[[btnSuggestion1 titleLabel] setNumberOfLines:0];
-    //[[btnSuggestion2 titleLabel] setNumberOfLines:0];
-    [btnSuggestion2 setFrame:CGRectMake([btnSuggestion2 frame].origin.x, [btnSuggestion2 frame].origin.y, [btnSuggestion1 frame].size.width, [btnSuggestion1 frame].size.height)];
-    CGRect frmLabel = CGRectMake(0, 0, [btnSuggestion1 frame].size.width, [btnSuggestion1 frame].size.height);
-
-    lblSuggestion1 = [[UILabel alloc] initWithFrame:frmLabel];
-    lblSuggestion2 = [[UILabel alloc] initWithFrame:frmLabel];
-    [lblSuggestion1 setFont:[[btnSuggestion1 titleLabel] font]];
-    [lblSuggestion2 setFont:[[btnSuggestion2 titleLabel] font]];
-    [lblSuggestion1 setTextAlignment:NSTextAlignmentCenter];
-    [lblSuggestion2 setTextAlignment:NSTextAlignmentCenter];
-    [lblSuggestion1 setTextColor:[UIColor whiteColor]];
-    [lblSuggestion2 setTextColor:[UIColor whiteColor]];
-    
-    ivSuggestion1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [btnSuggestion1 frame].size.width,
-                                                                  [btnSuggestion1 frame].size.height)];
-    [ivSuggestion1 setContentMode:UIViewContentModeScaleAspectFit];
-    ivSuggestion2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [btnSuggestion2 frame].size.width,
-                                                                  [btnSuggestion2 frame].size.height)];
-    [ivSuggestion2 setContentMode:UIViewContentModeScaleAspectFit];
-    
-    [btnSuggestion1 addSubview:ivSuggestion1];
-    [btnSuggestion2 addSubview:ivSuggestion2];
-    [btnSuggestion1 addSubview:lblSuggestion1];
-    [btnSuggestion2 addSubview:lblSuggestion2];
-    
     UIImage* settings = [UIImage imageNamed:@"gear.png"];
     UIImage *scaledSettings = [UIImage imageWithCGImage:[settings CGImage]
                                                   scale:73.0/30
@@ -70,12 +45,18 @@ NSArray* colorsTitle;
     [[self navigationItem] setRightBarButtonItem: rightButton];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
-    
+    CGRect frmSuggestion = [randomMessages frame];
+    frmSuggestion.origin.x = 0;
+    frmSuggestion.origin.y = 0;
+    [randomMessages setContentSize:frmSuggestion.size];
+
     if (ShowIntro) {
         [self showWalkthrough];
     }
     
     [Data addListener:self];
+    
+    [randomMessages setDelegate:self];
 
     [categories setDelegate:self];
     [categories setDataSource:self];
@@ -245,10 +226,10 @@ NSArray* colorsTitle;
 }
 
 -(IBAction)sendRandomMessage:(id)sender {
-    CurrentMessage = randomMessage;
-    CurrentCategory = [randomMessage category];
-    //[self performSegueWithIdentifier:@"ChooseContactForMessage" sender:self];
-    //[[self navigationController] performSegueWithIdentifier:@"ChooseContactForMessage" sender:self];
+    UISuggestionButton* btn = (UISuggestionButton*)sender;
+    CurrentMessage = [btn message];
+    CurrentCategory = [[btn message] category];
+    [self performSegueWithIdentifier:@"SelectMessage" sender:self];
 }
 
 -(IBAction)settings:(id)sender {
@@ -266,6 +247,36 @@ NSArray* colorsTitle;
 }
 #endif
 
+-(UISuggestionButton*) addMessageButton:(Message*)msg {
+    CGRect frmScroll = [randomMessages frame];
+    CGRect frmButton = CGRectMake([randomMessages contentSize].width, 0,
+                                  frmScroll.size.width, frmScroll.size.height);
+    
+    UISuggestionButton* btnSuggestion = [[UISuggestionButton alloc] initWithMessage:msg];
+    [btnSuggestion setFrame:frmButton];
+    CGRect frmLabel = CGRectMake(0, 0, frmButton.size.width, frmButton.size.height);
+    
+    UILabel* lblSuggestion = [[UILabel alloc] initWithFrame:frmLabel];
+    [lblSuggestion setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+    [lblSuggestion setTextAlignment:NSTextAlignmentCenter];
+    [lblSuggestion setNumberOfLines:0];
+    [lblSuggestion setTextColor:[UIColor whiteColor]];
+    [lblSuggestion setTag:1];
+    
+    UIImageView* ivSuggestion = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0,
+                                                                              frmButton.size.width,
+                                                                              frmButton.size.height)];
+    [ivSuggestion setContentMode:UIViewContentModeScaleAspectFit];
+    [ivSuggestion setTag:2];
+    [btnSuggestion addSubview:ivSuggestion];
+    [btnSuggestion addSubview:lblSuggestion];
+    
+    [btnSuggestion addTarget:self action:@selector(sendRandomMessage:)
+            forControlEvents:UIControlEventTouchUpInside];
+    
+    return btnSuggestion;
+}
+
 -(void)setReminder:(NSTimer*)timer {
     if (reminderButtonState == TIMER_PAUSED)
         return;
@@ -275,144 +286,60 @@ NSArray* colorsTitle;
     unsigned long colorcount = [colors count];
     unsigned int icolor = rand() % colorcount;
     
-    switch (reminderButtonState) {
-            /*
-        case HIDE_TEXT:
-        case HIDE_CONTACT:
-            [self fadeout];
-            break;
-             */
-        case SHOW_TEXT:
-            [btnSuggestion1 setBackgroundColor:[colors objectAtIndex:icolor]];
-            randomMessage = [Data chooseRandomMessage];
-            while ([randomMessage mediaUrl] != nil && [randomMessage img] == nil) {
-                ImageDownloader* load =
-                    [[ImageDownloader alloc] initWithUrl:[randomMessage mediaUrl]
-                                              forMessage:randomMessage];
-                [load load];
-                randomMessage = [Data chooseRandomMessage];
-            }
-            if (([randomMessage text] == nil) || [[randomMessage text] length] == 0) {
-                //[btnSuggestion1 setTitle:@"" forState:UIControlStateNormal];
-                [lblSuggestion1 setText:@""];
-                [lblSuggestion1 setHidden:YES];
-            }
-            else {
-                //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
-                [lblSuggestion1 setText:[randomMessage text]];
-                [lblSuggestion1 setTextColor:[colorsText objectAtIndex:icolor]];
-                [lblSuggestion1 setHidden:NO];
-            }
-            if ([randomMessage mediaUrl] == nil) {
-                [btnSuggestion1 setBackgroundImage:nil forState:UIControlStateNormal];
-                [lblSuggestion1 setFrame:CGRectMake(4, 4, [btnSuggestion1 frame].size.width-8, [btnSuggestion1 frame].size.height-8)];
-                //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
-                [ivSuggestion1 setHidden:YES];
-                [lblSuggestion1 setBackgroundColor:[UIColor clearColor]];
-                [lblSuggestion1 setNumberOfLines:0];
-                [lblSuggestion1 setAlpha:1];
-            }
-            else {
-                CGRect frm = CGRectMake(0, [btnSuggestion1 frame].size.height-22,
-                                        [btnSuggestion1 frame].size.width, 22);
-                [ivSuggestion1 setImage:[UIImage imageWithData:[randomMessage img]]];
-                [ivSuggestion1 setHidden:NO];
-                [lblSuggestion1 setFrame:frm];
-                [lblSuggestion1 setNumberOfLines:1];
-                [lblSuggestion1 setBackgroundColor:[UIColor grayColor]];
-                [lblSuggestion1 setAlpha:0.70];
-            }
-            
-            [self fadein];
-            break;
-        case SHOW_CONTACT:
-            [btnSuggestion2 setBackgroundColor:[colors objectAtIndex:icolor]];
-            randomMessage = [Data chooseRandomMessage];
-            while ([randomMessage mediaUrl] != nil && [randomMessage img] == nil) {
-                ImageDownloader* load =
-                [[ImageDownloader alloc] initWithUrl:[randomMessage mediaUrl]
-                                          forMessage:randomMessage];
-                [load load];
-                randomMessage = [Data chooseRandomMessage];
-            }
-            if (([randomMessage text] == nil) || [[randomMessage text] length] == 0) {
-                //[btnSuggestion2 setTitle:@"" forState:UIControlStateNormal];
-                [lblSuggestion2 setText:@""];
-                [lblSuggestion2 setHidden:YES];
-            }
-            else {
-                //[btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
-                [lblSuggestion2 setText:[randomMessage text]];
-                [lblSuggestion2 setTextColor:[colorsText objectAtIndex:icolor]];
-                [lblSuggestion2 setHidden:NO];
-            }
-            if ([randomMessage img] == nil) {
-                [btnSuggestion2 setBackgroundImage:nil forState:UIControlStateNormal];
-                [lblSuggestion2 setFrame:CGRectMake(4, 4, [btnSuggestion2 frame].size.width-8, [btnSuggestion2 frame].size.height-8)];
-                //[btnSuggestion2 setTitle:[randomMessage text] forState:UIControlStateNormal];
-                [ivSuggestion2 setHidden:YES];
-                [lblSuggestion2 setBackgroundColor:[UIColor clearColor]];
-                [lblSuggestion2 setNumberOfLines:0];
-                [lblSuggestion2 setAlpha:1];
-            }
-            else {
-                CGRect frm = CGRectMake(0, [btnSuggestion2 frame].size.height-22, [btnSuggestion2 frame].size.width, 22);
-                [lblSuggestion2 setFrame:frm];
-                [ivSuggestion2 setImage:[UIImage imageWithData:[randomMessage img]]];
-                [ivSuggestion2 setHidden:NO];
-                [lblSuggestion2 setBackgroundColor:[UIColor grayColor]];
-                [lblSuggestion2 setNumberOfLines:1];
-                [lblSuggestion2 setAlpha:0.70];
-            }
-            
-            
-            [self fadeout];
-            
-            break;
+    Message* msg = [Data chooseRandomMessage];
+    UISuggestionButton* btnSuggestion = [self addMessageButton:msg];
+    UILabel* lblSuggestion = (UILabel*)[btnSuggestion viewWithTag:1];
+    UIImageView* ivSuggestion = (UIImageView*)[btnSuggestion viewWithTag:2];
+    [btnSuggestion setBackgroundColor:[colors objectAtIndex:icolor]];
+    while ([msg mediaUrl] != nil && [msg img] == nil) {
+        ImageDownloader* load =
+        [[ImageDownloader alloc] initWithUrl:[msg mediaUrl]
+                                  forMessage:msg];
+        [load load];
+        msg = [Data chooseRandomMessage];
     }
-    reminderButtonState = (reminderButtonState + 1) % BUTTON_STATES;
-}
-
--(void)fadein {
-    /*
-    [btnSuggestion setAlpha:0.0f];
-    [UIView animateWithDuration:1.0f animations:^{ [btnSuggestion setAlpha:1.0f]; }
-                     completion:^(BOOL finished) {}];
-     */
-    CGRect frmStart1 = [btnSuggestion1 frame];
-    frmStart1.origin.x = [[self view] frame].size.width + 8;
-    [btnSuggestion1 setFrame:frmStart1];
-    [btnSuggestion1 setHidden:NO];
-    CGRect frmStart2 = [btnSuggestion2 frame];
-    CGRect frmDest1 = frmStart1;
-    frmDest1.origin.x = 0;
-    CGRect frmDest2 = frmStart2;
-    frmDest2.origin.x = -[[self view] frame].size.width - 8;
-    [UIView animateWithDuration:1.0f animations:^{
-        [btnSuggestion1 setFrame:frmDest1];
-        [btnSuggestion2 setFrame:frmDest2];
-    }];
-}
-
--(void)fadeout {
-    /*
-    [btnSuggestion setAlpha:1.0f];
-    [UIView animateWithDuration:1.0f animations:^{ [btnSuggestion setAlpha:0.0f]; }
-                     completion:^(BOOL finished) {}];
-     */
-    CGRect frmStart2 = [btnSuggestion2 frame];
-    frmStart2.origin.x = [[self view] frame].size.width + 8;
-    [btnSuggestion2 setFrame:frmStart2];
-    [btnSuggestion2 setHidden:NO];
-    CGRect frmStart1 = [btnSuggestion1 frame];
-    CGRect frmDest2 = frmStart1;
-    frmDest2.origin.x = 0;
-    CGRect frmDest1 = frmStart1;
-    frmDest1.origin.x = -[[self view] frame].size.width - 8;
-    [UIView animateWithDuration:1.0f animations:^{
-        [btnSuggestion1 setFrame:frmDest1];
-        [btnSuggestion2 setFrame:frmDest2];
-    }];
+    if (([msg text] == nil) || [[msg text] length] == 0) {
+        [lblSuggestion setText:@""];
+        [lblSuggestion setHidden:YES];
+    }
+    else {
+        //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
+        [lblSuggestion setText:[msg text]];
+        [lblSuggestion setTextColor:[colorsText objectAtIndex:icolor]];
+        [lblSuggestion setHidden:NO];
+    }
+    if ([msg mediaUrl] == nil) {
+        [btnSuggestion setBackgroundImage:nil forState:UIControlStateNormal];
+        [lblSuggestion setFrame:CGRectMake(4, 4,
+                                           [btnSuggestion frame].size.width-8,
+                                           [btnSuggestion frame].size.height-8)];
+        //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
+        [ivSuggestion setHidden:YES];
+        [lblSuggestion setBackgroundColor:[UIColor clearColor]];
+        [lblSuggestion setNumberOfLines:0];
+        [lblSuggestion setAlpha:1];
+    }
+    else {
+        CGRect frm = CGRectMake(0, [btnSuggestion frame].size.height-22,
+                                [btnSuggestion frame].size.width, 22);
+        [ivSuggestion setImage:[UIImage imageWithData:[msg img]]];
+        [ivSuggestion setHidden:NO];
+        [lblSuggestion setFrame:frm];
+        [lblSuggestion setNumberOfLines:1];
+        [lblSuggestion setBackgroundColor:[UIColor grayColor]];
+        [lblSuggestion setAlpha:0.70];
+    }
+    CGFloat newWidth = [randomMessages contentSize].width+[btnSuggestion frame].size.width;
+    CGSize newSize = CGSizeMake(newWidth, [randomMessages frame].size.height);
+    [randomMessages setContentSize:newSize];
+    [randomMessages addSubview:btnSuggestion];
+    CGRect frmNext = CGRectMake([randomMessages contentOffset].x, 0, [randomMessages frame].size.width,
+                                [randomMessages frame].size.height);
+    frmNext.origin.x += [randomMessages frame].size.width;
+    frmNext.origin.x -= (int)(frmNext.origin.x+1) % (int)frmNext.size.width;
+    
+    [randomMessages scrollRectToVisible:frmNext animated:YES];
+    
 }
 
 -(void)showWalkthrough {
@@ -513,18 +440,9 @@ NSArray* colorsTitle;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
-    // Update the page when more than 50% of the previous/next page is visible
-    CGFloat pageWidth = [scroller frame].size.width;
-    int page = floor(([scroller contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-    
-    [pages setCurrentPage: page];
-}
-
-- (IBAction)pageTurn:(id)sender {
-    long page = [pages currentPage];
-    CGRect frm = [scroller frame];
-    CGPoint p = [scroller contentOffset];
-    [scroller setContentOffset:CGPointMake(page * frm.size.width, p.y)];
+    if (sender == randomMessages) {
+        [sender setContentOffset:CGPointMake([sender contentOffset].x, 0)];
+    }
 }
 
 @end

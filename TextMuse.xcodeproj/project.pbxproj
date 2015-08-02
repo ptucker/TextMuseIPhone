@@ -33,6 +33,7 @@
 		2DCA58F11B6E8F670011FCDB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DCA58F01B6E8F670011FCDB /* UIKit.framework */; };
 		2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCA58F41B6EA53D0011FCDB /* YTPlayerView.m */; };
 		2DCA58F71B6EA54D0011FCDB /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA58F61B6EA54D0011FCDB /* Assets */; };
+		2DCA59061B6ECB260011FCDB /* UISuggestionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCA59051B6ECB260011FCDB /* UISuggestionButton.m */; };
 		2DCA7A061B58530000698E97 /* text.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA7A051B58530000698E97 /* text.xml */; };
 		2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CA1B0D8BF4000637E9 /* categories.png */; };
 		2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DCAF9CB1B0D8BF4000637E9 /* contacts.png */; };
@@ -132,6 +133,8 @@
 		2DCA58F31B6EA53D0011FCDB /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPlayerView.h; sourceTree = "<group>"; };
 		2DCA58F41B6EA53D0011FCDB /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPlayerView.m; sourceTree = "<group>"; };
 		2DCA58F61B6EA54D0011FCDB /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		2DCA59041B6ECB260011FCDB /* UISuggestionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISuggestionButton.h; sourceTree = "<group>"; };
+		2DCA59051B6ECB260011FCDB /* UISuggestionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISuggestionButton.m; sourceTree = "<group>"; };
 		2DCA7A051B58530000698E97 /* text.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = text.xml; path = ../../../../../Dropbox/text.xml; sourceTree = "<group>"; };
 		2DCAF9CA1B0D8BF4000637E9 /* categories.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = categories.png; sourceTree = "<group>"; };
 		2DCAF9CB1B0D8BF4000637E9 /* contacts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contacts.png; sourceTree = "<group>"; };
@@ -408,6 +411,8 @@
 				2DF0807B1AE625FC0003A277 /* CategoriesTableViewCell.xib */,
 				2DF0807C1AE625FC0003A277 /* CategoriesViewController.h */,
 				2DF0807D1AE625FC0003A277 /* CategoriesViewController.m */,
+				2DCA59041B6ECB260011FCDB /* UISuggestionButton.h */,
+				2DCA59051B6ECB260011FCDB /* UISuggestionButton.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -623,6 +628,7 @@
 				2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */,
 				2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */,
 				2DF080B81AE625FC0003A277 /* MessagesViewController.m in Sources */,
+				2DCA59061B6ECB260011FCDB /* UISuggestionButton.m in Sources */,
 				2DF080AF1AE625FC0003A277 /* ImageDownloader.m in Sources */,
 				2DF080B61AE625FC0003A277 /* Message.m in Sources */,
 				2DC6253E1AF2F92400D23CE8 /* MemberTableData.m in Sources */,

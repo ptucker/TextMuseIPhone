@@ -38,8 +38,6 @@
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
-            <string>Lato-Regular</string>
-            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -331,7 +329,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email (optional)" minimumFontSize="17" id="R1q-ce-m4D">
-                                <rect key="frame" x="164.00000005449564" y="308" width="140" height="30"/>
+                                <rect key="frame" x="164.00000005449567" y="308" width="140" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
@@ -380,34 +378,17 @@
                                 <rect key="frame" x="0.0" y="60" width="320" height="150"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0BT-e0-vqJ">
+                                    <view contentMode="scaleToFill" id="0JM-LC-WSJ">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="20"/>
-                                        <inset key="contentEdgeInsets" minX="15" minY="15" maxX="15" maxY="15"/>
-                                        <state key="normal">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="sendRandomMessage:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="COb-lZ-biZ"/>
-                                            <segue destination="A8v-W0-SOT" kind="push" id="UYj-Bg-tA2"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Rew-6w-6Fo">
-                                        <rect key="frame" x="328" y="0.0" width="320" height="150"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="20"/>
-                                        <inset key="contentEdgeInsets" minX="15" minY="15" maxX="15" maxY="15"/>
-                                        <state key="normal">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="sendRandomMessage:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="rUj-fW-Hmh"/>
-                                            <segue destination="A8v-W0-SOT" kind="push" id="ZG8-7T-qkb"/>
-                                        </connections>
-                                    </button>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsVerticalScrollIndicator="NO" id="w4K-Y0-Wad">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </scrollView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -432,9 +413,8 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="Kal-7e-pdB"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="btnSuggestion1" destination="0BT-e0-vqJ" id="vp3-3U-DZO"/>
-                        <outlet property="btnSuggestion2" destination="Rew-6w-6Fo" id="XcV-wm-kSv"/>
                         <outlet property="categories" destination="q0J-8q-bfb" id="Lur-C8-oIH"/>
+                        <outlet property="randomMessages" destination="w4K-Y0-Wad" id="xP9-eH-1VV"/>
                         <segue destination="A8v-W0-SOT" kind="push" identifier="SelectMessage" id="91J-mQ-crv"/>
                         <segue destination="54f-mb-IwZ" kind="push" identifier="Settings" id="NV5-cF-qMn"/>
                         <segue destination="yLr-zO-1M3" kind="push" identifier="registerInitial" id="11m-tQ-kJs"/>
@@ -442,7 +422,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-748" y="284"/>
+            <point key="canvasLocation" x="-851" y="332"/>
         </scene>
         <!--Select Message-->
         <scene sceneID="zOp-gi-9ub">
@@ -639,7 +619,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="13" y="1250"/>
+            <point key="canvasLocation" x="79" y="919"/>
         </scene>
         <!--Groups-->
         <scene sceneID="sf1-0c-d8W">
@@ -745,6 +725,5 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="11m-tQ-kJs"/>
-        <segue reference="91J-mQ-crv"/>
     </inferredMetricsTieBreakers>
 </document>

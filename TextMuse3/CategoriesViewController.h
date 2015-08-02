@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GlobalState.h"
+#import "UISuggestionButton.h"
 
 //#define HIDE_TEXT 1
 #define SHOW_TEXT 0
@@ -20,7 +21,7 @@
 #define BUTTON_STATES 4
 #define TIMER_PAUSED -1
 
-#define HIGHLIGHTED_INTERVAL (3.0)
+#define HIGHLIGHTED_INTERVAL (5.0)
 
 extern NSArray* colors;
 extern NSArray* colorsText;
@@ -29,19 +30,13 @@ extern NSArray* colorsText;
                                                         DataRefreshDelegate, UIScrollViewDelegate,
                                                         UIPageViewControllerDelegate> {
     IBOutlet UITableView* categories;
-    IBOutlet UIButton* btnSuggestion1;
-    IBOutlet UIButton* btnSuggestion2;
-    IBOutlet UILabel* lblSuggestion1;
-    IBOutlet UILabel* lblSuggestion2;
-    IBOutlet UIImageView* ivSuggestion1;
-    IBOutlet UIImageView* ivSuggestion2;
+    IBOutlet UIScrollView* randomMessages;
     UIRefreshControl *refreshControl;
     UIView* walkthroughView;
     UIPageControl* pages;
     UIScrollView* scroller;
     
     UserContact* randomContact;
-    Message* randomMessage;
     int reminderButtonState;
     NSTimer* timerReminder;
     NSTimer* timerFade;
@@ -49,6 +44,7 @@ extern NSArray* colorsText;
 
 -(IBAction)sendRandomMessage:(id)sender;
 -(IBAction)settings:(id)sender;
+-(UISuggestionButton*) addMessageButton:(Message*)msg;
 
 @end
 
