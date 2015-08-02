@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
-@interface Message : NSObject {
+@interface Message : NSObject <UIWebViewDelegate> {
     int msgId;
     int yourtextIndex;
     BOOL newMsg;
@@ -23,6 +24,8 @@
     NSString* text;
     NSString* mediaUrl;
     NSString* url;
+    
+    UIActivityIndicatorView* activityView;
 }
 
 @property (readwrite) int msgId;

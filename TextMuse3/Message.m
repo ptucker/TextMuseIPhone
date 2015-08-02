@@ -187,11 +187,79 @@
     if (url != nil) {
         if ([[url lowercaseString] hasPrefix:@"http://www.textmuse.com"] && [url containsString:@"%appid%"])
             url = [url stringByReplacingOccurrencesOfString:@"%appid%" withString:AppID];
+        /*
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]])
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
         else
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+         */
+        
+        UIButton* btn = (UIButton*)sender;
+        UIView* parent = [btn superview];
+        while ([parent superview] != nil)
+            parent = [parent superview];
+        
+        [self showWebViewInParent:parent withUrl:url withAnimation:YES];
     }
+}
+
+-(void)showWebViewInParent:(UIView*) parent withUrl:(NSString*)u withAnimation:(BOOL)close {
+    CGRect frmView = CGRectMake(0, [parent frame].size.height, [parent frame].size.width, [parent frame].size.height);
+    UIView* viewWeb = [[UIView alloc] initWithFrame:frmView];
+    [viewWeb setBackgroundColor:[UIColor whiteColor]];
+    CGFloat closeHeight = close ? 50 : 0;
+    if (close) {
+        CGRect frmButton = CGRectMake(frmView.size.width - 40, 20, 30, 30);
+        UIButton* btnClose = [[UIButton alloc] initWithFrame:frmButton];
+        [btnClose setTitle:@"X" forState:UIControlStateNormal];
+        [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:36]];
+        [btnClose setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btnClose addTarget:self action:@selector(closeWeb:) forControlEvents:UIControlEventTouchUpInside];
+        [viewWeb addSubview:btnClose];
+    }
+
+    CGRect frmWeb = CGRectMake(0, closeHeight, frmView.size.width, frmView.size.height-closeHeight);
+    UIWebView* web = [[UIWebView alloc] initWithFrame:frmWeb];
+    [web setDelegate:self];
+    [viewWeb addSubview:web];
+    [parent addSubview:viewWeb];
+    NSURLRequest* req = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:u]];
+    [web loadRequest:req];
+    
+    if (close) {
+        CGRect endFrame = frmView;
+        endFrame.origin.y = 0;
+        [UIView animateWithDuration:0.5 animations:^{
+            [viewWeb setFrame:endFrame];
+        } completion: ^(BOOL f) {
+        }];
+    }
+}
+
+-(void)closeWeb:(id)sender {
+    UIButton* btn = (UIButton*)sender;
+    UIView* v = [btn superview];
+    CGRect endFrame = [v frame];
+    endFrame.origin.y = [v frame].size.height;
+    [UIView animateWithDuration:0.5 animations:^{
+        [v setFrame:endFrame];
+    } completion: ^(BOOL f) {
+        if (f) [v removeFromSuperview];
+    }];
+}
+
+-(void)webViewDidStartLoad:(UIWebView*)webView {
+    if (activityView == nil)
+        activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityView setCenter:CGPointMake([webView frame].size.width/2, [webView frame].size.height/2)];
+    [activityView setHidesWhenStopped:YES];
+    [activityView startAnimating];
+    [webView addSubview:activityView];
+}
+
+-(void)webViewDidFinishLoad:(UIWebView*)webView {
+    [activityView stopAnimating];
+    [activityView removeFromSuperview];
 }
 
 -(void)updateText:(id)sender {
