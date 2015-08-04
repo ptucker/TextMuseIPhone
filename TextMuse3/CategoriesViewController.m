@@ -336,7 +336,7 @@ NSArray* colorsTitle;
     CGRect frmNext = CGRectMake([randomMessages contentOffset].x, 0, [randomMessages frame].size.width,
                                 [randomMessages frame].size.height);
     frmNext.origin.x += [randomMessages frame].size.width;
-    frmNext.origin.x -= (int)(frmNext.origin.x+1) % (int)frmNext.size.width;
+    frmNext.origin.x -= (int)frmNext.origin.x % (int)frmNext.size.width;
     
     [randomMessages scrollRectToVisible:frmNext animated:YES];
     
