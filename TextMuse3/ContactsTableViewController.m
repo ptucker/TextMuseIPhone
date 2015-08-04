@@ -34,7 +34,7 @@ NSMutableArray* searchContacts;
                                                    style:UIBarButtonItemStylePlain
                                                   target:self
                                                   action:@selector(sendMessages:)];
-    [rightButton setEnabled:NO];
+    //[rightButton setEnabled:NO];
     [[self navigationItem] setRightBarButtonItem: rightButton];
     
     showRecentContacts = (SaveRecentContacts && [RecentContacts count] > 0);
@@ -398,7 +398,7 @@ NSMutableArray* searchContacts;
         [checkedContacts removeObjectIdenticalTo:uc];
     }
     
-    [rightButton setEnabled:[checkedContacts count] > 0];
+    //[rightButton setEnabled:[checkedContacts count] > 0];
     
     [self syncSendButton];
 }
