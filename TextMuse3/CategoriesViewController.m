@@ -338,8 +338,12 @@ NSArray* colorsTitle;
     frmNext.origin.x += [randomMessages frame].size.width;
     frmNext.origin.x -= (int)frmNext.origin.x % (int)frmNext.size.width;
     
-    [randomMessages scrollRectToVisible:frmNext animated:YES];
-    
+    [UIView animateWithDuration:1.5
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{ [randomMessages scrollRectToVisible:frmNext animated:NO]; }
+                     completion:NULL];
+    //[randomMessages scrollRectToVisible:frmNext animated:YES];
 }
 
 -(void)showWalkthrough {
