@@ -26,6 +26,7 @@
     NSString* url;
     
     UIActivityIndicatorView* activityView;
+    UIWebView* web;
 }
 
 @property (readwrite) int msgId;

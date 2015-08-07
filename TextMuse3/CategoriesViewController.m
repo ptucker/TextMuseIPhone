@@ -43,6 +43,7 @@ NSArray* colorsTitle;
                                                                    target:self
                                                                    action:@selector(settings:)];
     [[self navigationItem] setRightBarButtonItem: rightButton];
+    [[self navigationController] setDelegate:self];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
     CGRect frmSuggestion = [randomMessages frame];
@@ -61,7 +62,6 @@ NSArray* colorsTitle;
     [categories setDelegate:self];
     [categories setDataSource:self];
     
-    [categories reloadData];
     [categories setBackgroundColor:[UIColor whiteColor]];
 #ifdef WHITWORTH
     [[self navigationItem] setTitle:@"Whitworth TextMuse"];
@@ -89,6 +89,13 @@ NSArray* colorsTitle;
                                                                   action:@selector(website:)];
     [[self navigationItem] setLeftBarButtonItem:leftButton];
 #endif
+}
+
+-(void)navigationController:(UINavigationController *)navigationController
+     willShowViewController:(UIViewController *)viewController
+                   animated:(BOOL)animated {
+    if (viewController == self)
+        [categories reloadData];
 }
 
 -(void)setColors {
@@ -149,7 +156,7 @@ NSArray* colorsTitle;
     if (CategoryList != nil) {
         int cnt = 0;
         for (NSString* cat in [CategoryList keyEnumerator]) {
-            if ([[CategoryList objectForKey:cat] isEqualToString: @"1"])
+            if (![[CategoryList objectForKey:cat] isEqualToString: @"0"])
                 cnt++;
         }
         c = cnt;
@@ -211,7 +218,7 @@ NSArray* colorsTitle;
         int ichosen = 0;
         for (icategory = 0; icategory<[cats count]; icategory++) {
             NSString* tmp = [cats objectAtIndex:icategory];
-            if ([[CategoryList objectForKey:tmp] isEqualToString:@"1"]) {
+            if (![[CategoryList objectForKey:tmp] isEqualToString:@"0"]) {
                 if (ichosen == selectedCategory)
                     break;
                 else
@@ -433,6 +440,13 @@ NSArray* colorsTitle;
     [[[self navigationItem] rightBarButtonItem] setEnabled:NO];
 }
 
+- (IBAction)pageTurn:(id)sender {
+    long page = [pages currentPage];
+    CGRect frm = [scroller frame];
+    CGPoint p = [scroller contentOffset];
+    [scroller setContentOffset:CGPointMake(page * frm.size.width, p.y)];
+}
+
 -(IBAction)closeWalkthrough:(id)sender {
     [walkthroughView removeFromSuperview];
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
@@ -446,6 +460,12 @@ NSArray* colorsTitle;
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
     if (sender == randomMessages) {
         [sender setContentOffset:CGPointMake([sender contentOffset].x, 0)];
+    }
+    else if (pages != nil) {
+        CGFloat pageWidth = [scroller frame].size.width;
+        int page = floor(([scroller contentOffset].x - pageWidth / 2) / pageWidth) + 1;
+        
+        [pages setCurrentPage: page];
     }
 }
 

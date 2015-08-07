@@ -44,10 +44,19 @@
     
     [chosenCategories setDataSource:self];
     [chosenCategories setDelegate:self];
+    [chosenCategories setEditing:YES];
     
     [chosenCategories reloadData];
-    
-    [self setViewPositions];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    tmpCategoryList = [NSMutableDictionary dictionaryWithDictionary:CategoryList];
+    discardChanges = YES;
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    if (discardChanges)
+        CategoryList = [NSMutableDictionary dictionaryWithDictionary:tmpCategoryList];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,8 +64,17 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)setViewPositions {
-    
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    //Hide the delete button
+    return UITableViewCellEditingStyleNone;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -86,7 +104,7 @@
         [btncheck setExtra:categoryName];
         if ([CategoryList objectForKey:categoryName] == nil)
             [CategoryList setObject:@"1" forKey:categoryName];
-        BOOL selected = [[CategoryList objectForKey:categoryName] isEqualToString: @"1"];
+        BOOL selected = ![[CategoryList objectForKey:categoryName] isEqualToString: @"0"];
         [btncheck setSelected:selected];
     
         if ([btncheck tag] == 0) {
@@ -110,18 +128,45 @@
         [self check:chk];
 }
 
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+     toIndexPath:(NSIndexPath *)destinationIndexPath {
+    NSArray* categories = [Data getCategories];
+    NSString* categoryMove = [categories objectAtIndex:[sourceIndexPath row]];
+    int precpos = 1;
+    if ([categories objectAtIndex:[destinationIndexPath row]] > 0) {
+        NSString* categoryPrec = [categories objectAtIndex:[destinationIndexPath row]-1];
+        precpos = [[CategoryList objectForKey:categoryPrec] intValue];
+    }
+    int newpos = precpos+1;
+    [CategoryList setValue:[NSString stringWithFormat:@"%d", newpos] forKey:categoryMove];
+    for (unsigned long i=[destinationIndexPath row]; i<[categories count]; i++) {
+        NSString* cat = [categories objectAtIndex:i];
+        int ipos = [[CategoryList objectForKey:cat] intValue];
+        if (ipos < (newpos + 1) && ![cat isEqualToString:categoryMove])
+            [CategoryList setValue:[NSString stringWithFormat:@"%d", (newpos+1)] forKey:cat];
+    }
+}
+
 -(IBAction)check:(id)sender {
     UICheckButton* btn = (UICheckButton*)sender;
     NSString* categoryName = [btn extra];
+    NSString* pos = @"0";
     [btn setSelected:![btn isSelected]];
-    [CategoryList setObject:[btn isSelected] ? @"1" : @"0" forKey:categoryName];
-    
-    /*
-    if ([btn isSelected] && ![ChosenCategories containsObject:categoryName])
-        [ChosenCategories addObject:categoryName];
-    else if (![btn isSelected] && [ChosenCategories containsObject:categoryName])
-        [ChosenCategories removeObject:categoryName];
-     */
+    if ([btn isSelected]) {
+        NSArray* categories = [Data getCategories];
+        int max = -1;
+        for (int i=0; i<[categories count]; i++) {
+            NSString* cat = [categories objectAtIndex:i];
+            if (![[CategoryList objectForKey:cat] isEqualToString:@"0"]) {
+                int tmp = [[CategoryList objectForKey:cat] intValue];
+                if (tmp > max)
+                    max = tmp;
+            }
+        }
+        pos = [NSString stringWithFormat:@"%d", (max+1)];
+    }
+
+    [CategoryList setObject:pos forKey:categoryName];
 }
 
 -(IBAction)registerUser:(id)sender {
@@ -141,11 +186,11 @@
 }
 
 -(void)saveSettings {
-    //[Settings SaveSetting:SettingChosenCategories withValue:ChosenCategories];
+    discardChanges = NO;
     [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
     for (NSString*c in [Data getCategories]) {
         MessageCategory*mc = [Data getCategory:c];
-        [mc setChosen:[[CategoryList objectForKey:c] isEqualToString:@"1"]];
+        [mc setChosen:![[CategoryList objectForKey:c] isEqualToString:@"0"]];
     }
     
     if (SortLastName != [sortContacts isOn]) {

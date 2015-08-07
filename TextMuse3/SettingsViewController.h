@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface SettingsViewController : UIViewController<UITableViewDataSource, UITableViewDelegate> {
+
+    NSMutableDictionary* tmpCategoryList;
+    BOOL discardChanges;
+    
     IBOutlet UITableView* chosenCategories;
     IBOutlet UISwitch* sortContacts;
     IBOutlet UISwitch* notifications;

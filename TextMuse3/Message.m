@@ -241,8 +241,11 @@ YTPlayerView* globalYTPlayer = nil;
     }
 
     CGRect frmWeb = CGRectMake(0, closeHeight, frmView.size.width, frmView.size.height-closeHeight);
-    UIWebView* web = [[UIWebView alloc] initWithFrame:frmWeb];
-    [web setDelegate:self];
+    if (web == nil) {
+        web = [[UIWebView alloc] init];
+        [web setDelegate:self];
+    }
+    [web setFrame:frmWeb];
     [viewWeb addSubview:web];
     [parent addSubview:viewWeb];
     NSURLRequest* req = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:u]];
@@ -266,7 +269,11 @@ YTPlayerView* globalYTPlayer = nil;
     [UIView animateWithDuration:0.5 animations:^{
         [v setFrame:endFrame];
     } completion: ^(BOOL f) {
-        if (f) [v removeFromSuperview];
+        if (f) {
+            [web removeFromSuperview];
+            [web loadHTMLString:@"" baseURL:nil];
+            [v removeFromSuperview];
+        }
     }];
 }
 

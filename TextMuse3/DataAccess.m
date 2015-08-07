@@ -365,8 +365,25 @@ NSString* localNotes = @"notes.xml";
     categoryCmp = ^NSComparisonResult(id c1, id c2) {
         MessageCategory* cat1 = [categories objectForKey:c1];
         MessageCategory* cat2 = [categories objectForKey:c2];
+        /*
         if ([cat1 required] != [cat2 required]) {
             return ([cat1 required]) ? NSOrderedAscending : NSOrderedDescending;
+        }
+         */
+        if ([cat1 newCategory] != [cat2 newCategory]) {
+            return ([cat1 newCategory]) ? NSOrderedAscending : NSOrderedDescending;
+        }
+        if ([CategoryList objectForKey:[cat1 name]] != [CategoryList objectForKey:[cat2 name]]) {
+            int v1 = [[CategoryList objectForKey:[cat1 name]] intValue];
+            int v2 = [[CategoryList objectForKey:[cat2 name]] intValue];
+            if (v1 == 0)
+                return NSOrderedDescending;
+            else if (v2 == 0)
+                return NSOrderedAscending;
+            else if (v1 > v2)
+                return NSOrderedDescending;
+            else if (v1 < v2)
+                return NSOrderedAscending;
         }
         
         return ([cat1 order] > [cat2 order]) ? NSOrderedDescending :
@@ -600,12 +617,12 @@ NSString* localNotes = @"notes.xml";
         currentCategory = [[MessageCategory alloc] initWithName:name];
         [currentCategory setOrder:[tmpCategories count]];
         [currentCategory setRequired:([[attributeDict allKeys] containsObject:@"required"] &&
-                                      [[attributeDict objectForKey:@"required"] isEqualToString:@"1"])];
+                                      ![[attributeDict objectForKey:@"required"] isEqualToString:@"0"])];
         [currentCategory setNewCategory:([[attributeDict allKeys] containsObject:@"new"] &&
-                                         [[attributeDict objectForKey:@"new"] isEqualToString:@"1"])];
+                                         ![[attributeDict objectForKey:@"new"] isEqualToString:@"0"])];
         [currentCategory setChosen:(CategoryList == nil ||
                                     [CategoryList objectForKey:[currentCategory name]] == nil ||
-                                    [[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"1"] ||
+                                    ![[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"0"] ||
                                     [currentCategory newCategory])];
         [currentCategory setMessages:[[NSMutableArray alloc] init]];
         if ([currentCategory required]) {
@@ -614,7 +631,8 @@ NSString* localNotes = @"notes.xml";
                 //CurrentCategory = [currentCategory name];
                 [Settings SaveSetting:InitialCategory withValue:[currentCategory name]];
             }
-            [CategoryList setObject:@"1" forKey:[currentCategory name]];
+            if (CategoryList != nil && [[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"0"])
+                [CategoryList setObject:@"1" forKey:[currentCategory name]];
         }
         if ([[attributeDict allKeys] containsObject:@"url"] &&
                 [[attributeDict allKeys] containsObject:@"icon"]) {
