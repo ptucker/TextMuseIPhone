@@ -11,6 +11,7 @@
 #import "UICheckButton.h"
 #import "Settings.h"
 #import "MessageCategory.h"
+#import "ChooseSkinView.h"
 
 @interface SettingsViewController ()
 
@@ -44,7 +45,7 @@
     
     [chosenCategories setDataSource:self];
     [chosenCategories setDelegate:self];
-    [chosenCategories setEditing:YES];
+    [chosenCategories setEditing:NO];
     
     [chosenCategories reloadData];
 }
@@ -65,11 +66,11 @@
 }
 
 -(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
+    return NO;
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
+    return NO;
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -175,6 +176,24 @@
 
 -(IBAction)feedback:(id)sender {
     
+}
+
+-(IBAction)skins:(id)sender {
+    CGRect frm = [[self view] frame];
+    CGRect frmNav = [[[self navigationController] navigationBar] frame];
+    CGFloat topmargin = 32; // frmNav.size.height;
+    frm.origin.y = topmargin; // + frm.size.height;
+    frm.size.height -= topmargin;
+
+    ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
+    [[self view] addSubview:skinview];
+    /*
+    CGRect frmDest = frm;
+    frmDest.origin.y = topmargin;
+    [UIView animateWithDuration:0.75f animations:^{
+        [skinview setFrame:frmDest];
+    }];
+     */
 }
 
 -(IBAction)switchContacts:(id)sender {

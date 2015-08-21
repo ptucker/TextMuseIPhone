@@ -20,6 +20,29 @@
     return self;
 }
 
+-(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view {
+    _url = url;
+    _view = view;
+    
+    return self;
+}
+
+-(id)initWithUrl:(NSString*)url forNavigationItemLeftButton:(UINavigationItem*)navigationItem
+      withTarget:(id)target withSelector:(SEL)selector {
+    _url = url;
+    _navigationItem = navigationItem;
+    _target = target;
+    _selector = selector;
+    
+    return self;
+}
+
+-(id)initWithUrl:(NSString*)url {
+    _url = url;
+    
+    return self;
+}
+
 -(id)initWithUrl:(NSString*)url forMessage:(Message *)msg {
     _url = url;
     _msg = msg;
@@ -34,7 +57,8 @@
     return self;
 }
 
--(void)load {
+-(BOOL)load {
+    BOOL ret = false;
     NSString* u = _url;
     NSString* ytid = [ImageDownloader GetYoutubeId:_url];
     
@@ -44,10 +68,11 @@
     
     if (CachedMediaMapping != nil && [CachedMediaMapping objectForKey:u] != nil) {
         NSString* cachedFile = [CachedMediaMapping objectForKey:u];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:cachedFile]) {
-            inetdata = [NSMutableData dataWithContentsOfFile:cachedFile];
+        inetdata = [NSMutableData dataWithContentsOfFile:cachedFile];
+        if (inetdata != nil) {
             mimeType = @"image/png";
             [self useImageData];
+            ret = true;
         }
     }
     if (inetdata == nil) {
@@ -62,6 +87,7 @@
                                                      delegate:self
                                              startImmediately:YES];
     }
+    return ret;
 }
 
 -(BOOL) mimeTypeSupported:(NSString*)mtype {
@@ -115,6 +141,17 @@
             [_btn setContentMode:UIViewContentModeScaleAspectFit];
             [_btn setHidden:NO];
         }
+    }
+    if (_navigationItem != nil) {
+        UIImage* o = [UIImage imageWithData:inetdata];
+        UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
+                                               scale:256.0/30
+                                         orientation:(o.imageOrientation)];
+        UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:_target
+                                                                      action:_selector];
+        [_navigationItem setLeftBarButtonItem:leftButton];
     }
 }
 

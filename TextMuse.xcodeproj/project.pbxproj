@@ -28,7 +28,9 @@
 		2DC636B81B17CF700087376D /* TextMuseIcon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC636B71B17CF700087376D /* TextMuseIcon_80.png */; };
 		2DC6523C1AF081A500B0912F /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523B1AF081A500B0912F /* GroupsViewController.m */; };
 		2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */; };
+		2DC697481B829022001ACC24 /* SkinInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC697471B829022001ACC24 /* SkinInfo.m */; };
 		2DC6EC671B18208400C527BA /* TransparentButterfly.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC6EC661B18208400C527BA /* TransparentButterfly.png */; };
+		2DC760531B84328300FFF404 /* ChooseSkinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC760521B84328300FFF404 /* ChooseSkinView.m */; };
 		2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC959071AFBAED000BAB0A7 /* ImageUtil.m */; };
 		2DCA58F11B6E8F670011FCDB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DCA58F01B6E8F670011FCDB /* UIKit.framework */; };
 		2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCA58F41B6EA53D0011FCDB /* YTPlayerView.m */; };
@@ -126,7 +128,11 @@
 		2DC6523B1AF081A500B0912F /* GroupsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsViewController.m; sourceTree = "<group>"; };
 		2DC6523D1AF09D4700B0912F /* ShowGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowGroupViewController.h; sourceTree = "<group>"; };
 		2DC6523E1AF09D4700B0912F /* ShowGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowGroupViewController.m; sourceTree = "<group>"; };
+		2DC697461B829022001ACC24 /* SkinInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinInfo.h; sourceTree = "<group>"; };
+		2DC697471B829022001ACC24 /* SkinInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SkinInfo.m; sourceTree = "<group>"; };
 		2DC6EC661B18208400C527BA /* TransparentButterfly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TransparentButterfly.png; sourceTree = "<group>"; };
+		2DC760511B84328300FFF404 /* ChooseSkinView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseSkinView.h; sourceTree = "<group>"; };
+		2DC760521B84328300FFF404 /* ChooseSkinView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseSkinView.m; sourceTree = "<group>"; };
 		2DC959061AFBAED000BAB0A7 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
 		2DC959071AFBAED000BAB0A7 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
 		2DCA58F01B6E8F670011FCDB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -277,6 +283,8 @@
 				2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */,
 				2DC52F001B0846C300E95D15 /* BirthPickerView.h */,
 				2DC52F011B0846C300E95D15 /* BirthPickerView.m */,
+				2DC760511B84328300FFF404 /* ChooseSkinView.h */,
+				2DC760521B84328300FFF404 /* ChooseSkinView.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -462,6 +470,8 @@
 				2DF0809E1AE625FC0003A277 /* UserContact.m */,
 				2DF0809F1AE625FC0003A277 /* UserPhone.h */,
 				2DF080A01AE625FC0003A277 /* UserPhone.m */,
+				2DC697461B829022001ACC24 /* SkinInfo.h */,
+				2DC697471B829022001ACC24 /* SkinInfo.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -612,6 +622,7 @@
 				2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */,
 				2DF080A41AE625FC0003A277 /* AppDelegate.m in Sources */,
 				2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */,
+				2DC697481B829022001ACC24 /* SkinInfo.m in Sources */,
 				2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */,
 				2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */,
 				2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */,
@@ -634,6 +645,7 @@
 				2DC6253E1AF2F92400D23CE8 /* MemberTableData.m in Sources */,
 				2DF080BC1AE625FC0003A277 /* SponsorInfo.m in Sources */,
 				2DC6523C1AF081A500B0912F /* GroupsViewController.m in Sources */,
+				2DC760531B84328300FFF404 /* ChooseSkinView.m in Sources */,
 				2DF080BF1AE625FC0003A277 /* UserPhone.m in Sources */,
 				2DF080A71AE625FC0003A277 /* CategoriesTableViewCell.m in Sources */,
 				2DF080B71AE625FC0003A277 /* MessageCategory.m in Sources */,

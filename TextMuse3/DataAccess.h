@@ -13,6 +13,7 @@
 #import "SponsorInfo.h"
 #import "Message.h"
 #import "MessageCategory.h"
+#import "SkinInfo.h"
 
 @protocol DataRefreshDelegate
 -(void)dataRefresh;

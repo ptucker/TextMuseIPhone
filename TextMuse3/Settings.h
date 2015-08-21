@@ -8,11 +8,14 @@
 
 #import "Message.h"
 #import "DataAccess.h"
+#import "SkinInfo.h"
 #import <Foundation/Foundation.h>
 
 @interface Settings : NSObject
 
 +(void) SaveSetting:(NSString*)setting withValue:(NSObject*)value;
++(void) SaveSkinData;
++(void) ClearSkinData;
 +(void) SaveCachedMapFile;
 +(void) ClearStaleMediaFiles;
 +(void) AppendSettingToArray:(NSString*)setting withValue:(NSObject*)value;
@@ -21,7 +24,7 @@
 +(void) LoadSettings;
 +(void) AddRecentContact:(NSString*)phone;
 +(void) AddRecentMessage:(Message*)msg;
-+(void)SaveUserMessages;
++(void) SaveUserMessages;
 +(void) AddGroup:(NSString*)grp withContacts:(NSArray*)contacts;
 +(void) RemoveGroup:(NSString*)grp;
 +(void) AddContact:(NSString*)contact forGroup:(NSString*)group;
@@ -70,6 +73,7 @@ extern NSString* SettingUserAge;
 extern NSString* SettingUserBirthMonth;
 extern NSString* SettingUserBirthYear;
 extern NSString* SettingAppID;
+extern NSString* SettingSkin;
 
 extern int MaxRecentContacts;
 extern int MaxRecentMessages;
@@ -97,6 +101,7 @@ extern NSString* UserAge;
 extern NSString* UserBirthMonth;
 extern NSString* UserBirthYear;
 extern NSString* AppID;
+extern SkinInfo* Skin;
 
 extern NSString* CachedMediaMappingFile;
 extern NSMutableDictionary* CachedMediaMapping;

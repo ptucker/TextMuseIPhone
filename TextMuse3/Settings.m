@@ -47,6 +47,7 @@ NSString* SettingUserAge=@"SettingUserAge";
 NSString* SettingUserBirthMonth=@"SettingBirthMonth";
 NSString* SettingUserBirthYear=@"SettingBirthYear";
 NSString* SettingAppID=@"SettingAppID";
+NSString* SettingSkin=@"SettingSkin";
 
 NSString* ReminderDateFormat = @"dd/MM/yyyy hh:mm:ss";
 NSString* NotificationDateFormat = @"dd/MM/yyyy 12:00:00";
@@ -84,6 +85,7 @@ NSString* UserAge;
 NSString* UserBirthMonth;
 NSString* UserBirthYear;
 NSString* AppID;
+SkinInfo* Skin;
 
 @implementation Settings
 
@@ -92,6 +94,15 @@ NSString* AppID;
     
     [defs setObject:value forKey:setting];
     [defs synchronize];
+}
+
++(void)SaveSkinData {
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:Skin];
+    [Settings SaveSetting:SettingSkin withValue:data];
+}
+
++(void)ClearSkinData {
+    [Settings ClearSetting:SettingSkin];
 }
 
 +(void)AppendSettingToArray:(NSString*)setting withValue:(NSObject*)value {
@@ -267,6 +278,11 @@ NSString* AppID;
         if ([defs stringForKey:SettingAppID] != nil &&
             [[defs stringForKey:SettingAppID] length] > 0)
             AppID = [defs stringForKey:SettingAppID];
+        Skin = nil;
+        if ([defs objectForKey:SettingSkin] != nil) {
+            NSData* data = [defs objectForKey:SettingSkin];
+            Skin = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        }
 
         [self LoadCachedMapping];
     }
@@ -276,28 +292,18 @@ NSString* AppID;
 +(void)LoadCachedMapping {
     if (CachedMediaMapping != nil) return;
     
-    //NSArray* docdirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    //NSString* docdir = [docdirs objectAtIndex:0];
-    //NSString* mapfile = [docdir stringByAppendingPathComponent:CachedMediaMappingFile];
-    NSString* mapfile = [NSTemporaryDirectory() stringByAppendingPathComponent:CachedMediaMappingFile];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:mapfile])
-        CachedMediaMapping = [NSKeyedUnarchiver unarchiveObjectWithFile:mapfile];
-    else
-        CachedMediaMapping = [[NSMutableDictionary alloc] init];
-    
     ActiveURLs = [[NSMutableDictionary alloc] init];
+    
+    NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
+    if ([defs dictionaryForKey:CachedMediaMappingFile] != nil)
+        CachedMediaMapping = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:CachedMediaMappingFile]];
 }
 
 +(void)SaveCachedMapFile {
-    //NSArray* docdirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    //NSString* docdir = [docdirs objectAtIndex:0];
-    //NSString* mapfile = [docdir stringByAppendingPathComponent:CachedMediaMappingFile];
-    NSString* mapfile = [NSTemporaryDirectory() stringByAppendingPathComponent:CachedMediaMappingFile];
+    NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:mapfile])
-        [[NSFileManager defaultManager] removeItemAtPath:mapfile error:nil];
-    [NSKeyedArchiver archiveRootObject:CachedMediaMapping toFile:mapfile];
+    [defs setObject:CachedMediaMapping forKey:CachedMediaMappingFile];
+    [defs synchronize];
 }
 
 +(void) ClearStaleMediaFiles {

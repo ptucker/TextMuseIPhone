@@ -27,5 +27,6 @@
 -(IBAction)switchNotes:(id)sender;
 -(IBAction)registerUser:(id)sender;
 -(IBAction)feedback:(id)sender;
+-(IBAction)skins:(id)sender;
 
 @end

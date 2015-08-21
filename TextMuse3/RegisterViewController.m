@@ -32,7 +32,7 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
     frm.origin.x = 8;
     frm.size.width = [[self view] frame].size.width-16;
     frm.origin.y = [lblBirth frame].origin.y + [lblBirth frame].size.height + 8;
-    frm.size.height = [btnPrivacy frame].origin.y - (frm.origin.y + frm.size.height + 16);
+    frm.size.height = 162;// [btnPrivacy frame].origin.y - (frm.origin.y + frm.size.height + 16);
     [birthPicker setFrame:frm];
     if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0) {
         ;

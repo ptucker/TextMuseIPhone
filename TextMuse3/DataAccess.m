@@ -17,9 +17,10 @@
 #import "Settings.h"
 #import "GlobalState.h"
 #import "Reachability.h"
+#import "ImageDownloader.h"
 #import <AddressBook/AddressBook.h>
 
-NSString* urlNotes = @"http://www.textmuse.com/admin/notes.php";
+NSString* urlNotes = @"http://www.textmuse.com/html/notes.php";
 NSString* localNotes = @"notes.xml";
 
 @implementation DataAccess
@@ -153,7 +154,10 @@ NSString* localNotes = @"notes.xml";
 #ifdef UOREGON
     sponsor = @"&sponsor=7";
 #endif
-    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@", urlNotes, lastDownload, appid, notif, sponsor];
+    if (Skin != nil)
+        sponsor = [NSString stringWithFormat:@"&sponsor=%ld", [Skin SkinID]];
+    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@",
+                      urlNotes, lastDownload, appid, notif, sponsor];
     if (!notificationOnly)
         LastNoteDownload = [dateformat stringFromDate:[NSDate date]];
     NSURL* url = [NSURL URLWithString:surl];
@@ -365,11 +369,9 @@ NSString* localNotes = @"notes.xml";
     categoryCmp = ^NSComparisonResult(id c1, id c2) {
         MessageCategory* cat1 = [categories objectForKey:c1];
         MessageCategory* cat2 = [categories objectForKey:c2];
-        /*
         if ([cat1 required] != [cat2 required]) {
             return ([cat1 required]) ? NSOrderedAscending : NSOrderedDescending;
         }
-         */
         if ([cat1 newCategory] != [cat2 newCategory]) {
             return ([cat1 newCategory]) ? NSOrderedAscending : NSOrderedDescending;
         }
@@ -609,6 +611,24 @@ NSString* localNotes = @"notes.xml";
     }
     else if ([elementName isEqualToString:@"ns"]) {
         NotificationMsgs = [[NSMutableArray alloc] init];
+    }
+    else if ([elementName isEqualToString:@"skin"]) {
+        Skin = [[SkinInfo alloc] init];
+        
+        [Skin setSkinID:[[attributeDict objectForKey:@"id"] integerValue]];
+        [Skin setSkinName:[attributeDict objectForKey:@"name"]];
+        [Skin setColor1:[attributeDict objectForKey:@"c1"]];
+        [Skin setColor2:[attributeDict objectForKey:@"c2"]];
+        [Skin setColor3:[attributeDict objectForKey:@"c3"]];
+        [Skin setHomeURL:[attributeDict objectForKey:@"home"]];
+        [Skin setLaunchImageURL:[attributeDict objectForKey:@"launch"]];
+        [Skin setMainWindowTitle:[attributeDict objectForKey:@"title"]];
+        [Skin setIconButtonURL:[attributeDict objectForKey:@"icon"]];
+
+        ImageDownloader* img = [[ImageDownloader alloc] initWithUrl:[Skin LaunchImageURL]];
+        [img load];
+
+        [Settings SaveSkinData];
     }
     else if ([elementName isEqualToString:@"c"]) {
         NSString* name = [attributeDict objectForKey:@"name"];

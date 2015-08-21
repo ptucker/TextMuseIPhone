@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "Settings.h"
 #import "WalkthroughViewController.h"
+#import "ImageDownloader.h"
 @interface AppDelegate ()
 
 @end
@@ -60,12 +61,7 @@
     else
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
 
-#ifdef WHITWORTH
-    sleep(2.0);
-#endif
-#ifdef UOREGON
-    sleep(2.0);
-#endif
+    //sleep(2.0);
 
     return YES;
 }
@@ -80,6 +76,7 @@
     [[UINavigationBar appearance] setTitleTextAttributes:txtAttrs];
     
     UIColor* colorTint = nil;
+    
 #ifdef UOREGON
     //ffef01
     colorTint = [UIColor colorWithRed:255.0/256 green:239.0/256 blue:1.0/256 alpha:1.0];
@@ -88,6 +85,10 @@
     //c20202
     colorTint = [UIColor colorWithRed:194.0/256 green:2.0/256 blue:2.0/256 alpha:1.0];
 #endif
+    
+    if (Skin != nil)
+        colorTint = [Skin createColor1];
+
     if (colorTint == nil)
         colorTint = [UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0];
     

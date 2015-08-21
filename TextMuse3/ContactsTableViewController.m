@@ -469,6 +469,9 @@ NSMutableArray* searchContacts;
 #ifdef UOREGON
         sponsor = @" Oregon";
 #endif
+        if (Skin != nil)
+            sponsor = [Skin SkinName];
+        
         NSString* tagline = [NSString stringWithFormat: @"\n\nSent by%@ TextMuse - http://www.textmuse.com/download", sponsor];
         //if (arc4random() % 10 == 0)
         message = [message stringByAppendingString:tagline];

@@ -14,6 +14,9 @@
     NSString* _url;
     UIButton* _btn;
     UIImageView* _view;
+    UINavigationItem* _navigationItem;
+    id _target;
+    SEL _selector;
     Message* _msg;
     NSString* mimeType;
     
@@ -26,9 +29,13 @@
 @property (readonly) BOOL isVideo;
 
 -(id)initWithUrl:(NSString*)url forMessage:(Message*)msg forImgView:(UIImageView*)view;
+-(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view;
 -(id)initWithUrl:(NSString*)url forMessage:(Message*)msg;
 -(id)initWithUrl:(NSString*)url forButton:(UIButton*)btn;
--(void)load;
+-(id)initWithUrl:(NSString*)url forNavigationItemLeftButton:(UINavigationItem*)navigationItem
+      withTarget:(id)target withSelector:(SEL)selector;
+-(id)initWithUrl:(NSString*)url;
+-(BOOL)load;
 
 +(NSString*)GetYoutubeId:(NSString*)youtubeUrl;
 

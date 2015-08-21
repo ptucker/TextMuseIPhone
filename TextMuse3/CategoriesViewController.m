@@ -50,7 +50,7 @@ NSArray* colorsTitle;
     frmSuggestion.origin.x = 0;
     frmSuggestion.origin.y = 0;
     [randomMessages setContentSize:frmSuggestion.size];
-
+    
     if (ShowIntro) {
         [self showWalkthrough];
     }
@@ -89,6 +89,15 @@ NSArray* colorsTitle;
                                                                   action:@selector(website:)];
     [[self navigationItem] setLeftBarButtonItem:leftButton];
 #endif
+    
+    if (Skin != nil) {
+        [[self navigationItem] setTitle:[Skin MainWindowTitle]];
+        ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
+                                               forNavigationItemLeftButton:[self navigationItem]
+                                                                withTarget:self
+                                                              withSelector:@selector(website:)];
+        [downloader load];
+    }
 }
 
 -(void)navigationController:(UINavigationController *)navigationController
@@ -107,10 +116,16 @@ NSArray* colorsTitle;
 #endif
 #ifdef UOREGON
     //Yellow, Green, Grey
-    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:255/255.0 green:2382/255.0 blue:2/255.0 alpha:1.0], [UIColor colorWithRed:0/255.0 green:73/255.0 blue:0/255.0 alpha:1.0], [UIColor colorWithRed:105/255.0 green:107/255.0 blue:106/255.0 alpha:1.0], nil];
+    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:255/255.0 green:239/255.0 blue:1/255.0 alpha:1.0], [UIColor colorWithRed:0/255.0 green:73/255.0 blue:0/255.0 alpha:1.0], [UIColor colorWithRed:105/255.0 green:107/255.0 blue:106/255.0 alpha:1.0], nil];
     colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor whiteColor], [UIColor whiteColor], nil];
     colorsTitle = [NSArray arrayWithObjects:[UIColor blackColor], [colors objectAtIndex:1], [colors objectAtIndex:2], nil];
 #endif
+    if (Skin != nil) {
+        colors = [NSArray arrayWithObjects:[Skin createColor1], [Skin createColor2], [Skin createColor3], nil];
+        colorsText = [NSArray arrayWithObjects:[Skin createTextColor1], [Skin createTextColor2], [Skin createTextColor3], nil];
+        colorsTitle = [NSArray arrayWithArray:colors];
+    }
+    
     if (colors == nil)
         //Green, Orange, Blue
         colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
@@ -118,6 +133,28 @@ NSArray* colorsTitle;
         colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
                        [colors objectAtIndex:2], nil];
 
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    //Show splash screen for 2 seconds
+    if (splash == nil && Skin != nil) {
+        CGRect frm = [[self view] frame];
+        splash = [[UIImageView alloc] initWithFrame:frm];
+        [splash setContentMode:UIViewContentModeScaleAspectFit];
+        [splash setBackgroundColor:[UIColor blackColor]];
+        ImageDownloader* img = [[ImageDownloader alloc] initWithUrl:[Skin LaunchImageURL] forImgView:splash];
+        [img load];
+        [[self view] addSubview:splash];
+        [NSTimer scheduledTimerWithTimeInterval:2.0
+                                         target:self
+                                       selector:@selector(closeSplash:)
+                                       userInfo:nil
+                                        repeats:NO];
+    }
+}
+
+-(void)closeSplash:(NSTimer*)timer {
+    [splash removeFromSuperview];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -145,7 +182,43 @@ NSArray* colorsTitle;
     [Data reloadData];
 }
 
+-(void)updateSkin {
+    if (Skin != nil && [Skin SkinName] != nil) {
+        colors = [NSArray arrayWithObjects:[Skin createColor1], [Skin createColor2], [Skin createColor3], nil];
+        colorsText = [NSArray arrayWithObjects:[Skin createTextColor1], [Skin createTextColor2],
+                      [Skin createTextColor3], nil];
+        colorsTitle = [NSArray arrayWithArray:colors];
+
+        UIColor* colorTint = [Skin createColor1];
+        [[[self navigationController] navigationBar] setTintColor:colorTint];
+
+        [[self navigationItem] setTitle:[Skin MainWindowTitle]];
+        
+        ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
+                                               forNavigationItemLeftButton:[self navigationItem]
+                                                                withTarget:self
+                                                              withSelector:@selector(website:)];
+        [downloader load];
+    }
+    else {
+        //Green, Orange, Blue
+        colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
+        colorsText = [NSArray arrayWithObjects:[UIColor whiteColor], [UIColor whiteColor],
+                      [UIColor whiteColor], nil];
+        colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
+                       [colors objectAtIndex:2], nil];
+        UIColor* colorTint = [UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0];
+        [[[self navigationController] navigationBar] setTintColor:colorTint];
+        
+        [[[self navigationItem] leftBarButtonItem] setImage:nil];
+        
+        [[self navigationItem] setTitle:@"TextMuse"];
+    }
+}
+
 -(void)dataRefresh {
+    [self updateSkin];
+    
     [categories reloadData];
     
     [refreshControl endRefreshing];
@@ -243,6 +316,7 @@ NSArray* colorsTitle;
     [self performSegueWithIdentifier:@"Settings" sender:self];
 }
 
+/*
 #ifdef UOREGON
 -(IBAction)website:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.goducks.com"]];
@@ -253,6 +327,11 @@ NSArray* colorsTitle;
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.whitworthpirates.com"]];
 }
 #endif
+*/
+
+-(IBAction)website:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[Skin HomeURL]]];
+}
 
 -(UISuggestionButton*) addMessageButton:(Message*)msg {
     CGRect frmScroll = [randomMessages frame];
