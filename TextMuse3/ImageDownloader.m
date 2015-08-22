@@ -59,6 +59,9 @@
 
 -(BOOL)load {
     BOOL ret = false;
+    if (_url == nil)
+        return ret;
+    
     NSString* u = _url;
     NSString* ytid = [ImageDownloader GetYoutubeId:_url];
     

@@ -76,15 +76,21 @@
 }
 
 -(UIColor*)createColor1 {
-    return [SkinInfo createColor:[self Color1]];
+    if (_color1 == nil)
+        _color1 = [SkinInfo createColor:[self Color1]];
+    return _color1;
 }
 
 -(UIColor*)createColor2 {
-    return [SkinInfo createColor:[self Color2]];
+    if (_color2 == nil)
+        _color2 = [SkinInfo createColor:[self Color2]];
+    return _color2;
 }
 
 -(UIColor*)createColor3 {
-    return [SkinInfo createColor:[self Color3]];
+    if (_color3 == nil)
+        _color3 = [SkinInfo createColor:[self Color3]];
+    return _color3;
 }
 
 -(UIColor*)createTextColor:(NSString*)color {

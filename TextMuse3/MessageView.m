@@ -8,10 +8,31 @@
 
 #import "MessageView.h"
 #import "ImageUtil.h"
+#import "Settings.h"
 
 @implementation MessageView
 
+UIImage* bubble1 = nil;
+UIImage* bubble2 = nil;
+UIImage* bubble3 = nil;
+
 -(void)setupViewForMessage:(Message *)msg inFrame:(CGRect)frame withColor:(UIColor*)color index:(long)i {
+    if (bubble1 == nil) {
+        bubble1 = [UIImage imageNamed:@"largegreenbubble"];
+        if (Skin != nil)
+            bubble1 = [bubble1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    if (bubble2 == nil) {
+        bubble2 = [UIImage imageNamed:@"largeorangebubble"];
+        if (Skin != nil)
+            bubble2 = [bubble2 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    if (bubble3 == nil) {
+        bubble3 = [UIImage imageNamed:@"largebluebubble"];
+        if (Skin != nil)
+            bubble3 = [bubble3 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    
     message = msg;
     
     [self setFrame:frame];
@@ -32,13 +53,19 @@
         imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
         switch (i) {
             case 0:
-                [imgBubble setImage:[UIImage imageNamed:@"largegreenbubble"]];
+                [imgBubble setImage:bubble1];
+                if (Skin != nil)
+                    [imgBubble setTintColor:[Skin createColor1]];
                 break;
             case 1:
-                [imgBubble setImage:[UIImage imageNamed:@"largeorangebubble"]];
+                [imgBubble setImage:bubble2];
+                if (Skin != nil)
+                    [imgBubble setTintColor:[Skin createColor2]];
                 break;
             case 2:
-                [imgBubble setImage:[UIImage imageNamed:@"largebluebubble"]];
+                [imgBubble setImage:bubble3];
+                if (Skin != nil)
+                    [imgBubble setTintColor:[Skin createColor3]];
                 break;
         }
         [self addSubview:imgBubble];

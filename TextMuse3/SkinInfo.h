@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@interface SkinInfo : NSObject <NSCoding>
+@interface SkinInfo : NSObject <NSCoding> {
+    UIColor* _color1;
+    UIColor* _color2;
+    UIColor* _color3;
+}
 
 @property long SkinID;
 @property NSString* SkinName;
