@@ -13,6 +13,7 @@
 #import "Message.h"
 #import "ImageDownloader.h"
 #import "Settings.h"
+#import "ChooseSkinView.h"
 
 NSArray* colors;
 NSArray* colorsText;
@@ -519,6 +520,17 @@ NSArray* colorsTitle;
     [[[self navigationItem] rightBarButtonItem] setEnabled:NO];
 }
 
+-(void)showChooseSkin {
+    CGRect frm = [[self view] frame];
+    CGRect frmNav = [[[self navigationController] navigationBar] frame];
+    CGFloat topmargin = 32; // frmNav.size.height;
+    frm.origin.y = topmargin; // + frm.size.height;
+    frm.size.height -= topmargin;
+    
+    ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
+    [[self view] addSubview:skinview];
+}
+
 - (IBAction)pageTurn:(id)sender {
     long page = [pages currentPage];
     CGRect frm = [scroller frame];
@@ -527,6 +539,8 @@ NSArray* colorsTitle;
 }
 
 -(IBAction)closeWalkthrough:(id)sender {
+    [self showChooseSkin];
+    
     [walkthroughView removeFromSuperview];
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
     [[[self  navigationItem] backBarButtonItem] setTitle:@"Skip"];

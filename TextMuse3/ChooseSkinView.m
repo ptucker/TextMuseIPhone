@@ -22,6 +22,13 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     
     [self setBackgroundColor:[UIColor whiteColor]];
     
+    CGRect frmTitle = CGRectMake(10, frame.origin.y, frame.size.width-20, 32);
+    UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
+    [lblTitle setText:@"Choose your TextMuse Skin"];
+    [lblTitle setFont:[UIFont fontWithName:@"Lato-Medium" size:24]];
+    [lblTitle setTextColor:[UIColor blackColor]];
+    [self addSubview:lblTitle];
+    
     CGRect frmClose = CGRectMake(frame.size.width-32, frame.origin.y, 32, 32);
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitle:@"X" forState:UIControlStateNormal];

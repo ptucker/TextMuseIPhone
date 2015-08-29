@@ -428,6 +428,17 @@ NSString* localNotes = @"notes.xml";
     return cs;
 }
 
+-(NSArray*)getSponsorCategories {
+    NSArray* sorted = [self sortCategories];
+    NSMutableArray* cs = [[NSMutableArray alloc] init];
+    for (NSString*c in sorted) {
+        if ([[categories objectForKey:c] sponsor] != nil)
+            [cs addObject:c];
+    }
+    
+    return cs;
+}
+
 -(MessageCategory*)getCategory:(NSString *)c {
     return [categories objectForKey:c];
 }
@@ -524,16 +535,23 @@ NSString* localNotes = @"notes.xml";
 
 -(Message*)chooseRandomMessage {
     BOOL chooseRecent = ([RecentCategories count] > 0 && arc4random() % 3) != 0;
+    BOOL chooseSponsor = Skin != nil && arc4random() % 3 != 0;
     NSInteger m = -1;
     MessageCategory* cat;
     
     while (m < 0) {
         NSMutableDictionary* cs = (chooseRecent) ? RecentCategories : categories;
-        NSInteger c = arc4random() % [cs count];
-        for (MessageCategory* ms in cs) {
-            if (c == 0)
-                cat = ms;
-            c--;
+        if (chooseSponsor && [self getSponsorCategories] != nil) {
+            NSArray* sponsoredCats = [self getSponsorCategories];
+            cat = [sponsoredCats objectAtIndex:(arc4random() % [sponsoredCats count])];
+        }
+        else {
+            NSInteger c = arc4random() % [cs count];
+            for (MessageCategory* ms in cs) {
+                if (c == 0)
+                    cat = ms;
+                c--;
+            }
         }
         if ([categories objectForKey:cat] == nil || [[[categories objectForKey:cat] messages] count] == 0) {
             [RecentCategories removeObjectForKey:cat];
