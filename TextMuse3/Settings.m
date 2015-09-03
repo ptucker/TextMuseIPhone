@@ -297,6 +297,8 @@ SkinInfo* Skin;
     NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
     if ([defs dictionaryForKey:CachedMediaMappingFile] != nil)
         CachedMediaMapping = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:CachedMediaMappingFile]];
+    else
+        CachedMediaMapping = [[NSMutableDictionary alloc] init];
 }
 
 +(void)SaveCachedMapFile {
