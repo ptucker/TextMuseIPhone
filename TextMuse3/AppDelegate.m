@@ -43,24 +43,25 @@
     
     [GlobalState init];
     
-    Class userNotification = NSClassFromString(@"UIUserNotificationSettings");
-    
-    UIUserNotificationSettings *settings =
-        [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
-    UIApplication* app = [UIApplication sharedApplication];
-    if ([app respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        [app registerUserNotificationSettings:settings];
-    }
-    
-    if (userNotification)
-    {
-        UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-    }
-    else
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
-
+    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        Class userNotification = NSClassFromString(@"UIUserNotificationSettings");
+        
+        UIUserNotificationSettings *settings =
+            [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
+        UIApplication* app = [UIApplication sharedApplication];
+        if ([app respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+            [app registerUserNotificationSettings:settings];
+        }
+        
+        if (userNotification)
+        {
+            UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        }
+        else
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+    });
     //sleep(2.0);
 
     return YES;

@@ -33,7 +33,7 @@ extern NSArray* colorsText;
     IBOutlet UITableView* categories;
     IBOutlet UIScrollView* randomMessages;
     UIRefreshControl *refreshControl;
-    UIImageView* splash;
+    UIView* splash;
     UIView* walkthroughView;
     UIPageControl* pages;
     UIScrollView* scroller;

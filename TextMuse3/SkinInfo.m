@@ -13,7 +13,7 @@
 /*
  @property long SkinID;
  @property NSString* SkinName;
- @property NSString* LaunchImageURL;
+ @property NSArray* LaunchImageURL;
  @property NSString* Color1;
  @property NSString* Color2;
  @property NSString* Color3;

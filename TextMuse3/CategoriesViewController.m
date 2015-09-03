@@ -92,7 +92,7 @@ NSArray* colorsTitle;
 #endif
     
     if (Skin != nil) {
-        [[self navigationItem] setTitle:[Skin MainWindowTitle]];
+        [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
         ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
                                                forNavigationItemLeftButton:[self navigationItem]
                                                                 withTarget:self
@@ -138,20 +138,89 @@ NSArray* colorsTitle;
 
 -(void)viewWillAppear:(BOOL)animated {
     //Show splash screen for 2 seconds
-    if (splash == nil && Skin != nil) {
-        CGRect frm = [[self view] frame];
-        splash = [[UIImageView alloc] initWithFrame:frm];
-        [splash setContentMode:UIViewContentModeScaleAspectFit];
-        [splash setBackgroundColor:[UIColor blackColor]];
-        ImageDownloader* img = [[ImageDownloader alloc] initWithUrl:[Skin LaunchImageURL] forImgView:splash];
-        [img load];
-        [[self view] addSubview:splash];
+    if (splash == nil) {
+        if (Skin != nil) {
+            [self showSkinSplash:[[self view] frame]];
+        }
+        else {
+            [self showDefaultSplash:[[self view] frame]];
+        }
         [NSTimer scheduledTimerWithTimeInterval:2.0
                                          target:self
                                        selector:@selector(closeSplash:)
                                        userInfo:nil
                                         repeats:NO];
     }
+}
+
+-(void)showSkinSplash:(CGRect)frm {
+    splash = [[UIImageView alloc] initWithFrame:frm];
+    [splash setContentMode:UIViewContentModeScaleAspectFit];
+    [splash setBackgroundColor:[UIColor blackColor]];
+    if ([[Skin LaunchImageURL] count] > 0) {
+        int l = (arc4random() % [[Skin LaunchImageURL] count]);
+        NSString* launch = [[Skin LaunchImageURL] objectAtIndex:l];
+        
+        ImageDownloader* img = [[ImageDownloader alloc] initWithUrl:launch
+                                                         forImgView:(UIImageView*)splash];
+        [img load];
+    }
+    
+    CGRect frmLogo = CGRectMake(10, frm.size.height - 100, 64, 64);
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:frmLogo];
+    [logo setContentMode:UIViewContentModeScaleAspectFit];
+    [logo setImage:[UIImage imageNamed:@"TransparentButterfly.png"]];
+    [splash addSubview:logo];
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle]infoDictionary];
+    NSString *bundleName = infoDictionary[(NSString *)kCFBundleNameKey];
+    
+    CGRect frmTitle = CGRectMake(80, frm.size.height - 100, frm.size.width - 100, 44);
+    UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:28]];
+    [title setTextColor:[Skin createColor1]];
+    [title setText:[NSString stringWithFormat:@"%@ %@", [Skin SkinName], bundleName]];
+    [splash addSubview:title];
+    
+    [[self view] addSubview:splash];
+}
+
+-(void)showDefaultSplash:(CGRect)frm {
+    splash = [[UIView alloc] initWithFrame:frm];
+    [splash setBackgroundColor:[colors objectAtIndex:2]];
+    CGFloat x = (frm.size.width - 246) / 2, y = (frm.size.height - 246) / 2;
+    CGRect frmLogo = CGRectMake(x, y, 246, 246);
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:frmLogo];
+    [logo setContentMode:UIViewContentModeScaleAspectFit];
+    [logo setImage:[UIImage imageNamed:@"TransparentButterfly.png"]];
+    [splash addSubview:logo];
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle]infoDictionary];
+    
+    NSString *ver = infoDictionary[@"CFBundleShortVersionString"];
+    NSString *build = infoDictionary[(NSString*)kCFBundleVersionKey];
+    NSString *bundleName = infoDictionary[(NSString *)kCFBundleNameKey];
+    
+    CGRect frmTitle = CGRectMake(10, y + frmLogo.size.height + 10, frm.size.width - 20, 44);
+    UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
+    [title setTextAlignment:NSTextAlignmentCenter];
+    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:44]];
+    [title setTextColor:[UIColor whiteColor]];
+    [title setText:bundleName];
+    [splash addSubview:title];
+    
+    CGRect frmVersion = CGRectMake(frmTitle.origin.x,
+                                   frmTitle.origin.y + frmTitle.size.height + 4,
+                                   frmTitle.size.width, 32);
+    
+    UILabel* version = [[UILabel alloc] initWithFrame:frmVersion];
+    [version setTextAlignment:NSTextAlignmentCenter];
+    [version setFont:[UIFont fontWithName:@"Lato-Light" size:30]];
+    [version setTextColor:[UIColor whiteColor]];
+    [version setText:[NSString stringWithFormat:@"%@.%@", ver, build]];
+    [splash addSubview:version];
+    [[self view] addSubview:splash];
 }
 
 -(void)closeSplash:(NSTimer*)timer {
@@ -193,7 +262,8 @@ NSArray* colorsTitle;
         UIColor* colorTint = [Skin createColor1];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
 
-        [[self navigationItem] setTitle:[Skin MainWindowTitle]];
+        //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
+        [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
         
         ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
                                                forNavigationItemLeftButton:[self navigationItem]

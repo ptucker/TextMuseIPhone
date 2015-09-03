@@ -639,14 +639,19 @@ NSString* localNotes = @"notes.xml";
         [Skin setColor2:[attributeDict objectForKey:@"c2"]];
         [Skin setColor3:[attributeDict objectForKey:@"c3"]];
         [Skin setHomeURL:[attributeDict objectForKey:@"home"]];
-        [Skin setLaunchImageURL:[attributeDict objectForKey:@"launch"]];
+        [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
         [Skin setMainWindowTitle:[attributeDict objectForKey:@"title"]];
         [Skin setIconButtonURL:[attributeDict objectForKey:@"icon"]];
 
-        ImageDownloader* img = [[ImageDownloader alloc] initWithUrl:[Skin LaunchImageURL]];
-        [img load];
-
         [Settings SaveSkinData];
+    }
+    else if ([elementName isEqualToString:@"launch"]) {
+        if ([[attributeDict objectForKey:@"width"] isEqualToString:@"320"]) {
+            [[Skin LaunchImageURL] addObject:[attributeDict objectForKey:@"url"]];
+            ImageDownloader* img =
+                [[ImageDownloader alloc] initWithUrl:[attributeDict objectForKey:@"url"]];
+            [img load];
+        }
     }
     else if ([elementName isEqualToString:@"c"]) {
         NSString* name = [attributeDict objectForKey:@"name"];
