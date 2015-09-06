@@ -24,8 +24,8 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     
     CGRect frmTitle = CGRectMake(10, frame.origin.y, frame.size.width-20, 32);
     UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-    [lblTitle setText:@"Choose your TextMuse Skin"];
-    [lblTitle setFont:[UIFont fontWithName:@"Lato-Medium" size:24]];
+    [lblTitle setText:@"Choose TextMuse Version"];
+    [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
     [lblTitle setTextColor:[UIColor blackColor]];
     [self addSubview:lblTitle];
     
@@ -102,8 +102,12 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     UIImageView* img = [[UIImageView alloc] initWithFrame:CGRectMake(10, 4, 36, 36)];
     [img setContentMode:UIViewContentModeScaleAspectFit];
     NSString* iconurl = [skinIcons objectAtIndex:[indexPath row]];
-    ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:iconurl forImgView:img];
-    [loader load];
+    if ([iconurl hasPrefix:@"http"]) {
+        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:iconurl forImgView:img];
+        [loader load];
+    }
+    else
+        [img setImage:[UIImage imageNamed:iconurl]];
     [cell addSubview:img];
     
     UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(70, 4, [self frame].size.width-74, 40)];
@@ -126,6 +130,8 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
         [Settings ClearSkinData];
     }
     [Data reloadData];
+    
+    [self close:nil];
 }
 
 
@@ -137,9 +143,9 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
 qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if (skinNames == nil) {
         skinNames = [[NSMutableArray alloc] init];
-        [skinNames addObject:@"no skin"];
+        [skinNames addObject:@"Main"];
         skinIcons = [[NSMutableArray alloc] init];
-        [skinIcons addObject:@""];
+        [skinIcons addObject:@"TransparentButterfly.png"];
         skinIDs = [[NSMutableArray alloc] init];
         [skinIDs addObject:@"-1"];
         skinColors = [[NSMutableArray alloc] init];

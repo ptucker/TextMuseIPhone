@@ -54,6 +54,8 @@ NSArray* colorsTitle;
     
     if (ShowIntro) {
         [self showWalkthrough];
+
+        [self showChooseSkin];
     }
     
     [Data addListener:self];
@@ -166,21 +168,29 @@ NSArray* colorsTitle;
         [img load];
     }
     
-    CGRect frmLogo = CGRectMake(10, frm.size.height - 100, 64, 64);
-    UIImageView *logo = [[UIImageView alloc] initWithFrame:frmLogo];
-    [logo setContentMode:UIViewContentModeScaleAspectFit];
-    [logo setImage:[UIImage imageNamed:@"TransparentButterfly.png"]];
-    [splash addSubview:logo];
+    CGRect frmIcon = CGRectMake(10, frm.size.height - 100, 64, 64);
+    UIImageView *icon = [[UIImageView alloc] initWithFrame:frmIcon];
+    [icon setContentMode:UIViewContentModeScaleAspectFit];
+    [icon setImage:[UIImage imageNamed:@"TransparentButterfly.png"]];
+    [splash addSubview:icon];
     
     NSDictionary *infoDictionary = [[NSBundle mainBundle]infoDictionary];
     NSString *bundleName = infoDictionary[(NSString *)kCFBundleNameKey];
+    CGRect frmLogo = CGRectMake((frm.size.width / 2) - 30, frm.size.height - 170, 60, 60);
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:frmLogo];
+    ImageDownloader* imglogo = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
+                                                         forImgView:(UIImageView*)logo];
+    [imglogo load];
+    [logo setContentMode:UIViewContentModeScaleAspectFit];
+    [splash addSubview:logo];
     
-    CGRect frmTitle = CGRectMake(80, frm.size.height - 100, frm.size.width - 100, 44);
+    CGRect frmTitle = CGRectMake(80, frm.size.height - 100, frm.size.width - 160, 44);
     UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
     [title setTextAlignment:NSTextAlignmentCenter];
     [title setFont:[UIFont fontWithName:@"Lato-Medium" size:28]];
     [title setTextColor:[Skin createColor1]];
-    [title setText:[NSString stringWithFormat:@"%@ %@", [Skin SkinName], bundleName]];
+    //[title setText:[NSString stringWithFormat:@"%@ %@", [Skin SkinName], bundleName]];
+    [title setText:[NSString stringWithFormat:@"%@", bundleName]];
     [splash addSubview:title];
     
     [[self view] addSubview:splash];
@@ -414,7 +424,7 @@ NSArray* colorsTitle;
     CGRect frmLabel = CGRectMake(0, 0, frmButton.size.width, frmButton.size.height);
     
     UILabel* lblSuggestion = [[UILabel alloc] initWithFrame:frmLabel];
-    [lblSuggestion setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+    [lblSuggestion setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
     [lblSuggestion setTextAlignment:NSTextAlignmentCenter];
     [lblSuggestion setNumberOfLines:0];
     [lblSuggestion setTextColor:[UIColor whiteColor]];
@@ -609,8 +619,6 @@ NSArray* colorsTitle;
 }
 
 -(IBAction)closeWalkthrough:(id)sender {
-    [self showChooseSkin];
-    
     [walkthroughView removeFromSuperview];
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
     [[[self  navigationItem] backBarButtonItem] setTitle:@"Skip"];

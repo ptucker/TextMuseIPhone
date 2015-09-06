@@ -56,7 +56,12 @@
     [[self lblTitle] setFrame:frmTitle];
     [[self lblTitle] setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
     [[self lblTitle] setBackgroundColor:[UIColor whiteColor]];
-    [[self lblTitle] setTextColor:colorTitle];
+    CGFloat r, g, b, a;
+    [colorTitle getRed:&r green:&g blue:&b alpha:&a];
+    if (((r + g + b) / 3) > 0.5)
+        [[self lblTitle] setTextColor:[UIColor blackColor]];
+    else
+        [[self lblTitle] setTextColor:colorTitle];
     [[self lblTitle] setText:title];
     [[self lblTitle] sizeToFit];
     frmTitle = [[self lblTitle] frame];
@@ -76,7 +81,10 @@
     [[self lblNew] setFrame:frmLblNew];
     [[self lblNew] setBackgroundColor:colorTitle];
     [[self lblNew] setFont:[UIFont fontWithName:@"Lato-Light" size:14]];
-    [[self lblNew] setTextColor:[UIColor whiteColor]];
+    if (((r + g + b) / 3) > 0.5)
+        [[self lblNew] setTextColor:[UIColor blackColor]];
+    else
+        [[self lblNew] setTextColor:[UIColor whiteColor]];
     [[self lblNew] setTextAlignment:NSTextAlignmentCenter];
     [[self lblNew] setHidden:(cnt == 0)];
     //Round the corners
