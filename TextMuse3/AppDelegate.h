@@ -14,7 +14,9 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) NSString *deviceToken;
+@property (strong, nonatomic) NSData *deviceToken;
+
+-(void)registerRemoteNotificationWithAzure;
 
 @end
 

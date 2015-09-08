@@ -102,16 +102,21 @@
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSCharacterSet *angleBrackets = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
-    NSString* token = [[deviceToken description] stringByTrimmingCharactersInSet:angleBrackets];
-    [self setDeviceToken: token];
+    [self setDeviceToken: deviceToken];
     
+}
+
+-(void)registerRemoteNotificationWithAzure {
     NSString* conn = @"Endpoint=sb://textmusehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=9hnIUk/Qjj9zusMfK570F10o5mXY1F9eXVS8REI3ZCw=";
-    //NSString*conn2 = @"Endpoint=sb://textmusehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=0aoaY8qFpFQkDvxF6ntqKtVEHoqlzeuZGpYDL+2pblw=";
     SBNotificationHub* hub = [[SBNotificationHub alloc] initWithConnectionString:conn
                                                              notificationHubPath:@"textmusehub"];
     
-    [hub registerNativeWithDeviceToken:deviceToken tags:nil completion:^(NSError* error) {
+    NSSet* tags = nil;
+    if (Skin != nil) {
+        tags = [[NSSet alloc] initWithObjects:[NSString stringWithFormat:@"skin%ld", [Skin SkinID]],
+                nil];
+    }
+    [hub registerNativeWithDeviceToken:[self deviceToken] tags:tags completion:^(NSError* error) {
         if (error != nil) {
             NSLog(@"Error registering for notifications: %@", error);
         }
