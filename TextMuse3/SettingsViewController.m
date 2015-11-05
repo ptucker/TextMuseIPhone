@@ -185,6 +185,7 @@
     frm.origin.y = topmargin; // + frm.size.height;
     frm.size.height -= topmargin;
 
+    //ChooseSkinView* skinview = ChooseSkinView.alloc().initWithFrame(frm);
     ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
     [[self view] addSubview:skinview];
     /*

@@ -15,9 +15,8 @@
 		2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */; };
 		2D4AC7EA1B22BE2900749074 /* TextMuseIcon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */; };
 		2D4AC7EC1B22BE5700749074 /* TextMuseIcon_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */; };
+		2D9D11F91BB2005300C679D1 /* LaunchImage_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */; settings = {ASSET_TAGS = (); }; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
-		2DC1F1A31B12D5C4000CC30A /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */; };
-		2DC1F1A51B12D63A000CC30A /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */; };
 		2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC52F011B0846C300E95D15 /* BirthPickerView.m */; };
 		2DC612031AF2E300000896EA /* AddMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC612021AF2E300000896EA /* AddMemberView.m */; };
 		2DC624B31AF1FF51006E806C /* greyHighlighter.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC624B01AF1FF51006E806C /* greyHighlighter.png */; };
@@ -33,7 +32,6 @@
 		2DC75F871BA141A90025AB8A /* LaunchImage-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC75F851BA141A90025AB8A /* LaunchImage-568h.png */; };
 		2DC75F881BA141A90025AB8A /* LaunchImage-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC75F861BA141A90025AB8A /* LaunchImage-568h@2x.png */; };
 		2DC760531B84328300FFF404 /* ChooseSkinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC760521B84328300FFF404 /* ChooseSkinView.m */; };
-		2DC93B431B97FCE4001E4E0A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC93B421B97FCE4001E4E0A /* LaunchScreen.xib */; };
 		2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC959071AFBAED000BAB0A7 /* ImageUtil.m */; };
 		2DCA58F11B6E8F670011FCDB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DCA58F01B6E8F670011FCDB /* UIKit.framework */; };
 		2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCA58F41B6EA53D0011FCDB /* YTPlayerView.m */; };
@@ -52,6 +50,8 @@
 		2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC521AECAA80002DA914 /* SettingsViewController.m */; };
 		2DD045871B0D9C3C00A1A9CF /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DD045861B0D9C3C00A1A9CF /* settings.png */; };
 		2DD06FF61B4B706B00F8DD3B /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DD06FF51B4B706B00F8DD3B /* link.png */; };
+		2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */; settings = {ASSET_TAGS = (); }; };
+		2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */; settings = {ASSET_TAGS = (); }; };
 		2DF0804E1AE625410003A277 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF0804D1AE625410003A277 /* main.m */; };
 		2DF080591AE625410003A277 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DF080581AE625410003A277 /* Images.xcassets */; };
 		2DF080681AE625410003A277 /* TextMuse3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF080671AE625410003A277 /* TextMuse3Tests.m */; };
@@ -111,10 +111,9 @@
 		2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_640_2.png; sourceTree = "<group>"; };
 		2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_58.png; sourceTree = "<group>"; };
 		2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_87.png; sourceTree = "<group>"; };
+		2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_320.png; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
-		2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMobileServices.framework"; sourceTree = "<group>"; };
-		2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMessaging.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMessaging.framework"; sourceTree = "<group>"; };
 		2DC52F001B0846C300E95D15 /* BirthPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BirthPickerView.h; sourceTree = "<group>"; };
 		2DC52F011B0846C300E95D15 /* BirthPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BirthPickerView.m; sourceTree = "<group>"; };
 		2DC612011AF2E300000896EA /* AddMemberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMemberView.h; sourceTree = "<group>"; };
@@ -137,7 +136,6 @@
 		2DC75F861BA141A90025AB8A /* LaunchImage-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchImage-568h@2x.png"; sourceTree = "<group>"; };
 		2DC760511B84328300FFF404 /* ChooseSkinView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseSkinView.h; sourceTree = "<group>"; };
 		2DC760521B84328300FFF404 /* ChooseSkinView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseSkinView.m; sourceTree = "<group>"; };
-		2DC93B421B97FCE4001E4E0A /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		2DC959061AFBAED000BAB0A7 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
 		2DC959071AFBAED000BAB0A7 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
 		2DCA58F01B6E8F670011FCDB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -161,6 +159,8 @@
 		2DCDFC521AECAA80002DA914 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2DD045861B0D9C3C00A1A9CF /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		2DD06FF51B4B706B00F8DD3B /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
+		2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = ../../../WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
+		2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMessaging.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMessaging.framework"; sourceTree = "<group>"; };
 		2DF080481AE625410003A277 /* TextMuse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMuse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DF0804C1AE625410003A277 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DF0804D1AE625410003A277 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -224,9 +224,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */,
 				2DCA58F11B6E8F670011FCDB /* UIKit.framework in Frameworks */,
-				2DC1F1A51B12D63A000CC30A /* WindowsAzureMessaging.framework in Frameworks */,
-				2DC1F1A31B12D5C4000CC30A /* WindowsAzureMobileServices.framework in Frameworks */,
+				2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,10 +296,10 @@
 		2DF0803F1AE625410003A277 = {
 			isa = PBXGroup;
 			children = (
+				2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */,
+				2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */,
 				2DCA58F01B6E8F670011FCDB /* UIKit.framework */,
 				2DCA7A051B58530000698E97 /* text.xml */,
-				2DC1F1A41B12D63A000CC30A /* WindowsAzureMessaging.framework */,
-				2DC1F1A21B12D5C4000CC30A /* WindowsAzureMobileServices.framework */,
 				2DF0804A1AE625410003A277 /* TextMuse3 */,
 				2DF080641AE625410003A277 /* TextMuse3Tests */,
 				2DF080491AE625410003A277 /* Products */,
@@ -331,7 +331,6 @@
 				2DF080751AE625FC0003A277 /* AppDelegate.h */,
 				2DF080761AE625FC0003A277 /* AppDelegate.m */,
 				2DF080731AE6257D0003A277 /* Localizable.strings */,
-				2DC93B421B97FCE4001E4E0A /* LaunchScreen.xib */,
 				2DF080CA1AE626E10003A277 /* Main.storyboard */,
 				2DF080581AE625410003A277 /* Images.xcassets */,
 				2DF0804B1AE625410003A277 /* Supporting Files */,
@@ -368,6 +367,7 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */,
 				2DC75F851BA141A90025AB8A /* LaunchImage-568h.png */,
 				2DC75F861BA141A90025AB8A /* LaunchImage-568h@2x.png */,
 				2DD06FF51B4B706B00F8DD3B /* link.png */,
@@ -526,7 +526,7 @@
 		2DF080401AE625410003A277 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = LaLoosh;
 				TargetAttributes = {
 					2DF080471AE625410003A277 = {
@@ -589,7 +589,6 @@
 				2DF080741AE6257D0003A277 /* Localizable.strings in Resources */,
 				2DD06FF61B4B706B00F8DD3B /* link.png in Resources */,
 				2DF080B01AE625FC0003A277 /* largebluebubble.png in Resources */,
-				2DC93B431B97FCE4001E4E0A /* LaunchScreen.xib in Resources */,
 				2DCA7A061B58530000698E97 /* text.xml in Resources */,
 				2D4AC7E21B22BC6400749074 /* LaunchImage.png in Resources */,
 				2DC636B51B17CDE60087376D /* TextMuseIcon_3x.png in Resources */,
@@ -600,6 +599,7 @@
 				2DCDFC461AEC7F4C002DA914 /* bluecheck.png in Resources */,
 				2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */,
 				2DC636B41B17CDE60087376D /* TextMuseIcon_2x.png in Resources */,
+				2D9D11F91BB2005300C679D1 /* LaunchImage_320.png in Resources */,
 				2DF080C01AE625FC0003A277 /* whitecategorybubble.png in Resources */,
 				2DCAF9D11B0D8BF4000637E9 /* message.png in Resources */,
 				2DCAF9D01B0D8BF4000637E9 /* message_edit.png in Resources */,
@@ -700,6 +700,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -715,7 +716,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -752,7 +753,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -766,6 +767,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/petertucker/Documents/Consulting/azuresdk-iOS-v1.2.4",
@@ -773,6 +775,7 @@
 				INFOPLIST_FILE = TextMuse3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuse;
 				PROVISIONING_PROFILE = "";
 			};
@@ -785,6 +788,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/petertucker/Documents/Consulting/azuresdk-iOS-v1.2.4",
@@ -792,6 +796,7 @@
 				INFOPLIST_FILE = TextMuse3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuse;
 				PROVISIONING_PROFILE = "";
 			};
@@ -811,6 +816,7 @@
 				);
 				INFOPLIST_FILE = TextMuse3Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuseTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextMuse.app/TextMuse";
 			};
@@ -826,6 +832,7 @@
 				);
 				INFOPLIST_FILE = TextMuse3Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuseTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextMuse.app/TextMuse";
 			};

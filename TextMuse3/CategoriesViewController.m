@@ -194,6 +194,8 @@ NSArray* colorsTitle;
     [splash addSubview:title];
     
     [[self view] addSubview:splash];
+    
+    [NSThread sleepForTimeInterval:1.0];
 }
 
 -(void)showDefaultSplash:(CGRect)frm {

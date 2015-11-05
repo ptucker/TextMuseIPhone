@@ -18,9 +18,10 @@
 #import "GlobalState.h"
 #import "Reachability.h"
 #import "ImageDownloader.h"
+#import "AppDelegate.h"
 #import <AddressBook/AddressBook.h>
 
-NSString* urlNotes = @"http://www.textmuse.com/html/notes.php";
+NSString* urlNotes = @"http://www.textmuse.com/admin/notes.php";
 NSString* localNotes = @"notes.xml";
 
 @implementation DataAccess
@@ -623,6 +624,9 @@ NSString* localNotes = @"notes.xml";
         if (AppID == nil || ![AppID isEqualToString:[attributeDict objectForKey:@"app"]]) {
             AppID = [attributeDict objectForKey:@"app"];
             [Settings SaveSetting:SettingAppID withValue:AppID];
+            //We changed the appid, so we need to re-register for push notifications
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            [appDelegate registerRemoteNotificationWithAzure];
         }
         
         [Settings SaveSetting:SettingLastNoteDownload withValue:LastNoteDownload];

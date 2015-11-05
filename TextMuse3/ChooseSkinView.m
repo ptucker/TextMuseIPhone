@@ -131,8 +131,8 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
         [Settings ClearSkinData];
     }
     [Data reloadData];
-    //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    //[appDelegate registerRemoteNotificationWithAzure];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate registerRemoteNotificationWithAzure];
     
     [self close:nil];
 }

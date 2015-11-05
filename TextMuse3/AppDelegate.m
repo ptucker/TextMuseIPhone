@@ -102,20 +102,27 @@
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [self setDeviceToken: deviceToken];
+    BOOL reg = [self deviceToken] == nil;
     
+    [self setDeviceToken: deviceToken];
+    if (reg)
+        [self registerRemoteNotificationWithAzure];
 }
 
 -(void)registerRemoteNotificationWithAzure {
+    if ([self deviceToken] == nil) return;
+    
     NSString* conn = @"Endpoint=sb://textmusehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=9hnIUk/Qjj9zusMfK570F10o5mXY1F9eXVS8REI3ZCw=";
     SBNotificationHub* hub = [[SBNotificationHub alloc] initWithConnectionString:conn
                                                              notificationHubPath:@"textmusehub"];
-    
-    NSSet* tags = nil;
-    if (Skin != nil) {
-        tags = [[NSSet alloc] initWithObjects:[NSString stringWithFormat:@"skin%ld", [Skin SkinID]],
-                nil];
-    }
+
+    long skinid = (Skin != nil) ? [Skin SkinID] : 0;
+    NSMutableSet* tags =
+        [[NSMutableSet alloc] initWithObjects:[NSString stringWithFormat:@"skin%ld", skinid], nil];
+
+    if (AppID != nil)
+        [tags addObject:AppID];
+
     [hub registerNativeWithDeviceToken:[self deviceToken] tags:tags completion:^(NSError* error) {
         if (error != nil) {
             NSLog(@"Error registering for notifications: %@", error);
@@ -213,6 +220,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
         [formatter setTimeZone:[NSTimeZone defaultTimeZone]];
         [formatter setDateFormat:NotificationDateFormat];
         NSString* notifyString = [formatter stringFromDate:notify];
+        [formatter setDateFormat:ReminderDateFormat];
         NSDate* notifyDate = [formatter dateFromString:notifyString];
         
         if ([AppDelegate checkNotificationType:UIUserNotificationTypeBadge])

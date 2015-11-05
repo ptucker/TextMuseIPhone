@@ -464,15 +464,15 @@ NSMutableArray* searchContacts;
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
         NSString* sponsor = @"";
 #ifdef WHITWORTH
-        sponsor = @" Whitworth";
+        sponsor = @"Whitworth ";
 #endif
 #ifdef UOREGON
-        sponsor = @" Oregon";
+        sponsor = @"Oregon ";
 #endif
         if (Skin != nil)
-            sponsor = [Skin SkinName];
+            sponsor = [[Skin SkinName] stringByAppendingString:@" "];
         
-        NSString* tagline = [NSString stringWithFormat: @"\n\nSent by%@ TextMuse - http://www.textmuse.com/download", sponsor];
+        NSString* tagline = [NSString stringWithFormat: @"\n\nSent by %@TextMuse - http://bit.ly/1QDXyfj", sponsor];
         //if (arc4random() % 10 == 0)
         message = [message stringByAppendingString:tagline];
         if (([CurrentMessage mediaUrl] == nil || [[CurrentMessage mediaUrl] length] == 0) &&
