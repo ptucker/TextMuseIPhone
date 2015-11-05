@@ -49,7 +49,7 @@ NSString* SettingUserBirthYear=@"SettingBirthYear";
 NSString* SettingAppID=@"SettingAppID";
 NSString* SettingSkin=@"SettingSkin";
 
-NSString* ReminderDateFormat = @"dd/MM/yyyy hh:mm:ss";
+NSString* ReminderDateFormat = @"dd/MM/yyyy HH:mm:ss";
 NSString* NotificationDateFormat = @"dd/MM/yyyy 12:00:00";
 BOOL NotificationOn = YES;
 BOOL NotificationRegistered = YES;
