@@ -534,13 +534,18 @@ NSString* localNotes = @"notes.xml";
     return c;
 }
 
+const int RECENTWATCHCOUNT=5;
+int irecent = 0;
+Message* recentMsgs[RECENTWATCHCOUNT];
 -(Message*)chooseRandomMessage {
     BOOL chooseRecent = ([RecentCategories count] > 0 && arc4random() % 3) != 0;
     BOOL chooseSponsor = Skin != nil && arc4random() % 3 != 0;
     NSInteger m = -1;
     MessageCategory* cat;
     
-    while (m < 0) {
+    int iloop = 0;
+    Message* rndmsg = nil;
+    while (rndmsg == nil) {
         NSMutableDictionary* cs = (chooseRecent) ? RecentCategories : categories;
         if (chooseSponsor && [self getSponsorCategories] != nil) {
             NSArray* sponsoredCats = [self getSponsorCategories];
@@ -562,8 +567,16 @@ NSString* localNotes = @"notes.xml";
         else {
             m = arc4random() % [[[categories objectForKey:cat] messages] count];
         }
+        rndmsg = [[[categories objectForKey:cat] messages] objectAtIndex:m];
+        for (int i=0; iloop < 10 && i<RECENTWATCHCOUNT; i++) {
+            if (recentMsgs[i] != nil && [recentMsgs[i] msgId] == [rndmsg msgId])
+                rndmsg = nil;
+        }
+        iloop++;
     }
-    return [[[categories objectForKey:cat] messages] objectAtIndex:m];
+    recentMsgs[irecent%RECENTWATCHCOUNT] = rndmsg;
+    irecent++;
+    return rndmsg;
 }
 
 -(UserContact*)findUserByPhone:(NSString*)targetPhone {

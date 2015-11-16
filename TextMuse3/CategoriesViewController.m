@@ -261,6 +261,8 @@ NSArray* colorsTitle;
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
+    [[randomMessages subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
     [Data reloadData];
 }
 
