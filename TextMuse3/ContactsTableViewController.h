@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import "ImageDownloader.h"
+#import "SendMessage.h"
 
-@interface ContactsTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate, UISearchBarDelegate, UISearchDisplayDelegate> {
-    MFMessageComposeViewController *msgcontroller;
+@interface ContactsTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate> {
     ImageDownloader* loader;
     NSMutableData* inetdata;
+    SendMessage* sendMessage;
     NSMutableArray* checkedContacts;
     NSArray* groups;
     bool showRecentContacts;

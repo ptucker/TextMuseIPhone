@@ -11,6 +11,8 @@
 #import "Message.h"
 #import "MessageView.h"
 #import "Settings.h"
+#import "GlobalState.h"
+#import "DataAccess.h"
 
 NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 
@@ -129,7 +131,14 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     CGFloat pageWidth = [scrollview frame].size.width;
     int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
     CurrentMessage = [[Data getMessagesForCategory:CurrentCategory] objectAtIndex:p];
-    [self performSegueWithIdentifier:@"ChooseContact" sender:self];
+
+    if ([[Data getContacts] count] == 0) {
+        if (sendMessage == nil)
+            sendMessage = [[SendMessage alloc] init];
+        [sendMessage sendMessageTo:nil from:self];
+    }
+    else
+        [self performSegueWithIdentifier:@"ChooseContact" sender:self];
 }
 
 -(IBAction)highlightMessage:(id)sender {

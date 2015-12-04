@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SendMessage.h"
 
 @interface MessagesViewController : UIViewController<UIScrollViewDelegate> {
     IBOutlet UIView* header;
@@ -18,6 +19,8 @@
     IBOutlet UIPageControl* pages;
     unsigned long pageDivisor;
     CGRect frameStart;
+    
+    SendMessage* sendMessage;
 }
 
 -(IBAction)backButton:(id)sender;

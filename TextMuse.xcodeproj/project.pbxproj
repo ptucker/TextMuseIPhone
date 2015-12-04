@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
+		2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D236B031C115DA900CDE1F7 /* SendMessage.m */; };
 		2D4AC7E21B22BC6400749074 /* LaunchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E11B22BC6400749074 /* LaunchImage.png */; };
 		2D4AC7E41B22BCAC00749074 /* LaunchImage_750.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */; };
 		2D4AC7E61B22BD6100749074 /* LaunchImage_640.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E51B22BD6100749074 /* LaunchImage_640.png */; };
 		2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */; };
 		2D4AC7EA1B22BE2900749074 /* TextMuseIcon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */; };
 		2D4AC7EC1B22BE5700749074 /* TextMuseIcon_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */; };
-		2D9D11F91BB2005300C679D1 /* LaunchImage_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */; settings = {ASSET_TAGS = (); }; };
+		2D9D11F91BB2005300C679D1 /* LaunchImage_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
 		2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC52F011B0846C300E95D15 /* BirthPickerView.m */; };
 		2DC612031AF2E300000896EA /* AddMemberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC612021AF2E300000896EA /* AddMemberView.m */; };
@@ -50,8 +51,8 @@
 		2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC521AECAA80002DA914 /* SettingsViewController.m */; };
 		2DD045871B0D9C3C00A1A9CF /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DD045861B0D9C3C00A1A9CF /* settings.png */; };
 		2DD06FF61B4B706B00F8DD3B /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DD06FF51B4B706B00F8DD3B /* link.png */; };
-		2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */; settings = {ASSET_TAGS = (); }; };
-		2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */; settings = {ASSET_TAGS = (); }; };
+		2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */; };
+		2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */; };
 		2DF0804E1AE625410003A277 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF0804D1AE625410003A277 /* main.m */; };
 		2DF080591AE625410003A277 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DF080581AE625410003A277 /* Images.xcassets */; };
 		2DF080681AE625410003A277 /* TextMuse3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF080671AE625410003A277 /* TextMuse3Tests.m */; };
@@ -105,6 +106,8 @@
 		2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUsViewController.m; sourceTree = "<group>"; };
 		2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		2D236B021C115DA900CDE1F7 /* SendMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMessage.h; sourceTree = "<group>"; };
+		2D236B031C115DA900CDE1F7 /* SendMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMessage.m; sourceTree = "<group>"; };
 		2D4AC7E11B22BC6400749074 /* LaunchImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage.png; sourceTree = "<group>"; };
 		2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_750.png; sourceTree = "<group>"; };
 		2D4AC7E51B22BD6100749074 /* LaunchImage_640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_640.png; sourceTree = "<group>"; };
@@ -449,6 +452,8 @@
 				2DF080931AE625FC0003A277 /* MessagesViewController.m */,
 				2DF080941AE625FC0003A277 /* MessageView.h */,
 				2DF080951AE625FC0003A277 /* MessageView.m */,
+				2D236B021C115DA900CDE1F7 /* SendMessage.h */,
+				2D236B031C115DA900CDE1F7 /* SendMessage.m */,
 			);
 			name = Messages;
 			sourceTree = "<group>";
@@ -633,6 +638,7 @@
 				2DC697481B829022001ACC24 /* SkinInfo.m in Sources */,
 				2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */,
 				2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */,
+				2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */,
 				2DC6523F1AF09D4700B0912F /* ShowGroupViewController.m in Sources */,
 				2DF080BE1AE625FC0003A277 /* UserContact.m in Sources */,
 				2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */,
