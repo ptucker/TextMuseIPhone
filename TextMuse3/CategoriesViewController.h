@@ -27,11 +27,10 @@ extern NSArray* colors;
 extern NSArray* colorsText;
 
 @interface CategoriesViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,
-                                                        DataRefreshDelegate, UIScrollViewDelegate,
-                                                        UIPageViewControllerDelegate,
-                                                        UINavigationControllerDelegate> {
+DataRefreshDelegate, UIScrollViewDelegate, UIPageViewControllerDelegate, UINavigationControllerDelegate> {
     IBOutlet UITableView* categories;
     IBOutlet UIScrollView* randomMessages;
+    UITableView* categoryTable;
     UIRefreshControl *refreshControl;
     UIView* splash;
     UIView* walkthroughView;

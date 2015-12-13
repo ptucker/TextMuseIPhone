@@ -76,7 +76,7 @@ NSArray* colorsTitle;
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
-                                                                  action:@selector(website:)];
+                                                                  action:@selector(showCategoryList:)];
     [[self navigationItem] setLeftBarButtonItem:leftButton];
 #endif
 #ifdef UOREGON
@@ -89,7 +89,7 @@ NSArray* colorsTitle;
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
-                                                                  action:@selector(website:)];
+                                                                  action:@selector(showCategoryList:)];
     [[self navigationItem] setLeftBarButtonItem:leftButton];
 #endif
     
@@ -98,7 +98,7 @@ NSArray* colorsTitle;
         ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
                                                forNavigationItemLeftButton:[self navigationItem]
                                                                 withTarget:self
-                                                              withSelector:@selector(website:)];
+                                                              withSelector:@selector(showCategoryList:)];
         [downloader load];
     }
 }
@@ -282,7 +282,7 @@ NSArray* colorsTitle;
         ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
                                                forNavigationItemLeftButton:[self navigationItem]
                                                                 withTarget:self
-                                                              withSelector:@selector(website:)];
+                                                              withSelector:@selector(showCategoryList:)];
         [downloader load];
     }
     else {
@@ -311,60 +311,79 @@ NSArray* colorsTitle;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger c = [[Data getCategories] count];
-    if (CategoryList != nil) {
-        int cnt = 0;
-        for (NSString* cat in [CategoryList keyEnumerator]) {
-            if (![[CategoryList objectForKey:cat] isEqualToString: @"0"])
-                cnt++;
+    if (tableView != categoryTable) {
+        if (CategoryList != nil) {
+            int cnt = 0;
+            for (NSString* cat in [CategoryList keyEnumerator]) {
+                if (![[CategoryList objectForKey:cat] isEqualToString: @"0"])
+                    cnt++;
+            }
+            c = cnt;
         }
-        c = cnt;
     }
     
     return c;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 190.0;
+    if (tableView == categoryTable)
+        return 46.0;
+    else
+        return 190.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"categories";
-    CategoriesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[CategoriesTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    if (tableView == categoryTable) {
+        UITableViewCell* cell = [[UITableViewCell alloc] init];
+        [cell setBackgroundColor:[UIColor blackColor]];
+        [[cell textLabel] setTextColor:[UIColor whiteColor]];
+        [[cell textLabel] setText:[[Data getCategories] objectAtIndex:[indexPath row]]];
+        
+        return cell;
     }
-    
-    long icategory = [self chosenCategory:[indexPath row]];
+    else {
+        static NSString *CellIdentifier = @"categories";
+        CategoriesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[CategoriesTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        long icategory = [self chosenCategory:[indexPath row]];
 
-    NSString* category;
-    Message* msg = nil;
-    NSArray* cs = [Data getCategories];
-    if (icategory >= [[Data getCategories] count])
-        icategory = [[Data getCategories] count] - 1;
-    category = [cs objectAtIndex:icategory];
-    if ([[Data getMessagesForCategory:category] count] != 0)
-        msg = [[Data getMessagesForCategory:category] objectAtIndex:0];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [cell showForWidth:[[self view] frame].size.width
-             withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
-             textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
-            titleColor:[colorsTitle objectAtIndex:[indexPath row]%[colors count]]
-                 title:category
-              newCount:[Data getNewMessageCountForCategory:category]
-               message:msg];
-    
-    return cell;
+        NSString* category;
+        Message* msg = nil;
+        NSArray* cs = [Data getCategories];
+        if (icategory >= [[Data getCategories] count])
+            icategory = [[Data getCategories] count] - 1;
+        category = [cs objectAtIndex:icategory];
+        if ([[Data getMessagesForCategory:category] count] != 0)
+            msg = [[Data getMessagesForCategory:category] objectAtIndex:0];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell showForWidth:[[self view] frame].size.width
+                 withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
+                 textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
+                titleColor:[colorsTitle objectAtIndex:[indexPath row]%[colors count]]
+                     title:category
+                  newCount:[Data getNewMessageCountForCategory:category]
+                   message:msg];
+        
+        return cell;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    long icategory = [self chosenCategory:[indexPath row]];
-
+    long icategory = [indexPath row];
+    if (tableView != categoryTable) {
+        icategory = [self chosenCategory:[indexPath row]];
+        if (icategory >= [[Data getCategories] count])
+            icategory = [[Data getCategories] count] - 1;
+    }
     CurrentColorIndex = icategory % [colors count];
-    if (icategory >= [[Data getCategories] count])
-        icategory = [[Data getCategories] count] - 1;
     CurrentCategory = [[Data getCategories] objectAtIndex:icategory];
     CurrentMessage = nil;
+    
+    [self hideCategoryList];
     
     [self performSegueWithIdentifier:@"SelectMessage" sender:self];
 }
@@ -416,6 +435,37 @@ NSArray* colorsTitle;
 
 -(IBAction)website:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[Skin HomeURL]]];
+}
+
+-(IBAction)showCategoryList:(id)sender {
+    if (categoryTable == nil) {
+        UIView* parent = [categories superview];
+        CGRect frmTable = [categories frame];
+        frmTable.size.width = frmTable.size.width * 0.8;
+        CGRect frmNext = frmTable;
+        frmTable.origin.x = -frmTable.size.width;
+        categoryTable = [[UITableView alloc] initWithFrame:frmTable];
+        [categoryTable setDelegate:self];
+        [categoryTable setDataSource:self];
+        [categoryTable setBackgroundColor:[UIColor blackColor]];
+    
+        [parent addSubview:categoryTable];
+        [UIView animateWithDuration:0.5 animations:^{[categoryTable setFrame:frmNext];}];
+    }
+    else {
+        [self hideCategoryList];
+    }
+}
+
+-(void)hideCategoryList {
+    CGRect frmNext = [categoryTable frame];
+    frmNext.origin.x = -frmNext.size.width;
+    [UIView animateWithDuration:0.5
+                     animations:^{[categoryTable setFrame:frmNext];}
+                     completion:^(BOOL finished){
+                         [categoryTable removeFromSuperview];
+                         categoryTable = nil;
+                     }];
 }
 
 -(UISuggestionButton*) addMessageButton:(Message*)msg {
