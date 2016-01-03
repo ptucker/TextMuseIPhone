@@ -8,6 +8,12 @@
 
 #import "ImageDownloader.h"
 #import "Settings.h"
+#include <libkern/OSAtomic.h>
+
+int downloading = 0;
+const int MAXDOWNLOAD = 48;
+const int MAXRETRY = 5;
+NSMutableArray* downloadQueue = nil;
 
 @implementation ImageDownloader
 @synthesize inetdata, mimeType, isVideo;
@@ -17,6 +23,9 @@
     _view = view;
     _msg = msg;
     
+    [ImageDownloader initQueue];
+    [self checkCache];
+    
     return self;
 }
 
@@ -24,6 +33,9 @@
     _url = url;
     _view = view;
     
+    [ImageDownloader initQueue];
+    [self checkCache];
+
     return self;
 }
 
@@ -34,12 +46,18 @@
     _target = target;
     _selector = selector;
     
+    [ImageDownloader initQueue];
+    [self checkCache];
+
     return self;
 }
 
 -(id)initWithUrl:(NSString*)url {
     _url = url;
     
+    [ImageDownloader initQueue];
+    [self checkCache];
+
     return self;
 }
 
@@ -47,6 +65,9 @@
     _url = url;
     _msg = msg;
     
+    [ImageDownloader initQueue];
+    [self checkCache];
+
     return self;
 }
 
@@ -54,14 +75,40 @@
     _url = url;
     _btn = btn;
     
+    [ImageDownloader initQueue];
+    [self checkCache];
+
     return self;
 }
 
--(BOOL)load {
-    BOOL ret = false;
-    if (_url == nil)
-        return ret;
-    
++(void)initQueue {
+    @synchronized(downloadQueue) {
+        if (downloadQueue == nil)
+            downloadQueue = [[NSMutableArray alloc] init];
+    }
+}
+
++(void)enqueueDownload:(ImageDownloader*)loader {
+    @synchronized(downloadQueue) {
+        [downloadQueue addObject:loader];
+    }
+}
+
++(ImageDownloader*)dequeueDownload {
+    ImageDownloader* ret;
+    @synchronized(downloadQueue) {
+        if (downloadQueue != nil && [downloadQueue count] > 0) {
+            ret = [downloadQueue objectAtIndex:0];
+            [downloadQueue removeObjectAtIndex:0];
+        }
+        else
+            ret = nil;
+    }
+    return ret;
+}
+
+-(void)checkCache {
+    retryCount = 0;
     NSString* u = _url;
     NSString* ytid = [ImageDownloader GetYoutubeId:_url];
     
@@ -75,22 +122,46 @@
         if (inetdata != nil) {
             mimeType = @"image/png";
             [self useImageData];
-            ret = true;
         }
     }
+}
+
+-(BOOL)load {
+    BOOL ret = false;
+    if (_url == nil)
+        return ret;
+    
+    [self checkCache];
     if (inetdata == nil) {
-        NSURL* url = [NSURL URLWithString:u];
-    
-        NSURLRequest* request = [NSURLRequest requestWithURL:url
-                                                 cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                             timeoutInterval:30];
-    
-        inetdata = [[NSMutableData alloc] init];
-        connection = [[NSURLConnection alloc] initWithRequest:request
-                                                     delegate:self
-                                             startImmediately:YES];
+        if (downloading < MAXDOWNLOAD)
+            [self startDownload];
+        else
+            [ImageDownloader enqueueDownload:self];
     }
     return ret;
+}
+
+-(void)startDownload {
+    NSString* u = _url;
+    NSString* ytid = [ImageDownloader GetYoutubeId:_url];
+    
+    if (ytid != nil)
+        u = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/default.jpg", ytid];
+    [ActiveURLs setValue:@"" forKey:u];
+    
+    NSURL* url = [NSURL URLWithString:u];
+    
+    NSURLRequest* request = [NSURLRequest requestWithURL:url
+                                             cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                         timeoutInterval:30];
+    
+    inetdata = [[NSMutableData alloc] init];
+    connection = [[NSURLConnection alloc] initWithRequest:request
+                                                 delegate:self
+                                         startImmediately:YES];
+    
+    OSAtomicAdd32(1, &downloading);
+    NSLog([NSString stringWithFormat:@"download count: %d", downloading]);
 }
 
 -(BOOL) mimeTypeSupported:(NSString*)mtype {
@@ -109,7 +180,21 @@
     [inetdata appendData:data];
 }
 
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    if (retryCount < MAXRETRY) {
+        retryCount++;
+        
+        inetdata = nil;
+        [self load];
+    }
+}
+
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
+    OSAtomicAdd32(-1, &downloading);
+    ImageDownloader* waiting = [ImageDownloader dequeueDownload];
+    if (waiting != nil)
+        [waiting startDownload];
+    
     [self useImageData];
 
     NSString* u = [[[connection currentRequest] URL] description];
@@ -148,7 +233,7 @@
     if (_navigationItem != nil) {
         UIImage* o = [UIImage imageWithData:inetdata];
         UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                               scale:256.0/30
+                                               scale:o.size.width/30
                                          orientation:(o.imageOrientation)];
         UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
                                                                        style:UIBarButtonItemStylePlain

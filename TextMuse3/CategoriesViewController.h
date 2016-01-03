@@ -23,9 +23,6 @@
 
 #define HIGHLIGHTED_INTERVAL (5.0)
 
-extern NSArray* colors;
-extern NSArray* colorsText;
-
 @interface CategoriesViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,
 DataRefreshDelegate, UIScrollViewDelegate, UIPageViewControllerDelegate, UINavigationControllerDelegate> {
     IBOutlet UITableView* categories;

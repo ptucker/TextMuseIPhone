@@ -22,9 +22,10 @@
 @interface DataAccess : NSObject<NSXMLParserDelegate, NSURLConnectionDataDelegate, NSURLConnectionDelegate> {
     NSMutableDictionary* categories;
     NSMutableDictionary* tmpCategories;
+    NSMutableArray* allMessages;
+    NSMutableArray* tmpAllMessages;
     NSMutableArray* localImages;
     NSArray* contacts;
-    NSMutableArray* categoryOrder;
     NSArray* headings;
     NSMutableArray* selectContacts;
     BOOL loadingContacts;
@@ -42,6 +43,7 @@
     MessageCategory* currentCategory;
     NSString* currentElement;
     int currentMsgId;
+    int categoryOrder;
     BOOL newMsg;
     BOOL likedMsg;
     NSString* currentText, *currentMediaUrl, *currentUrl;
@@ -69,6 +71,7 @@
 -(int)getIndexForContact:(UserContact*)uc;
 -(UserContact*)findUserByPhone:(NSString*)targetPhone;
 -(UserContact*)chooseRandomContact;
+-(NSArray*)getAllMessages;
 -(NSArray*)getMessagesForCategory:(NSString*)category;
 -(int)getNewMessageCountForCategory:(NSString*)category;
 -(Message*)chooseRandomMessage;

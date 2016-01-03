@@ -7,7 +7,7 @@
 //
 
 #import "MessagesViewController.h"
-#import "CategoriesViewController.h"
+#import "RndMessagesViewController.h"
 #import "Message.h"
 #import "MessageView.h"
 #import "Settings.h"

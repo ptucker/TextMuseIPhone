@@ -180,7 +180,6 @@
 
 -(IBAction)skins:(id)sender {
     CGRect frm = [[self view] frame];
-    CGRect frmNav = [[[self navigationController] navigationBar] frame];
     CGFloat topmargin = 32; // frmNav.size.height;
     frm.origin.y = topmargin; // + frm.size.height;
     frm.size.height -= topmargin;

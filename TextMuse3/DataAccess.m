@@ -85,7 +85,6 @@ NSString* localNotes = @"notes.xml";
 -(void) loadFromFile {
     @try {
         NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
-        categoryOrder = [[NSMutableArray alloc] init];
 
         if (![[NSFileManager defaultManager] fileExistsAtPath:file]) {
             inetdata = [NSMutableData dataWithData:[[self createFile]
@@ -101,11 +100,13 @@ NSString* localNotes = @"notes.xml";
             [self parseMessageData];
         }
         categories = tmpCategories;
+        allMessages = tmpAllMessages;
     }
     @catch (id ex) {
         inetdata = [NSMutableData dataWithData:[[self createFile] dataUsingEncoding:NSUTF8StringEncoding]];
         [self parseMessageData];
         categories = tmpCategories;
+        allMessages = tmpAllMessages;
     }
     for (NSObject* l in listeners) {
         if ([l respondsToSelector:@selector(dataRefresh)])
@@ -164,7 +165,6 @@ NSString* localNotes = @"notes.xml";
     NSURL* url = [NSURL URLWithString:surl];
     NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
     inetdata = [[NSMutableData alloc] initWithCapacity:60000];
-    categoryOrder = [[NSMutableArray alloc] init];
     
     conn = [[NSURLConnection alloc] initWithRequest:req
                                            delegate:self
@@ -291,6 +291,7 @@ NSString* localNotes = @"notes.xml";
 
 -(void)parseMessageData {
     tmpCategories = [[NSMutableDictionary alloc] init];
+    tmpAllMessages = [[NSMutableArray alloc] init];
     parseFailed = false;
     
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:inetdata];
@@ -503,6 +504,23 @@ NSString* localNotes = @"notes.xml";
     return chooseRecent ? [self findUserByPhone:[cs objectAtIndex:r]] : [cs objectAtIndex:r];
 }
 
+-(NSArray*)getAllMessages {
+    return allMessages;
+}
+
+-(int)getMessageScore:(Message*)m {
+    int s = arc4random() % 3;
+    
+    if ([[categories objectForKey:[m category]] sponsor] == NULL)
+        s += 5;
+    if (CategoryList != nil && [[CategoryList objectForKey:[m category]] isEqualToString: @"0"])
+        s += 10;
+    
+    s += ([m order] / 3);
+    
+    return s;
+}
+
 -(NSArray*)getMessagesForCategory:(NSString*)category {
     if ([category isEqualToString:NSLocalizedString(@"Your Photos Title", nil)])
         return localImages;
@@ -671,6 +689,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         }
     }
     else if ([elementName isEqualToString:@"c"]) {
+        categoryOrder = 0;
         NSString* name = [attributeDict objectForKey:@"name"];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
@@ -744,15 +763,20 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     
     if ([elementName isEqualToString:@"n"]) {
-        NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;
-        Message* msg = [[Message alloc] initWithId:currentMsgId
-                                              text:m
-                                          mediaUrl:currentMediaUrl
-                                               url:currentUrl
-                                       forCategory:[currentCategory name]
-                                             isNew:newMsg];
-        [msg setLiked:likedMsg];
-        [[currentCategory messages] addObject:msg];
+        if (![[currentCategory name] isEqualToString: @"Trending"]) {
+            NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;
+            Message* msg = [[Message alloc] initWithId:currentMsgId
+                                                  text:m
+                                              mediaUrl:currentMediaUrl
+                                                   url:currentUrl
+                                           forCategory:[currentCategory name]
+                                                 isNew:newMsg];
+            [msg setLiked:likedMsg];
+            [msg setOrder:categoryOrder];
+            categoryOrder++;
+            [[currentCategory messages] addObject:msg];
+            [tmpAllMessages addObject:msg];
+        }
     }
     else if ([elementName isEqualToString:@"t"]) {
         [NotificationMsgs addObject:xmldata];
@@ -777,6 +801,14 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             
             [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
         }
+
+        [tmpAllMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
+            int score1 = [self getMessageScore:(Message*)m1];
+            int score2 = [self getMessageScore:(Message*)m2];
+            
+            return (score1 < score2) ? NSOrderedAscending : (score1 > score2) ? NSOrderedDescending : NSOrderedSame;
+        }];
+        
     }
     else if ([elementName isEqualToString:@"text"] && [partsdata length] > 0)
         currentText = partsdata;

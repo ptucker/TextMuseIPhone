@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <MessageUI/MessageUI.h>
-#import "Message.h"
+
+@class Message;
 
 @interface ImageDownloader : NSObject<NSURLConnectionDelegate> {
     NSString* _url;
@@ -19,6 +20,7 @@
     SEL _selector;
     Message* _msg;
     NSString* mimeType;
+    int retryCount;
     
     NSMutableData* inetdata;
     NSURLConnection* connection;

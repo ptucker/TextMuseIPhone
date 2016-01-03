@@ -10,12 +10,24 @@
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
 		2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D236B031C115DA900CDE1F7 /* SendMessage.m */; };
+		2D32406E1C2F268100E4E59B /* group_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D32406B1C2F268100E4E59B /* group_btn.png */; };
+		2D32406F1C2F268100E4E59B /* home_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D32406C1C2F268100E4E59B /* home_btn.png */; };
+		2D3240701C2F268100E4E59B /* pin_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D32406D1C2F268100E4E59B /* pin_btn.png */; };
+		2D3240741C2F3A0800E4E59B /* RndMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3240731C2F3A0800E4E59B /* RndMessagesViewController.m */; };
+		2D3240781C2F51F800E4E59B /* TextMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3240761C2F51F800E4E59B /* TextMessageTableViewCell.m */; };
+		2D3240791C2F51F800E4E59B /* TextMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3240771C2F51F800E4E59B /* TextMessageTableViewCell.xib */; };
+		2D32407D1C2F520F00E4E59B /* ImageMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D32407B1C2F520F00E4E59B /* ImageMessageTableViewCell.m */; };
+		2D32407E1C2F520F00E4E59B /* ImageMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D32407C1C2F520F00E4E59B /* ImageMessageTableViewCell.xib */; };
+		2D3240801C2F94C300E4E59B /* pinblack_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D32407F1C2F94C300E4E59B /* pinblack_btn.png */; };
+		2D3240821C2F95B000E4E59B /* send.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D3240811C2F95B000E4E59B /* send.png */; };
+		2D3240851C2FB06F00E4E59B /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3240841C2FB06F00E4E59B /* MessageTableViewCell.m */; };
 		2D4AC7E21B22BC6400749074 /* LaunchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E11B22BC6400749074 /* LaunchImage.png */; };
 		2D4AC7E41B22BCAC00749074 /* LaunchImage_750.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */; };
 		2D4AC7E61B22BD6100749074 /* LaunchImage_640.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E51B22BD6100749074 /* LaunchImage_640.png */; };
 		2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */; };
 		2D4AC7EA1B22BE2900749074 /* TextMuseIcon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */; };
 		2D4AC7EC1B22BE5700749074 /* TextMuseIcon_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */; };
+		2D5118E61C325E1500F077E9 /* like.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5118E51C325E1500F077E9 /* like.png */; };
 		2D9D11F91BB2005300C679D1 /* LaunchImage_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
 		2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC52F011B0846C300E95D15 /* BirthPickerView.m */; };
@@ -53,6 +65,7 @@
 		2DD06FF61B4B706B00F8DD3B /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DD06FF51B4B706B00F8DD3B /* link.png */; };
 		2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */; };
 		2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */; };
+		2DED1C8F1C1E95D400D6C465 /* TextMuseButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DED1C8E1C1E95D400D6C465 /* TextMuseButton.png */; };
 		2DF0804E1AE625410003A277 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF0804D1AE625410003A277 /* main.m */; };
 		2DF080591AE625410003A277 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DF080581AE625410003A277 /* Images.xcassets */; };
 		2DF080681AE625410003A277 /* TextMuse3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DF080671AE625410003A277 /* TextMuse3Tests.m */; };
@@ -108,12 +121,28 @@
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		2D236B021C115DA900CDE1F7 /* SendMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMessage.h; sourceTree = "<group>"; };
 		2D236B031C115DA900CDE1F7 /* SendMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMessage.m; sourceTree = "<group>"; };
+		2D32406B1C2F268100E4E59B /* group_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = group_btn.png; path = ../../../../../../Dropbox/FriendText/images/group_btn.png; sourceTree = "<group>"; };
+		2D32406C1C2F268100E4E59B /* home_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home_btn.png; path = ../../../../../../Dropbox/FriendText/images/home_btn.png; sourceTree = "<group>"; };
+		2D32406D1C2F268100E4E59B /* pin_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pin_btn.png; path = ../../../../../../Dropbox/FriendText/images/pin_btn.png; sourceTree = "<group>"; };
+		2D3240721C2F3A0800E4E59B /* RndMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RndMessagesViewController.h; sourceTree = "<group>"; };
+		2D3240731C2F3A0800E4E59B /* RndMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RndMessagesViewController.m; sourceTree = "<group>"; };
+		2D3240751C2F51F800E4E59B /* TextMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMessageTableViewCell.h; sourceTree = "<group>"; };
+		2D3240761C2F51F800E4E59B /* TextMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextMessageTableViewCell.m; sourceTree = "<group>"; };
+		2D3240771C2F51F800E4E59B /* TextMessageTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextMessageTableViewCell.xib; sourceTree = "<group>"; };
+		2D32407A1C2F520F00E4E59B /* ImageMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageMessageTableViewCell.h; sourceTree = "<group>"; };
+		2D32407B1C2F520F00E4E59B /* ImageMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageMessageTableViewCell.m; sourceTree = "<group>"; };
+		2D32407C1C2F520F00E4E59B /* ImageMessageTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageMessageTableViewCell.xib; sourceTree = "<group>"; };
+		2D32407F1C2F94C300E4E59B /* pinblack_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pinblack_btn.png; path = ../../../../../../Dropbox/FriendText/images/pinblack_btn.png; sourceTree = "<group>"; };
+		2D3240811C2F95B000E4E59B /* send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = send.png; path = ../../../../../../Dropbox/FriendText/images/send.png; sourceTree = "<group>"; };
+		2D3240831C2FB06F00E4E59B /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
+		2D3240841C2FB06F00E4E59B /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		2D4AC7E11B22BC6400749074 /* LaunchImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage.png; sourceTree = "<group>"; };
 		2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_750.png; sourceTree = "<group>"; };
 		2D4AC7E51B22BD6100749074 /* LaunchImage_640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_640.png; sourceTree = "<group>"; };
 		2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_640_2.png; sourceTree = "<group>"; };
 		2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_58.png; sourceTree = "<group>"; };
 		2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_87.png; sourceTree = "<group>"; };
+		2D5118E51C325E1500F077E9 /* like.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = like.png; path = ../../../../../../Dropbox/FriendText/images/like.png; sourceTree = "<group>"; };
 		2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_320.png; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
@@ -164,6 +193,7 @@
 		2DD06FF51B4B706B00F8DD3B /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
 		2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = ../../../WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
 		2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMessaging.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMessaging.framework"; sourceTree = "<group>"; };
+		2DED1C8E1C1E95D400D6C465 /* TextMuseButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseButton.png; sourceTree = "<group>"; };
 		2DF080481AE625410003A277 /* TextMuse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextMuse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DF0804C1AE625410003A277 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DF0804D1AE625410003A277 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -243,6 +273,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D3240711C2F39D400E4E59B /* RndMessages */ = {
+			isa = PBXGroup;
+			children = (
+				2D3240721C2F3A0800E4E59B /* RndMessagesViewController.h */,
+				2D3240731C2F3A0800E4E59B /* RndMessagesViewController.m */,
+				2D3240751C2F51F800E4E59B /* TextMessageTableViewCell.h */,
+				2D3240761C2F51F800E4E59B /* TextMessageTableViewCell.m */,
+				2D3240771C2F51F800E4E59B /* TextMessageTableViewCell.xib */,
+				2D32407A1C2F520F00E4E59B /* ImageMessageTableViewCell.h */,
+				2D32407B1C2F520F00E4E59B /* ImageMessageTableViewCell.m */,
+				2D32407C1C2F520F00E4E59B /* ImageMessageTableViewCell.xib */,
+				2D3240831C2FB06F00E4E59B /* MessageTableViewCell.h */,
+				2D3240841C2FB06F00E4E59B /* MessageTableViewCell.m */,
+			);
+			name = RndMessages;
+			sourceTree = "<group>";
+		};
 		2DC625121AF04D8A00C2B6B4 /* Groups */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +368,7 @@
 		2DF0804A1AE625410003A277 /* TextMuse3 */ = {
 			isa = PBXGroup;
 			children = (
+				2D3240711C2F39D400E4E59B /* RndMessages */,
 				2DCA58F21B6EA24F0011FCDB /* YTPlayer */,
 				2DCDFC4C1AEC98F5002DA914 /* UI */,
 				2DF080C81AE626700003A277 /* Data */,
@@ -370,6 +418,13 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D5118E51C325E1500F077E9 /* like.png */,
+				2D3240811C2F95B000E4E59B /* send.png */,
+				2D32407F1C2F94C300E4E59B /* pinblack_btn.png */,
+				2D32406B1C2F268100E4E59B /* group_btn.png */,
+				2D32406C1C2F268100E4E59B /* home_btn.png */,
+				2D32406D1C2F268100E4E59B /* pin_btn.png */,
+				2DED1C8E1C1E95D400D6C465 /* TextMuseButton.png */,
 				2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */,
 				2DC75F851BA141A90025AB8A /* LaunchImage-568h.png */,
 				2DC75F861BA141A90025AB8A /* LaunchImage-568h@2x.png */,
@@ -570,6 +625,7 @@
 			files = (
 				2DD045871B0D9C3C00A1A9CF /* settings.png in Resources */,
 				2D4AC7EA1B22BE2900749074 /* TextMuseIcon_58.png in Resources */,
+				2D5118E61C325E1500F077E9 /* like.png in Resources */,
 				2DCDFC451AEC7F4C002DA914 /* bluebackarrow.png in Resources */,
 				2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */,
 				2DF080591AE625410003A277 /* Images.xcassets in Resources */,
@@ -579,17 +635,23 @@
 				2DF080B41AE625FC0003A277 /* Lato-Medium.ttf in Resources */,
 				2DF080A51AE625FC0003A277 /* blackleftquote.png in Resources */,
 				2DC75F871BA141A90025AB8A /* LaunchImage-568h.png in Resources */,
+				2D32406F1C2F268100E4E59B /* home_btn.png in Resources */,
 				2DF080B11AE625FC0003A277 /* largegreenbubble.png in Resources */,
 				2DF080BD1AE625FC0003A277 /* TextMuse.jpg in Resources */,
+				2D3240801C2F94C300E4E59B /* pinblack_btn.png in Resources */,
 				2D4AC7E61B22BD6100749074 /* LaunchImage_640.png in Resources */,
+				2DED1C8F1C1E95D400D6C465 /* TextMuseButton.png in Resources */,
 				2DC6EC671B18208400C527BA /* TransparentButterfly.png in Resources */,
 				2DF080C11AE625FC0003A277 /* whitecategoryleftquote.png in Resources */,
+				2D3240791C2F51F800E4E59B /* TextMessageTableViewCell.xib in Resources */,
+				2D3240701C2F268100E4E59B /* pin_btn.png in Resources */,
 				2DF080C21AE625FC0003A277 /* whitecategoryrightquote.png in Resources */,
 				2DF080B31AE625FC0003A277 /* Lato-Light.ttf in Resources */,
 				2DF080B21AE625FC0003A277 /* largeorangebubble.png in Resources */,
 				2DCDFC481AEC7F4C002DA914 /* rightfacingsmallarrow.png in Resources */,
 				2DF080AC1AE625FC0003A277 /* gear.png in Resources */,
 				2DC624B31AF1FF51006E806C /* greyHighlighter.png in Resources */,
+				2D32407E1C2F520F00E4E59B /* ImageMessageTableViewCell.xib in Resources */,
 				2DF080A81AE625FC0003A277 /* CategoriesTableViewCell.xib in Resources */,
 				2DF080741AE6257D0003A277 /* Localizable.strings in Resources */,
 				2DD06FF61B4B706B00F8DD3B /* link.png in Resources */,
@@ -598,10 +660,12 @@
 				2D4AC7E21B22BC6400749074 /* LaunchImage.png in Resources */,
 				2DC636B51B17CDE60087376D /* TextMuseIcon_3x.png in Resources */,
 				2DF080B51AE625FC0003A277 /* Lato-Regular.ttf in Resources */,
+				2D3240821C2F95B000E4E59B /* send.png in Resources */,
 				2D4AC7E41B22BCAC00749074 /* LaunchImage_750.png in Resources */,
 				2DCAF9CF1B0D8BF4000637E9 /* contacts.png in Resources */,
 				2DF080AE1AE625FC0003A277 /* greyheart.png in Resources */,
 				2DCDFC461AEC7F4C002DA914 /* bluecheck.png in Resources */,
+				2D32406E1C2F268100E4E59B /* group_btn.png in Resources */,
 				2DCAF9CE1B0D8BF4000637E9 /* categories.png in Resources */,
 				2DC636B41B17CDE60087376D /* TextMuseIcon_2x.png in Resources */,
 				2D9D11F91BB2005300C679D1 /* LaunchImage_320.png in Resources */,
@@ -636,6 +700,7 @@
 				2DF080A41AE625FC0003A277 /* AppDelegate.m in Sources */,
 				2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */,
 				2DC697481B829022001ACC24 /* SkinInfo.m in Sources */,
+				2D3240781C2F51F800E4E59B /* TextMessageTableViewCell.m in Sources */,
 				2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */,
 				2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */,
 				2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */,
@@ -648,6 +713,7 @@
 				2DC612031AF2E300000896EA /* AddMemberView.m in Sources */,
 				2DF080BB1AE625FC0003A277 /* Settings.m in Sources */,
 				2DF080AB1AE625FC0003A277 /* DataAccess.m in Sources */,
+				2D3240851C2FB06F00E4E59B /* MessageTableViewCell.m in Sources */,
 				2DF080A91AE625FC0003A277 /* CategoriesViewController.m in Sources */,
 				2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */,
 				2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */,
@@ -659,8 +725,10 @@
 				2DC6253E1AF2F92400D23CE8 /* MemberTableData.m in Sources */,
 				2DF080BC1AE625FC0003A277 /* SponsorInfo.m in Sources */,
 				2DC6523C1AF081A500B0912F /* GroupsViewController.m in Sources */,
+				2D3240741C2F3A0800E4E59B /* RndMessagesViewController.m in Sources */,
 				2DC760531B84328300FFF404 /* ChooseSkinView.m in Sources */,
 				2DF080BF1AE625FC0003A277 /* UserPhone.m in Sources */,
+				2D32407D1C2F520F00E4E59B /* ImageMessageTableViewCell.m in Sources */,
 				2DF080A71AE625FC0003A277 /* CategoriesTableViewCell.m in Sources */,
 				2DF080B71AE625FC0003A277 /* MessageCategory.m in Sources */,
 			);

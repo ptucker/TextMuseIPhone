@@ -1,36 +1,45 @@
 //
-//  ViewController.m
-//  TextMuse2
+//  RndMessagesViewController.m
+//  TextMuse
 //
-//  Created by Peter Tucker on 4/18/15.
-//  Copyright (c) 2015 LaLoosh. All rights reserved.
+//  Created by Peter Tucker on 12/26/15.
+//  Copyright © 2015 LaLoosh. All rights reserved.
 //
 
-#import "CategoriesViewController.h"
+#import "RndMessagesViewController.h"
 #import "WalkthroughViewController.h"
-#import "CategoriesTableViewCell.h"
+#import "ImageMessageTableViewCell.h"
+#import "TextMessageTableViewCell.h"
 #import "MessageCategory.h"
 #import "Message.h"
 #import "ImageDownloader.h"
 #import "Settings.h"
 #import "ChooseSkinView.h"
-#import "RndMessagesViewController.h"
 
-@interface CategoriesViewController ()
+NSArray* colors;
+NSArray* colorsText;
+NSArray* colorsTitle;
+
+@interface RndMessagesViewController ()
 
 @end
 
-@implementation CategoriesViewController
+@implementation RndMessagesViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    CGRect frmMessages = CGRectMake(0, 65, [[self view] frame].size.width,
+                                    [[self view] frame].size.height - 65 - 40);
+    messages = [[UITableView alloc] initWithFrame:frmMessages];
+    [[self view] addSubview:messages];
+    
     if (colors == nil)
         [self setColors];
-
+    
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
-    [categories addSubview:refreshControl];
+    [messages addSubview:refreshControl];
     
     UIImage* settings = [UIImage imageNamed:@"gear.png"];
     UIImage *scaledSettings = [UIImage imageWithCGImage:[settings CGImage]
@@ -44,51 +53,18 @@
     [[self navigationController] setDelegate:self];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
-    CGRect frmSuggestion = [randomMessages frame];
-    frmSuggestion.origin.x = 0;
-    frmSuggestion.origin.y = 0;
-    [randomMessages setContentSize:frmSuggestion.size];
-    
     if (ShowIntro) {
         [self showWalkthrough];
-
+        
         [self showChooseSkin];
     }
     
     [Data addListener:self];
     
-    [randomMessages setDelegate:self];
-
-    [categories setDelegate:self];
-    [categories setDataSource:self];
+    [messages setDelegate:self];
+    [messages setDataSource:self];
     
-    [categories setBackgroundColor:[UIColor whiteColor]];
-#ifdef WHITWORTH
-    [[self navigationItem] setTitle:@"Whitworth TextMuse"];
-
-    UIImage* o = [UIImage imageNamed:@"w.png"];
-    UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                           scale:174.0/30
-                                     orientation:(o.imageOrientation)];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(showCategoryList:)];
-    [[self navigationItem] setLeftBarButtonItem:leftButton];
-#endif
-#ifdef UOREGON
-    [[self navigationItem] setTitle:@"Oregon TextMuse"];
-
-    UIImage* o = [UIImage imageNamed:@"o.png"];
-    UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                           scale:o.size.width/30
-                                     orientation:(o.imageOrientation)];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(showCategoryList:)];
-    [[self navigationItem] setLeftBarButtonItem:leftButton];
-#endif
+    [messages setBackgroundColor:[UIColor whiteColor]];
     
     if (Skin != nil) {
         [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
@@ -115,11 +91,11 @@
      willShowViewController:(UIViewController *)viewController
                    animated:(BOOL)animated {
     if (viewController == self)
-        [categories reloadData];
+        [messages reloadData];
 }
 
 -(void)setColors {
-    colorsText = [NSArray arrayWithObjects:[UIColor whiteColor], [UIColor whiteColor], [UIColor whiteColor],
+    colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor blackColor], [UIColor blackColor],
                   nil];
 #ifdef WHITWORTH
     //Crimson, Black, Grey
@@ -143,7 +119,7 @@
     if (colorsTitle == nil)
         colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
                        [colors objectAtIndex:2], nil];
-
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -161,6 +137,10 @@
                                        userInfo:nil
                                         repeats:NO];
     }
+}
+
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    [Data reloadData];
 }
 
 -(void)showSkinSplash:(CGRect)frm {
@@ -248,19 +228,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    reminderButtonState = SHOW_TEXT;
     [[[self  navigationItem] backBarButtonItem] setTitle:@"Back"];
-    
-    if (timerReminder == nil) {
-        timerReminder = [NSTimer scheduledTimerWithTimeInterval:HIGHLIGHTED_INTERVAL
-                                                         target:self
-                                                       selector:@selector(setReminder:)
-                                                       userInfo:nil
-                                                        repeats:YES];
-    }
-
-    //Call this right away
-    [self setReminder:timerReminder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -268,10 +236,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)refresh:(UIRefreshControl *)refreshControl {
-    [[randomMessages subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+-(void)dataRefresh {
+    [self updateSkin];
     
-    [Data reloadData];
+    [messages reloadData];
+    
+    [refreshControl endRefreshing];
 }
 
 -(void)updateSkin {
@@ -280,10 +250,10 @@
         colorsText = [NSArray arrayWithObjects:[Skin createTextColor1], [Skin createTextColor2],
                       [Skin createTextColor3], nil];
         colorsTitle = [NSArray arrayWithArray:colors];
-
+        
         UIColor* colorTint = [Skin createColor1];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
-
+        
         //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
         [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
         
@@ -296,8 +266,8 @@
     else {
         //Green, Orange, Blue
         colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
-        colorsText = [NSArray arrayWithObjects:[UIColor whiteColor], [UIColor whiteColor],
-                      [UIColor whiteColor], nil];
+        colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor blackColor],
+                      [UIColor blackColor], nil];
         colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
                        [colors objectAtIndex:2], nil];
         UIColor* colorTint = [UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0];
@@ -306,7 +276,7 @@
         [[[self navigationItem] leftBarButtonItem] setImage:nil];
         
         [[self navigationItem] setTitle:@"TextMuse"];
-
+        
         UIImage* o = [UIImage imageNamed:@"TextMuseButton"];
         UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
                                                scale:60.0/30
@@ -319,35 +289,17 @@
     }
 }
 
--(void)dataRefresh {
-    [self updateSkin];
-    
-    [categories reloadData];
-    
-    [refreshControl endRefreshing];
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger c = [[Data getCategories] count];
-    if (tableView != categoryTable) {
-        if (CategoryList != nil) {
-            int cnt = 0;
-            for (NSString* cat in [CategoryList keyEnumerator]) {
-                if (![[CategoryList objectForKey:cat] isEqualToString: @"0"])
-                    cnt++;
-            }
-            c = cnt;
-        }
-    }
-    
-    return c;
+    return [[Data getAllMessages] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable)
         return 46.0;
-    else
-        return 190.0;
+    else {
+        Message* msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
+        return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -360,30 +312,31 @@
         return cell;
     }
     else {
-        static NSString *CellIdentifier = @"categories";
-        CategoriesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
+        static NSString *TextCellIdentifier = @"txtmessages";
+        static NSString *ImgCellIdentifier = @"imgmessages";
+        Message* msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
+        /*
+        MessageTableViewCell *cell = ([msg img] != nil) ?
+                                    [tableView dequeueReusableCellWithIdentifier:ImgCellIdentifier] :
+                                    [tableView dequeueReusableCellWithIdentifier:TextCellIdentifier];
+         */
+        MessageTableViewCell* cell = nil;
         if (cell == nil) {
-            cell = [[CategoriesTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell = ([msg img] != nil) ?
+                        [[ImageMessageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                         reuseIdentifier:ImgCellIdentifier] :
+                        [[TextMessageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                        reuseIdentifier:TextCellIdentifier];
         }
         
-        long icategory = [self chosenCategory:[indexPath row]];
-
-        NSString* category;
-        Message* msg = nil;
-        NSArray* cs = [Data getCategories];
-        if (icategory >= [[Data getCategories] count])
-            icategory = [[Data getCategories] count] - 1;
-        category = [cs objectAtIndex:icategory];
-        if ([[Data getMessagesForCategory:category] count] != 0)
-            msg = [[Data getMessagesForCategory:category] objectAtIndex:0];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell showForWidth:[[self view] frame].size.width
+        [cell showForSize:[[self view] frame].size
+              usingParent:self
                  withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
                  textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
                 titleColor:[colorsTitle objectAtIndex:[indexPath row]%[colors count]]
-                     title:category
-                  newCount:[Data getNewMessageCountForCategory:category]
+                     title:[msg category]
+                   sponsor:[[Data getCategory:[msg category]] sponsor]
                    message:msg];
         
         return cell;
@@ -391,15 +344,19 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    long icategory = [indexPath row];
-    if (tableView != categoryTable) {
-        icategory = [self chosenCategory:[indexPath row]];
+    if (tableView == categoryTable) {
+        long icategory = [self chosenCategory:[indexPath row]];
         if (icategory >= [[Data getCategories] count])
             icategory = [[Data getCategories] count] - 1;
+        CurrentCategory = [[Data getCategories] objectAtIndex:icategory];
+        CurrentMessage = nil;
     }
-    CurrentColorIndex = icategory % [colors count];
-    CurrentCategory = [[Data getCategories] objectAtIndex:icategory];
-    CurrentMessage = nil;
+    else {
+        CurrentMessage =[[Data getAllMessages] objectAtIndex:[indexPath row]];
+        CurrentCategory = [CurrentMessage category];
+    }
+    
+    CurrentColorIndex = [indexPath row] % [colors count];
     
     [self hideCategoryList];
     
@@ -423,33 +380,13 @@
         if (icategory == [cats count])
             NSLog(@"I don't expect to be here ...");
     }
-
+    
     return icategory;
-}
-
--(IBAction)sendRandomMessage:(id)sender {
-    UISuggestionButton* btn = (UISuggestionButton*)sender;
-    CurrentMessage = [btn message];
-    CurrentCategory = [[btn message] category];
-    [self performSegueWithIdentifier:@"SelectMessage" sender:self];
 }
 
 -(IBAction)settings:(id)sender {
     [self performSegueWithIdentifier:@"Settings" sender:self];
 }
-
-/*
-#ifdef UOREGON
--(IBAction)website:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.goducks.com"]];
-}
-#endif
-#ifdef WHITWORTH
--(IBAction)website:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.whitworthpirates.com"]];
-}
-#endif
-*/
 
 -(IBAction)website:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[Skin HomeURL]]];
@@ -457,8 +394,8 @@
 
 -(IBAction)showCategoryList:(id)sender {
     if (categoryTable == nil) {
-        UIView* parent = [categories superview];
-        CGRect frmTable = [categories frame];
+        UIView* parent = [messages superview];
+        CGRect frmTable = [messages frame];
         frmTable.size.width = frmTable.size.width * 0.8;
         CGRect frmNext = frmTable;
         frmTable.origin.x = -frmTable.size.width;
@@ -466,7 +403,7 @@
         [categoryTable setDelegate:self];
         [categoryTable setDataSource:self];
         [categoryTable setBackgroundColor:[UIColor blackColor]];
-    
+        
         [parent addSubview:categoryTable];
         [UIView animateWithDuration:0.5 animations:^{[categoryTable setFrame:frmNext];}];
     }
@@ -484,105 +421,6 @@
                          [categoryTable removeFromSuperview];
                          categoryTable = nil;
                      }];
-}
-
--(UISuggestionButton*) addMessageButton:(Message*)msg {
-    CGRect frmScroll = [randomMessages frame];
-    CGRect frmButton = CGRectMake([randomMessages contentSize].width, 0,
-                                  frmScroll.size.width, frmScroll.size.height);
-    
-    UISuggestionButton* btnSuggestion = [[UISuggestionButton alloc] initWithMessage:msg];
-    [btnSuggestion setFrame:frmButton];
-    CGRect frmLabel = CGRectMake(0, 0, frmButton.size.width, frmButton.size.height);
-    
-    UILabel* lblSuggestion = [[UILabel alloc] initWithFrame:frmLabel];
-    [lblSuggestion setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
-    [lblSuggestion setTextAlignment:NSTextAlignmentCenter];
-    [lblSuggestion setNumberOfLines:0];
-    [lblSuggestion setTextColor:[UIColor whiteColor]];
-    [lblSuggestion setTag:1];
-    
-    UIImageView* ivSuggestion = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0,
-                                                                              frmButton.size.width,
-                                                                              frmButton.size.height)];
-    [ivSuggestion setContentMode:UIViewContentModeScaleAspectFit];
-    [ivSuggestion setTag:2];
-    [btnSuggestion addSubview:ivSuggestion];
-    [btnSuggestion addSubview:lblSuggestion];
-    
-    [btnSuggestion addTarget:self action:@selector(sendRandomMessage:)
-            forControlEvents:UIControlEventTouchUpInside];
-    
-    return btnSuggestion;
-}
-
--(void)setReminder:(NSTimer*)timer {
-    if (reminderButtonState == TIMER_PAUSED)
-        return;
-    
-    if (reminderButtonState == SHOW_CONTACT && [Data getContacts] == nil)
-        reminderButtonState = SHOW_TEXT;
-    unsigned long colorcount = [colors count];
-    unsigned int icolor = rand() % colorcount;
-    
-    Message* msg = [Data chooseRandomMessage];
-    UISuggestionButton* btnSuggestion = [self addMessageButton:msg];
-    UILabel* lblSuggestion = (UILabel*)[btnSuggestion viewWithTag:1];
-    UIImageView* ivSuggestion = (UIImageView*)[btnSuggestion viewWithTag:2];
-    [btnSuggestion setBackgroundColor:[colors objectAtIndex:icolor]];
-    while ([msg mediaUrl] != nil && [msg img] == nil) {
-        ImageDownloader* load =
-        [[ImageDownloader alloc] initWithUrl:[msg mediaUrl]
-                                  forMessage:msg];
-        [load load];
-        msg = [Data chooseRandomMessage];
-    }
-    if (([msg text] == nil) || [[msg text] length] == 0) {
-        [lblSuggestion setText:@""];
-        [lblSuggestion setHidden:YES];
-    }
-    else {
-        //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
-        [lblSuggestion setText:[msg text]];
-        [lblSuggestion setTextColor:[colorsText objectAtIndex:icolor]];
-        [lblSuggestion setHidden:NO];
-    }
-    if ([msg mediaUrl] == nil) {
-        [btnSuggestion setBackgroundImage:nil forState:UIControlStateNormal];
-        [lblSuggestion setFrame:CGRectMake(4, 4,
-                                           [btnSuggestion frame].size.width-8,
-                                           [btnSuggestion frame].size.height-8)];
-        //[btnSuggestion1 setTitle:[randomMessage text] forState:UIControlStateNormal];
-        [ivSuggestion setHidden:YES];
-        [lblSuggestion setBackgroundColor:[UIColor clearColor]];
-        [lblSuggestion setNumberOfLines:0];
-        [lblSuggestion setAlpha:1];
-    }
-    else {
-        CGRect frm = CGRectMake(0, [btnSuggestion frame].size.height-22,
-                                [btnSuggestion frame].size.width, 22);
-        [ivSuggestion setImage:[UIImage imageWithData:[msg img]]];
-        [ivSuggestion setHidden:NO];
-        [lblSuggestion setFrame:frm];
-        [lblSuggestion setNumberOfLines:1];
-        [lblSuggestion setBackgroundColor:[UIColor grayColor]];
-        [lblSuggestion setAlpha:0.70];
-    }
-    CGFloat newWidth = [randomMessages contentSize].width+[btnSuggestion frame].size.width;
-    CGSize newSize = CGSizeMake(newWidth, [randomMessages frame].size.height);
-    [randomMessages setContentSize:newSize];
-    [randomMessages addSubview:btnSuggestion];
-    CGRect frmNext = CGRectMake([randomMessages contentOffset].x, 0, [randomMessages frame].size.width,
-                                [randomMessages frame].size.height);
-    frmNext.origin.x += [randomMessages frame].size.width;
-    frmNext.origin.x -= (int)frmNext.origin.x % (int)frmNext.size.width;
-    
-    [UIView animateWithDuration:1.5
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{ [randomMessages scrollRectToVisible:frmNext animated:NO]; }
-                     completion:NULL];
-    //[randomMessages scrollRectToVisible:frmNext animated:YES];
 }
 
 -(void)showWalkthrough {
@@ -668,7 +506,7 @@
         x += frmScroll.size.width;
     }
     [scroller setContentSize:CGSizeMake(frmScroll.size.width*pagecount, frmScroll.size.height)];
-
+    
     [[[self navigationItem] rightBarButtonItem] setEnabled:NO];
 }
 
@@ -699,16 +537,5 @@
     [Settings SaveSetting:SettingShowIntro withValue:@"0"];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)sender {
-    if (sender == randomMessages) {
-        [sender setContentOffset:CGPointMake([sender contentOffset].x, 0)];
-    }
-    else if (pages != nil) {
-        CGFloat pageWidth = [scroller frame].size.width;
-        int page = floor(([scroller contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-        
-        [pages setCurrentPage: page];
-    }
-}
 
 @end

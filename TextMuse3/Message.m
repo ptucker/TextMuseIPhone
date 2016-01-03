@@ -7,14 +7,13 @@
 //
 
 #import "Message.h"
-#import "ImageDownloader.h"
 #import "Settings.h"
 #import "YTPlayerView.h"
 
 YTPlayerView* globalYTPlayer = nil;
 
 @implementation Message
-@synthesize msgId, newMsg, img, assetURL, imgType, msgUrl, category, text, mediaUrl, url, liked;
+@synthesize msgId, order, newMsg, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, liked;
 
 -(id)initWithId:(int)i message:(NSString *)m forCategory:(NSString*)c isNew:(BOOL)n {
     //msg = m;
@@ -25,9 +24,8 @@ YTPlayerView* globalYTPlayer = nil;
     NSArray* parts = [Message FindUrlInString:m];
     if (parts != nil) {
         msgUrl = [parts objectAtIndex:0];
-        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[parts objectAtIndex:0]
-                                                            forMessage:self];
-        [loader load];
+        loader = [[ImageDownloader alloc] initWithUrl:[parts objectAtIndex:0]
+                                           forMessage:self];
     }
     
     return self;
@@ -44,8 +42,7 @@ YTPlayerView* globalYTPlayer = nil;
     category = c;
     
     if (mediaUrl != nil) {
-        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:mediaUrl forMessage:self];
-        [loader load];
+        loader = [[ImageDownloader alloc] initWithUrl:mediaUrl forMessage:self];
     }
     
     return self;
@@ -89,6 +86,21 @@ YTPlayerView* globalYTPlayer = nil;
     text = msg;
     
     return self;
+}
+
+-(NSData*)img {
+    @synchronized(img) {
+        if (img == nil && loader != nil) {
+            [loader load];
+        }
+    }
+    return img;
+}
+
+-(void)setImg:(NSData *)imgNew {
+    @synchronized(img) {
+        img = imgNew;
+    }
 }
 
 -(void)loadUserImage {
@@ -159,8 +171,8 @@ YTPlayerView* globalYTPlayer = nil;
               forControlEvents:UIControlEventTouchUpInside];
             [parent addSubview:imgview];
             if (assetURL == nil) {
-                ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:mediaUrl forButton:imgview];
-                [loader load];
+                ImageDownloader* ldr = [[ImageDownloader alloc] initWithUrl:mediaUrl forButton:imgview];
+                [ldr load];
                 [UIView animateWithDuration:0.5 animations:^{
                     [imgview setFrame:endFrame];
                 } completion: ^(BOOL f) {

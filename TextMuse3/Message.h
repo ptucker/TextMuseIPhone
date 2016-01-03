@@ -9,12 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "ImageDownloader.h"
 
 @interface Message : NSObject <UIWebViewDelegate> {
     int msgId;
+    int order;
     int yourtextIndex;
     BOOL newMsg;
     BOOL liked;
+    ImageDownloader* loader;
     NSData* img;
     NSURL *assetURL;
     NSString* imgType;
@@ -30,6 +33,7 @@
 }
 
 @property (readwrite) int msgId;
+@property (readwrite) int order;
 @property (readwrite) BOOL newMsg;
 @property (readwrite) BOOL liked;
 @property (nonatomic, readwrite, copy) NSData* img;
