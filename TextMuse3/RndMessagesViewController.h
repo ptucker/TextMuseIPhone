@@ -28,5 +28,5 @@ DataRefreshDelegate, UINavigationControllerDelegate> {
 }
 
 -(IBAction)settings:(id)sender;
-
+-(IBAction)home:(id)sender;
 @end

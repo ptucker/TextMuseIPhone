@@ -8,6 +8,7 @@
 
 #import "MessageTableViewCell.h"
 #import "GlobalState.h"
+#import "UICaptionButton.h"
 
 @implementation MessageTableViewCell
 
@@ -32,12 +33,12 @@
     frmLogo = CGRectMake(8, 8, 21, 21);
     frmTitle = CGRectMake(35, 8, size.width - 8 - 35, 21);
     frmSeeAll = CGRectMake(size.width - 14 - 8, 8, 14, 21);
-    frmLike = CGRectMake(8, bottomY, 24, 24);
-    frmPin = CGRectMake(size.width/2 - 12, bottomY, 24, 24);
-    frmSend = CGRectMake(size.width - 8 - 26, bottomY, 26, 24);
+    frmLike = CGRectMake(8, bottomY, 28, 28);
+    frmPin = CGRectMake(size.width/2 - 12, bottomY, 28, 28);
+    frmSend = CGRectMake(size.width - 8 - 26, bottomY, 31, 28);
     frmParent = CGRectMake(8, 37, size.width-16, sizeParent.height);
     frmContent = CGRectMake(8, 9, frmParent.size.width-16, frmParent.size.height-18);
-    CGRect frmBorder = CGRectMake(1, 1, size.width-2, bottomY + 28);
+    CGRect frmBorder = CGRectMake(1, 1, size.width-2, bottomY + 36);
 
     if (viewParent == nil) {
         viewParent = [[UIView alloc] initWithFrame:frmParent];
@@ -82,14 +83,16 @@
     }
     [btnLike setFrame:frmLike];
     if (btnPin == nil) {
-        btnPin = [[UIButton alloc] initWithFrame:frmPin];
-        [btnPin setImage:[UIImage imageNamed:@"pinblack_btn"] forState:UIControlStateNormal];
+        btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:@"pinblack_btn"]
+                                                andText:@"pin"];
+        //[btnPin setImage:[UIImage imageNamed:@"pinblack_btn"] forState:UIControlStateNormal];
         [self addSubview:btnPin];
     }
     [btnPin setFrame:frmPin];
     if (btnSend == nil) {
-        btnSend = [[UIButton alloc] initWithFrame:frmSend];
-        [btnSend setImage:[UIImage imageNamed:@"send"] forState:UIControlStateNormal];
+        btnSend = [[UICaptionButton alloc] initWithFrame:frmSend withImage:[UIImage imageNamed:@"send"]
+                                                 andText:@"send"];
+        //[btnSend setImage:[UIImage imageNamed:@"send"] forState:UIControlStateNormal];
         [btnSend addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btnSend];
     }

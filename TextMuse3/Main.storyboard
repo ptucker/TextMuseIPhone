@@ -404,6 +404,9 @@
                                         <rect key="frame" x="4" y="4" width="37" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="home_btn.png"/>
+                                        <connections>
+                                            <action selector="home:" destination="4sn-wL-anZ" eventType="touchUpInside" id="HWx-ce-Osz"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8Sx-EF-WVk">
                                         <rect key="frame" x="276" y="4" width="40" height="32"/>

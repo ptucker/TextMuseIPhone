@@ -15,6 +15,7 @@
 #import "ImageDownloader.h"
 #import "Settings.h"
 #import "ChooseSkinView.h"
+#import "UICheckButton.h"
 
 NSArray* colors;
 NSArray* colorsText;
@@ -370,12 +371,8 @@ NSArray* colorsTitle;
     
     if (![[Data getRequiredCategories] containsObject:categoryName]) {
         CGRect frmCheck = CGRectMake(width-46, 2, 42, 42);
-        UIButton* chk = [[UIButton alloc] initWithFrame:frmCheck];
-        [chk setTitle:@"" forState:UIControlStateNormal];
-        [chk setTitle:@"" forState:UIControlStateSelected];
-        [chk setImage:[UIImage imageNamed:@"emptycheck"] forState:UIControlStateNormal];
-        [chk setImage:[UIImage imageNamed:@"bluecheck"] forState:UIControlStateSelected];
-        [chk setTag:iCategory];
+        UICheckButton* chk = [[UICheckButton alloc] initWithFrame:frmCheck];
+        [chk setExtra:categoryName];
         [chk addTarget:self action:@selector(chooseCategory:) forControlEvents:UIControlEventTouchUpInside];
         
         [cell addSubview:chk];
@@ -389,14 +386,13 @@ NSArray* colorsTitle;
 }
 
 -(IBAction)chooseCategory:(id)sender {
-    UIButton* chk = (UIButton*)sender;
+    UICheckButton* chk = (UICheckButton*)sender;
     [chk setSelected:![chk isSelected]];
     
-    NSString* category = [[Data getCategories] objectAtIndex:[chk tag]];
-    if ([[CategoryList objectForKey:category] isEqualToString:@"0"])
-        [CategoryList setObject:@"1" forKey:category];
+    if ([[CategoryList objectForKey:[chk extra]] isEqualToString:@"0"])
+        [CategoryList setObject:@"1" forKey:[chk extra]];
     else
-        [CategoryList setObject:@"0" forKey:category];
+        [CategoryList setObject:@"0" forKey:[chk extra]];
 
     [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
     for (NSString*c in [Data getCategories]) {
@@ -406,6 +402,12 @@ NSArray* colorsTitle;
     
     [Data resortMessages];
     [self dataRefresh];
+}
+
+-(IBAction)home:(id)sender {
+    [messages scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                    atScrollPosition:UITableViewScrollPositionTop
+                            animated:YES];
 }
 
 -(long) chosenCategory:(long)selectedCategory {

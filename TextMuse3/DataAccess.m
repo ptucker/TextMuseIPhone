@@ -270,6 +270,7 @@ NSString* localNotes = @"notes.xml";
         dispatch_async(dispatch_get_main_queue(), ^{
             if (!notificationOnly) {
                 categories = tmpCategories;
+                allMessages = tmpAllMessages;
             }
 
             NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
