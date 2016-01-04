@@ -72,6 +72,7 @@
 -(UserContact*)findUserByPhone:(NSString*)targetPhone;
 -(UserContact*)chooseRandomContact;
 -(NSArray*)getAllMessages;
+-(NSArray*)resortMessages;
 -(NSArray*)getMessagesForCategory:(NSString*)category;
 -(int)getNewMessageCountForCategory:(NSString*)category;
 -(Message*)chooseRandomMessage;

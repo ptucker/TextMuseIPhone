@@ -508,13 +508,23 @@ NSString* localNotes = @"notes.xml";
     return allMessages;
 }
 
+-(NSArray*)resortMessages {
+    [allMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
+        int score1 = [self getMessageScore:(Message*)m1];
+        int score2 = [self getMessageScore:(Message*)m2];
+        
+        return (score1 < score2) ? NSOrderedAscending : (score1 > score2) ? NSOrderedDescending : NSOrderedSame;
+    }];
+    return allMessages;
+}
+
 -(int)getMessageScore:(Message*)m {
     int s = arc4random() % 3;
     
     if ([[categories objectForKey:[m category]] sponsor] == NULL)
         s += 5;
     if (CategoryList != nil && [[CategoryList objectForKey:[m category]] isEqualToString: @"0"])
-        s += 10;
+        s += 1000;
     
     s += ([m order] / 3);
     

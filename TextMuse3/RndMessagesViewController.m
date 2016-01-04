@@ -290,7 +290,10 @@ NSArray* colorsTitle;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[Data getAllMessages] count];
+    if (tableView == categoryTable)
+        return [[Data getCategories] count];
+    else
+        return [[Data getAllMessages] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -304,12 +307,7 @@ NSArray* colorsTitle;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
-        UITableViewCell* cell = [[UITableViewCell alloc] init];
-        [cell setBackgroundColor:[UIColor blackColor]];
-        [[cell textLabel] setTextColor:[UIColor whiteColor]];
-        [[cell textLabel] setText:[[Data getCategories] objectAtIndex:[indexPath row]]];
-        
-        return cell;
+        return [self createCategoryCell:[indexPath row] forWidth:[tableView frame].size.width];
     }
     else {
         static NSString *TextCellIdentifier = @"txtmessages";
@@ -361,6 +359,53 @@ NSArray* colorsTitle;
     [self hideCategoryList];
     
     [self performSegueWithIdentifier:@"SelectMessage" sender:self];
+}
+
+-(UITableViewCell*)createCategoryCell:(long)iCategory forWidth:(CGFloat)width {
+    UITableViewCell* cell = [[UITableViewCell alloc] init];
+    [cell setBackgroundColor:[UIColor blackColor]];
+    [[cell textLabel] setTextColor:[UIColor whiteColor]];
+    NSString* categoryName = [[Data getCategories] objectAtIndex:iCategory];
+    [[cell textLabel] setText:categoryName];
+    
+    if (![[Data getRequiredCategories] containsObject:categoryName]) {
+        CGRect frmCheck = CGRectMake(width-46, 2, 42, 42);
+        UIButton* chk = [[UIButton alloc] initWithFrame:frmCheck];
+        [chk setTitle:@"" forState:UIControlStateNormal];
+        [chk setTitle:@"" forState:UIControlStateSelected];
+        [chk setImage:[UIImage imageNamed:@"emptycheck"] forState:UIControlStateNormal];
+        [chk setImage:[UIImage imageNamed:@"bluecheck"] forState:UIControlStateSelected];
+        [chk setTag:iCategory];
+        [chk addTarget:self action:@selector(chooseCategory:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell addSubview:chk];
+        if ([CategoryList objectForKey:categoryName] == nil)
+            [CategoryList setObject:@"1" forKey:categoryName];
+        BOOL selected = ![[CategoryList objectForKey:categoryName] isEqualToString: @"0"];
+        [chk setSelected:selected];
+    }
+    
+    return cell;
+}
+
+-(IBAction)chooseCategory:(id)sender {
+    UIButton* chk = (UIButton*)sender;
+    [chk setSelected:![chk isSelected]];
+    
+    NSString* category = [[Data getCategories] objectAtIndex:[chk tag]];
+    if ([[CategoryList objectForKey:category] isEqualToString:@"0"])
+        [CategoryList setObject:@"1" forKey:category];
+    else
+        [CategoryList setObject:@"0" forKey:category];
+
+    [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
+    for (NSString*c in [Data getCategories]) {
+        MessageCategory*mc = [Data getCategory:c];
+        [mc setChosen:![[CategoryList objectForKey:c] isEqualToString:@"0"]];
+    }
+    
+    [Data resortMessages];
+    [self dataRefresh];
 }
 
 -(long) chosenCategory:(long)selectedCategory {
