@@ -14,7 +14,7 @@
 #import "GlobalState.h"
 #import "DataAccess.h"
 
-NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
+NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 
 @interface MessagesViewController ()
 
@@ -150,7 +150,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     Message*m = [quotes objectAtIndex:page];
     [m setLiked:![m liked]];
         
-    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlLikeNote]
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlHighlightNote]
                                                        cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                    timeoutInterval:30];
     [req setHTTPMethod:@"POST"];

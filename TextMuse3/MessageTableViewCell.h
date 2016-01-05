@@ -10,6 +10,7 @@
 #import "SponsorInfo.h"
 #import "Message.h"
 #import "ImageDownloader.h"
+#import "UICaptionButton.h"
 
 @interface MessageTableViewCell : UITableViewCell {
     ImageDownloader* downloader;
@@ -30,9 +31,9 @@
     IBOutlet UILabel* lblTitle;
     IBOutlet UIImageView* imgLogo;
     IBOutlet UIButton* btnSeeAll;
-    IBOutlet UIButton* btnLike;
-    IBOutlet UIButton* btnPin;
-    IBOutlet UIButton* btnSend;
+    IBOutlet UICaptionButton* btnLike;
+    IBOutlet UICaptionButton* btnPin;
+    IBOutlet UICaptionButton* btnSend;
 }
 
 +(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent;

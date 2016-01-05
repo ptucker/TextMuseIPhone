@@ -41,4 +41,6 @@
 
 +(NSString*)GetYoutubeId:(NSString*)youtubeUrl;
 
++(void)CancelDownloads;
+
 @end

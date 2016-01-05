@@ -8,7 +8,9 @@
 
 #import "MessageTableViewCell.h"
 #import "GlobalState.h"
-#import "UICaptionButton.h"
+#import "Settings.h"
+
+NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 
 @implementation MessageTableViewCell
 
@@ -77,8 +79,16 @@
     }
     [btnSeeAll setFrame:frmSeeAll];
     if (btnLike == nil) {
-        btnLike = [[UIButton alloc] initWithFrame:frmLike];
-        [btnLike setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+        NSString* clike = [msg likeCount] != 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
+        NSString* img = [msg liked] ? @"like" : @"greylike";
+        btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
+                                               withImage:[UIImage imageNamed:img]
+                                            andRightText:clike];
+        [btnLike setSelected:[_msg liked]];
+        //[btnLike setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+        
+        [btnLike addTarget:self action:@selector(likeMessage:) forControlEvents:UIControlEventTouchUpInside];
+        
         [self addSubview:btnLike];
     }
     [btnLike setFrame:frmLike];
@@ -111,7 +121,7 @@
         [lblContent setText:@""];
     }
 
-    if (sponsor != nil) {
+    if ([msg version]) {
         [imgLogo setHidden:NO];
         frmTitle.origin.x = 35;
         [lblTitle setFrame:frmTitle];
@@ -141,6 +151,28 @@
     CurrentCategory = [_msg category];
     CurrentMessage = _msg;
     [_nav performSegueWithIdentifier:@"SendMessage" sender:_nav];
+}
+
+-(IBAction)likeMessage:(id)sender {
+    [_msg setLiked:![_msg liked]];
+    [_msg setLikeCount:[_msg likeCount] + ([_msg liked] ? 1 : -1)];
+    
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlLikeNote]
+                                                       cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                   timeoutInterval:30];
+    [req setHTTPMethod:@"POST"];
+    [req setHTTPBody:[[NSString stringWithFormat:@"id=%ld&app=%@&h=%d",
+                       (long)[_msg msgId], AppID, ([_msg liked] ? 1 : 0)]
+                      dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:nil
+                                                    startImmediately:YES];
+
+    [btnLike setSelected:[_msg liked]];
+    NSString* img = [_msg liked] ? @"like" : @"greylike";
+    [btnLike setImage:[UIImage imageNamed:img]];
+    [btnLike setCaption:[_msg likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [_msg likeCount]]];
 }
 
 +(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent {

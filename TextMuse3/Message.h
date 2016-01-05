@@ -17,6 +17,8 @@
     int yourtextIndex;
     BOOL newMsg;
     BOOL liked;
+    int likeCount;
+    BOOL version;
     ImageDownloader* loader;
     NSData* img;
     NSURL *assetURL;
@@ -36,6 +38,8 @@
 @property (readwrite) int order;
 @property (readwrite) BOOL newMsg;
 @property (readwrite) BOOL liked;
+@property (readwrite) int likeCount;
+@property (readwrite) BOOL version;
 @property (nonatomic, readwrite, copy) NSData* img;
 @property (nonatomic, readonly, retain) NSURL* assetURL;
 @property (nonatomic, readwrite, copy) NSString* imgType;

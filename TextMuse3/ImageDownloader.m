@@ -107,6 +107,13 @@ NSMutableArray* downloadQueue = nil;
     return ret;
 }
 
++(void)CancelDownloads {
+    @synchronized(downloadQueue) {
+        if (downloadQueue != nil)
+            [downloadQueue removeAllObjects];
+    }
+}
+
 -(void)checkCache {
     retryCount = 0;
     NSString* u = _url;

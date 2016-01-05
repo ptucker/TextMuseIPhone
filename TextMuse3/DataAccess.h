@@ -23,7 +23,8 @@
     NSMutableDictionary* categories;
     NSMutableDictionary* tmpCategories;
     NSMutableArray* allMessages;
-    NSMutableArray* tmpAllMessages;
+    NSMutableArray* tmpRegMessages;
+    NSMutableArray* tmpVersionMessages;
     NSMutableArray* localImages;
     NSArray* contacts;
     NSArray* headings;
@@ -46,6 +47,8 @@
     int categoryOrder;
     BOOL newMsg;
     BOOL likedMsg;
+    int likeCount;
+    BOOL versionMsg;
     NSString* currentText, *currentMediaUrl, *currentUrl;
     
     //NSString* documentdir;

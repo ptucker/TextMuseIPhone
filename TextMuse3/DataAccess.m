@@ -100,13 +100,13 @@ NSString* localNotes = @"notes.xml";
             [self parseMessageData];
         }
         categories = tmpCategories;
-        allMessages = tmpAllMessages;
+        [self mergeMessages];
     }
     @catch (id ex) {
         inetdata = [NSMutableData dataWithData:[[self createFile] dataUsingEncoding:NSUTF8StringEncoding]];
         [self parseMessageData];
         categories = tmpCategories;
-        allMessages = tmpAllMessages;
+        [self mergeMessages];
     }
     for (NSObject* l in listeners) {
         if ([l respondsToSelector:@selector(dataRefresh)])
@@ -139,6 +139,8 @@ NSString* localNotes = @"notes.xml";
     if (timerLoad != nil)
         [timerLoad invalidate];
     timerLoad = nil;
+    
+    [ImageDownloader CancelDownloads];
     
     NSDateFormatter *dateformat=[[NSDateFormatter alloc]init];
     [dateformat setDateFormat:@"yyyy-MM-dd HH:mm:ss"]; // Date formatter
@@ -270,7 +272,7 @@ NSString* localNotes = @"notes.xml";
         dispatch_async(dispatch_get_main_queue(), ^{
             if (!notificationOnly) {
                 categories = tmpCategories;
-                allMessages = tmpAllMessages;
+                [self mergeMessages];
             }
 
             NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
@@ -292,7 +294,8 @@ NSString* localNotes = @"notes.xml";
 
 -(void)parseMessageData {
     tmpCategories = [[NSMutableDictionary alloc] init];
-    tmpAllMessages = [[NSMutableArray alloc] init];
+    tmpRegMessages = [[NSMutableArray alloc] init];
+    tmpVersionMessages = [[NSMutableArray alloc] init];
     parseFailed = false;
     
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:inetdata];
@@ -509,6 +512,21 @@ NSString* localNotes = @"notes.xml";
     return allMessages;
 }
 
+-(void) mergeMessages {
+    int v = 0, r = 0;
+    allMessages = [[NSMutableArray alloc] init];
+    while (v < [tmpVersionMessages count] || r < [tmpRegMessages count]) {
+        if (v < [tmpVersionMessages count]){
+            [allMessages addObject:[tmpVersionMessages objectAtIndex:v]];
+            v++;
+        }
+        if (r < [tmpRegMessages count]) {
+            [allMessages addObject:[tmpRegMessages objectAtIndex:r]];
+            r++;
+        }
+    }
+}
+
 -(NSArray*)resortMessages {
     [allMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
         int score1 = [self getMessageScore:(Message*)m1];
@@ -522,8 +540,8 @@ NSString* localNotes = @"notes.xml";
 -(int)getMessageScore:(Message*)m {
     int s = arc4random() % 3;
     
-    if ([[categories objectForKey:[m category]] sponsor] == NULL)
-        s += 5;
+    //if ([[categories objectForKey:[m category]] sponsor] == NULL)
+        //s += 5;
     if (CategoryList != nil && [[CategoryList objectForKey:[m category]] isEqualToString: @"0"])
         s += 1000;
     
@@ -724,6 +742,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             if (CategoryList != nil && [[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"0"])
                 [CategoryList setObject:@"1" forKey:[currentCategory name]];
         }
+        versionMsg = NO;
+        if ([attributeDict objectForKey:@"version"] != nil)
+            versionMsg = [[attributeDict objectForKey:@"version"] isEqualToString:@"1"];
         if ([[attributeDict allKeys] containsObject:@"url"] &&
                 [[attributeDict allKeys] containsObject:@"icon"]) {
             NSString* url = [attributeDict objectForKey:@"url"];
@@ -751,6 +772,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             newMsg = [[attributeDict objectForKey:@"new"] isEqualToString:@"1"];
         if ([attributeDict objectForKey:@"liked"] != nil)
             likedMsg = [[attributeDict objectForKey:@"liked"] isEqualToString:@"1"];
+        likeCount = 0;
+        if ([attributeDict objectForKey:@"likecount"] != nil)
+            likeCount = [[attributeDict objectForKey:@"likecount"] intValue];
         xmldata = [[NSMutableString alloc] init];
         currentText = nil;
         currentMediaUrl = nil;
@@ -783,10 +807,15 @@ Message* recentMsgs[RECENTWATCHCOUNT];
                                            forCategory:[currentCategory name]
                                                  isNew:newMsg];
             [msg setLiked:likedMsg];
+            [msg setLikeCount:likeCount];
+            [msg setVersion:versionMsg];
             [msg setOrder:categoryOrder];
             categoryOrder++;
             [[currentCategory messages] addObject:msg];
-            [tmpAllMessages addObject:msg];
+            if (versionMsg)
+                [tmpVersionMessages addObject:msg];
+            else
+                [tmpRegMessages addObject:msg];
         }
     }
     else if ([elementName isEqualToString:@"t"]) {
@@ -813,7 +842,13 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
         }
 
-        [tmpAllMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
+        [tmpVersionMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
+            int score1 = [self getMessageScore:(Message*)m1];
+            int score2 = [self getMessageScore:(Message*)m2];
+            
+            return (score1 < score2) ? NSOrderedAscending : (score1 > score2) ? NSOrderedDescending : NSOrderedSame;
+        }];
+        [tmpRegMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
             int score1 = [self getMessageScore:(Message*)m1];
             int score2 = [self getMessageScore:(Message*)m2];
             
