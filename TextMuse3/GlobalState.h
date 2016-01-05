@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DataAccess.h"
+#import "SqlData.h"
 #import "Message.h"
 
 @interface GlobalState : NSObject
@@ -17,6 +18,8 @@ extern NSString* CurrentCategory;
 extern long CurrentColorIndex;
 extern Message* CurrentMessage;
 extern NSString* CurrentGroup;
+extern SqlData* SqlDb;
+
 +(void)init;
 
 @end

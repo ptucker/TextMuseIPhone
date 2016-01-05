@@ -49,6 +49,8 @@ NSString* localNotes = @"notes.xml";
     selectContacts = [[NSMutableArray alloc] init];
     
     notificationOnly = false;
+    
+    pinnedMsgs = [SqlDb getPinnedMessages];
     [self initCategories];
     
     [self initContacts];
@@ -512,6 +514,10 @@ NSString* localNotes = @"notes.xml";
     return allMessages;
 }
 
+-(NSArray*)getPinnedMessages {
+    return [SqlDb getPinnedMessages];
+}
+
 -(void) mergeMessages {
     int v = 0, r = 0;
     allMessages = [[NSMutableArray alloc] init];
@@ -810,6 +816,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [msg setLikeCount:likeCount];
             [msg setVersion:versionMsg];
             [msg setOrder:categoryOrder];
+            [msg setPinned:[self isPinned:msg]];
             categoryOrder++;
             [[currentCategory messages] addObject:msg];
             if (versionMsg)
@@ -862,6 +869,14 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentMediaUrl = partsdata;
     else if ([elementName isEqualToString:@"url"] && [partsdata length] > 0)
         currentUrl = partsdata;
+}
+
+-(BOOL)isPinned:(Message*)msg {
+    BOOL ret = false;
+    for (int i=0; i<[pinnedMsgs count] && !ret; i++)
+        ret = [msg msgId] == [[pinnedMsgs objectAtIndex:i] msgId];
+    
+    return ret;
 }
 
 @end

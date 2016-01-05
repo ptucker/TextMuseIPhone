@@ -10,6 +10,9 @@
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
 		2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D236B031C115DA900CDE1F7 /* SendMessage.m */; };
+		2D2E7D0C1C3C4601002C3886 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2E7D0B1C3C4601002C3886 /* libsqlite3.0.tbd */; };
+		2D2E7D0F1C3C469B002C3886 /* SqlData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2E7D0E1C3C469B002C3886 /* SqlData.m */; };
+		2D2E7D111C3C7669002C3886 /* pinfilled_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D2E7D101C3C7669002C3886 /* pinfilled_btn.png */; };
 		2D32406E1C2F268100E4E59B /* group_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D32406B1C2F268100E4E59B /* group_btn.png */; };
 		2D32406F1C2F268100E4E59B /* home_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D32406C1C2F268100E4E59B /* home_btn.png */; };
 		2D3240701C2F268100E4E59B /* pin_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D32406D1C2F268100E4E59B /* pin_btn.png */; };
@@ -123,6 +126,10 @@
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		2D236B021C115DA900CDE1F7 /* SendMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMessage.h; sourceTree = "<group>"; };
 		2D236B031C115DA900CDE1F7 /* SendMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMessage.m; sourceTree = "<group>"; };
+		2D2E7D0B1C3C4601002C3886 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		2D2E7D0D1C3C469B002C3886 /* SqlData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SqlData.h; sourceTree = "<group>"; };
+		2D2E7D0E1C3C469B002C3886 /* SqlData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqlData.m; sourceTree = "<group>"; };
+		2D2E7D101C3C7669002C3886 /* pinfilled_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pinfilled_btn.png; path = ../../../../../../Dropbox/FriendText/images/pinfilled_btn.png; sourceTree = "<group>"; };
 		2D32406B1C2F268100E4E59B /* group_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = group_btn.png; path = ../../../../../../Dropbox/FriendText/images/group_btn.png; sourceTree = "<group>"; };
 		2D32406C1C2F268100E4E59B /* home_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home_btn.png; path = ../../../../../../Dropbox/FriendText/images/home_btn.png; sourceTree = "<group>"; };
 		2D32406D1C2F268100E4E59B /* pin_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pin_btn.png; path = ../../../../../../Dropbox/FriendText/images/pin_btn.png; sourceTree = "<group>"; };
@@ -262,6 +269,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D2E7D0C1C3C4601002C3886 /* libsqlite3.0.tbd in Frameworks */,
 				2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */,
 				2DCA58F11B6E8F670011FCDB /* UIKit.framework in Frameworks */,
 				2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */,
@@ -353,6 +361,7 @@
 		2DF0803F1AE625410003A277 = {
 			isa = PBXGroup;
 			children = (
+				2D2E7D0B1C3C4601002C3886 /* libsqlite3.0.tbd */,
 				2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */,
 				2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */,
 				2DCA58F01B6E8F670011FCDB /* UIKit.framework */,
@@ -425,6 +434,7 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D2E7D101C3C7669002C3886 /* pinfilled_btn.png */,
 				2D3A38C11C3B92FE0025AF39 /* greylike.png */,
 				2D5118E51C325E1500F077E9 /* like.png */,
 				2D3240811C2F95B000E4E59B /* send.png */,
@@ -546,6 +556,8 @@
 				2DF080A01AE625FC0003A277 /* UserPhone.m */,
 				2DC697461B829022001ACC24 /* SkinInfo.h */,
 				2DC697471B829022001ACC24 /* SkinInfo.m */,
+				2D2E7D0D1C3C469B002C3886 /* SqlData.h */,
+				2D2E7D0E1C3C469B002C3886 /* SqlData.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -637,6 +649,7 @@
 				2D5118E61C325E1500F077E9 /* like.png in Resources */,
 				2DCDFC451AEC7F4C002DA914 /* bluebackarrow.png in Resources */,
 				2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */,
+				2D2E7D111C3C7669002C3886 /* pinfilled_btn.png in Resources */,
 				2DF080591AE625410003A277 /* Images.xcassets in Resources */,
 				2DC636B81B17CF700087376D /* TextMuseIcon_80.png in Resources */,
 				2D4AC7EC1B22BE5700749074 /* TextMuseIcon_87.png in Resources */,
@@ -717,6 +730,7 @@
 				2DF080BE1AE625FC0003A277 /* UserContact.m in Sources */,
 				2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */,
 				2DF0804E1AE625410003A277 /* main.m in Sources */,
+				2D2E7D0F1C3C469B002C3886 /* SqlData.m in Sources */,
 				2DF080AA1AE625FC0003A277 /* ContactsTableViewController.m in Sources */,
 				2DF080AD1AE625FC0003A277 /* GlobalState.m in Sources */,
 				2DC612031AF2E300000896EA /* AddMemberView.m in Sources */,

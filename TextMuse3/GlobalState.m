@@ -13,10 +13,12 @@ NSString* CurrentCategory;
 long CurrentColorIndex;
 Message* CurrentMessage;
 NSString* CurrentGroup;
+SqlData* SqlDb;
 
 @implementation GlobalState
 
 +(void)init {
+    SqlDb = [[SqlData alloc] init];
     Data = [[DataAccess alloc] init];
     CurrentCategory = @"Trending";
     CurrentColorIndex = 0;

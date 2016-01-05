@@ -420,6 +420,9 @@
                                         <rect key="frame" x="141" y="4" width="37" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <state key="normal" image="pin_btn.png"/>
+                                        <connections>
+                                            <action selector="showPinned:" destination="4sn-wL-anZ" eventType="touchUpInside" id="b09-aB-QP3"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

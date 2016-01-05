@@ -34,6 +34,7 @@ NSArray* colorsTitle;
                                     [[self view] frame].size.height - 65 - 40);
     messages = [[UITableView alloc] initWithFrame:frmMessages];
     [[self view] addSubview:messages];
+    showPinned = false;
     
     if (colors == nil)
         [self setColors];
@@ -293,6 +294,8 @@ NSArray* colorsTitle;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == categoryTable)
         return [[Data getCategories] count];
+    else if (showPinned)
+        return [[Data getPinnedMessages] count];
     else
         return [[Data getAllMessages] count];
 }
@@ -301,7 +304,8 @@ NSArray* colorsTitle;
     if (tableView == categoryTable)
         return 46.0;
     else {
-        Message* msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
+        Message* msg = showPinned ? [[Data getPinnedMessages] objectAtIndex:[indexPath row]] :
+                                    [[Data getAllMessages] objectAtIndex:[indexPath row]];
         return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
     }
 }
@@ -313,7 +317,8 @@ NSArray* colorsTitle;
     else {
         static NSString *TextCellIdentifier = @"txtmessages";
         static NSString *ImgCellIdentifier = @"imgmessages";
-        Message* msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
+        Message* msg = showPinned ? [[Data getPinnedMessages] objectAtIndex:[indexPath row]] :
+                                    [[Data getAllMessages] objectAtIndex:[indexPath row]];
         /*
         MessageTableViewCell *cell = ([msg img] != nil) ?
                                     [tableView dequeueReusableCellWithIdentifier:ImgCellIdentifier] :
@@ -334,8 +339,8 @@ NSArray* colorsTitle;
                  withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
                  textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
                 titleColor:[colorsTitle objectAtIndex:[indexPath row]%[colors count]]
-                     title:[msg category]
-                   sponsor:[[Data getCategory:[msg category]] sponsor]
+                     title:showPinned ? @"pinned" : [msg category]
+                   sponsor:showPinned ? nil : [[Data getCategory:[msg category]] sponsor]
                    message:msg];
         
         return cell;
@@ -351,7 +356,8 @@ NSArray* colorsTitle;
         CurrentMessage = nil;
     }
     else {
-        CurrentMessage =[[Data getAllMessages] objectAtIndex:[indexPath row]];
+        CurrentMessage = showPinned ? [[Data getPinnedMessages] objectAtIndex:[indexPath row]] :
+                                      [[Data getAllMessages] objectAtIndex:[indexPath row]];
         CurrentCategory = [CurrentMessage category];
     }
     
@@ -405,9 +411,30 @@ NSArray* colorsTitle;
 }
 
 -(IBAction)home:(id)sender {
+    showPinned = false;
+    [messages reloadData];
+    
     [messages scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
                     atScrollPosition:UITableViewScrollPositionTop
                             animated:YES];
+}
+
+-(IBAction)showPinned:(id)sender {
+    if ([[Data getPinnedMessages] count] == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Pinned Messages"
+                                                        message:@"You don't have any pinned messages yet. Click on the pin icon for a message you want to save, and it will be displayed here."
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                              otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    else {
+        showPinned = true;
+        [messages reloadData];
+        [messages scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                        atScrollPosition:UITableViewScrollPositionTop
+                                animated:YES];
+    }
 }
 
 -(long) chosenCategory:(long)selectedCategory {

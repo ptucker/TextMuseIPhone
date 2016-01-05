@@ -25,6 +25,7 @@ DataRefreshDelegate, UINavigationControllerDelegate> {
     UIScrollView* scroller;
     NSTimer* timerReminder;
     NSArray* allMessages;
+    BOOL showPinned;
 }
 
 -(IBAction)settings:(id)sender;

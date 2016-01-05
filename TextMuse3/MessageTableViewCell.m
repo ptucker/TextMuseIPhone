@@ -93,9 +93,11 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     }
     [btnLike setFrame:frmLike];
     if (btnPin == nil) {
-        btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:@"pinblack_btn"]
+        NSString* pinImg = [msg pinned] ? @"pinfilled_btn" : @"pinblack_btn";
+        btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
                                                 andText:@"pin"];
         //[btnPin setImage:[UIImage imageNamed:@"pinblack_btn"] forState:UIControlStateNormal];
+        [btnPin addTarget:self action:@selector(pinMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btnPin];
     }
     [btnPin setFrame:frmPin];
@@ -173,6 +175,18 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     NSString* img = [_msg liked] ? @"like" : @"greylike";
     [btnLike setImage:[UIImage imageNamed:img]];
     [btnLike setCaption:[_msg likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [_msg likeCount]]];
+}
+
+-(IBAction)pinMessage:(id)sender {
+    [_msg setPinned:![_msg pinned]];
+    
+    if ([_msg pinned])
+        [SqlDb pinMessage:_msg];
+    else
+        [SqlDb unpinMessage:_msg];
+    
+    NSString* pinImg = [_msg pinned] ? @"pinfilled_btn" : @"pinblack_btn";
+    [btnPin setImage:[UIImage imageNamed:pinImg]];
 }
 
 +(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent {

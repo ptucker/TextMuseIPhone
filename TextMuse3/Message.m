@@ -13,7 +13,7 @@
 YTPlayerView* globalYTPlayer = nil;
 
 @implementation Message
-@synthesize msgId, order, newMsg, version, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, liked, likeCount;
+@synthesize msgId, order, newMsg, version, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, liked, likeCount, pinned;
 
 -(id)initWithId:(int)i message:(NSString *)m forCategory:(NSString*)c isNew:(BOOL)n {
     //msg = m;

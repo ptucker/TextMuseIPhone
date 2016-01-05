@@ -23,6 +23,7 @@
     NSMutableDictionary* categories;
     NSMutableDictionary* tmpCategories;
     NSMutableArray* allMessages;
+    NSArray* pinnedMsgs;
     NSMutableArray* tmpRegMessages;
     NSMutableArray* tmpVersionMessages;
     NSMutableArray* localImages;
@@ -75,6 +76,7 @@
 -(UserContact*)findUserByPhone:(NSString*)targetPhone;
 -(UserContact*)chooseRandomContact;
 -(NSArray*)getAllMessages;
+-(NSArray*)getPinnedMessages;
 -(NSArray*)resortMessages;
 -(NSArray*)getMessagesForCategory:(NSString*)category;
 -(int)getNewMessageCountForCategory:(NSString*)category;

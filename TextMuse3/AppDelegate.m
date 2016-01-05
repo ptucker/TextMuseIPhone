@@ -34,14 +34,14 @@
     [[NSUserDefaults standardUserDefaults] registerDefaults:regDict];
 
     [Settings LoadSettings];
+    [GlobalState init];
+    
     
     return self;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupNavigationBar:application];
-    
-    [GlobalState init];
     
     dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         Class userNotification = NSClassFromString(@"UIUserNotificationSettings");

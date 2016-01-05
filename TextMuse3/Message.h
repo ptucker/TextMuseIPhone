@@ -16,6 +16,7 @@
     int order;
     int yourtextIndex;
     BOOL newMsg;
+    BOOL pinned;
     BOOL liked;
     int likeCount;
     BOOL version;
@@ -37,6 +38,7 @@
 @property (readwrite) int msgId;
 @property (readwrite) int order;
 @property (readwrite) BOOL newMsg;
+@property (readwrite) BOOL pinned;
 @property (readwrite) BOOL liked;
 @property (readwrite) int likeCount;
 @property (readwrite) BOOL version;
