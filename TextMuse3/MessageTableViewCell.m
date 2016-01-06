@@ -30,7 +30,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
         sizeParent = [MessageTableViewCell GetContentSizeForImage:[UIImage imageWithData:[msg img]]
                                                            inSize:size];
     
-    CGFloat bottomY = sizeParent.height + 38;
+    CGFloat bottomY = sizeParent.height + 40;
     
     frmLogo = CGRectMake(8, 8, 21, 21);
     frmTitle = CGRectMake(35, 8, size.width - 8 - 35, 21);

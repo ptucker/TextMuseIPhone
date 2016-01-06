@@ -28,7 +28,8 @@
                message:msg];
     
     CGRect frmContentImage = CGRectMake(0, 0, frmParent.size.width, frmParent.size.height);
-    CGRect frmContentLabel = CGRectMake(0, frmParent.size.height - 21, frmParent.size.width, 21);
+    CGRect frmContentLabel = CGRectMake(8, frmParent.size.height - 21, frmParent.size.width-16, 21);
+    CGRect frmContentFrame = CGRectMake(0, frmParent.size.height - 21, frmParent.size.width, 21);
     if (imgContent == nil) {
         imgContent = [[UIImageView alloc] initWithFrame:frmContentImage];
         [imgContent setContentMode:UIViewContentModeScaleAspectFit];
@@ -36,17 +37,22 @@
         [viewParent addSubview:imgContent];
     }
     if ([[msg text] length] > 0) {
+        UIView* vFrame = [[UIView alloc] initWithFrame:frmContentFrame];
+        [vFrame setBackgroundColor:[UIColor darkGrayColor]];
+        [vFrame setAlpha:0.80];
+        [viewParent addSubview:vFrame];
+        [viewParent bringSubviewToFront:vFrame];
+        
         [lblContent setHidden:NO];
-        [lblContent setBackgroundColor:[UIColor darkGrayColor]];
         [lblContent setTextColor:[UIColor whiteColor]];
-        [lblContent setAlpha:0.80];
+        [lblContent setTextAlignment:NSTextAlignmentCenter];
+        [viewParent bringSubviewToFront:lblContent];
     }
     else {
         [lblContent setHidden:YES];
     }
     
     [imgContent setImage:[UIImage imageWithData:[msg img]]];
-    [viewParent bringSubviewToFront:lblContent];
     [lblContent setFrame:frmContentLabel];
     [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
 }
