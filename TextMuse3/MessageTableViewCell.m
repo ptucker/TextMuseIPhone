@@ -179,6 +179,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 
 -(IBAction)pinMessage:(id)sender {
     [_msg setPinned:![_msg pinned]];
+    [Data setMessagePin:_msg withValue:[_msg pinned]];
     
     if ([_msg pinned])
         [SqlDb pinMessage:_msg];

@@ -50,8 +50,12 @@
     if (openDatabaseResult != SQLITE_OK)
         return;
  
-    NSString* text = [[msg text] stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString* insert = [NSString stringWithFormat:@"insert into Pins (msgid, msg, mediaurl, url) values (%d, '%@', '%@', '%@');", [msg msgId], text, [msg mediaUrl], [msg url]];
+    NSString* text = [msg text] == nil ? @"null" :
+            [NSString stringWithFormat:@"'%@'", [[msg text] stringByReplacingOccurrencesOfString:@"'"
+                                                                                      withString:@"''"]];
+    NSString* url = [msg url] == nil ? @"null" : [NSString stringWithFormat:@"'%@'", [msg url]];
+    NSString* mediaurl = [msg mediaUrl] == nil ? @"null" : [NSString stringWithFormat:@"'%@'", [msg mediaUrl]];
+    NSString* insert = [NSString stringWithFormat:@"insert into Pins (msgid, msg, mediaurl, url) values (%d, %@, %@, %@);", [msg msgId], text, mediaurl, url];
     sqlite3_stmt* stmt;
     if (sqlite3_prepare(db, [insert UTF8String], -1, &stmt, nil) == SQLITE_OK) {
         sqlite3_step(stmt);
@@ -89,9 +93,12 @@
     if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             int msgid = sqlite3_column_int(stmt, 0);
-            NSString* msg = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stmt, 1)];
-            NSString* mediaurl = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stmt, 2)];
-            NSString* url = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stmt, 3)];
+            char* data = (char*)sqlite3_column_text(stmt, 1);
+            NSString* msg = (data == nil) ? nil : [NSString stringWithUTF8String:data];
+            data = (char*)sqlite3_column_text(stmt, 2);
+            NSString* mediaurl = (data == nil) ? nil : [NSString stringWithUTF8String:data];
+            data = (char*)sqlite3_column_text(stmt, 3);
+            NSString* url = (data == nil) ? nil : [NSString stringWithUTF8String:data];
             Message* m = [[Message alloc] initWithId:msgid
                                                 text:msg
                                             mediaUrl:mediaurl

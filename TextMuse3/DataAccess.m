@@ -543,6 +543,15 @@ NSString* localNotes = @"notes.xml";
     return allMessages;
 }
 
+-(void)setMessagePin:(Message*)msg withValue:(BOOL)pin {
+    for (Message* m in allMessages) {
+        if ([m msgId] == [msg msgId]) {
+            [m setPinned:pin];
+            break;
+        }
+    }
+}
+
 -(int)getMessageScore:(Message*)m {
     int s = arc4random() % 3;
     
@@ -550,6 +559,13 @@ NSString* localNotes = @"notes.xml";
         //s += 5;
     if (CategoryList != nil && [[CategoryList objectForKey:[m category]] isEqualToString: @"0"])
         s += 1000;
+    
+    if (![m newMsg])
+        s += 4;
+    if (![m liked])
+        s += 1;
+    if (![m pinned])
+        s += 1;
     
     s += ([m order] / 3);
     

@@ -295,7 +295,7 @@ NSArray* colorsTitle;
     if (tableView == categoryTable)
         return [[Data getCategories] count];
     else if (showPinned)
-        return [[Data getPinnedMessages] count];
+        return [pinnedMessages count];
     else
         return [[Data getAllMessages] count];
 }
@@ -304,7 +304,7 @@ NSArray* colorsTitle;
     if (tableView == categoryTable)
         return 46.0;
     else {
-        Message* msg = showPinned ? [[Data getPinnedMessages] objectAtIndex:[indexPath row]] :
+        Message* msg = showPinned ? [pinnedMessages objectAtIndex:[indexPath row]] :
                                     [[Data getAllMessages] objectAtIndex:[indexPath row]];
         return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
     }
@@ -317,7 +317,7 @@ NSArray* colorsTitle;
     else {
         static NSString *TextCellIdentifier = @"txtmessages";
         static NSString *ImgCellIdentifier = @"imgmessages";
-        Message* msg = showPinned ? [[Data getPinnedMessages] objectAtIndex:[indexPath row]] :
+        Message* msg = showPinned ? [pinnedMessages objectAtIndex:[indexPath row]] :
                                     [[Data getAllMessages] objectAtIndex:[indexPath row]];
         /*
         MessageTableViewCell *cell = ([msg img] != nil) ?
@@ -356,9 +356,9 @@ NSArray* colorsTitle;
         CurrentMessage = nil;
     }
     else {
-        CurrentMessage = showPinned ? [[Data getPinnedMessages] objectAtIndex:[indexPath row]] :
+        CurrentMessage = showPinned ? [pinnedMessages objectAtIndex:[indexPath row]] :
                                       [[Data getAllMessages] objectAtIndex:[indexPath row]];
-        CurrentCategory = [CurrentMessage category];
+        CurrentCategory = showPinned ? @"PinnedMessages" : [CurrentMessage category];
     }
     
     CurrentColorIndex = [indexPath row] % [colors count];
@@ -429,6 +429,7 @@ NSArray* colorsTitle;
         [alert show];
     }
     else {
+        pinnedMessages = [Data getPinnedMessages];
         showPinned = true;
         [messages reloadData];
         [messages scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]

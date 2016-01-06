@@ -43,8 +43,10 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 
     CGRect frame = [scrollview frame];
     frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
-    for (int i=0; i<[[Data getMessagesForCategory:CurrentCategory] count]; i++) {
-        Message* msg = [[Data getMessagesForCategory:CurrentCategory] objectAtIndex:i];
+    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+                     [Data getMessagesForCategory:CurrentCategory];
+    for (int i=0; i<[msgs count]; i++) {
+        Message* msg = [msgs objectAtIndex:i];
         MessageView* mv = [[MessageView alloc] initWithFrame:frame];
     
         [mv setupViewForMessage:msg
@@ -58,7 +60,7 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
         frame.origin.x += frame.size.width;
     }
     
-    Message* msg = [[Data getMessagesForCategory:CurrentCategory] objectAtIndex:0];
+    Message* msg = [msgs objectAtIndex:0];
     if ([msg liked])
         [highlightButton setImage:[UIImage imageNamed:@"yellowHighlighter.png"]
                          forState:UIControlStateNormal];
@@ -66,7 +68,7 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
         [highlightButton setImage:[UIImage imageNamed:@"greyHighlighter.png"]
                          forState:UIControlStateNormal];
 
-    unsigned long cnt = [[Data getMessagesForCategory:CurrentCategory] count];
+    unsigned long cnt = [msgs count];
     [scrollview setContentSize:CGSizeMake(frame.size.width * cnt, frame.size.height)];
 
     //Only allow up to 15 dots
@@ -85,7 +87,8 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
-    NSArray* quotes = [Data getMessagesForCategory:CurrentCategory];
+    NSArray* quotes = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+                        [Data getMessagesForCategory:CurrentCategory];
     if ([quotes count] == 0) return;
     
     // Update the page when more than 50% of the previous/next page is visible
@@ -130,7 +133,9 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
     //long p = [pages currentPage];
     CGFloat pageWidth = [scrollview frame].size.width;
     int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-    CurrentMessage = [[Data getMessagesForCategory:CurrentCategory] objectAtIndex:p];
+    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+                                        [Data getMessagesForCategory:CurrentCategory];
+    CurrentMessage = [msgs objectAtIndex:p];
 
     if ([[Data getContacts] count] == 0) {
         if (sendMessage == nil)
@@ -146,7 +151,8 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
         
     CGFloat pageWidth = [scrollview frame].size.width;
     int page = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-    NSArray* quotes = [Data getMessagesForCategory:CurrentCategory];
+    NSArray* quotes = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+                                    [Data getMessagesForCategory:CurrentCategory];
     Message*m = [quotes objectAtIndex:page];
     [m setLiked:![m liked]];
         
