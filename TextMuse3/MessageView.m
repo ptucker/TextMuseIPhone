@@ -48,9 +48,9 @@ UIImage* bubble3 = nil;
     CGRect frmLblContent = CGRectMake(66, frame.size.height/8,
                                       frame.size.width-132, frame.size.height - 80);
     CGFloat fontSize = 24.0;
-    CGRect frmBtnDetails = CGRectMake(frame.size.width-95, frame.size.height-40, 83, 25);
-    CGRect frmLike = CGRectMake(12, frame.size.height-40, 45, 25);
-    CGRect frmPin = CGRectMake(frame.size.width/2-20, frame.size.height-40, 40, 40);
+    CGRect frmPin = CGRectMake(frame.size.width-52, frame.size.height-40, 40, 40);
+    CGRect frmLike = CGRectMake(12, frame.size.height-40, 60, 40);
+    CGRect frmBtnDetails = CGRectMake(frame.size.width/2-20, frame.size.height-40, 40, 40);
     
     if ([msg img] == nil) {
         imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
@@ -143,17 +143,18 @@ UIImage* bubble3 = nil;
         [self addSubview:lblContent];
     }
 
-    NSString* likeImg = [msg liked] ? @"like.png" : @"greylike.png";
+    NSString* likeImg = [msg liked] ? @"heart_red" : @"heart_black";
+    NSString* likeText = [msg likeCount] > 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
     if (btnLike == nil) {
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike withImage:[UIImage imageNamed:likeImg]
-                                            andRightText:[NSString stringWithFormat:@"%d", [msg likeCount]]];
+                                            andRightText:likeText];
         [self addSubview:btnLike];
     }
     [btnLike setImage:[UIImage imageNamed:likeImg]];
     [btnLike setFrame:frmLike];
     [btnLike addTarget:self action:@selector(likeMessage:) forControlEvents:UIControlEventTouchUpInside];
 
-    NSString* pinImg = [msg pinned] ? @"pinfilled_btn.png" : @"pinblack_btn.png";
+    NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_black";
     if (btnPin == nil) {
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
                                                 andText:@"pin"];
@@ -164,11 +165,12 @@ UIImage* bubble3 = nil;
     [btnPin addTarget:self action:@selector(pinMessage:) forControlEvents:UIControlEventTouchUpInside];
 
     if (btnDetails == nil) {
-        btnDetails = [[UIButton alloc] init];
+        btnDetails = [[UICaptionButton alloc] initWithFrame:frmBtnDetails
+                                                  withImage:[UIImage imageNamed:@"open-in-new"]
+                                                    andText:@"see it"];
         [self addSubview:btnDetails];
     }
-    [btnDetails setImage:[UIImage imageNamed:@"link.png"] forState:UIControlStateNormal];
-    [btnDetails setContentMode:UIViewContentModeScaleAspectFit];
+    [btnDetails setImage:[UIImage imageNamed:@"open-in-new"]];
     [btnDetails setFrame:frmBtnDetails];
     [btnDetails setHidden:[msg url] == nil];
 
@@ -220,7 +222,7 @@ UIImage* bubble3 = nil;
     else
         [SqlDb unpinMessage:message];
     
-    NSString* pinImg = [message pinned] ? @"pinfilled_btn" : @"pinblack_btn";
+    NSString* pinImg = [message pinned] ? @"pin_red" : @"pin_black";
     [btnPin setImage:[UIImage imageNamed:pinImg]];
 }
 
@@ -242,7 +244,7 @@ UIImage* bubble3 = nil;
                                                     startImmediately:YES];
     
     [btnLike setSelected:[message liked]];
-    NSString* img = [message liked] ? @"like" : @"greylike";
+    NSString* img = [message liked] ? @"heart_red" : @"heart_black";
     [btnLike setImage:[UIImage imageNamed:img]];
     [btnLike setCaption:[message likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [message likeCount]]];
 }

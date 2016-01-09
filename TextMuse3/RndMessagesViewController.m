@@ -264,6 +264,9 @@ NSArray* colorsTitle;
         
         UIColor* colorTint = [Skin createColor1];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
+        [btnPin setTintColor:colorTint];
+        [btnHome setTintColor:colorTint];
+        [btnGroup setTintColor:colorTint];
         
         //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
         [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];

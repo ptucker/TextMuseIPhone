@@ -38,7 +38,6 @@
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
-            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -402,25 +401,25 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qXK-Zg-adm">
-                                        <rect key="frame" x="4" y="4" width="37" height="32"/>
+                                        <rect key="frame" x="4" y="4" width="32" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" image="home_btn.png"/>
+                                        <state key="normal" image="home.png"/>
                                         <connections>
                                             <action selector="home:" destination="4sn-wL-anZ" eventType="touchUpInside" id="HWx-ce-Osz"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8Sx-EF-WVk">
-                                        <rect key="frame" x="276" y="4" width="40" height="32"/>
+                                        <rect key="frame" x="284" y="4" width="32" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" image="group_btn.png"/>
+                                        <state key="normal" image="account-multiple.png"/>
                                         <connections>
                                             <segue destination="ehy-AJ-lyu" kind="push" id="BNQ-99-bBq"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sYc-fb-cG4">
-                                        <rect key="frame" x="141" y="4" width="37" height="32"/>
+                                        <rect key="frame" x="144" y="4" width="32" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <state key="normal" image="pin_btn.png"/>
+                                        <state key="normal" image="pin_grey.png"/>
                                         <connections>
                                             <action selector="showPinned:" destination="4sn-wL-anZ" eventType="touchUpInside" id="b09-aB-QP3"/>
                                         </connections>
@@ -435,6 +434,9 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="q7e-Uo-1Jv"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="btnGroup" destination="8Sx-EF-WVk" id="RBG-ZR-MWN"/>
+                        <outlet property="btnHome" destination="qXK-Zg-adm" id="Q7i-wj-gVk"/>
+                        <outlet property="btnPin" destination="sYc-fb-cG4" id="z5l-nB-xc5"/>
                         <segue destination="54f-mb-IwZ" kind="push" identifier="Settings" id="udu-bJ-qbO"/>
                         <segue destination="A8v-W0-SOT" kind="push" identifier="SelectMessage" id="gIs-SO-9jD"/>
                         <segue destination="yLr-zO-1M3" kind="push" identifier="registerInitial" id="MVW-gx-UGH"/>
@@ -564,24 +566,6 @@
                                             <action selector="changePage" destination="A8v-W0-SOT" eventType="touchUpInside" id="4cF-Qc-vCG"/>
                                         </connections>
                                     </pageControl>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jlj-Sk-7VD">
-                                        <rect key="frame" x="78" y="20" width="163" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.08235294118" green="0.77647058820000003" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="19"/>
-                                        <state key="normal" title="TEXT IT">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="chooseMessage:" destination="A8v-W0-SOT" eventType="touchUpInside" id="IMh-t3-e9E"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -605,9 +589,9 @@
                     <connections>
                         <outlet property="header" destination="ynT-IL-jSQ" id="x5A-IB-gF9"/>
                         <outlet property="headerLabel" destination="yX1-TZ-yBg" id="abY-7d-pMl"/>
+                        <outlet property="lowerView" destination="KJE-mr-rcN" id="MFv-3i-WMU"/>
                         <outlet property="pages" destination="WaZ-Xj-T21" id="e1B-r8-Bih"/>
                         <outlet property="scrollview" destination="awD-Xn-mCF" id="EyK-ZJ-Hay"/>
-                        <outlet property="selectButton" destination="jlj-Sk-7VD" id="m0I-cw-MNs"/>
                         <segue destination="ngF-ER-qsv" kind="push" identifier="ChooseContact" id="uk3-ye-d2w"/>
                     </connections>
                 </viewController>
@@ -718,7 +702,7 @@
                                                     <rect key="frame" x="208" y="11" width="92" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -790,15 +774,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="group_btn.png" width="87" height="70"/>
-        <image name="home_btn.png" width="77" height="70"/>
-        <image name="pin_btn.png" width="77" height="70"/>
+        <image name="account-multiple.png" width="36" height="36"/>
+        <image name="home.png" width="36" height="36"/>
+        <image name="pin_grey.png" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="udu-bJ-qbO"/>
-        <segue reference="MVW-gx-UGH"/>
-        <segue reference="BNQ-99-bBq"/>
         <segue reference="gIs-SO-9jD"/>
-        <segue reference="iE0-eb-h1E"/>
+        <segue reference="udu-bJ-qbO"/>
+        <segue reference="BNQ-99-bBq"/>
+        <segue reference="MVW-gx-UGH"/>
+        <segue reference="uk3-ye-d2w"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -86,7 +86,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     [btnSeeAll setFrame:frmSeeAll];
     if (btnLike == nil) {
         NSString* clike = [msg likeCount] != 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
-        NSString* img = [msg liked] ? @"like" : @"greylike";
+        NSString* img = [msg liked] ? @"heart_red" : @"heart_black";
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:[UIImage imageNamed:img]
                                             andRightText:clike];
@@ -99,7 +99,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     }
     [btnLike setFrame:frmLike];
     if (btnPin == nil) {
-        NSString* pinImg = [msg pinned] ? @"pinfilled_btn" : @"pinblack_btn";
+        NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_black";
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
                                                 andText:@"pin"];
         //[btnPin setImage:[UIImage imageNamed:@"pinblack_btn"] forState:UIControlStateNormal];
@@ -178,7 +178,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
                                                     startImmediately:YES];
 
     [btnLike setSelected:[_msg liked]];
-    NSString* img = [_msg liked] ? @"like" : @"greylike";
+    NSString* img = [_msg liked] ? @"heart_red" : @"heart_black";
     [btnLike setImage:[UIImage imageNamed:img]];
     [btnLike setCaption:[_msg likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [_msg likeCount]]];
 }
@@ -192,7 +192,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     else
         [SqlDb unpinMessage:_msg];
     
-    NSString* pinImg = [_msg pinned] ? @"pinfilled_btn" : @"pinblack_btn";
+    NSString* pinImg = [_msg pinned] ? @"pin_red" : @"pin_black";
     [btnPin setImage:[UIImage imageNamed:pinImg]];
 }
 

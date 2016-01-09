@@ -36,8 +36,13 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
     [headerLabel setTextColor:[colorsText objectAtIndex:CurrentColorIndex]];
     [headerLabel setText:CurrentCategory];
 
-    [selectButton setBackgroundColor:currColor];
-    [selectButton setTitleColor:[colorsText objectAtIndex:CurrentColorIndex] forState:UIControlStateNormal];
+    //[selectButton setBackgroundColor:currColor];
+    //[selectButton setTitleColor:[colorsText objectAtIndex:CurrentColorIndex] forState:UIControlStateNormal];
+    CGRect frmSelect = CGRectMake([[self view] frame].size.width/2 - 32, 22, 64, 64);
+    selectButton = [[UICaptionButton alloc] initWithFrame:frmSelect withImage:[UIImage imageNamed:@"send"]
+                                                  andText:@"send"];
+    [selectButton addTarget:self action:@selector(chooseMessage:) forControlEvents:UIControlEventTouchUpInside];
+    [lowerView addSubview:selectButton];
     
     [scrollview setDelegate:self];
 

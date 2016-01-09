@@ -58,7 +58,8 @@
     _caption = [[UILabel alloc] initWithFrame:frmText];
     [_caption setText:_text];
     [_caption setTextAlignment:(right ? NSTextAlignmentRight : NSTextAlignmentCenter)];
-    UIFont* fnt = [UIFont fontWithName:@"Lato-Medium" size:(right ? 14 : 10)];
+    CGFloat fontsize = (right ? frmText.size.height/2 : frmText.size.height);
+    UIFont* fnt = [UIFont fontWithName:@"Lato-Medium" size:fontsize];
     [_caption setFont:fnt];
     [self addSubview:_caption];
 }

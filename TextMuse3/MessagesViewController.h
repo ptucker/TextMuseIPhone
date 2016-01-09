@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "SendMessage.h"
+#import "UICaptionButton.h"
 
 @interface MessagesViewController : UIViewController<UIScrollViewDelegate> {
     IBOutlet UIView* header;
     IBOutlet UILabel* headerLabel;
-    IBOutlet UIButton* selectButton;
+    IBOutlet UICaptionButton* selectButton;
     IBOutlet UIButton* highlightButton;
+    IBOutlet UIView* lowerView;
     
     IBOutlet UIScrollView* scrollview;
     IBOutlet UIPageControl* pages;

@@ -19,7 +19,7 @@
     UITextView* tvContent;
     UICaptionButton* btnLike;
     UICaptionButton* btnPin;
-    UIButton* btnDetails;
+    UICaptionButton* btnDetails;
     
     Message* message;
 }
