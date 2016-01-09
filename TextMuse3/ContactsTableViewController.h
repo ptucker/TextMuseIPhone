@@ -28,6 +28,8 @@
     IBOutlet UIButton* btnSend;
 }
 
+@property (readwrite) NSString* GroupName;
+
 -(IBAction)backButton:(id)sender;
 -(IBAction)check:(id)sender;
 

@@ -41,17 +41,23 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     frmParent = CGRectMake(8, 37, size.width-16, sizeParent.height);
     frmContent = CGRectMake(8, 9, frmParent.size.width-16, frmParent.size.height-18);
     CGRect frmBorder = CGRectMake(1, 1, size.width-2, bottomY + 36);
-
+    
     if (viewParent == nil) {
         viewParent = [[UIView alloc] initWithFrame:frmParent];
         [self addSubview:viewParent];
     }
     [viewParent setFrame:frmParent];
-
+    
+    /*
+    const CGFloat *coms = CGColorGetComponents(color.CGColor);
+    CGFloat r = coms[0], g = coms[1], b = coms[2];
+    if ((r + g + b) / 3 > 0.5)
+        [self setBackgroundColor:[UIColor lightGrayColor]];
+     */
+    
     if (lblTitle == nil) {
         lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-        [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
-        [lblTitle setTextColor:[UIColor blackColor]];
+        [lblTitle setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
         [self addSubview:lblTitle];
     }
     [lblTitle setFrame:frmTitle];

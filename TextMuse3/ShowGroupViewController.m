@@ -10,6 +10,7 @@
 #import "GlobalState.h"
 #import "Settings.h"
 #import "AddMemberView.h"
+#import "ContactsTableViewController.h"
 
 @interface ShowGroupViewController ()
 
@@ -32,9 +33,21 @@
     [tableview setDataSource:self];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [tableview reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue*)segue sender:(nullable id)sender {
+    if ([[segue identifier] isEqualToString:@"FindMembers"])
+    {
+        ContactsTableViewController* cvc = [segue destinationViewController];
+        [cvc setGroupName:CurrentGroup];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -70,6 +83,9 @@
 }
 
 -(IBAction)addMembers:(id)sender {
+    [self performSegueWithIdentifier:@"FindMembers" sender:self];
+
+    /*
     CGRect frm = [[self view] frame];
     CGRect frmNav = [[[self navigationController] navigationBar] frame];
     frm.origin.y = frm.size.height;
@@ -89,16 +105,7 @@
     }];
 
     [[self navigationItem] setHidesBackButton:YES animated:YES];
+     */
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

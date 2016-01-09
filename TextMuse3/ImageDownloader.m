@@ -168,7 +168,7 @@ NSMutableArray* downloadQueue = nil;
                                          startImmediately:YES];
     
     OSAtomicAdd32(1, &downloading);
-    NSLog([NSString stringWithFormat:@"download count: %d", downloading]);
+    //NSLog([NSString stringWithFormat:@"download count: %d", downloading]);
 }
 
 -(BOOL) mimeTypeSupported:(NSString*)mtype {

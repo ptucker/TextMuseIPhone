@@ -32,6 +32,10 @@
     [[self navigationItem] setRightBarButtonItem: rightButton];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [tableview reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -44,9 +48,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"group"
                                                             forIndexPath:indexPath];
-    
-    UILabel* lbl = (UILabel*)[cell viewWithTag:100];
-    [lbl setText:[groups objectAtIndex:[indexPath row]]];
+    NSString* groupName = [groups objectAtIndex:[indexPath row]];
+    UILabel* lblName = (UILabel*)[cell viewWithTag:100];
+    [lblName setText:groupName];
+    UILabel* lblCount = (UILabel*)[cell viewWithTag:101];
+    NSArray* group = [NamedGroups objectForKey:groupName];
+    [lblCount setText:[NSString stringWithFormat:@"%lu members", (unsigned long)[group count]]];
     
     return cell;
 }

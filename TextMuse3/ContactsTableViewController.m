@@ -29,8 +29,16 @@ NSMutableArray* searchContacts;
 
     sendMessage = [[SendMessage alloc] init];
     checkedContacts = [[NSMutableArray alloc] init];
+    NSString* rbtn = @"Send";
+    if ([[self GroupName] length] > 0) {
+        for (NSString* c in [NamedGroups objectForKey:[self GroupName]]) {
+            UserContact* contact = [Data findUserByPhone:c];
+            [checkedContacts addObject:contact];
+        }
+        rbtn = @"Save";
+    }
     
-    rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Send"
+    rightButton = [[UIBarButtonItem alloc] initWithTitle:rbtn
                                                    style:UIBarButtonItemStylePlain
                                                   target:self
                                                   action:@selector(sendMessages:)];
@@ -74,6 +82,9 @@ NSMutableArray* searchContacts;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (tableView == [[self searchDisplayController] searchResultsTableView])
         return 1;
+    else if ([[self GroupName] length] > 0) {
+        return [[Data getContactHeadings] count]+1;
+    }
     else
         return [[Data getContactHeadings] count]+1 + (showRecentContacts ? 1 : 0);
 }
@@ -81,6 +92,16 @@ NSMutableArray* searchContacts;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == [[self searchDisplayController] searchResultsTableView])
         return [searchContacts count];
+    else if ([[self GroupName] length] > 0) {
+        if (section == 0)
+            return [[NamedGroups objectForKey:[self GroupName]] count];
+        else {
+            // Return the number of rows in the section.
+            NSArray* headings = [Data getContactHeadings];
+            section--;
+            return [[Data getContactsForHeading:[headings objectAtIndex:section]] count];
+        }
+    }
     else {
         if ((section == 0 && showRecentContacts))
             return [RecentContacts count];
@@ -114,7 +135,8 @@ NSMutableArray* searchContacts;
     [lbl setTextColor:[UIColor blackColor]];
     [customView addSubview:lbl];
     
-    if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts)) {
+    if ([[self GroupName] length] == 0 &&
+            ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))) {
         // create the edit button
         CGRect frm = CGRectMake([tableView frame].size.width-100, 0.0, 90.0, 34.0);
         UIButton * headerBtn = [[UIButton alloc] initWithFrame:frm];
@@ -138,12 +160,22 @@ NSMutableArray* searchContacts;
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString* title = @"Recent Contacts";
-    if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))
-        title = @"Groups";
-    else if ((section > 0 && !showRecentContacts) || (section > 1 && showRecentContacts)) {
-        section--;
-        if (showRecentContacts) section--;
-        title = [[Data getContactHeadings] objectAtIndex:section];
+    if ([[self GroupName] length] == 0) {
+        if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))
+            title = @"Groups";
+        else if ((section > 0 && !showRecentContacts) || (section > 1 && showRecentContacts)) {
+            section--;
+            if (showRecentContacts) section--;
+            title = [[Data getContactHeadings] objectAtIndex:section];
+        }
+    }
+    else {
+        if (section == 0)
+            title = [self GroupName];
+        else {
+            section--;
+            title = [[Data getContactHeadings] objectAtIndex:section];
+        }
     }
     return title;
 }
@@ -167,7 +199,8 @@ NSMutableArray* searchContacts;
             [cell addSubview:right];
         }
 
-        if (tableView == contacts && ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))) {
+        if (tableView == contacts && [[self GroupName] length] == 0 &&
+                ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts))) {
             UILabel* fname = (UILabel*)[cell viewWithTag:100];
             [fname setText:[groups objectAtIndex:[indexPath row]]];
             [fname sizeToFit];
@@ -182,6 +215,18 @@ NSMutableArray* searchContacts;
             
             if (tableView == [[self searchDisplayController] searchResultsTableView]) {
                 contact = [searchContacts objectAtIndex:[indexPath row]];
+            }
+            else if ([[self GroupName] length] > 0) {
+                if (section == 0) {
+                    NSString* phone = [[NamedGroups objectForKey:[self GroupName]] objectAtIndex:[indexPath row]];
+                    contact = [Data findUserByPhone:phone];
+                }
+                else {
+                    section--;
+                    NSArray* headings = [Data getContactHeadings];
+                    NSArray* cs = [Data getContactsForHeading:[headings objectAtIndex:section]];
+                    contact = [cs objectAtIndex:[indexPath row]];
+                }
             }
             else {
                 if (showRecentContacts && section == 0) {
@@ -220,7 +265,8 @@ NSMutableArray* searchContacts;
             [btncheck setFrame:frmBtn];
             [btncheck addTarget:self action:@selector(check:) forControlEvents:UIControlEventTouchUpInside];
             [btncheck setExtra:contact];
-            [btncheck setSelected:[checkedContacts containsObject:contact]];
+            BOOL selected = [checkedContacts containsObject:contact];
+            [btncheck setSelected:selected];
         
             if ([btncheck tag] == 0 && tableView == contacts) {
                 [btncheck setTag:102];
@@ -292,6 +338,9 @@ NSMutableArray* searchContacts;
 }
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([[self GroupName] length] > 0)
+        return NULL;
+    
     UITableViewRowAction* actChoose =
     [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                        title:@"Choose number"
@@ -395,13 +444,19 @@ NSMutableArray* searchContacts;
         [checkedContacts removeObjectIdenticalTo:uc];
     }
     
-    //[rightButton setEnabled:[checkedContacts count] > 0];
-    
     [self syncSendButton];
 }
 
 -(IBAction)sendMessages:(id)sender {
-    if ([checkedContacts count] > 1) {
+    if ([[self GroupName] length] > 0) {
+        NSMutableArray* cs = [[NSMutableArray alloc] init];
+        for (UserContact* c in checkedContacts) {
+            [cs addObject:[c numberToUse]];
+        }
+        [NamedGroups setObject:cs forKey:[self GroupName]];
+        [[self navigationController] popViewControllerAnimated:YES];
+    }
+    else if ([checkedContacts count] > 1) {
         UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle:NSLocalizedString(@"Name Group Title", nil)
                               message:NSLocalizedString(@"Name Group Details", nil)

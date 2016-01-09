@@ -231,6 +231,11 @@ SkinInfo* Skin;
                     [NamedGroups setObject:names forKey:grp];
             }
         }
+        else {
+            [NamedGroups setObject:[[NSArray alloc] init] forKey:@"BFFs"];
+            [NamedGroups setObject:[[NSArray alloc] init] forKey:@"Family"];
+            [NamedGroups setObject:[[NSArray alloc] init] forKey:@"Study Group"];
+        }
 
         if ([defs dictionaryForKey:SettingCategoryList] != nil) {
             CategoryList = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingCategoryList]];

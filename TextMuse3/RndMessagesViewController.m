@@ -16,6 +16,7 @@
 #import "Settings.h"
 #import "ChooseSkinView.h"
 #import "UICheckButton.h"
+#import "ContactsTableViewController.h"
 
 NSArray* colors;
 NSArray* colorsText;
@@ -244,6 +245,14 @@ NSArray* colorsTitle;
     [messages reloadData];
     
     [refreshControl endRefreshing];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue*)segue sender:(nullable id)sender {
+    if ([[segue identifier] isEqualToString:@"SendMessage"])
+    {
+        ContactsTableViewController* cvc = [segue destinationViewController];
+        [cvc setGroupName:@""];
+    }
 }
 
 -(void)updateSkin {
