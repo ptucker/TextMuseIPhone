@@ -8,6 +8,7 @@
 
 #import "MessageView.h"
 #import "ImageUtil.h"
+#import "GlobalState.h"
 #import "Settings.h"
 
 @implementation MessageView
@@ -43,11 +44,13 @@ UIImage* bubble3 = nil;
                                       frame.size.height/8, 44, 44);
     CGRect frmBubble = CGRectMake(frame.size.width/8, 0,
                                   7*frame.size.width/8, frame.size.height - 80);
-    CGRect frmImgContent = CGRectMake(14, 14, frame.size.width-28, frame.size.height - 80);
+    CGRect frmImgContent = CGRectMake(14, 14, frame.size.width-28, frame.size.height - 150);
     CGRect frmLblContent = CGRectMake(66, frame.size.height/8,
                                       frame.size.width-132, frame.size.height - 80);
     CGFloat fontSize = 24.0;
-    CGRect frmBtnDetails = CGRectMake(frame.size.width-95, frame.size.height-25, 83, 25);
+    CGRect frmBtnDetails = CGRectMake(frame.size.width-95, frame.size.height-40, 83, 25);
+    CGRect frmLike = CGRectMake(12, frame.size.height-40, 45, 25);
+    CGRect frmPin = CGRectMake(frame.size.width/2-20, frame.size.height-40, 40, 40);
     
     if ([msg img] == nil) {
         imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
@@ -139,7 +142,27 @@ UIImage* bubble3 = nil;
         [self addSubview:imgRightQuote];
         [self addSubview:lblContent];
     }
-    
+
+    NSString* likeImg = [msg liked] ? @"like.png" : @"greylike.png";
+    if (btnLike == nil) {
+        btnLike = [[UICaptionButton alloc] initWithFrame:frmLike withImage:[UIImage imageNamed:likeImg]
+                                            andRightText:[NSString stringWithFormat:@"%d", [msg likeCount]]];
+        [self addSubview:btnLike];
+    }
+    [btnLike setImage:[UIImage imageNamed:likeImg]];
+    [btnLike setFrame:frmLike];
+    [btnLike addTarget:self action:@selector(likeMessage:) forControlEvents:UIControlEventTouchUpInside];
+
+    NSString* pinImg = [msg pinned] ? @"pinfilled_btn.png" : @"pinblack_btn.png";
+    if (btnPin == nil) {
+        btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
+                                                andText:@"pin"];
+        [self addSubview:btnPin];
+    }
+    [btnPin setImage:[UIImage imageNamed:pinImg]];
+    [btnPin setFrame:frmPin];
+    [btnPin addTarget:self action:@selector(pinMessage:) forControlEvents:UIControlEventTouchUpInside];
+
     if (btnDetails == nil) {
         btnDetails = [[UIButton alloc] init];
         [self addSubview:btnDetails];
@@ -186,6 +209,42 @@ UIImage* bubble3 = nil;
 
 -(IBAction)messageFollow:(id)sender{
     [message follow:sender];
+}
+
+-(IBAction)pinMessage:(id)sender {
+    [message setPinned:![message pinned]];
+    [Data setMessagePin:message withValue:[message pinned]];
+    
+    if ([message pinned])
+        [SqlDb pinMessage:message];
+    else
+        [SqlDb unpinMessage:message];
+    
+    NSString* pinImg = [message pinned] ? @"pinfilled_btn" : @"pinblack_btn";
+    [btnPin setImage:[UIImage imageNamed:pinImg]];
+}
+
+-(IBAction)likeMessage:(id)sender {
+    [message setLiked:![message liked]];
+    [message setLikeCount:[message likeCount] + ([message liked] ? 1 : -1)];
+    
+    NSMutableURLRequest* req = [NSMutableURLRequest
+                                requestWithURL:[NSURL URLWithString:@"http://www.textmuse.com/admin/notelike.php"]
+                                cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                timeoutInterval:30];
+    [req setHTTPMethod:@"POST"];
+    [req setHTTPBody:[[NSString stringWithFormat:@"id=%ld&app=%@&h=%d",
+                       (long)[message msgId], AppID, ([message liked] ? 1 : 0)]
+                      dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:nil
+                                                    startImmediately:YES];
+    
+    [btnLike setSelected:[message liked]];
+    NSString* img = [message liked] ? @"like" : @"greylike";
+    [btnLike setImage:[UIImage imageNamed:img]];
+    [btnLike setCaption:[message likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [message likeCount]]];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Message.h"
+#import "UICaptionButton.h"
 
 @interface MessageView : UIView<UITextViewDelegate> {
     UIImageView* imgLeftQuote;
@@ -16,6 +17,8 @@
     UIButton* imgContent;
     UILabel* lblContent;
     UITextView* tvContent;
+    UICaptionButton* btnLike;
+    UICaptionButton* btnPin;
     UIButton* btnDetails;
     
     Message* message;
