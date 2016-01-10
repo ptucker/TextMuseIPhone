@@ -264,8 +264,14 @@ NSArray* colorsTitle;
         
         UIColor* colorTint = [Skin createColor1];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
-        [btnPin setTintColor:colorTint];
+        UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
+        UIImage* imgPin = [[UIImage imageNamed:@"pin_grey"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnPin setImage:imgPin forState:UIControlStateNormal];
+        [btnPin setTintColor:colorTint];
+        UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
         
         //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
@@ -286,6 +292,15 @@ NSArray* colorsTitle;
                        [colors objectAtIndex:2], nil];
         UIColor* colorTint = [UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
+        UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnHome setImage:imgHome forState:UIControlStateNormal];
+        [btnHome setTintColor:colorTint];
+        UIImage* imgPin = [[UIImage imageNamed:@"pin_grey"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnPin setImage:imgPin forState:UIControlStateNormal];
+        [btnPin setTintColor:colorTint];
+        UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnGroup setImage:imgGroup forState:UIControlStateNormal];
+        [btnGroup setTintColor:colorTint];
         
         [[[self navigationItem] leftBarButtonItem] setImage:nil];
         
