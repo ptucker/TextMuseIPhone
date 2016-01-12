@@ -146,7 +146,9 @@ UIImage* bubble3 = nil;
     NSString* likeImg = [msg liked] ? @"heart_red" : @"heart_black";
     NSString* likeText = [msg likeCount] > 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
     if (btnLike == nil) {
-        btnLike = [[UICaptionButton alloc] initWithFrame:frmLike withImage:[UIImage imageNamed:likeImg]
+        btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
+                                               withImage:[UIImage imageNamed:likeImg]
+                                                 andText:@"like it"
                                             andRightText:likeText];
         [self addSubview:btnLike];
     }
@@ -157,7 +159,7 @@ UIImage* bubble3 = nil;
     NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_black";
     if (btnPin == nil) {
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
-                                                andText:@"pin"];
+                                                andText:@"pin it"];
         [self addSubview:btnPin];
     }
     [btnPin setImage:[UIImage imageNamed:pinImg]];

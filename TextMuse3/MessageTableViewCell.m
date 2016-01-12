@@ -35,9 +35,9 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     frmLogo = CGRectMake(8, 8, 21, 21);
     frmTitle = CGRectMake(35, 8, size.width - 8 - 35, 21);
     frmSeeAll = CGRectMake(size.width - 14 - 8, 8, 14, 21);
-    frmLike = CGRectMake(8, bottomY, 28, 28);
+    frmLike = CGRectMake(8, bottomY, 32, 28);
     frmPin = CGRectMake(size.width/2 - 12, bottomY, 28, 28);
-    frmSend = CGRectMake(size.width - 8 - 26, bottomY, 31, 28);
+    frmSend = CGRectMake(size.width - 8 - 36, bottomY, 36, 28);
     frmParent = CGRectMake(8, 37, size.width-16, sizeParent.height);
     frmContent = CGRectMake(8, 9, frmParent.size.width-16, frmParent.size.height-18);
     CGRect frmBorder = CGRectMake(1, 1, size.width-2, bottomY + 36);
@@ -89,6 +89,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
         NSString* img = [msg liked] ? @"heart_red" : @"heart_black";
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:[UIImage imageNamed:img]
+                                                 andText:@"like it"
                                             andRightText:clike];
         [btnLike setSelected:[_msg liked]];
         //[btnLike setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
@@ -101,7 +102,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     if (btnPin == nil) {
         NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_black";
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
-                                                andText:@"pin"];
+                                                andText:@"pin it"];
         //[btnPin setImage:[UIImage imageNamed:@"pinblack_btn"] forState:UIControlStateNormal];
         [btnPin addTarget:self action:@selector(pinMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btnPin];
@@ -109,7 +110,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     [btnPin setFrame:frmPin];
     if (btnSend == nil) {
         btnSend = [[UICaptionButton alloc] initWithFrame:frmSend withImage:[UIImage imageNamed:@"send"]
-                                                 andText:@"send"];
+                                                 andText:@"send it"];
         //[btnSend setImage:[UIImage imageNamed:@"send"] forState:UIControlStateNormal];
         [btnSend addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btnSend];

@@ -14,7 +14,6 @@
     self = [super init];
     _text = txt;
     _image = img;
-    right = NO;
     
     [self addViews];
     
@@ -25,7 +24,6 @@
     self = [super initWithFrame:frame];
     _text = txt;
     _image = img;
-    right = NO;
 
     [self addViews];
 
@@ -34,9 +32,19 @@
 
 -(id)initWithFrame:(CGRect)frame withImage:(UIImage*)img andRightText:(NSString*)txt{
     self = [super initWithFrame:frame];
-    _text = txt;
+    _rtext = txt;
     _image = img;
-    right = YES;
+    
+    [self addViews];
+    
+    return self;
+}
+
+-(id)initWithFrame:(CGRect)frame withImage:(UIImage*)img andText:(NSString*)txt andRightText:(NSString*)txtRight {
+    self = [super initWithFrame:frame];
+    _text = txt;
+    _rtext = txtRight;
+    _image = img;
     
     [self addViews];
     
@@ -44,10 +52,14 @@
 }
 
 -(void)addViews {
-    CGRect frmImg = right ? CGRectMake(0, 0, [self frame].size.width * 0.60, [self frame].size.height) :
-                            CGRectMake(0, 0, [self frame].size.width, [self frame].size.height * 0.60);
-    CGRect frmText = right ?
-        CGRectMake([self frame].size.width * 0.60, 0, [self frame].size.width * 0.40, [self frame].size.height) :
+    BOOL right = [_rtext length] > 0;
+    BOOL bottom = [_text length] > 0;
+    CGFloat widthImage = right ? [self frame].size.width * 0.60 : [self frame].size.width;
+    CGFloat heightImage = bottom ? [self frame].size.height * 0.60 : [self frame].size.height;
+    CGRect frmImg = CGRectMake(0, 0, widthImage, heightImage);
+    CGRect frmRightText = CGRectMake([self frame].size.width * 0.60, 0, [self frame].size.width * 0.40,
+                                     heightImage);
+    CGRect frmBottomText =
         CGRectMake(0, [self frame].size.height * 0.60, [self frame].size.width, [self frame].size.height*0.40);
 
     _imgview = [[UIImageView alloc] initWithImage:_image];
@@ -55,13 +67,21 @@
     [_imgview setContentMode:UIViewContentModeScaleAspectFit];
     [self addSubview:_imgview];
     
-    _caption = [[UILabel alloc] initWithFrame:frmText];
+    _caption = [[UILabel alloc] initWithFrame:frmBottomText];
     [_caption setText:_text];
-    [_caption setTextAlignment:(right ? NSTextAlignmentRight : NSTextAlignmentCenter)];
-    CGFloat fontsize = (right ? frmText.size.height/2 : frmText.size.height);
+    [_caption setTextAlignment:NSTextAlignmentCenter];
+    CGFloat fontsize = frmBottomText.size.height;
     UIFont* fnt = [UIFont fontWithName:@"Lato-Medium" size:fontsize];
     [_caption setFont:fnt];
     [self addSubview:_caption];
+
+    _rcaption = [[UILabel alloc] initWithFrame:frmRightText];
+    [_rcaption setText:_rtext];
+    [_rcaption setTextAlignment:NSTextAlignmentRight];
+    fontsize = frmRightText.size.height;
+    fnt = [UIFont fontWithName:@"Lato-Medium" size:fontsize];
+    [_rcaption setFont:fnt];
+    [self addSubview:_rcaption];
 }
 
 -(void)setCaption:(NSString*)caption {
