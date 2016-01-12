@@ -49,7 +49,7 @@ UIImage* bubble3 = nil;
                                       frame.size.width-132, frame.size.height - 80);
     CGFloat fontSize = 24.0;
     CGRect frmPin = CGRectMake(frame.size.width-52, frame.size.height-40, 40, 40);
-    CGRect frmLike = CGRectMake(12, frame.size.height-40, 60, 40);
+    CGRect frmLike = CGRectMake(12, frame.size.height-40, 80, 40);
     CGRect frmBtnDetails = CGRectMake(frame.size.width/2-20, frame.size.height-40, 40, 40);
     
     if ([msg img] == nil) {

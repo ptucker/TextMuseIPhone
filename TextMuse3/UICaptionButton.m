@@ -57,10 +57,10 @@
     CGFloat widthImage = right ? [self frame].size.width * 0.60 : [self frame].size.width;
     CGFloat heightImage = bottom ? [self frame].size.height * 0.60 : [self frame].size.height;
     CGRect frmImg = CGRectMake(0, 0, widthImage, heightImage);
-    CGRect frmRightText = CGRectMake([self frame].size.width * 0.60, 0, [self frame].size.width * 0.40,
+    CGRect frmRightText = CGRectMake([self frame].size.width * 0.50, 0, [self frame].size.width * 0.50,
                                      heightImage);
     CGRect frmBottomText =
-        CGRectMake(0, [self frame].size.height * 0.60, [self frame].size.width, [self frame].size.height*0.40);
+        CGRectMake(0, [self frame].size.height * 0.60, widthImage, [self frame].size.height*0.40);
 
     _imgview = [[UIImageView alloc] initWithImage:_image];
     [_imgview setFrame:frmImg];
@@ -77,8 +77,8 @@
 
     _rcaption = [[UILabel alloc] initWithFrame:frmRightText];
     [_rcaption setText:_rtext];
-    [_rcaption setTextAlignment:NSTextAlignmentRight];
-    fontsize = frmRightText.size.height;
+    [_rcaption setTextAlignment:NSTextAlignmentLeft];
+    fontsize = 0.75 * frmRightText.size.height;
     fnt = [UIFont fontWithName:@"Lato-Medium" size:fontsize];
     [_rcaption setFont:fnt];
     [self addSubview:_rcaption];
