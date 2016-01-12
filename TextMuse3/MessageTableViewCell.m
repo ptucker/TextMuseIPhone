@@ -110,7 +110,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     [btnPin setFrame:frmPin];
     if (btnSend == nil) {
         btnSend = [[UICaptionButton alloc] initWithFrame:frmSend withImage:[UIImage imageNamed:@"send"]
-                                                 andText:@"send it"];
+                                                 andText:@"text it"];
         //[btnSend setImage:[UIImage imageNamed:@"send"] forState:UIControlStateNormal];
         [btnSend addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btnSend];
