@@ -159,7 +159,14 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 -(IBAction)sendMessage:(id)sender {
     CurrentCategory = [_msg category];
     CurrentMessage = _msg;
-    [_nav performSegueWithIdentifier:@"SendMessage" sender:_nav];
+
+    if ([[Data getContacts] count] == 0) {
+        if (sendMessage == nil)
+            sendMessage = [[SendMessage alloc] init];
+        [sendMessage sendMessageTo:nil from:_nav];
+    }
+    else
+        [_nav performSegueWithIdentifier:@"SendMessage" sender:_nav];
 }
 
 -(IBAction)likeMessage:(id)sender {

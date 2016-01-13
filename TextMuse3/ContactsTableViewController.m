@@ -189,8 +189,9 @@ NSMutableArray* searchContacts;
                                                    forIndexPath:indexPath];
         else {
             cell = [[UITableViewCell alloc] init];
-            CGRect frmLeft = CGRectMake(8, 8, [tableView frame].size.width/2 - 4, 44);
-            CGRect frmRight = CGRectMake(8, [tableView frame].size.width/2 + 4, frmLeft.size.width, 44);
+            CGFloat nameWidth = ([tableView frame].size.width - 48) / 2;
+            CGRect frmLeft = CGRectMake(36, 8, nameWidth, 44);
+            CGRect frmRight = CGRectMake(nameWidth + 8, 8, nameWidth, 44);
             UILabel* left = [[UILabel alloc] initWithFrame:frmLeft];
             UILabel* right = [[UILabel alloc] initWithFrame:frmRight];
             [left setTag:100];
@@ -268,7 +269,7 @@ NSMutableArray* searchContacts;
             BOOL selected = [checkedContacts containsObject:contact];
             [btncheck setSelected:selected];
         
-            if ([btncheck tag] == 0 && tableView == contacts) {
+            if ([btncheck tag] == 0/* && tableView == contacts*/) {
                 [btncheck setTag:102];
                 [cell addSubview:btncheck];
             }
@@ -302,17 +303,25 @@ NSMutableArray* searchContacts;
     long section = [indexPath section];
     
     if (tableView == [[self searchDisplayController] searchResultsTableView]) {
+        UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+        [self check:[cell viewWithTag:102]];
+        /*
         UserContact* contact = [searchContacts objectAtIndex:[indexPath row]];
         
         NSArray* contactlist = [NSArray arrayWithObject:contact];
         [sendMessage sendMessageTo:contactlist from:self];
+         */
     }
     else {
         if (section == 0 && showRecentContacts) {
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            [self check:[cell viewWithTag:102]];
+            /*
             UserContact* contact = [Data findUserByPhone:[RecentContacts objectAtIndex:[indexPath row]]];
             
             NSArray* contactlist = [NSArray arrayWithObject:contact];
             [sendMessage sendMessageTo:contactlist from:self];
+             */
         }
         else if ((section == 0 && !showRecentContacts) || (section == 1 && showRecentContacts)) {
             NSArray* grp = [NamedGroups objectForKey:[groups objectAtIndex:[indexPath row]]];
@@ -333,6 +342,9 @@ NSMutableArray* searchContacts;
             }
         }
         else {
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            [self check:[cell viewWithTag:102]];
+            /*
             section--;
             if (showRecentContacts) section--;
             
@@ -342,6 +354,7 @@ NSMutableArray* searchContacts;
 
             NSArray* contactlist = [NSArray arrayWithObject:contact];
             [sendMessage sendMessageTo:contactlist from:self];
+             */
         }
     }
 }

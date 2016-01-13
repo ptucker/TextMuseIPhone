@@ -8,6 +8,7 @@
 
 #import "Settings.h"
 #import "UserContact.h"
+#import "GlobalState.h"
 
 BOOL WalkThrough = false;
 
@@ -231,7 +232,7 @@ SkinInfo* Skin;
                     [NamedGroups setObject:names forKey:grp];
             }
         }
-        else {
+        else if ([[Data getContacts] count] > 0) {
             [NamedGroups setObject:[[NSArray alloc] init] forKey:@"BFFs"];
             [NamedGroups setObject:[[NSArray alloc] init] forKey:@"Family"];
             [NamedGroups setObject:[[NSArray alloc] init] forKey:@"Study Group"];

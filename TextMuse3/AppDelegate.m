@@ -33,9 +33,8 @@
     }
     [[NSUserDefaults standardUserDefaults] registerDefaults:regDict];
 
-    [Settings LoadSettings];
     [GlobalState init];
-    
+    [Settings LoadSettings];
     
     return self;
 }
