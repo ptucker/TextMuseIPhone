@@ -181,7 +181,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     [btnLike setSelected:[_msg liked]];
     NSString* img = [_msg liked] ? @"heart_red" : @"heart_black";
     [btnLike setImage:[UIImage imageNamed:img]];
-    [btnLike setCaption:[_msg likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [_msg likeCount]]];
+    [btnLike setRightCaption:[_msg likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [_msg likeCount]]];
 }
 
 -(IBAction)pinMessage:(id)sender {

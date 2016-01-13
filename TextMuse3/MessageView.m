@@ -10,6 +10,7 @@
 #import "ImageUtil.h"
 #import "GlobalState.h"
 #import "Settings.h"
+#import "FLAnimatedImage.h"
 
 @implementation MessageView
 
@@ -74,6 +75,8 @@ UIImage* bubble3 = nil;
         [self addSubview:imgBubble];
     }
     else {
+        BOOL gif = ([[[msg mediaUrl] pathExtension] isEqualToString:@"gif"]);
+
         imgContent = [[UIButton alloc] initWithFrame:frmImgContent];
         UIImage* img = [ImageUtil scaleImage:[UIImage imageWithData:[msg img]] forFrame:frmImgContent];
         [imgContent setImage:img forState:UIControlStateNormal];
@@ -248,7 +251,7 @@ UIImage* bubble3 = nil;
     [btnLike setSelected:[message liked]];
     NSString* img = [message liked] ? @"heart_red" : @"heart_black";
     [btnLike setImage:[UIImage imageNamed:img]];
-    [btnLike setCaption:[message likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [message likeCount]]];
+    [btnLike setRightCaption:[message likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [message likeCount]]];
 }
 
 @end

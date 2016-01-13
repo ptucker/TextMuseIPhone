@@ -30,8 +30,16 @@
     CGRect frmContentImage = CGRectMake(0, 0, frmParent.size.width, frmParent.size.height);
     CGRect frmContentLabel = CGRectMake(8, frmParent.size.height - 21, frmParent.size.width-16, 21);
     CGRect frmContentFrame = CGRectMake(0, frmParent.size.height - 21, frmParent.size.width, 21);
+    BOOL gif = ([[[msg mediaUrl] pathExtension] isEqualToString:@"gif"]);
     if (imgContent == nil) {
-        imgContent = [[UIImageView alloc] initWithFrame:frmContentImage];
+        if (gif) {
+            FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[msg img]];
+            FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
+            [imageView setAnimatedImage: image];
+            imgContent = imageView;
+        }
+        else
+            imgContent = [[UIImageView alloc] initWithFrame:frmContentImage];
         [imgContent setContentMode:UIViewContentModeScaleAspectFit];
         [imgContent setClipsToBounds:YES];
         [viewParent addSubview:imgContent];

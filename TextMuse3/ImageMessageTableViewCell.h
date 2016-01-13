@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MessageTableViewCell.h"
+#import "FLAnimatedImage.h"
 
 @interface ImageMessageTableViewCell : MessageTableViewCell {
     IBOutlet UIImageView* imgContent;

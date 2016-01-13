@@ -322,6 +322,15 @@ NSMutableArray* searchContacts;
             }
             if ([users count] > 0)
                 [sendMessage sendMessageTo:users from:self];
+            else {
+                UIAlertView *alert = [[UIAlertView alloc]
+                                      initWithTitle:@"No users"
+                                      message:[NSString stringWithFormat:@"The group %@ doesn't have any contacts to send to.", [groups objectAtIndex:[indexPath row]]]
+                                      delegate:nil
+                                      cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                      otherButtonTitles:nil];
+                [alert show];
+            }
         }
         else {
             section--;
