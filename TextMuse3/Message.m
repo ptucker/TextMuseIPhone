@@ -20,6 +20,7 @@ YTPlayerView* globalYTPlayer = nil;
     msgId = i;
     newMsg = n;
     category = c;
+    imgLock = [[NSObject alloc] init];
     
     NSArray* parts = [Message FindUrlInString:m];
     if (parts != nil) {
@@ -40,6 +41,7 @@ YTPlayerView* globalYTPlayer = nil;
     msgId = i;
     newMsg = n;
     category = c;
+    imgLock = [[NSObject alloc] init];
     
     if (mediaUrl != nil) {
         loader = [[ImageDownloader alloc] initWithUrl:mediaUrl forMessage:self];
@@ -63,6 +65,7 @@ YTPlayerView* globalYTPlayer = nil;
         msgId = 0;
         text = stored;
     }
+    imgLock = [[NSObject alloc] init];
     
     return self;
 }
@@ -73,6 +76,7 @@ YTPlayerView* globalYTPlayer = nil;
     category = NSLocalizedString(@"Your Photos Title", nil);
     mediaUrl = @"userphoto://";
     assetURL = [a valueForProperty:ALAssetPropertyAssetURL];
+    imgLock = [[NSObject alloc] init];
     
     return self;
 }
@@ -84,12 +88,13 @@ YTPlayerView* globalYTPlayer = nil;
     category = NSLocalizedString(@"Your Messages Title", nil);
     mediaUrl = @"usertext://";
     text = msg;
+    imgLock = [[NSObject alloc] init];
     
     return self;
 }
 
 -(NSData*)img {
-    @synchronized(img) {
+    @synchronized(imgLock) {
         if (img == nil && loader != nil) {
             [loader load];
         }
@@ -98,7 +103,7 @@ YTPlayerView* globalYTPlayer = nil;
 }
 
 -(void)setImg:(NSData *)imgNew {
-    @synchronized(img) {
+    @synchronized(imgLock) {
         img = imgNew;
     }
 }

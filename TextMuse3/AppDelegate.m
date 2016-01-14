@@ -10,6 +10,7 @@
 #import "Settings.h"
 #import "WalkthroughViewController.h"
 #import "ImageDownloader.h"
+#import "FLAnimatedImage.h"
 @interface AppDelegate ()
 
 @end
@@ -35,6 +36,11 @@
 
     [GlobalState init];
     [Settings LoadSettings];
+    
+    [FLAnimatedImage setLogBlock:^(NSString *logString, FLLogLevel logLevel) {
+        // Using NSLog
+        NSLog(@"%@", logString);
+    } logLevel:FLLogLevelWarn];
     
     return self;
 }

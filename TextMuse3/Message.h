@@ -21,6 +21,7 @@
     int likeCount;
     BOOL version;
     ImageDownloader* loader;
+    NSObject* imgLock;
     NSData* img;
     NSURL *assetURL;
     NSString* imgType;

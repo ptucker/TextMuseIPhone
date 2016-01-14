@@ -30,18 +30,18 @@
     CGRect frmContentImage = CGRectMake(0, 0, frmParent.size.width, frmParent.size.height);
     CGRect frmContentLabel = CGRectMake(8, frmParent.size.height - 21, frmParent.size.width-16, 21);
     CGRect frmContentFrame = CGRectMake(0, frmParent.size.height - 21, frmParent.size.width, 21);
-    BOOL gif = ([[[msg mediaUrl] pathExtension] isEqualToString:@"gif"]);
+    BOOL gif = [[msg imgType] isEqualToString:@"image/gif"];
     if (imgContent == nil) {
         if (gif) {
-            FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[msg img]];
             FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
-            [imageView setAnimatedImage: image];
+            [imageView setFrame:frmContentImage];
             imgContent = imageView;
         }
-        else
+        else {
             imgContent = [[UIImageView alloc] initWithFrame:frmContentImage];
-        [imgContent setContentMode:UIViewContentModeScaleAspectFit];
-        [imgContent setClipsToBounds:YES];
+            [imgContent setContentMode:UIViewContentModeScaleAspectFit];
+            [imgContent setClipsToBounds:YES];
+        }
         [viewParent addSubview:imgContent];
     }
     if ([[msg text] length] > 0) {
@@ -59,8 +59,18 @@
     else {
         [lblContent setHidden:YES];
     }
-    
-    [imgContent setImage:[UIImage imageWithData:[msg img]]];
+
+    if (gif) {
+        FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[msg img]];
+        FLAnimatedImageView* imageView = (FLAnimatedImageView*)imgContent;
+        [imageView setAnimatedImage: image];
+        BOOL running = [imageView isAnimating];
+        if (!running)
+            [imageView startAnimating];
+    }
+    else {
+        [imgContent setImage:[UIImage imageWithData:[msg img]]];
+    }
     [lblContent setFrame:frmContentLabel];
     [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
 }

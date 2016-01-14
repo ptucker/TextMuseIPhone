@@ -127,10 +127,35 @@ NSMutableArray* downloadQueue = nil;
         NSString* cachedFile = [CachedMediaMapping objectForKey:u];
         inetdata = [NSMutableData dataWithContentsOfFile:cachedFile];
         if (inetdata != nil) {
-            mimeType = @"image/png";
+            mimeType = [self mimeTypeByGuessingFromData:inetdata];
             [self useImageData];
         }
     }
+}
+
+- (NSString *)mimeTypeByGuessingFromData:(NSData *)data {
+    
+    char bytes[12] = {0};
+    [data getBytes:&bytes length:12];
+    
+    const char bmp[2] = {'B', 'M'};
+    const char gif[3] = {'G', 'I', 'F'};
+    const char jpg[3] = {0xff, 0xd8, 0xff};
+    const char png[8] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
+    
+    
+    if (!memcmp(bytes, bmp, 2)) {
+        return @"image/x-ms-bmp";
+    } else if (!memcmp(bytes, gif, 3)) {
+        return @"image/gif";
+    } else if (!memcmp(bytes, jpg, 3)) {
+        return @"image/jpeg";
+    } else if (!memcmp(bytes, png, 8)) {
+        return @"image/png";
+    }
+    
+    return @"application/octet-stream"; // default type
+    
 }
 
 -(BOOL)load {
@@ -187,13 +212,16 @@ NSMutableArray* downloadQueue = nil;
     [inetdata appendData:data];
 }
 
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+-(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
     if (retryCount < MAXRETRY) {
         retryCount++;
         
         inetdata = nil;
-        [self load];
+        [self startDownload];
+        NSLog([NSString stringWithFormat:@"retrying: %@", [[[_connection currentRequest] URL] absoluteString]]);
     }
+    else
+        NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
@@ -216,6 +244,7 @@ NSMutableArray* downloadQueue = nil;
         
         @synchronized(CachedMediaMapping) {
             [CachedMediaMapping setValue:mapfile forKey:u];
+            [Settings SaveCachedMapFile];
         }
     }
 }
