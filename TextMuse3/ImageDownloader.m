@@ -97,6 +97,7 @@ NSMutableArray* downloadQueue = nil;
 +(ImageDownloader*)dequeueDownload {
     ImageDownloader* ret;
     @synchronized(downloadQueue) {
+        NSLog([NSString stringWithFormat:@"%lu downloads queued", (unsigned long)[downloadQueue count]]);
         if (downloadQueue != nil && [downloadQueue count] > 0) {
             ret = [downloadQueue objectAtIndex:0];
             [downloadQueue removeObjectAtIndex:0];
@@ -123,17 +124,29 @@ NSMutableArray* downloadQueue = nil;
         u = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/default.jpg", ytid];
     [ActiveURLs setValue:@"" forKey:u];
     
-    if (CachedMediaMapping != nil && [CachedMediaMapping objectForKey:u] != nil) {
-        NSString* cachedFile = [CachedMediaMapping objectForKey:u];
+    NSString* cachedFile = nil;
+    @synchronized(CachedMediaMapping) {
+        if (CachedMediaMapping != nil && [CachedMediaMapping objectForKey:u] != nil)
+            cachedFile = [CachedMediaMapping objectForKey:u];
+    }
+    
+    if (cachedFile != nil) {
         inetdata = [NSMutableData dataWithContentsOfFile:cachedFile];
         if (inetdata != nil) {
-            mimeType = [self mimeTypeByGuessingFromData:inetdata];
-            [self useImageData];
+            mimeType = [ImageDownloader mimeTypeByGuessingFromData:inetdata];
+            if (mimeType != nil)
+                [self useImageData];
+            else {
+                @synchronized(CachedMediaMapping) {
+                    [CachedMediaMapping removeObjectForKey:u];
+                }
+                inetdata = nil;
+            }
         }
     }
 }
 
-- (NSString *)mimeTypeByGuessingFromData:(NSData *)data {
++ (NSString *)mimeTypeByGuessingFromData:(NSData *)data {
     
     char bytes[12] = {0};
     [data getBytes:&bytes length:12];
@@ -154,7 +167,7 @@ NSMutableArray* downloadQueue = nil;
         return @"image/png";
     }
     
-    return @"application/octet-stream"; // default type
+    return nil;
     
 }
 
@@ -233,41 +246,52 @@ NSMutableArray* downloadQueue = nil;
     [self useImageData];
 
     NSString* u = [[[connection currentRequest] URL] description];
-    if ([CachedMediaMapping objectForKey:u] == nil ||
-            ![[NSFileManager defaultManager] fileExistsAtPath:[CachedMediaMapping objectForKey:u]]) {
+    BOOL saveFile = false;
+    @synchronized(CachedMediaMapping) {
+        saveFile = ([CachedMediaMapping objectForKey:u] == nil ||
+                    ![[NSFileManager defaultManager] fileExistsAtPath:[CachedMediaMapping objectForKey:u]]);
+    }
+    if (saveFile) {
         NSString *prefixString = @"media";
         NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
         NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
-        NSString* mapfile = [NSTemporaryDirectory() stringByAppendingPathComponent:uniqueFileName];
+        NSString* tmpfile = [NSTemporaryDirectory() stringByAppendingPathComponent:uniqueFileName];
+        BOOL writeSucceeded = [inetdata writeToFile:tmpfile atomically:YES];
 
-        [inetdata writeToFile:mapfile atomically:YES];
-        
-        @synchronized(CachedMediaMapping) {
-            [CachedMediaMapping setValue:mapfile forKey:u];
-            [Settings SaveCachedMapFile];
+        if (writeSucceeded) {
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+            NSString *cachesDirectory = [paths objectAtIndex:0];
+            NSString* mapfile = [cachesDirectory stringByAppendingPathComponent:uniqueFileName];
+            [[NSFileManager defaultManager] moveItemAtPath:tmpfile toPath:mapfile error:nil];
+            
+            @synchronized(CachedMediaMapping) {
+                [CachedMediaMapping setValue:mapfile forKey:u];
+                [Settings SaveCachedMapFile];
+            }
         }
     }
 }
 
 -(void)useImageData {
     //Download complete. Write to view and/or message
+    NSData* copy = [inetdata copy];
     if (_view != nil) {
         if ([[mimeType substringToIndex:6] isEqualToString:@"image/"])
-            [_view setImage:[UIImage imageWithData:inetdata]];
+            [_view setImage:[UIImage imageWithData:copy]];
     }
     if (_msg != nil) {
-        [_msg setImg:[inetdata copy]];
+        [_msg setImg:copy];
         [_msg setImgType:mimeType];
     }
     if (_btn != nil) {
         if ([[mimeType substringToIndex:6] isEqualToString:@"image/"]) {
-            [_btn setImage:[UIImage imageWithData:inetdata] forState:UIControlStateNormal];
+            [_btn setImage:[UIImage imageWithData:copy] forState:UIControlStateNormal];
             [_btn setContentMode:UIViewContentModeScaleAspectFit];
             [_btn setHidden:NO];
         }
     }
     if (_navigationItem != nil) {
-        UIImage* o = [UIImage imageWithData:inetdata];
+        UIImage* o = [UIImage imageWithData:copy];
         UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
                                                scale:o.size.width/30
                                          orientation:(o.imageOrientation)];

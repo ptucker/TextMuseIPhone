@@ -78,9 +78,13 @@ MFMessageComposeViewController* msgcontroller = nil;
                 } failureBlock:^(NSError*err) {}];
             }
             else if ([CurrentMessage img] != nil) {
+                NSString* type = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
+                                                    (NSString*)kUTTypeGIF : (NSString*)kUTTypeImage;
+                NSString* tmpfile = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
+                                                    @"test.gif" : @"test.png";
                 [msgcontroller addAttachmentData:[CurrentMessage img]
-                                  typeIdentifier:(NSString*)kUTTypeImage
-                                        filename:@"test.png"];
+                                  typeIdentifier:type
+                                        filename:tmpfile];
             }
             else {
                 [msgcontroller addAttachmentData:[loader inetdata]

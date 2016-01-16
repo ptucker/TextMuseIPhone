@@ -108,6 +108,10 @@ YTPlayerView* globalYTPlayer = nil;
     }
 }
 
+-(BOOL)isImgNull {
+    return (img == nil);
+}
+
 -(void)loadUserImage {
     ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
     [library assetForURL:assetURL resultBlock:^(ALAsset* asset) {
@@ -164,22 +168,47 @@ YTPlayerView* globalYTPlayer = nil;
             while ([parent superview] != nil)
                 parent = [parent superview];
             CGRect endFrame = [parent frame];
+            CGRect endImgFrame = CGRectMake(0, 0, endFrame.size.width, endFrame.size.height);
             CGRect bfrm = [parent frame];
             int x = bfrm.origin.x + bfrm.size.width/2;
             int y = bfrm.origin.y + bfrm.size.height/2;
-            UIButton* imgview = [[UIButton alloc] initWithFrame:CGRectMake(x, y, 0, 0)];
-            [imgview setContentMode:UIViewContentModeScaleToFill];
-            [imgview setBackgroundColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.8]];
-            [[imgview imageView] setContentMode:UIViewContentModeScaleAspectFit];
-            [imgview addTarget:self
+            
+            BOOL gif = [[self imgType] isEqualToString:@"image/gif"];
+            
+            CGRect frmImg = CGRectMake(0, 0, 0, 0);
+            UIImageView* iview = [[UIImageView alloc] initWithFrame:frmImg];
+            if (!gif) {
+                UIImage* imgBtn = [UIImage imageWithData:[self img]];
+                [iview setImage:imgBtn];
+            }
+            else {
+                FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
+                [imageView setFrame:frmImg];
+                FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[self img]];
+                [imageView setAnimatedImage: image];
+                BOOL running = [imageView isAnimating];
+                if (!running) {
+                    [imageView startAnimating];
+                }
+                iview = imageView;
+            }
+            [iview setContentMode:UIViewContentModeScaleAspectFit];
+            [iview setTag:100];
+            
+            UIButton* btnImg = [[UIButton alloc] initWithFrame:CGRectMake(x, y, 0, 0)];
+            [btnImg setBackgroundColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.8]];
+            [btnImg addSubview:iview];
+
+            [btnImg addTarget:self
                         action:@selector(closeImage:)
               forControlEvents:UIControlEventTouchUpInside];
-            [parent addSubview:imgview];
+            [parent addSubview:btnImg];
             if (assetURL == nil) {
-                ImageDownloader* ldr = [[ImageDownloader alloc] initWithUrl:mediaUrl forButton:imgview];
-                [ldr load];
+                //ImageDownloader* ldr = [[ImageDownloader alloc] initWithUrl:mediaUrl forButton:btnImg];
+                //[ldr load];
                 [UIView animateWithDuration:0.5 animations:^{
-                    [imgview setFrame:endFrame];
+                    [btnImg setFrame:endFrame];
+                    [iview setFrame:endImgFrame];
                 } completion: ^(BOOL f) {
                 }];
             }
@@ -189,13 +218,13 @@ YTPlayerView* globalYTPlayer = nil;
                 [library assetForURL:assetURL resultBlock:^(ALAsset* asset) {
                     CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
                     NSData* d = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
-                    [imgview setImage:[UIImage imageWithData:d] forState:UIControlStateNormal];
+                    [btnImg setImage:[UIImage imageWithData:d] forState:UIControlStateNormal];
                     [UIView animateWithDuration:0.5 animations:^{
-                        [imgview setFrame:endFrame];
+                        [btnImg setFrame:endFrame];
                     } completion: ^(BOOL f) {
                     }];
                 } failureBlock:^(NSError*err) {
-                    [imgview setImage:[UIImage imageWithData:img] forState:UIControlStateNormal];
+                    [btnImg setImage:[UIImage imageWithData:img] forState:UIControlStateNormal];
                 }];
             }
         }
@@ -204,10 +233,12 @@ YTPlayerView* globalYTPlayer = nil;
 
 -(void)closeImage:(id)sender {
     UIView* v = (UIView*)sender;
+    UIView* vImg = [v viewWithTag:100];
     CGRect endFrame = CGRectMake([v frame].origin.x + [v frame].size.width/2,
                                  [v frame].origin.y + [v frame].size.height/2, 0, 0);
     [UIView animateWithDuration:0.5 animations:^{
         [v setFrame:endFrame];
+        [vImg setFrame:CGRectMake(0, 0, 0, 0)];
     } completion: ^(BOOL f) {
         [v removeFromSuperview];
     }];

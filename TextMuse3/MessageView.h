@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Message.h"
 #import "UICaptionButton.h"
+#import "FLAnimatedImage.h"
 
 @interface MessageView : UIView<UITextViewDelegate> {
     UIImageView* imgLeftQuote;

@@ -61,12 +61,15 @@
     }
 
     if (gif) {
-        FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[msg img]];
         FLAnimatedImageView* imageView = (FLAnimatedImageView*)imgContent;
-        [imageView setAnimatedImage: image];
-        BOOL running = [imageView isAnimating];
-        if (!running)
-            [imageView startAnimating];
+        if ([imageView animatedImage] == nil) {
+            FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[msg img]];
+            [imageView setAnimatedImage: image];
+            BOOL running = [imageView isAnimating];
+            if (!running) {
+                [imageView startAnimating];
+            }
+        }
     }
     else {
         [imgContent setImage:[UIImage imageWithData:[msg img]]];

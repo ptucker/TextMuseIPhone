@@ -75,12 +75,29 @@ UIImage* bubble3 = nil;
         [self addSubview:imgBubble];
     }
     else {
-        BOOL gif = ([[[msg mediaUrl] pathExtension] isEqualToString:@"gif"]);
+        BOOL gif = [[msg imgType] isEqualToString:@"image/gif"];
+        
+        CGRect frmImg = CGRectMake(0, 0, frmImgContent.size.width, frmImgContent.size.height);
+        UIImageView* iview = [[UIImageView alloc] initWithFrame:frmImg];
+        if (!gif) {
+            UIImage* img = [UIImage imageWithData:[msg img]];
+            [iview setImage:img];
+        }
+        else {
+            FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
+            [imageView setFrame:frmImg];
+            FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[msg img]];
+            [imageView setAnimatedImage: image];
+            BOOL running = [imageView isAnimating];
+            if (!running) {
+                [imageView startAnimating];
+            }
+            iview = imageView;
+        }
+        [iview setContentMode:UIViewContentModeScaleAspectFit];
 
         imgContent = [[UIButton alloc] initWithFrame:frmImgContent];
-        UIImage* img = [ImageUtil scaleImage:[UIImage imageWithData:[msg img]] forFrame:frmImgContent];
-        [imgContent setImage:img forState:UIControlStateNormal];
-        [[imgContent imageView] setContentMode:UIViewContentModeScaleAspectFit];
+        [imgContent addSubview:iview];
         [imgContent setBackgroundColor:[UIColor clearColor]];
         [self addSubview:imgContent];
         

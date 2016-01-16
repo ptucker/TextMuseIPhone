@@ -40,7 +40,7 @@
 -(BOOL)load;
 
 +(NSString*)GetYoutubeId:(NSString*)youtubeUrl;
-
++(NSString *)mimeTypeByGuessingFromData:(NSData *)data;
 +(void)CancelDownloads;
 
 @end

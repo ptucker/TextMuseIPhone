@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ImageDownloader.h"
+#import "FLAnimatedImage.h"
 
 @interface Message : NSObject <UIWebViewDelegate> {
     int msgId;
@@ -61,6 +62,7 @@
 -(id)initFromStorage:(NSString*)stored;
 -(id)initFromUserPhoto:(ALAsset*)imgfile;
 -(void)loadUserImage;
+-(BOOL)isImgNull;
 -(id)initFromUserText:(NSString*)msg atIndex:(int)i;
 
 -(NSString*)stringForStorage;

@@ -226,7 +226,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 
 +(CGFloat)GetCellHeightForMessage:(Message *)msg inSize:(CGSize)size {
     CGFloat height = 225.0;
-    if ([msg img] != nil) {
+    if (![msg isImgNull]) {
         UIImage* img = [UIImage imageWithData:[msg img]];
         CGSize sizeContent = [MessageTableViewCell GetContentSizeForImage:img inSize:size];
         height = 92.0 + sizeContent.height;
