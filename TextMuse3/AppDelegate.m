@@ -34,8 +34,8 @@
     }
     [[NSUserDefaults standardUserDefaults] registerDefaults:regDict];
 
-    [GlobalState init];
     [Settings LoadSettings];
+    [GlobalState init];
     
     [FLAnimatedImage setLogBlock:^(NSString *logString, FLLogLevel logLevel) {
         // Using NSLog
