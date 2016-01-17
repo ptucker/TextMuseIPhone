@@ -21,6 +21,7 @@
     Message* _msg;
     NSString* mimeType;
     int retryCount;
+    NSArray* _backgroundColors;
     
     NSMutableData* inetdata;
     NSURLConnection* connection;
@@ -32,6 +33,7 @@
 
 -(id)initWithUrl:(NSString*)url forMessage:(Message*)msg forImgView:(UIImageView*)view;
 -(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view;
+-(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view chooseBackground:(NSArray*)colors;
 -(id)initWithUrl:(NSString*)url forMessage:(Message*)msg;
 -(id)initWithUrl:(NSString*)url forButton:(UIButton*)btn;
 -(id)initWithUrl:(NSString*)url forNavigationItemLeftButton:(UINavigationItem*)navigationItem

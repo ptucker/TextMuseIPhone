@@ -231,7 +231,7 @@ NSArray* colorsTitle;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [[[self  navigationItem] backBarButtonItem] setTitle:@"Back"];
+    [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -267,12 +267,15 @@ NSArray* colorsTitle;
         UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
+        [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgPin = [[UIImage imageNamed:@"pin_grey"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnPin setImage:imgPin forState:UIControlStateNormal];
         [btnPin setTintColor:colorTint];
+        [btnPin setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
+        [btnGroup setTitleColor:colorTint forState:UIControlStateNormal];
         
         //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
         [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
@@ -295,12 +298,15 @@ NSArray* colorsTitle;
         UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
+        [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgPin = [[UIImage imageNamed:@"pin_grey"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnPin setImage:imgPin forState:UIControlStateNormal];
         [btnPin setTintColor:colorTint];
+        [btnPin setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
+        [btnGroup setTitleColor:colorTint forState:UIControlStateNormal];
         
         [[[self navigationItem] leftBarButtonItem] setImage:nil];
         

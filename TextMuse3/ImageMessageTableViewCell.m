@@ -30,6 +30,8 @@
     CGRect frmContentImage = CGRectMake(0, 0, frmParent.size.width, frmParent.size.height);
     CGRect frmContentLabel = CGRectMake(8, frmParent.size.height - 21, frmParent.size.width-16, 21);
     CGRect frmContentFrame = CGRectMake(0, frmParent.size.height - 21, frmParent.size.width, 21);
+    frmLogo = CGRectMake(frmContentFrame.size.width - 41, 13, 21, 21);
+
     BOOL gif = [[msg imgType] isEqualToString:@"image/gif"];
     if (imgContent == nil) {
         if (gif) {
@@ -76,6 +78,8 @@
     }
     [lblContent setFrame:frmContentLabel];
     [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+
+    [viewParent bringSubviewToFront:imgLogo];
 }
 
 @end

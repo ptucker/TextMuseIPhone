@@ -32,15 +32,15 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     
     CGFloat bottomY = sizeParent.height + 40;
     
-    frmLogo = CGRectMake(8, 8, 21, 21);
     frmTitle = CGRectMake(35, 8, size.width - 8 - 35, 21);
     frmSeeAll = CGRectMake(size.width - 14 - 8, 8, 14, 21);
-    frmLike = CGRectMake(8, bottomY, 48, 28);
-    frmPin = CGRectMake(size.width/2 - 12, bottomY, 28, 28);
-    frmSend = CGRectMake(size.width - 8 - 36, bottomY, 36, 28);
+    frmLike = CGRectMake(8, bottomY, 96, 21);
+    frmPin = CGRectMake(size.width/2 - 48, bottomY, 96, 21);
+    frmSend = CGRectMake(size.width - 8 - 96, bottomY, 96, 21);
     frmParent = CGRectMake(8, 37, size.width-16, sizeParent.height);
+    frmLogo = CGRectMake(frmParent.size.width - 52, 13, 32, 32);
     frmContent = CGRectMake(8, 9, frmParent.size.width-16, frmParent.size.height-18);
-    CGRect frmBorder = CGRectMake(1, 1, size.width-2, bottomY + 36);
+    //CGRect frmBorder = CGRectMake(1, 1, size.width-2, bottomY + 36);
     
     if (viewParent == nil) {
         viewParent = [[UIView alloc] initWithFrame:frmParent];
@@ -70,7 +70,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     if (imgLogo == nil) {
         imgLogo = [[UIImageView alloc] initWithFrame:frmLogo];
         [imgLogo setContentMode:UIViewContentModeScaleAspectFit];
-        [self addSubview:imgLogo];
+        [viewParent addSubview:imgLogo];
     }
     [imgLogo setFrame:frmLogo];
     if (btnSeeAll == nil) {
@@ -89,8 +89,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
         NSString* img = [msg liked] ? @"heart_red" : @"heart_black";
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:[UIImage imageNamed:img]
-                                                 andText:@"like it"
-                                            andRightText:clike];
+                                            andRightText:@"like it"];
         [btnLike setSelected:[_msg liked]];
         //[btnLike setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
         
@@ -102,24 +101,26 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     if (btnPin == nil) {
         NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_black";
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
-                                                andText:@"pin it"];
+                                                andRightText:@"save it"];
         //[btnPin setImage:[UIImage imageNamed:@"pinblack_btn"] forState:UIControlStateNormal];
         [btnPin addTarget:self action:@selector(pinMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btnPin];
     }
     [btnPin setFrame:frmPin];
     if (btnSend == nil) {
-        btnSend = [[UICaptionButton alloc] initWithFrame:frmSend withImage:[UIImage imageNamed:@"send"]
-                                                 andText:@"text it"];
-        //[btnSend setImage:[UIImage imageNamed:@"send"] forState:UIControlStateNormal];
+        btnSend = [[UICaptionButton alloc] initWithFrame:frmSend
+                                               withImage:[UIImage imageNamed:@"TextMuseButton"]
+                                            andRightText:@"text it"];
         [btnSend addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btnSend];
     }
     [btnSend setFrame:frmSend];
     
     [lblTitle setText:[msg category]];
-    [lblTitle setTextColor:colorTitle];
-    [lblContent setTextColor:colorText];
+    [lblTitle setTextColor:[UIColor darkGrayColor]];
+    [lblContent setTextColor:[UIColor darkGrayColor]];
+    //[lblTitle setTextColor:colorTitle];
+    //[lblContent setTextColor:colorText];
     
     if ([[msg text] length] > 0) {
         [lblContent setHidden:NO];
@@ -132,16 +133,21 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 
     if ([msg version]) {
         [imgLogo setHidden:NO];
-        frmTitle.origin.x = 35;
+        frmTitle.origin.x = 8; //35;
         [lblTitle setFrame:frmTitle];
-        downloader = [[ImageDownloader alloc] initWithUrl:[sponsor Icon] forImgView:imgLogo];
+        downloader = [[ImageDownloader alloc] initWithUrl:[sponsor Icon]
+                                               forImgView:imgLogo
+                                         chooseBackground:[NSArray arrayWithObjects:[Skin Color1],
+                                                           [Skin Color2], [Skin Color3], nil]];
         [downloader load];
+        //[imgLogo setAlpha:0.95];
+        [viewParent bringSubviewToFront:imgLogo];
         
-        UIView* viewBorder = [[UIView alloc] initWithFrame:frmBorder];
-        [[viewBorder layer] setBorderColor:[colorTitle CGColor]];
-        [[viewBorder layer] setBorderWidth:2.0];
-        [self addSubview:viewBorder];
-        [self sendSubviewToBack:viewBorder];
+        //UIView* viewBorder = [[UIView alloc] initWithFrame:frmBorder];
+        //[[viewBorder layer] setBorderColor:[colorTitle CGColor]];
+        //[[viewBorder layer] setBorderWidth:2.0];
+        //[self addSubview:viewBorder];
+        //[self sendSubviewToBack:viewBorder];
     }
     else {
         [imgLogo setHidden:YES];
@@ -188,7 +194,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     [btnLike setSelected:[_msg liked]];
     NSString* img = [_msg liked] ? @"heart_red" : @"heart_black";
     [btnLike setImage:[UIImage imageNamed:img]];
-    [btnLike setRightCaption:[_msg likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [_msg likeCount]]];
+    //[btnLike setRightCaption:[_msg likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [_msg likeCount]]];
 }
 
 -(IBAction)pinMessage:(id)sender {

@@ -29,6 +29,11 @@ NSMutableArray* downloadQueue = nil;
     return self;
 }
 
+-(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view chooseBackground:(NSArray*)colors {
+    _backgroundColors = colors;
+    return [self initWithUrl:url forImgView:view];
+}
+
 -(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view {
     _url = url;
     _view = view;
@@ -276,8 +281,18 @@ NSMutableArray* downloadQueue = nil;
     //Download complete. Write to view and/or message
     NSData* copy = [inetdata copy];
     if (_view != nil) {
-        if ([[mimeType substringToIndex:6] isEqualToString:@"image/"])
-            [_view setImage:[UIImage imageWithData:copy]];
+        if ([[mimeType substringToIndex:6] isEqualToString:@"image/"]) {
+            if (_backgroundColors != nil) {
+                [self setBackground];
+                [[_view layer] setCornerRadius:8.0];
+                [[_view layer] setMasksToBounds:YES];
+                UIImageView* iv = [[UIImageView alloc] initWithImage:[UIImage imageWithData:copy]];
+                [iv setFrame:CGRectMake(2, 2, [_view frame].size.width-4, [_view frame].size.height-4)];
+                [_view addSubview:iv];
+            }
+            else
+                [_view setImage:[UIImage imageWithData:copy]];
+        }
     }
     if (_msg != nil) {
         [_msg setImg:copy];
@@ -301,6 +316,99 @@ NSMutableArray* downloadQueue = nil;
                                                                       action:_selector];
         [_navigationItem setLeftBarButtonItem:leftButton];
     }
+}
+
+struct pixel {
+    unsigned char r, g, b, a;
+};
+
+-(void)setBackground {
+    struct pixel dc = [self getDominantColor:[UIImage imageWithData:inetdata]];
+    
+    unsigned char max = 0;
+    int imax = 0;
+    for (int i=0; i<[_backgroundColors count]; i++) {
+        NSString* bkg = [_backgroundColors objectAtIndex:i];
+        unsigned char* bcolors = [self getRGB:bkg];
+        unsigned char tmp = abs(bcolors[0] - dc.r) + abs(bcolors[1] - dc.g) + abs(bcolors[2] - dc.b);
+        if (tmp > max) {
+            max = tmp;
+            imax = i;
+        }
+        free(bcolors);
+    }
+    
+    unsigned char* bc = [self getRGB:[_backgroundColors objectAtIndex:imax]];
+    [_view setBackgroundColor:[UIColor colorWithRed:bc[0]/256.0 green:bc[1]/256.0 blue:bc[2]/256.0 alpha:1]];
+    free(bc);
+}
+
+- (struct pixel) getDominantColor:(UIImage*)image
+{
+    NSUInteger red = 0;
+    NSUInteger green = 0;
+    NSUInteger blue = 0;
+    
+    // Allocate a buffer big enough to hold all the pixels
+    struct pixel* pixels = (struct pixel*) calloc(1, image.size.width * image.size.height * sizeof(struct pixel));
+    if (pixels != nil)
+    {
+        CGContextRef context = CGBitmapContextCreate(
+                                                     (void*) pixels,
+                                                     image.size.width,
+                                                     image.size.height,
+                                                     8,
+                                                     image.size.width * 4,
+                                                     CGImageGetColorSpace(image.CGImage),
+                                                     kCGImageAlphaPremultipliedLast
+                                                     );
+        
+        if (context != NULL)
+        {
+            CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, image.size.width, image.size.height),
+                               image.CGImage);
+
+            NSUInteger numberOfPixels = image.size.width * image.size.height;
+            for (int i=0; i<numberOfPixels; i++) {
+                red += pixels[i].r;
+                green += pixels[i].g;
+                blue += pixels[i].b;
+            }
+            
+            red /= numberOfPixels;
+            green /= numberOfPixels;
+            blue/= numberOfPixels;
+            
+            CGContextRelease(context);
+        }
+        
+        free(pixels);
+    }
+    
+    struct pixel ret;
+    ret.r = red; ret.g = green; ret.b = blue; ret.a = 255;
+    return ret;
+}
+
+
+-(unsigned char *) getRGB:(NSString*)color {
+    unsigned char* colors = malloc(sizeof(CGFloat)*3);
+    colors[0] = ([self getInt:[color characterAtIndex:0]] * 10 + [self getInt:[color characterAtIndex:1]]);
+    colors[1] = ([self getInt:[color characterAtIndex:2]] * 10 + [self getInt:[color characterAtIndex:3]]);
+    colors[2] = ([self getInt:[color characterAtIndex:4]] * 10 + [self getInt:[color characterAtIndex:5]]);
+    
+    return colors;
+}
+
+-(int)getInt:(unichar)ch {
+    if (ch >= '0' && ch <= '9')
+        return (int)(ch - '0');
+    else if (ch >= 'a' && ch <= 'f')
+        return (int)(ch - 'a');
+    else if (ch >= 'A' && ch <= 'F')
+        return (int)(ch - 'A');
+    else
+        return 0;
 }
 
 +(NSString*)GetYoutubeId:(NSString *)youtubeUrl {

@@ -49,9 +49,9 @@ UIImage* bubble3 = nil;
     CGRect frmLblContent = CGRectMake(66, frame.size.height/8,
                                       frame.size.width-132, frame.size.height - 80);
     CGFloat fontSize = 24.0;
-    CGRect frmPin = CGRectMake(frame.size.width-52, frame.size.height-40, 40, 40);
-    CGRect frmLike = CGRectMake(12, frame.size.height-40, 80, 40);
-    CGRect frmBtnDetails = CGRectMake(frame.size.width/2-20, frame.size.height-40, 40, 40);
+    CGRect frmPin = CGRectMake(frame.size.width-104, frame.size.height-24, 96, 24);
+    CGRect frmLike = CGRectMake(12, frame.size.height-24, 96, 24);
+    CGRect frmBtnDetails = CGRectMake(frame.size.width/2-48, frame.size.height-24, 96, 24);
     
     if ([msg img] == nil) {
         imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
@@ -168,8 +168,7 @@ UIImage* bubble3 = nil;
     if (btnLike == nil) {
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:[UIImage imageNamed:likeImg]
-                                                 andText:@"like it"
-                                            andRightText:likeText];
+                                            andRightText:@"like it"];
         [self addSubview:btnLike];
     }
     [btnLike setImage:[UIImage imageNamed:likeImg]];
@@ -179,7 +178,7 @@ UIImage* bubble3 = nil;
     NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_black";
     if (btnPin == nil) {
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
-                                                andText:@"pin it"];
+                                                andRightText:@"pin it"];
         [self addSubview:btnPin];
     }
     [btnPin setImage:[UIImage imageNamed:pinImg]];
@@ -189,7 +188,7 @@ UIImage* bubble3 = nil;
     if (btnDetails == nil) {
         btnDetails = [[UICaptionButton alloc] initWithFrame:frmBtnDetails
                                                   withImage:[UIImage imageNamed:@"open-in-new"]
-                                                    andText:@"see it"];
+                                                    andRightText:@"see it"];
         [self addSubview:btnDetails];
     }
     [btnDetails setImage:[UIImage imageNamed:@"open-in-new"]];
@@ -268,7 +267,7 @@ UIImage* bubble3 = nil;
     [btnLike setSelected:[message liked]];
     NSString* img = [message liked] ? @"heart_red" : @"heart_black";
     [btnLike setImage:[UIImage imageNamed:img]];
-    [btnLike setRightCaption:[message likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [message likeCount]]];
+    //[btnLike setRightCaption:[message likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [message likeCount]]];
 }
 
 @end
