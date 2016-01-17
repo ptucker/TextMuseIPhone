@@ -104,7 +104,9 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [img setContentMode:UIViewContentModeScaleAspectFit];
     NSString* iconurl = [skinIcons objectAtIndex:[indexPath row]];
     if ([iconurl hasPrefix:@"http"]) {
-        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:iconurl forImgView:img];
+        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:iconurl
+                                                            forImgView:img
+                                                      chooseBackground:skinColors];
         [loader load];
     }
     else
