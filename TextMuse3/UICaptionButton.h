@@ -24,5 +24,6 @@
 -(void)setCaption:(NSString*)caption;
 -(void)setRightCaption:(NSString*)caption;
 -(void)setImage:(UIImage*)img;
+-(void)setCaptionColor:(UIColor*)color;
 
 @end

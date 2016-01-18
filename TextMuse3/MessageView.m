@@ -163,22 +163,24 @@ UIImage* bubble3 = nil;
         [self addSubview:lblContent];
     }
 
-    NSString* likeImg = [msg liked] ? @"heart_red" : @"heart_black";
+    NSString* likeImg = [msg liked] ? @"heart_red" : @"heart_dkgrey";
     NSString* likeText = [msg likeCount] > 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
     if (btnLike == nil) {
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:[UIImage imageNamed:likeImg]
                                             andRightText:@"like it"];
+        [btnLike setCaptionColor:[UIColor darkGrayColor]];
         [self addSubview:btnLike];
     }
     [btnLike setImage:[UIImage imageNamed:likeImg]];
     [btnLike setFrame:frmLike];
     [btnLike addTarget:self action:@selector(likeMessage:) forControlEvents:UIControlEventTouchUpInside];
 
-    NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_black";
+    NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_dkgrey";
     if (btnPin == nil) {
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
                                                 andRightText:@"pin it"];
+        [btnPin setCaptionColor:[UIColor darkGrayColor]];
         [self addSubview:btnPin];
     }
     [btnPin setImage:[UIImage imageNamed:pinImg]];
@@ -189,6 +191,7 @@ UIImage* bubble3 = nil;
         btnDetails = [[UICaptionButton alloc] initWithFrame:frmBtnDetails
                                                   withImage:[UIImage imageNamed:@"open-in-new"]
                                                     andRightText:@"see it"];
+        [btnDetails setCaptionColor:[UIColor darkGrayColor]];
         [self addSubview:btnDetails];
     }
     [btnDetails setImage:[UIImage imageNamed:@"open-in-new"]];

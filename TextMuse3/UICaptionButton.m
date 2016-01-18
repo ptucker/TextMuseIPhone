@@ -109,6 +109,11 @@
     [self setupViews];
 }
 
+-(void)setCaptionColor:(UIColor*)color {
+    [_rcaption setTextColor:color];
+    [_caption setTextColor:color];
+}
+
 -(void)setImage:(UIImage*)img {
     [_imgview setImage:img];
 
