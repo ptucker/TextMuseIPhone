@@ -34,9 +34,9 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     
     frmTitle = CGRectMake(35, 8, size.width - 8 - 35, 21);
     frmSeeAll = CGRectMake(size.width - 14 - 8, 8, 14, 21);
-    frmLike = CGRectMake(8, bottomY, 96, 21);
-    frmPin = CGRectMake(size.width/2 - 48, bottomY, 96, 21);
-    frmSend = CGRectMake(size.width - 8 - 96, bottomY, 96, 21);
+    frmLike = CGRectMake(8, bottomY, 84, 21);
+    frmPin = CGRectMake(size.width/2 - 46, bottomY, 92, 21);
+    frmSend = CGRectMake(size.width - 8 - 84, bottomY, 84, 21);
     frmParent = CGRectMake(8, 37, size.width-16, sizeParent.height);
     frmLogo = CGRectMake(frmParent.size.width - 52, 13, 32, 32);
     frmContent = CGRectMake(8, 9, frmParent.size.width-16, frmParent.size.height-18);

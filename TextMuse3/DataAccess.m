@@ -169,7 +169,7 @@ NSString* localNotes = @"notes.xml";
     NSURL* url = [NSURL URLWithString:surl];
     NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
     inetdata = [[NSMutableData alloc] initWithCapacity:60000];
-    
+
     conn = [[NSURLConnection alloc] initWithRequest:req
                                            delegate:self
                                    startImmediately:YES];
@@ -818,7 +818,6 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 }
 
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-    
     if ([elementName isEqualToString:@"n"]) {
         if (![[currentCategory name] isEqualToString: @"Trending"]) {
             NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;

@@ -77,8 +77,8 @@
     CGRect frmImg = CGRectMake(0, 0, widthImage, heightImage);
     CGRect frmRightText = CGRectMake([self frame].size.width * 0.50, 0, [self frame].size.width * 0.50,
                                      heightImage);
-    CGRect frmBottomText =
-    CGRectMake(0, [self frame].size.height * 0.60, widthImage, [self frame].size.height*0.40);
+    CGRect frmBottomText = CGRectMake(0, [self frame].size.height * 0.60, widthImage,
+                                      [self frame].size.height*0.40);
     
     [_imgview setFrame:frmImg];
     

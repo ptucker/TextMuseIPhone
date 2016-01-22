@@ -125,7 +125,8 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     long skinid = [[skinIDs objectAtIndex:[indexPath row]] integerValue];
     if (skinid != -1) {
-        Skin = [[SkinInfo alloc] init];
+        if (Skin == nil)
+            Skin = [[SkinInfo alloc] init];
         [Skin setSkinID:skinid];
     }
     else {

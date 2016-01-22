@@ -121,16 +121,6 @@
 -(void)setColors {
     colorsText = [NSArray arrayWithObjects:[UIColor whiteColor], [UIColor whiteColor], [UIColor whiteColor],
                   nil];
-#ifdef WHITWORTH
-    //Crimson, Black, Grey
-    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:194/255.0 green:2/255.0 blue:2/255.0 alpha:1.0], [UIColor blackColor], [UIColor colorWithRed:68/255.0 green:68/255.0 blue:68/255.0 alpha:1.0], nil];
-#endif
-#ifdef UOREGON
-    //Yellow, Green, Grey
-    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:255/255.0 green:239/255.0 blue:1/255.0 alpha:1.0], [UIColor colorWithRed:0/255.0 green:73/255.0 blue:0/255.0 alpha:1.0], [UIColor colorWithRed:105/255.0 green:107/255.0 blue:106/255.0 alpha:1.0], nil];
-    colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor whiteColor], [UIColor whiteColor], nil];
-    colorsTitle = [NSArray arrayWithObjects:[UIColor blackColor], [colors objectAtIndex:1], [colors objectAtIndex:2], nil];
-#endif
     if (Skin != nil) {
         colors = [NSArray arrayWithObjects:[Skin createColor1], [Skin createColor2], [Skin createColor3], nil];
         colorsText = [NSArray arrayWithObjects:[Skin createTextColor1], [Skin createTextColor2], [Skin createTextColor3], nil];
