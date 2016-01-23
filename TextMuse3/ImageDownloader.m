@@ -14,19 +14,28 @@ int downloading = 0;
 const int MAXDOWNLOAD = 48;
 const int MAXRETRY = 5;
 NSMutableArray* downloadQueue = nil;
+NSObject* lockDownloading;
 
 @implementation ImageDownloader
 @synthesize inetdata, mimeType, isVideo;
+
+-(id)init {
+    self = [super init];
+    
+    [ImageDownloader initQueue];
+    [self checkCache];
+    if (lockDownloading == nil)
+        lockDownloading = [[NSObject alloc] init];
+    
+    return self;
+}
 
 -(id)initWithUrl:(NSString*)url forMessage:(Message *)msg forImgView:(UIImageView*)view {
     _url = url;
     _view = view;
     _msg = msg;
-    
-    [ImageDownloader initQueue];
-    [self checkCache];
-    
-    return self;
+
+    return [self init];
 }
 
 -(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view chooseBackground:(NSArray*)colors {
@@ -38,10 +47,7 @@ NSMutableArray* downloadQueue = nil;
     _url = url;
     _view = view;
     
-    [ImageDownloader initQueue];
-    [self checkCache];
-
-    return self;
+    return [self init];
 }
 
 -(id)initWithUrl:(NSString*)url forNavigationItemLeftButton:(UINavigationItem*)navigationItem
@@ -51,39 +57,27 @@ NSMutableArray* downloadQueue = nil;
     _target = target;
     _selector = selector;
     
-    [ImageDownloader initQueue];
-    [self checkCache];
-
-    return self;
+    return [self init];
 }
 
 -(id)initWithUrl:(NSString*)url {
     _url = url;
     
-    [ImageDownloader initQueue];
-    [self checkCache];
-
-    return self;
+    return [self init];
 }
 
 -(id)initWithUrl:(NSString*)url forMessage:(Message *)msg {
     _url = url;
     _msg = msg;
     
-    [ImageDownloader initQueue];
-    [self checkCache];
-
-    return self;
+    return [self init];
 }
 
 -(id)initWithUrl:(NSString *)url forButton:(UIButton *)btn {
     _url = url;
     _btn = btn;
     
-    [ImageDownloader initQueue];
-    [self checkCache];
-
-    return self;
+    return [self init];
 }
 
 +(void)initQueue {
@@ -102,7 +96,6 @@ NSMutableArray* downloadQueue = nil;
 +(ImageDownloader*)dequeueDownload {
     ImageDownloader* ret;
     @synchronized(downloadQueue) {
-        NSLog([NSString stringWithFormat:@"%lu downloads queued", (unsigned long)[downloadQueue count]]);
         if (downloadQueue != nil && [downloadQueue count] > 0) {
             ret = [downloadQueue objectAtIndex:0];
             [downloadQueue removeObjectAtIndex:0];
@@ -210,8 +203,11 @@ NSMutableArray* downloadQueue = nil;
                                                  delegate:self
                                          startImmediately:YES];
     
-    OSAtomicAdd32(1, &downloading);
-    //NSLog([NSString stringWithFormat:@"download count: %d", downloading]);
+    @synchronized(lockDownloading) {
+        downloading++;
+        if (downloading == 1)
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
+    }
 }
 
 -(BOOL) mimeTypeSupported:(NSString*)mtype {
@@ -236,14 +232,17 @@ NSMutableArray* downloadQueue = nil;
         
         inetdata = nil;
         [self startDownload];
-        NSLog([NSString stringWithFormat:@"retrying: %@", [[[_connection currentRequest] URL] absoluteString]]);
     }
     else
         NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
-    OSAtomicAdd32(-1, &downloading);
+    @synchronized(lockDownloading) {
+        downloading--;
+        if (downloading == 0)
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+    }
     ImageDownloader* waiting = [ImageDownloader dequeueDownload];
     if (waiting != nil)
         [waiting startDownload];
