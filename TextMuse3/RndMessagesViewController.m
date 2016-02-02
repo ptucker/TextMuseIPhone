@@ -69,6 +69,7 @@ NSArray* colorsTitle;
     
     [messages setBackgroundColor:[UIColor whiteColor]];
     
+    /*
     if (Skin != nil) {
         [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
         ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
@@ -88,6 +89,16 @@ NSArray* colorsTitle;
                                                                       action:@selector(showCategoryList:)];
         [[self navigationItem] setLeftBarButtonItem:leftButton];
     }
+     */
+    UIImage* o = [UIImage imageNamed:@"menu"];
+    UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
+                                           scale:48.0/30
+                                     orientation:(o.imageOrientation)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(showCategoryList:)];
+    [[self navigationItem] setLeftBarButtonItem:leftButton];
 }
 
 -(void)navigationController:(UINavigationController *)navigationController
@@ -280,11 +291,13 @@ NSArray* colorsTitle;
         //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
         [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
         
+        /*
         ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
                                                forNavigationItemLeftButton:[self navigationItem]
                                                                 withTarget:self
                                                               withSelector:@selector(showCategoryList:)];
         [downloader load];
+         */
     }
     else {
         //Green, Orange, Blue
@@ -308,10 +321,9 @@ NSArray* colorsTitle;
         [btnGroup setTintColor:colorTint];
         [btnGroup setTitleColor:colorTint forState:UIControlStateNormal];
         
-        [[[self navigationItem] leftBarButtonItem] setImage:nil];
-        
         [[self navigationItem] setTitle:@"TextMuse"];
         
+        /*
         UIImage* o = [UIImage imageNamed:@"TextMuseButton"];
         UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
                                                scale:60.0/30
@@ -321,6 +333,7 @@ NSArray* colorsTitle;
                                                                       target:self
                                                                       action:@selector(showCategoryList:)];
         [[self navigationItem] setLeftBarButtonItem:leftButton];
+         */
     }
 }
 
