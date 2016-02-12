@@ -819,7 +819,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString:@"n"]) {
-        if (![[currentCategory name] isEqualToString: @"Trending"]) {
+        //if (![[currentCategory name] isEqualToString: @"Trending"]) {
             NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;
             Message* msg = [[Message alloc] initWithId:currentMsgId
                                                   text:m
@@ -838,7 +838,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
                 [tmpVersionMessages addObject:msg];
             else
                 [tmpRegMessages addObject:msg];
-        }
+        //}
     }
     else if ([elementName isEqualToString:@"t"]) {
         [NotificationMsgs addObject:xmldata];

@@ -395,10 +395,8 @@ NSArray* colorsTitle;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
-        long icategory = [self chosenCategory:[indexPath row]];
-        if (icategory >= [[Data getCategories] count])
-            icategory = [[Data getCategories] count] - 1;
-        CurrentCategory = [[Data getCategories] objectAtIndex:icategory];
+        UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+        CurrentCategory = [[cell textLabel] text];
         CurrentMessage = nil;
     }
     else {
