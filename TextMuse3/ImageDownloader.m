@@ -80,6 +80,14 @@ NSObject* lockDownloading;
     return [self init];
 }
 
+-(void)addImageView:(UIImageView*)view {
+    _view = view;
+}
+
+-(void)addCallback:(callback)cb {
+    _cback = cb;
+}
+
 +(void)initQueue {
     @synchronized(downloadQueue) {
         if (downloadQueue == nil)

@@ -25,6 +25,7 @@
 		2D4AC7E81B22BDBD00749074 /* LaunchImage_640_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */; };
 		2D4AC7EA1B22BE2900749074 /* TextMuseIcon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */; };
 		2D4AC7EC1B22BE5700749074 /* TextMuseIcon_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */; };
+		2D8D26B91C79586900C13F49 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D8D26B81C79586900C13F49 /* image.png */; };
 		2D9D11F91BB2005300C679D1 /* LaunchImage_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
 		2DC52F021B0846C300E95D15 /* BirthPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC52F011B0846C300E95D15 /* BirthPickerView.m */; };
@@ -152,6 +153,7 @@
 		2D4AC7E71B22BDBD00749074 /* LaunchImage_640_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_640_2.png; sourceTree = "<group>"; };
 		2D4AC7E91B22BE2900749074 /* TextMuseIcon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_58.png; sourceTree = "<group>"; };
 		2D4AC7EB1B22BE5700749074 /* TextMuseIcon_87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TextMuseIcon_87.png; sourceTree = "<group>"; };
+		2D8D26B81C79586900C13F49 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		2D9D11F81BB2005300C679D1 /* LaunchImage_320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage_320.png; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D8D26B81C79586900C13F49 /* image.png */,
 				2D343EB81C60692600587D19 /* menu.png */,
 				2DF67BE51C4CA89200329DC8 /* heart_dkgrey.png */,
 				2DF67BE61C4CA89200329DC8 /* pin_dkgrey.png */,
@@ -703,6 +706,7 @@
 				2DF080AC1AE625FC0003A277 /* gear.png in Resources */,
 				2DC624B31AF1FF51006E806C /* greyHighlighter.png in Resources */,
 				2DF67BE81C4CA89200329DC8 /* pin_dkgrey.png in Resources */,
+				2D8D26B91C79586900C13F49 /* image.png in Resources */,
 				2D32407E1C2F520F00E4E59B /* ImageMessageTableViewCell.xib in Resources */,
 				2DF080A81AE625FC0003A277 /* CategoriesTableViewCell.xib in Resources */,
 				2DF67BDB1C4CA7A800329DC8 /* greyheart.png in Resources */,

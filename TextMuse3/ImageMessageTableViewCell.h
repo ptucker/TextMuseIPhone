@@ -14,4 +14,6 @@
     IBOutlet UIImageView* imgContent;
 }
 
+-(void)setMsgImage;
+
 @end

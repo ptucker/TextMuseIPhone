@@ -44,6 +44,7 @@
 @property (readwrite) BOOL liked;
 @property (readwrite) int likeCount;
 @property (readwrite) BOOL version;
+@property (readonly) ImageDownloader* loader;
 @property (nonatomic, readwrite, copy) NSData* img;
 @property (nonatomic, readonly, retain) NSURL* assetURL;
 @property (nonatomic, readwrite, copy) NSString* imgType;

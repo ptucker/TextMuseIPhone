@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <MessageUI/MessageUI.h>
 
+typedef void(*callback)(void);
+
 @class Message;
 
 @interface ImageDownloader : NSObject<NSURLConnectionDelegate> {
@@ -22,6 +24,7 @@
     NSString* mimeType;
     int retryCount;
     NSArray* _backgroundColors;
+    callback _cback;
     
     NSMutableData* inetdata;
     NSURLConnection* connection;
@@ -40,6 +43,8 @@
       withTarget:(id)target withSelector:(SEL)selector;
 -(id)initWithUrl:(NSString*)url;
 -(BOOL)load;
+-(void)addImageView:(UIImageView*)view;
+-(void)addCallback:(callback)cb;
 
 +(NSString*)GetYoutubeId:(NSString*)youtubeUrl;
 +(NSString *)mimeTypeByGuessingFromData:(NSData *)data;

@@ -164,7 +164,7 @@ UIImage* bubble3 = nil;
     }
 
     NSString* likeImg = [msg liked] ? @"heart_red" : @"heart_dkgrey";
-    NSString* likeText = [msg likeCount] > 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
+    //NSString* likeText = [msg likeCount] > 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
     if (btnLike == nil) {
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:[UIImage imageNamed:likeImg]

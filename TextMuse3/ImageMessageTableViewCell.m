@@ -10,6 +10,8 @@
 
 @implementation ImageMessageTableViewCell
 
+UIImage* imgLoading;
+
 -(void)showForSize:(CGSize)size
        usingParent:(id)nav
           withColor:(UIColor*)color
@@ -27,25 +29,22 @@
                sponsor:sponsor
                message:msg];
     
+    UIImage* img = nil;
+    if ([msg img] != nil)
+        img = [UIImage imageWithData:[msg img]];
+    else {
+        if (imgLoading == nil)
+            imgLoading = [UIImage imageNamed:@"image"];
+        img = imgLoading;
+    }
+    
     CGRect frmContentImage = CGRectMake(0, 0, frmParent.size.width, frmParent.size.height);
     CGRect frmContentLabel = CGRectMake(8, frmParent.size.height - 21, frmParent.size.width-16, 21);
     CGRect frmContentFrame = CGRectMake(0, frmParent.size.height - 21, frmParent.size.width, 21);
     frmLogo = CGRectMake(frmContentFrame.size.width - 41, 13, 21, 21);
+    
+    [self setMsgImage:msg forFrame:frmContentImage withDefault:img];
 
-    BOOL gif = [[msg imgType] isEqualToString:@"image/gif"];
-    if (imgContent == nil) {
-        if (gif) {
-            FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
-            [imageView setFrame:frmContentImage];
-            imgContent = imageView;
-        }
-        else {
-            imgContent = [[UIImageView alloc] initWithFrame:frmContentImage];
-            [imgContent setContentMode:UIViewContentModeScaleAspectFit];
-            [imgContent setClipsToBounds:YES];
-        }
-        [viewParent addSubview:imgContent];
-    }
     if ([[msg text] length] > 0) {
         UIView* vFrame = [[UIView alloc] initWithFrame:frmContentFrame];
         [vFrame setBackgroundColor:[UIColor darkGrayColor]];
@@ -61,7 +60,32 @@
     else {
         [lblContent setHidden:YES];
     }
+    
+    if ([msg img] == nil)
+        [[msg loader] addImageView:imgContent];
 
+    [lblContent setFrame:frmContentLabel];
+    [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+
+    [viewParent bringSubviewToFront:imgLogo];
+}
+
+-(void)setMsgImage:(Message*)msg forFrame:(CGRect)frmContentImage withDefault:(UIImage*)img {
+    BOOL gif = [[msg imgType] isEqualToString:@"image/gif"];
+    if (imgContent == nil) {
+        if (gif) {
+            FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
+            [imageView setFrame:frmContentImage];
+            imgContent = imageView;
+        }
+        else {
+            imgContent = [[UIImageView alloc] initWithFrame:frmContentImage];
+            [imgContent setContentMode:UIViewContentModeScaleAspectFit];
+            [imgContent setClipsToBounds:YES];
+        }
+        [viewParent addSubview:imgContent];
+    }
+    
     if (gif) {
         FLAnimatedImageView* imageView = (FLAnimatedImageView*)imgContent;
         if ([imageView animatedImage] == nil) {
@@ -74,12 +98,9 @@
         }
     }
     else {
-        [imgContent setImage:[UIImage imageWithData:[msg img]]];
+        [imgContent setImage:img];
     }
-    [lblContent setFrame:frmContentLabel];
-    [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
-
-    [viewParent bringSubviewToFront:imgLogo];
+    
 }
 
 @end
