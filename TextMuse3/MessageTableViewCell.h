@@ -29,6 +29,8 @@
     UINavigationController* _nav;
     SendMessage* sendMessage;
     
+    UITableView* _tableView;
+    
     IBOutlet UILabel* lblContent;
     IBOutlet UILabel* lblTitle;
     IBOutlet UIImageView* imgLogo;
@@ -49,5 +51,6 @@
              title:(NSString*)title
            sponsor:(SponsorInfo*)sponsor
            message:(Message*)msg;
+-(void)setTableView:(UITableView*)tableView;
 
 @end

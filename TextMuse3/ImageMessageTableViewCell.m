@@ -61,8 +61,10 @@ UIImage* imgLoading;
         [lblContent setHidden:YES];
     }
     
-    if ([msg img] == nil)
+    if ([msg img] == nil) {
         [[msg loader] addImageView:imgContent];
+        [[msg loader] addTableView:_tableView];
+    }
 
     [lblContent setFrame:frmContentLabel];
     [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];

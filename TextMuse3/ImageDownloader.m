@@ -88,6 +88,10 @@ NSObject* lockDownloading;
     _cback = cb;
 }
 
+-(void)addTableView:(UITableView*)tableView {
+    _tableView = tableView;
+}
+
 +(void)initQueue {
     @synchronized(downloadQueue) {
         if (downloadQueue == nil)
@@ -323,6 +327,8 @@ NSObject* lockDownloading;
                                                                       action:_selector];
         [_navigationItem setLeftBarButtonItem:leftButton];
     }
+    if (_tableView != nil)
+        [_tableView reloadData];
 }
 
 struct pixel {

@@ -210,6 +210,10 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     [btnPin setImage:[UIImage imageNamed:pinImg]];
 }
 
+-(void)setTableView:(UITableView*)tableView {
+    _tableView = tableView;
+}
+
 +(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent {
     CGFloat heightParent = 133;
     CGFloat widthParent = sizeParent.width;

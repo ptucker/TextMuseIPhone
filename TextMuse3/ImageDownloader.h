@@ -17,6 +17,7 @@ typedef void(*callback)(void);
     NSString* _url;
     UIButton* _btn;
     UIImageView* _view;
+    UITableView* _tableView;
     UINavigationItem* _navigationItem;
     id _target;
     SEL _selector;
@@ -45,6 +46,7 @@ typedef void(*callback)(void);
 -(BOOL)load;
 -(void)addImageView:(UIImageView*)view;
 -(void)addCallback:(callback)cb;
+-(void)addTableView:(UITableView*)tableView;
 
 +(NSString*)GetYoutubeId:(NSString*)youtubeUrl;
 +(NSString *)mimeTypeByGuessingFromData:(NSData *)data;

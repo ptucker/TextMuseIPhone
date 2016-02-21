@@ -90,7 +90,7 @@ NSArray* colorsTitle;
         [[self navigationItem] setLeftBarButtonItem:leftButton];
     }
      */
-    UIImage* o = [UIImage imageNamed:@"menu.svg"];
+    UIImage* o = [UIImage imageNamed:@"menu"];
     UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
                                            scale:48.0/30
                                      orientation:(o.imageOrientation)];
@@ -377,6 +377,7 @@ NSArray* colorsTitle;
                                                          reuseIdentifier:ImgCellIdentifier] :
                         [[TextMessageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                         reuseIdentifier:TextCellIdentifier];
+            [cell setTableView:tableView];
         }
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
