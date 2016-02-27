@@ -18,7 +18,7 @@ extern NSArray* colorsTitle;
 DataRefreshDelegate, UINavigationControllerDelegate> {
     IBOutlet UITableView* messages;
     IBOutlet UIButton* btnHome;
-    IBOutlet UIButton* btnPin;
+    IBOutlet UIButton* btnEvent;
     IBOutlet UIButton* btnGroup;
     UITableView* categoryTable;
     UIRefreshControl *refreshControl;
@@ -32,6 +32,7 @@ DataRefreshDelegate, UINavigationControllerDelegate> {
     BOOL showPinned;
 }
 
+-(IBAction)addEvent:(id)sender;
 -(IBAction)settings:(id)sender;
 -(IBAction)home:(id)sender;
 @end

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dCH-QF-mLU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="dCH-QF-mLU">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Lato-Light.ttf">
@@ -41,9 +41,87 @@
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
+        <!--Add Event-->
+        <scene sceneID="Itd-4X-sQO">
+            <objects>
+                <viewController title="Add Event" id="y4r-5l-tYZ" customClass="AddEventViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cRz-6e-FLG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add an event so others around you can know what's going on." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vJs-qv-64P">
+                                <rect key="frame" x="20" y="79" width="280" height="57"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Location" textAlignment="natural" minimumFontSize="17" id="6xi-sw-xS2">
+                                <rect key="frame" x="20" y="303" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description *" textAlignment="natural" id="7VM-qD-YZg">
+                                <rect key="frame" x="20" y="144" width="280" height="128"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date *" textAlignment="natural" minimumFontSize="17" id="SW7-QX-A0t">
+                                <rect key="frame" x="20" y="362" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="16"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email *" textAlignment="natural" minimumFontSize="17" id="uD7-eJ-Pfi">
+                                <rect key="frame" x="20" y="416" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ULJ-my-1SW">
+                                <rect key="frame" x="20" y="496" width="280" height="52"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                                <state key="normal" title="Submit event">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="submitEvent:" destination="y4r-5l-tYZ" eventType="touchUpInside" id="PBa-se-X4Z"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Event" id="HiB-Ex-MZq"/>
+                    <connections>
+                        <outlet property="btnSubmit" destination="ULJ-my-1SW" id="fxi-TQ-NOq"/>
+                        <outlet property="tvDesc" destination="7VM-qD-YZg" id="AIp-qa-CDx"/>
+                        <outlet property="txtDate" destination="SW7-QX-A0t" id="Z0H-7X-ymT"/>
+                        <outlet property="txtEmail" destination="uD7-eJ-Pfi" id="gw4-Ph-ScH"/>
+                        <outlet property="txtLocation" destination="6xi-sw-xS2" id="OBz-KS-H88"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TJf-9r-J2D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-313" y="-1035"/>
+        </scene>
         <!--Settings-->
         <scene sceneID="xH6-Sm-TNK">
             <objects>
@@ -412,12 +490,12 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sYc-fb-cG4">
-                                        <rect key="frame" x="122" y="4" width="76" height="32"/>
+                                        <rect key="frame" x="122" y="4" width="85" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
-                                        <state key="normal" title="saved" image="pin_grey.png"/>
+                                        <state key="normal" title="event" image="calendar-plus.png"/>
                                         <connections>
-                                            <action selector="showPinned:" destination="4sn-wL-anZ" eventType="touchUpInside" id="b09-aB-QP3"/>
+                                            <action selector="addEvent:" destination="4sn-wL-anZ" eventType="touchUpInside" id="3Cb-gn-Utn"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -430,18 +508,19 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="q7e-Uo-1Jv"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="btnEvent" destination="sYc-fb-cG4" id="x33-gJ-VeB"/>
                         <outlet property="btnGroup" destination="8Sx-EF-WVk" id="RBG-ZR-MWN"/>
                         <outlet property="btnHome" destination="qXK-Zg-adm" id="Q7i-wj-gVk"/>
-                        <outlet property="btnPin" destination="sYc-fb-cG4" id="z5l-nB-xc5"/>
                         <segue destination="54f-mb-IwZ" kind="push" identifier="Settings" id="udu-bJ-qbO"/>
                         <segue destination="A8v-W0-SOT" kind="push" identifier="SelectMessage" id="gIs-SO-9jD"/>
                         <segue destination="yLr-zO-1M3" kind="push" identifier="registerInitial" id="MVW-gx-UGH"/>
                         <segue destination="ngF-ER-qsv" kind="push" identifier="SendMessage" id="ynu-Ad-b5Z"/>
+                        <segue destination="y4r-5l-tYZ" kind="push" identifier="AddEvent" id="Pcx-nJ-Vem"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzL-bm-eLj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-852" y="-296"/>
+            <point key="canvasLocation" x="-807" y="-365"/>
         </scene>
         <!--TextMuse-->
         <scene sceneID="ufC-wZ-h7g">
@@ -681,7 +760,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="group" id="Kns-rY-DH0">
-                                        <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Kns-rY-DH0" id="bMp-mn-ViW">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -771,14 +850,14 @@
     </scenes>
     <resources>
         <image name="account-multiple.png" width="36" height="36"/>
+        <image name="calendar-plus.png" width="48" height="48"/>
         <image name="home.png" width="36" height="36"/>
-        <image name="pin_grey.png" width="36" height="36"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="udu-bJ-qbO"/>
-        <segue reference="MVW-gx-UGH"/>
         <segue reference="ynu-Ad-b5Z"/>
-        <segue reference="gIs-SO-9jD"/>
+        <segue reference="MVW-gx-UGH"/>
         <segue reference="BNQ-99-bBq"/>
+        <segue reference="gIs-SO-9jD"/>
+        <segue reference="udu-bJ-qbO"/>
     </inferredMetricsTieBreakers>
 </document>

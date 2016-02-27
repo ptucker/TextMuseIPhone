@@ -10,6 +10,8 @@
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
 		2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D236B031C115DA900CDE1F7 /* SendMessage.m */; };
+		2D2BA08A1C80EF01001DC30E /* calendar-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D2BA0891C80EF01001DC30E /* calendar-plus.png */; };
+		2D2BA08E1C80F1E9001DC30E /* AddEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2BA08D1C80F1E9001DC30E /* AddEventViewController.m */; };
 		2D2E7D0C1C3C4601002C3886 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2E7D0B1C3C4601002C3886 /* libsqlite3.0.tbd */; };
 		2D2E7D0F1C3C469B002C3886 /* SqlData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2E7D0E1C3C469B002C3886 /* SqlData.m */; };
 		2D3240741C2F3A0800E4E59B /* RndMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3240731C2F3A0800E4E59B /* RndMessagesViewController.m */; };
@@ -133,6 +135,9 @@
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		2D236B021C115DA900CDE1F7 /* SendMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMessage.h; sourceTree = "<group>"; };
 		2D236B031C115DA900CDE1F7 /* SendMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMessage.m; sourceTree = "<group>"; };
+		2D2BA0891C80EF01001DC30E /* calendar-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar-plus.png"; sourceTree = "<group>"; };
+		2D2BA08C1C80F1E9001DC30E /* AddEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddEventViewController.h; sourceTree = "<group>"; };
+		2D2BA08D1C80F1E9001DC30E /* AddEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddEventViewController.m; sourceTree = "<group>"; };
 		2D2E7D0B1C3C4601002C3886 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		2D2E7D0D1C3C469B002C3886 /* SqlData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SqlData.h; sourceTree = "<group>"; };
 		2D2E7D0E1C3C469B002C3886 /* SqlData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqlData.m; sourceTree = "<group>"; };
@@ -302,6 +307,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D2BA08B1C80F1C5001DC30E /* AddEvent */ = {
+			isa = PBXGroup;
+			children = (
+				2D2BA08C1C80F1E9001DC30E /* AddEventViewController.h */,
+				2D2BA08D1C80F1E9001DC30E /* AddEventViewController.m */,
+			);
+			name = AddEvent;
+			sourceTree = "<group>";
+		};
 		2D3240711C2F39D400E4E59B /* RndMessages */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,6 +414,7 @@
 		2DF0804A1AE625410003A277 /* TextMuse3 */ = {
 			isa = PBXGroup;
 			children = (
+				2D2BA08B1C80F1C5001DC30E /* AddEvent */,
 				2DF1271E1C44D50200DBB3DE /* FLAnimatedImage */,
 				2D3240711C2F39D400E4E59B /* RndMessages */,
 				2DCA58F21B6EA24F0011FCDB /* YTPlayer */,
@@ -451,6 +466,7 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D2BA0891C80EF01001DC30E /* calendar-plus.png */,
 				2D8D26B81C79586900C13F49 /* image.png */,
 				2D343EB81C60692600587D19 /* menu.png */,
 				2DF67BE51C4CA89200329DC8 /* heart_dkgrey.png */,
@@ -735,6 +751,7 @@
 				2DC624B51AF1FF51006E806C /* yellowHighlighter.png in Resources */,
 				2D343EB91C60692600587D19 /* menu.png in Resources */,
 				2DCDFC471AEC7F4C002DA914 /* emptycheck.png in Resources */,
+				2D2BA08A1C80EF01001DC30E /* calendar-plus.png in Resources */,
 				2DF080CC1AE626E10003A277 /* Main.storyboard in Resources */,
 				2DF080A61AE625FC0003A277 /* blackrightquote.png in Resources */,
 			);
@@ -783,6 +800,7 @@
 				2DE627EF1C3B15A200F3BE36 /* UICaptionButton.m in Sources */,
 				2DF080B81AE625FC0003A277 /* MessagesViewController.m in Sources */,
 				2DCA59061B6ECB260011FCDB /* UISuggestionButton.m in Sources */,
+				2D2BA08E1C80F1E9001DC30E /* AddEventViewController.m in Sources */,
 				2DF080AF1AE625FC0003A277 /* ImageDownloader.m in Sources */,
 				2DF1272A1C44D6C600DBB3DE /* FLAnimatedImageView.m in Sources */,
 				2DF080B61AE625FC0003A277 /* Message.m in Sources */,

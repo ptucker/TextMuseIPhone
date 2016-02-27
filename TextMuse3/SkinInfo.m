@@ -75,6 +75,26 @@
     return [UIColor colorWithRed:r/256.0 green:g/256.0 blue:b/256.0 alpha:1.0];
 }
 
+-(UIColor*)getDarkestColor {
+    UIColor* ret = [self createColor1];
+    CGFloat r, g, b;
+    [[self createColor1] getRed:&r green:&g blue:&b alpha:nil];
+    CGFloat min = (r + g + b) / 3;
+    
+    [[self createColor2] getRed:&r green:&g blue:&b alpha:nil];
+    if ((r+g+b)/3 < min) {
+        min = (r+g+b)/3;
+        ret = [self createColor2];
+    }
+    [[self createColor3] getRed:&r green:&g blue:&b alpha:nil];
+    if ((r+g+b)/3 < min) {
+        min = (r+g+b)/3;
+        ret = [self createColor3];
+    }
+    
+    return ret;
+}
+
 -(UIColor*)createColor1 {
     if (_color1 == nil)
         _color1 = [SkinInfo createColor:[self Color1]];

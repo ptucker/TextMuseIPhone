@@ -19,6 +19,7 @@
     BOOL newMsg;
     BOOL pinned;
     BOOL liked;
+    
     int likeCount;
     BOOL version;
     ImageDownloader* loader;
@@ -32,6 +33,8 @@
     NSString* text;
     NSString* mediaUrl;
     NSString* url;
+    NSString* eventLocation;
+    NSString* eventDate;
     
     UIActivityIndicatorView* activityView;
     UIWebView* web;
@@ -54,6 +57,8 @@
 @property (nonatomic, readonly, copy) NSString* text;
 @property (nonatomic, readonly, copy) NSString* mediaUrl;
 @property (nonatomic, readonly, copy) NSString* url;
+@property (nonatomic, readwrite, copy) NSString* eventLocation;
+@property (nonatomic, readwrite, copy) NSString* eventDate;
 @property (nonatomic, readonly, copy) NSString* sponsorUrl;
 @property (nonatomic, readonly, copy) NSString* sponsorIcon;
 

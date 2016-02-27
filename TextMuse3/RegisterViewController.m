@@ -67,7 +67,6 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
 // Something inside this VC's view was tapped (except the navbar/toolbar)
 - (void)singleTapToDismissKeyboard:(UITapGestureRecognizer *)sender
 {
-    NSLog(@"singleTap");
     [self hideKeyboard:sender];
 }
 
@@ -75,7 +74,6 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
 // for protocol UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField*)textField
 {
-    NSLog(@"Return pressed");
     [self hideKeyboard:textField];
     return YES;
 }
@@ -86,7 +84,6 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
     // Why? Because it works and checking which one was last active gets messy.
     [txtEmail resignFirstResponder];
     [txtName resignFirstResponder];
-    NSLog(@"keyboard hidden");
 }
 
 -(IBAction)btnPrivacy:(id)sender {

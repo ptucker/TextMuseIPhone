@@ -299,7 +299,7 @@ NSString* localNotes = @"notes.xml";
     tmpRegMessages = [[NSMutableArray alloc] init];
     tmpVersionMessages = [[NSMutableArray alloc] init];
     parseFailed = false;
-    
+    NSString* xml = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:inetdata];
     [parser setDelegate:self];
     [parser parse];
@@ -767,6 +767,10 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         versionMsg = NO;
         if ([attributeDict objectForKey:@"version"] != nil)
             versionMsg = [[attributeDict objectForKey:@"version"] isEqualToString:@"1"];
+        BOOL useIcon = false;
+        if ([[attributeDict allKeys] containsObject:@"useicon"])
+            useIcon = [[attributeDict objectForKey:@"useicon"] isEqualToString:@"1"];
+        [currentCategory setUseIcon:useIcon];
         if ([[attributeDict allKeys] containsObject:@"url"] &&
                 [[attributeDict allKeys] containsObject:@"icon"]) {
             NSString* url = [attributeDict objectForKey:@"url"];
@@ -797,6 +801,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         likeCount = 0;
         if ([attributeDict objectForKey:@"likecount"] != nil)
             likeCount = [[attributeDict objectForKey:@"likecount"] intValue];
+        currentEventLoc = [attributeDict objectForKey:@"loc"];
+        currentEventDate = [attributeDict objectForKey:@"edate"];
         xmldata = [[NSMutableString alloc] init];
         currentText = nil;
         currentMediaUrl = nil;
@@ -819,26 +825,26 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString:@"n"]) {
-        //if (![[currentCategory name] isEqualToString: @"Trending"]) {
-            NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;
-            Message* msg = [[Message alloc] initWithId:currentMsgId
-                                                  text:m
-                                              mediaUrl:currentMediaUrl
-                                                   url:currentUrl
-                                           forCategory:[currentCategory name]
-                                                 isNew:newMsg];
-            [msg setLiked:likedMsg];
-            [msg setLikeCount:likeCount];
-            [msg setVersion:versionMsg];
-            [msg setOrder:categoryOrder];
-            [msg setPinned:[self isPinned:msg]];
-            categoryOrder++;
-            [[currentCategory messages] addObject:msg];
-            if (versionMsg)
-                [tmpVersionMessages addObject:msg];
-            else
-                [tmpRegMessages addObject:msg];
-        //}
+        NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;
+        Message* msg = [[Message alloc] initWithId:currentMsgId
+                                              text:m
+                                          mediaUrl:currentMediaUrl
+                                               url:currentUrl
+                                       forCategory:[currentCategory name]
+                                             isNew:newMsg];
+        [msg setLiked:likedMsg];
+        [msg setLikeCount:likeCount];
+        [msg setVersion:versionMsg];
+        [msg setOrder:categoryOrder];
+        [msg setPinned:[self isPinned:msg]];
+        [msg setEventDate:currentEventDate];
+        [msg setEventLocation:currentEventLoc];
+        categoryOrder++;
+        [[currentCategory messages] addObject:msg];
+        if (versionMsg)
+            [tmpVersionMessages addObject:msg];
+        else
+            [tmpRegMessages addObject:msg];
     }
     else if ([elementName isEqualToString:@"t"]) {
         [NotificationMsgs addObject:xmldata];

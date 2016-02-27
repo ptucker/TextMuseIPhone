@@ -6,6 +6,7 @@
 //  Copyright © 2015 LaLoosh. All rights reserved.
 //
 
+#import "MessageCategory.h"
 #import "MessageTableViewCell.h"
 #import "GlobalState.h"
 #import "Settings.h"
@@ -124,14 +125,20 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     
     if ([[msg text] length] > 0) {
         [lblContent setHidden:NO];
-        [lblContent setText:[msg text]];
+        NSString* txt = [msg text];
+        if ([[msg eventDate] length] > 0)
+            txt = [NSString stringWithFormat:@"%@\nWhen: %@", txt, [msg eventDate]];
+        if ([[msg eventLocation] length] > 0)
+            txt = [NSString stringWithFormat:@"%@\nWhere: %@", txt, [msg eventLocation]];
+        [lblContent setText:txt];
     }
     else {
         [lblContent setHidden:NO];
         [lblContent setText:@""];
     }
 
-    if ([msg version]) {
+    MessageCategory* category = [Data getCategory:[msg category]];
+    if ([msg version] && [category useIcon]) {
         [imgLogo setHidden:NO];
         frmTitle.origin.x = 8; //35;
         [lblTitle setFrame:frmTitle];

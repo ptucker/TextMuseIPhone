@@ -99,6 +99,10 @@ NSArray* colorsTitle;
                                                                   target:self
                                                                   action:@selector(showCategoryList:)];
     [[self navigationItem] setLeftBarButtonItem:leftButton];
+    
+    [[btnHome imageView] setContentMode:UIViewContentModeScaleAspectFit];
+    [[btnEvent imageView] setContentMode:UIViewContentModeScaleAspectFit];
+    [[btnGroup imageView] setContentMode:UIViewContentModeScaleAspectFit];
 }
 
 -(void)navigationController:(UINavigationController *)navigationController
@@ -279,10 +283,10 @@ NSArray* colorsTitle;
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
         [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
-        UIImage* imgPin = [[UIImage imageNamed:@"pin_grey"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [btnPin setImage:imgPin forState:UIControlStateNormal];
-        [btnPin setTintColor:colorTint];
-        [btnPin setTitleColor:colorTint forState:UIControlStateNormal];
+        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnEvent setImage:imgEvent forState:UIControlStateNormal];
+        [btnEvent setTintColor:colorTint];
+        [btnEvent setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
@@ -312,10 +316,10 @@ NSArray* colorsTitle;
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
         [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
-        UIImage* imgPin = [[UIImage imageNamed:@"pin_grey"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [btnPin setImage:imgPin forState:UIControlStateNormal];
-        [btnPin setTintColor:colorTint];
-        [btnPin setTitleColor:colorTint forState:UIControlStateNormal];
+        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnEvent setImage:imgEvent forState:UIControlStateNormal];
+        [btnEvent setTintColor:colorTint];
+        [btnEvent setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
@@ -339,7 +343,7 @@ NSArray* colorsTitle;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == categoryTable)
-        return [[Data getCategories] count];
+        return [[Data getCategories] count] + 1; //add one for pinned category
     else if (showPinned)
         return [pinnedMessages count];
     else
@@ -396,9 +400,16 @@ NSArray* colorsTitle;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
-        UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-        CurrentCategory = [[cell textLabel] text];
-        CurrentMessage = nil;
+        if ([indexPath row] == 0) {
+            [self showPinned:nil];
+            [self hideCategoryList];
+            return;
+        }
+        else {
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            CurrentCategory = [[cell textLabel] text];
+            CurrentMessage = nil;
+        }
     }
     else {
         CurrentMessage = showPinned ? [pinnedMessages objectAtIndex:[indexPath row]] :
@@ -417,10 +428,10 @@ NSArray* colorsTitle;
     UITableViewCell* cell = [[UITableViewCell alloc] init];
     [cell setBackgroundColor:[UIColor blackColor]];
     [[cell textLabel] setTextColor:[UIColor whiteColor]];
-    NSString* categoryName = [[Data getCategories] objectAtIndex:iCategory];
+    NSString* categoryName = (iCategory == 0) ? @"Pinned" : [[Data getCategories] objectAtIndex:iCategory-1];
     [[cell textLabel] setText:categoryName];
     
-    if (![[Data getRequiredCategories] containsObject:categoryName]) {
+    if (!(iCategory == 0 || [[Data getRequiredCategories] containsObject:categoryName])) {
         CGRect frmCheck = CGRectMake(width-46, 2, 42, 42);
         UICheckButton* chk = [[UICheckButton alloc] initWithFrame:frmCheck];
         [chk setExtra:categoryName];
@@ -481,6 +492,10 @@ NSArray* colorsTitle;
                         atScrollPosition:UITableViewScrollPositionTop
                                 animated:YES];
     }
+}
+
+-(IBAction)addEvent:(id)sender {
+    [self performSegueWithIdentifier:@"AddEvent" sender:self];
 }
 
 -(long) chosenCategory:(long)selectedCategory {

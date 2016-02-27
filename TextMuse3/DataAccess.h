@@ -50,7 +50,7 @@
     BOOL likedMsg;
     int likeCount;
     BOOL versionMsg;
-    NSString* currentText, *currentMediaUrl, *currentUrl;
+    NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate;
     
     //NSString* documentdir;
     

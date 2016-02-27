@@ -34,4 +34,6 @@
 -(UIColor*) createTextColor2;
 -(UIColor*) createTextColor3;
 
+-(UIColor*) getDarkestColor;
+
 @end
