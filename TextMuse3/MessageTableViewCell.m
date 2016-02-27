@@ -125,11 +125,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     
     if ([[msg text] length] > 0) {
         [lblContent setHidden:NO];
-        NSString* txt = [msg text];
-        if ([[msg eventDate] length] > 0)
-            txt = [NSString stringWithFormat:@"%@\nWhen: %@", txt, [msg eventDate]];
-        if ([[msg eventLocation] length] > 0)
-            txt = [NSString stringWithFormat:@"%@\nWhere: %@", txt, [msg eventLocation]];
+        NSString* txt = [msg getFullMessage];
         [lblContent setText:txt];
     }
     else {

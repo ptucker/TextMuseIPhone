@@ -137,6 +137,16 @@ YTPlayerView* globalYTPlayer = nil;
     return [ImageDownloader GetYoutubeId:mediaUrl] != nil;
 }
 
+-(NSString*)getFullMessage {
+    NSString* txt = [self text];
+    if ([[self eventDate] length] > 0)
+        txt = [NSString stringWithFormat:@"%@\nWhen: %@", txt, [self eventDate]];
+    if ([[self eventLocation] length] > 0)
+        txt = [NSString stringWithFormat:@"%@\nWhere: %@", txt, [self eventLocation]];
+    
+    return txt;
+}
+
 -(void)action:(id)sender {
     if (mediaUrl != nil) {
         //Check if this is a youtube URL

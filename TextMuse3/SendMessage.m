@@ -44,7 +44,7 @@ MFMessageComposeViewController* msgcontroller = nil;
         
         NSString* urlAdd = ([CurrentMessage url] == nil ? @"" :
                             [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
-        NSString* text = ([CurrentMessage text] == nil ? @"" : [CurrentMessage text]);
+        NSString* text = ([CurrentMessage getFullMessage] == nil ? @"" : [CurrentMessage getFullMessage]);
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
         NSString* sponsor = @"";
 #ifdef WHITWORTH

@@ -115,7 +115,8 @@ UIImage* bubble3 = nil;
     }
     if (frame.size.height < 350)
         fontSize -= 4;
-    
+
+    NSString* txt = [msg getFullMessage];
     if ([[msg mediaUrl] isEqualToString:@"usertext://"]) {
         imgLeftQuote = [[UIImageView alloc] initWithFrame:frmLeftQuote];
         [imgLeftQuote setImage:[UIImage imageNamed:@"blackleftquote"]];
@@ -133,8 +134,8 @@ UIImage* bubble3 = nil;
         }
         [tvContent setDelegate:self];
         [tvContent setAlpha:0.60];
-        if ([msg text] != nil && [[msg text] length] > 0)
-            [tvContent setText:[msg text]];
+        if (txt != nil && [txt length] > 0)
+            [tvContent setText:txt];
         else {
             tvContent.text = @"Add your message...";
             tvContent.textColor = [UIColor lightGrayColor]; //optional
@@ -145,14 +146,14 @@ UIImage* bubble3 = nil;
         [self addSubview:imgRightQuote];
         [self addSubview:tvContent];
     }
-    else if ([msg text] != nil && [[msg text] length] > 0) {
+    else if (txt != nil && [txt length] > 0) {
         imgLeftQuote = [[UIImageView alloc] initWithFrame:frmLeftQuote];
         [imgLeftQuote setImage:[UIImage imageNamed:@"blackleftquote"]];
         imgRightQuote = [[UIImageView alloc] initWithFrame:frmRightQuote];
         [imgRightQuote setImage:[UIImage imageNamed:@"blackrightquote"]];
 
         lblContent = [[UILabel alloc] initWithFrame:frmLblContent];
-        [lblContent setText:[msg text]];
+        [lblContent setText:txt];
         [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:fontSize]];
         [lblContent setTextColor:[UIColor blackColor]];
         [lblContent setNumberOfLines:0];

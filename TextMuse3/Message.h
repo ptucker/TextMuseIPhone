@@ -77,6 +77,8 @@
 -(BOOL)containsVideo;
 -(BOOL)isVideo;
 
+-(NSString*)getFullMessage;
+
 -(void)action:(id)sender;
 -(void)follow:(id)sender;
 -(void)updateText:(id)sender;
