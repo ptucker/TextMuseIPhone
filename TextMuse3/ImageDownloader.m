@@ -245,8 +245,14 @@ NSObject* lockDownloading;
         inetdata = nil;
         [self startDownload];
     }
-    else
+    else {
+        @synchronized(lockDownloading) {
+            downloading--;
+            if (downloading == 0)
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+        }
         NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
+    }
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{

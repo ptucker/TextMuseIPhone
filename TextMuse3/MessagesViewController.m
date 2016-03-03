@@ -13,8 +13,10 @@
 #import "Settings.h"
 #import "GlobalState.h"
 #import "DataAccess.h"
+#import "SqlData.h"
 
 NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
+NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
 
 @interface MessagesViewController ()
 
@@ -30,6 +32,20 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
                              [UIFont fontWithName:@"Lato-Medium" size:18.0], NSFontAttributeName, nil];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:txtAttrs forState:UIControlStateNormal];
     
+    if (![CurrentCategory isEqualToString:@"PinnedMessages"]) {
+        UIImage* flagit = [UIImage imageNamed:@"flag-variant.png"];
+        UIImage *scaledFlag = [UIImage imageWithCGImage:[flagit CGImage]
+                                                      scale:48.0/30
+                                                orientation:(flagit.imageOrientation)];
+        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledFlag
+                                                                        style:UIBarButtonItemStylePlain
+                                                                       target:self
+                                                                       action:@selector(flagit:)];
+        [[self navigationItem] setRightBarButtonItem: rightButton];
+    }
+    else
+        [[self navigationItem] setRightBarButtonItem: nil];
+
     UIColor* currColor = [colors objectAtIndex:CurrentColorIndex];
     [header setBackgroundColor:currColor];
     [headerLabel setBackgroundColor:currColor];
@@ -47,39 +63,7 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
     
     [scrollview setDelegate:self];
 
-    CGRect frame = [scrollview frame];
-    frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
-    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
-                     [Data getMessagesForCategory:CurrentCategory];
-    for (int i=0; i<[msgs count]; i++) {
-        Message* msg = [msgs objectAtIndex:i];
-        MessageView* mv = [[MessageView alloc] initWithFrame:frame];
-    
-        [mv setupViewForMessage:msg
-                        inFrame:frame
-                      withColor:[colors objectAtIndex:CurrentColorIndex]
-                          index:CurrentColorIndex];
-    
-        [scrollview addSubview:mv];
-        if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
-            frameStart.origin.x = frame.origin.x;
-        frame.origin.x += frame.size.width;
-    }
-    
-    Message* msg = [msgs objectAtIndex:0];
-    if ([msg liked])
-        [highlightButton setImage:[UIImage imageNamed:@"yellowHighlighter.png"]
-                         forState:UIControlStateNormal];
-    else
-        [highlightButton setImage:[UIImage imageNamed:@"greyHighlighter.png"]
-                         forState:UIControlStateNormal];
-
-    unsigned long cnt = [msgs count];
-    [scrollview setContentSize:CGSizeMake(frame.size.width * cnt, frame.size.height)];
-
-    //Only allow up to 15 dots
-    pageDivisor = (cnt/15) + 1;
-    [pages setNumberOfPages:(cnt/pageDivisor)];
+    [self showMessages];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -122,6 +106,45 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
     [pages setCurrentPage: (page / pageDivisor)];
 }
 
+-(void)showMessages {
+    for (UIView* v in [scrollview subviews])
+        [v removeFromSuperview];
+    
+    CGRect frame = [scrollview frame];
+    frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+                                                                    [Data getMessagesForCategory:CurrentCategory];
+    for (int i=0; i<[msgs count]; i++) {
+        Message* msg = [msgs objectAtIndex:i];
+        MessageView* mv = [[MessageView alloc] initWithFrame:frame];
+        
+        [mv setupViewForMessage:msg
+                        inFrame:frame
+                      withColor:[colors objectAtIndex:CurrentColorIndex]
+                          index:CurrentColorIndex];
+        
+        [scrollview addSubview:mv];
+        if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
+            frameStart.origin.x = frame.origin.x;
+        frame.origin.x += frame.size.width;
+    }
+    
+    Message* msg = [msgs objectAtIndex:0];
+    if ([msg liked])
+        [highlightButton setImage:[UIImage imageNamed:@"yellowHighlighter.png"]
+                         forState:UIControlStateNormal];
+    else
+        [highlightButton setImage:[UIImage imageNamed:@"greyHighlighter.png"]
+                         forState:UIControlStateNormal];
+    
+    unsigned long cnt = [msgs count];
+    [scrollview setContentSize:CGSizeMake(frame.size.width * cnt, frame.size.height)];
+    
+    //Only allow up to 15 dots
+    pageDivisor = (cnt/15) + 1;
+    [pages setNumberOfPages:(cnt/pageDivisor)];
+}
+
 - (IBAction)changePage {
     // update the scroll view to the appropriate page
     CGRect frame;
@@ -133,6 +156,55 @@ NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 
 -(IBAction)backButton:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(IBAction)flagit:(id)sender {
+    CGFloat pageWidth = [scrollview frame].size.width;
+    int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
+    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+    [Data getMessagesForCategory:CurrentCategory];
+    Message*msg = [msgs objectAtIndex:p];
+    
+    NSString* msgText = [[msg text] length] > 0 ? [msg text] : @"this message";
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Flag as inappropriate?"
+                                                    message:[NSString stringWithFormat:@"Are you sure you want to flag %@ as inappropriate?", msgText]
+                                                   delegate:self
+                                          cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
+                                          otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        CGFloat pageWidth = [scrollview frame].size.width;
+        int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
+        NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+        [Data getMessagesForCategory:CurrentCategory];
+        Message*msg = [msgs objectAtIndex:p];
+        
+        [SqlDb flagMessage:msg];
+        
+        [self showMessages];
+        
+        NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlFlagNote]
+                                                           cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                       timeoutInterval:30];
+        [req setHTTPMethod:@"POST"];
+        [req setHTTPBody:[[NSString stringWithFormat:@"id=%ld", (long)[msg msgId]]
+                          dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                                delegate:nil
+                                                        startImmediately:YES];
+
+        //If we deleted the last one, scroll to the new last one
+        if (p == [msgs count]-1) {
+            CGRect frame = [scrollview frame];
+            CGRect frameScroll = CGRectMake([scrollview contentSize].width - frame.size.width, 0,
+                                            frame.size.width, frame.size.height);
+            [scrollview scrollRectToVisible:frameScroll animated:YES];
+        }
+    }
 }
 
 -(IBAction)chooseMessage:(id)sender {

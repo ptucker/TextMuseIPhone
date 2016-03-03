@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 #import "Message.h"
-@interface SqlData : NSObject
+@interface SqlData : NSObject {
+    sqlite3* db;
+}
 
 @property (nonatomic, strong) NSString *documentsDirectory;
 @property (nonatomic, strong) NSString *databaseFilename;
@@ -18,5 +20,9 @@
 -(void)pinMessage:(Message*)msg;
 -(void)unpinMessage:(Message*)msg;
 -(NSArray*)getPinnedMessages;
+
+-(void)flagMessage:(Message*) msg;
+-(BOOL)isFlagged:(Message*) msg;
+-(BOOL)isFlaggedId:(int) msgId;
 
 @end

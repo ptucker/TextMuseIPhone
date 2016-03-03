@@ -579,8 +579,14 @@ NSString* localNotes = @"notes.xml";
         return YourMessages;
     else if ([category isEqualToString:NSLocalizedString(@"Recent Messages Title", nil)])
         return RecentMessages;
-    else
-        return [[categories objectForKey:category] messages];
+    else {
+        NSMutableArray* ms = [[NSMutableArray alloc] init];
+        for (Message*m in [[categories objectForKey:category] messages]) {
+            if (![SqlDb isFlagged:m])
+                [ms addObject:m];
+        }
+        return ms;
+    }
 }
 
 -(int)getNewMessageCount {
@@ -825,26 +831,28 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString:@"n"]) {
-        NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;
-        Message* msg = [[Message alloc] initWithId:currentMsgId
-                                              text:m
-                                          mediaUrl:currentMediaUrl
-                                               url:currentUrl
-                                       forCategory:[currentCategory name]
-                                             isNew:newMsg];
-        [msg setLiked:likedMsg];
-        [msg setLikeCount:likeCount];
-        [msg setVersion:versionMsg];
-        [msg setOrder:categoryOrder];
-        [msg setPinned:[self isPinned:msg]];
-        [msg setEventDate:currentEventDate];
-        [msg setEventLocation:currentEventLoc];
-        categoryOrder++;
-        [[currentCategory messages] addObject:msg];
-        if (versionMsg)
-            [tmpVersionMessages addObject:msg];
-        else
-            [tmpRegMessages addObject:msg];
+        if (![SqlDb isFlaggedId:currentMsgId]) {
+            NSString* m = (currentText==nil && currentMediaUrl==nil && currentUrl==nil) ? xmldata : currentText;
+            Message* msg = [[Message alloc] initWithId:currentMsgId
+                                                  text:m
+                                              mediaUrl:currentMediaUrl
+                                                   url:currentUrl
+                                           forCategory:[currentCategory name]
+                                                 isNew:newMsg];
+            [msg setLiked:likedMsg];
+            [msg setLikeCount:likeCount];
+            [msg setVersion:versionMsg];
+            [msg setOrder:categoryOrder];
+            [msg setPinned:[self isPinned:msg]];
+            [msg setEventDate:currentEventDate];
+            [msg setEventLocation:currentEventLoc];
+            categoryOrder++;
+            [[currentCategory messages] addObject:msg];
+            if (versionMsg)
+                [tmpVersionMessages addObject:msg];
+            else
+                [tmpRegMessages addObject:msg];
+        }
     }
     else if ([elementName isEqualToString:@"t"]) {
         [NotificationMsgs addObject:xmldata];

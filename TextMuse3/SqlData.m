@@ -19,12 +19,17 @@
         [self setDatabaseFilename: @"textmuse.db"];
 
         NSString *dbPath = [[self documentsDirectory] stringByAppendingPathComponent:[self databaseFilename]];
-        sqlite3* db;
-        BOOL openDatabaseResult = sqlite3_open([dbPath UTF8String], &db);
+        BOOL openDatabaseResult = SQLITE_OK;
+        if (db == nil)
+            openDatabaseResult = sqlite3_open([dbPath UTF8String], &db);
         if (openDatabaseResult == SQLITE_OK) {
             NSString* pins = @"create table if not exists Pins (msgid int, msg text, mediaurl text, url text);";
             sqlite3_stmt* stmt;
             if (sqlite3_prepare(db, [pins UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+                sqlite3_step(stmt);
+            }
+            NSString* flagged  = @"create table if not exists Flagged (msgid int);";
+            if (sqlite3_prepare(db, [flagged UTF8String], -1, &stmt, nil) == SQLITE_OK) {
                 sqlite3_step(stmt);
             }
         }
@@ -37,19 +42,14 @@
             [av show];
         }
         
-        sqlite3_close(db);
     }
     
     return self;
 }
 
 -(void)pinMessage:(Message*)msg {
-    sqlite3* db;
-    NSString *databasePath = [[self documentsDirectory] stringByAppendingPathComponent:[self databaseFilename]];
-    BOOL openDatabaseResult = sqlite3_open([databasePath UTF8String], &db);
-    if (openDatabaseResult != SQLITE_OK)
-        return;
- 
+    if (db == nil) return;
+    
     NSString* text = [msg text] == nil ? @"null" :
             [NSString stringWithFormat:@"'%@'", [[msg text] stringByReplacingOccurrencesOfString:@"'"
                                                                                       withString:@"''"]];
@@ -61,31 +61,21 @@
         sqlite3_step(stmt);
         
     }
-    sqlite3_close(db);
 }
 
 -(void)unpinMessage:(Message*)msg {
-    sqlite3* db;
-    NSString *databasePath = [[self documentsDirectory] stringByAppendingPathComponent:[self databaseFilename]];
-    BOOL openDatabaseResult = sqlite3_open([databasePath UTF8String], &db);
-    if (openDatabaseResult != SQLITE_OK)
-        return;
-    
+    if (db == nil) return;
+
     NSString* insert = [NSString stringWithFormat:@"delete from Pins where msgid=%d;", [msg msgId]];
     sqlite3_stmt* stmt;
     if (sqlite3_prepare(db, [insert UTF8String], -1, &stmt, nil) == SQLITE_OK) {
         sqlite3_step(stmt);
         
     }
-    sqlite3_close(db);
 }
 
 -(NSArray*)getPinnedMessages {
-    sqlite3* db;
-    NSString *databasePath = [[self documentsDirectory] stringByAppendingPathComponent:[self databaseFilename]];
-    BOOL openDatabaseResult = sqlite3_open([databasePath UTF8String], &db);
-    if (openDatabaseResult  != SQLITE_OK)
-        return nil;
+    if (db == nil) return nil;
     
     NSString* fetch = @"select msgid, msg, mediaurl, url from Pins;";
     sqlite3_stmt* stmt;
@@ -110,9 +100,45 @@
         }
         
     }
-    sqlite3_close(db);
     
     return pins;
+}
+
+-(void)flagMessage:(Message*)msg {
+    if (db == nil) return;
+
+    NSString* insert = [NSString stringWithFormat:@"insert into Flagged (msgid) values (%d);", [msg msgId]];
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare(db, [insert UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        sqlite3_step(stmt);
+        
+    }
+}
+
+-(BOOL)isFlagged:(Message*)msg {
+    if (db == nil) return false;
+
+    BOOL ret = false;
+    NSString* fetch = [NSString stringWithFormat:@"select msgid from Flagged where msgid=%d;", [msg msgId]];
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+    }
+    
+    return ret;
+}
+
+-(BOOL)isFlaggedId:(int)msgId {
+    if (db == nil) return false;
+    
+    BOOL ret = false;
+    NSString* fetch = [NSString stringWithFormat:@"select msgid from Flagged where msgid=%d;", msgId];
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+    }
+    
+    return ret;
 }
 
 @end
