@@ -48,6 +48,7 @@
     int categoryOrder;
     BOOL newMsg;
     BOOL likedMsg;
+    BOOL isBadge;
     int likeCount;
     BOOL versionMsg;
     NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate;

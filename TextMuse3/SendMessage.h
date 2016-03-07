@@ -20,7 +20,7 @@ extern MFMessageComposeViewController* msgcontroller;
 }
 
 -(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController*)parent;
--(void)updateMessageCount:(int)msgId;
+-(void)updateMessageCount:(int)msgId withCount:(unsigned int)c;
 -(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result;
 
 @end

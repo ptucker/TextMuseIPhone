@@ -19,6 +19,7 @@
     BOOL newMsg;
     BOOL pinned;
     BOOL liked;
+    BOOL badge;
     
     int likeCount;
     BOOL version;
@@ -45,6 +46,7 @@
 @property (readwrite) BOOL newMsg;
 @property (readwrite) BOOL pinned;
 @property (readwrite) BOOL liked;
+@property (readwrite) BOOL badge;
 @property (readwrite) int likeCount;
 @property (readwrite) BOOL version;
 @property (readonly) ImageDownloader* loader;

@@ -33,7 +33,7 @@ MFMessageComposeViewController* msgcontroller = nil;
     
     if([MFMessageComposeViewController canSendText])
     {
-        [self updateMessageCount:[CurrentMessage msgId]];
+        [self updateMessageCount:[CurrentMessage msgId] withCount:(unsigned int)[contactlist count]];
         NSMutableArray* phones = [[NSMutableArray alloc] init];
         for (UserContact*c in contactlist) {
             [phones addObject:[c getPhone]];
@@ -97,14 +97,14 @@ MFMessageComposeViewController* msgcontroller = nil;
     }
 }
 
--(void)updateMessageCount:(int)msgId {
+-(void)updateMessageCount:(int)msgId withCount:(unsigned int)c {
     NSURL* url = [NSURL URLWithString:urlUpdateNotes];
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
                                                        cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                    timeoutInterval:30];
     inetdata = [[NSMutableData alloc] init];
     [req setHTTPMethod:@"POST"];
-    [req setHTTPBody:[[NSString stringWithFormat:@"id=%d&app=%@", msgId, AppID]
+    [req setHTTPBody:[[NSString stringWithFormat:@"id=%d&app=%@&cnt=%d", msgId, AppID, c]
                       dataUsingEncoding:NSUTF8StringEncoding]];
     
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req

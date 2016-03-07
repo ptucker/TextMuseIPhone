@@ -938,6 +938,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuse;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -959,6 +960,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuse;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

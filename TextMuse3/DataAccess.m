@@ -520,7 +520,11 @@ NSString* localNotes = @"notes.xml";
 
 -(void) mergeMessages {
     int v = 0, r = 0;
-    allMessages = [[NSMutableArray alloc] init];
+    NSArray* bs = [self getMessagesForCategory:@"Badges"];
+    if (bs == nil)
+        allMessages = [[NSMutableArray alloc] init];
+    else
+        allMessages = [NSMutableArray arrayWithArray:[self getMessagesForCategory:@"Badges"]];
     while (v < [tmpVersionMessages count] || r < [tmpRegMessages count]) {
         if (v < [tmpVersionMessages count]){
             [allMessages addObject:[tmpVersionMessages objectAtIndex:v]];
@@ -580,6 +584,9 @@ NSString* localNotes = @"notes.xml";
     else if ([category isEqualToString:NSLocalizedString(@"Recent Messages Title", nil)])
         return RecentMessages;
     else {
+        if ([categories objectForKey:category] == nil)
+            return nil;
+        
         NSMutableArray* ms = [[NSMutableArray alloc] init];
         for (Message*m in [[categories objectForKey:category] messages]) {
             if (![SqlDb isFlagged:m])
@@ -749,6 +756,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         categoryOrder = 0;
         NSString* name = [attributeDict objectForKey:@"name"];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        isBadge = [name isEqualToString:@"Badges"];
 
         currentCategory = [[MessageCategory alloc] initWithName:name];
         [currentCategory setOrder:[tmpCategories count]];
@@ -841,6 +849,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
                                                  isNew:newMsg];
             [msg setLiked:likedMsg];
             [msg setLikeCount:likeCount];
+            [msg setBadge:isBadge];
             [msg setVersion:versionMsg];
             [msg setOrder:categoryOrder];
             [msg setPinned:[self isPinned:msg]];
