@@ -15,7 +15,7 @@ extern NSArray* colorsText;
 extern NSArray* colorsTitle;
 
 @interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,
-DataRefreshDelegate, UINavigationControllerDelegate> {
+DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     IBOutlet UITableView* messages;
     IBOutlet UIButton* btnHome;
     IBOutlet UIButton* btnEvent;

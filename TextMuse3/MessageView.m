@@ -49,7 +49,7 @@ UIImage* bubble3 = nil;
     CGRect frmLblContent = CGRectMake(66, frame.size.height/8,
                                       frame.size.width-132, frame.size.height - 80);
     CGFloat fontSize = 24.0;
-    CGRect frmPin = CGRectMake(frame.size.width-8-84, frame.size.height-24, 84, 24);
+    CGRect frmPin = CGRectMake(frame.size.width-8-104, frame.size.height-24, 104, 24);
     CGRect frmLike = CGRectMake(12, frame.size.height-24, 96, 24);
     CGRect frmBtnDetails = CGRectMake(frame.size.width/2-48, frame.size.height-24, 96, 24);
     
@@ -180,7 +180,7 @@ UIImage* bubble3 = nil;
     NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_dkgrey";
     if (btnPin == nil) {
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
-                                                andRightText:@"pin it"];
+                                                andRightText:@"save it"];
         [btnPin setCaptionColor:[UIColor darkGrayColor]];
         [self addSubview:btnPin];
     }

@@ -595,16 +595,16 @@ NSArray* colorsTitle;
     [pages setNumberOfPages:pagecount];
     int x = 0;
     NSString* images[] = {
-        @"categories.png", @"message.png", @"contacts.png", @"message_edit.png", @"settings.png"
+        @"walk_one", @"walk_two", @"walk_three", @"walk_four", @"walk_five"
     };
     NSString* txts[] = {
-        @"Choose a category to find a text message you want to send your friends.",
-        @"Swipe through and touch the text message you want to send.",
-        @"After choosing a text, choose a contact or select a few and touch 'SEND'.",
-        @"... and before you send it, you can make edits to give it that personal touch.",
-        @"Touch the cog to personalize TextMuse. Adjust settings and send us your feedback!"
+        @"Every day, you’ll find great local deals, great events, university news and other fun stuff.",
+        @"Choose a text to see more, save it for later or share it with someone.",
+        @"Choose a friend or group. If they have more than one number, swipe left and select the best number.",
+        @"... and before you send it, edit it to give it that personal touch.",
+        @"Touch the cog to personalize TextMuse – choose which categories you want to see and send us feedback."
     };
-    CGFloat txtHeight = 50;
+    CGFloat txtHeight = 80;
     frmScroll.size.height -= frmScroll.origin.y;
     for (int i=0; i<pagecount; i++) {
         CGRect frmHeader = CGRectMake(x + 10, 10, frmScroll.size.width - 20, 24);
@@ -653,6 +653,13 @@ NSArray* colorsTitle;
     
     ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
     [[self view] addSubview:skinview];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat pageWidth = [scroller frame].size.width;
+    float fractionalPage = [scroller contentOffset].x / pageWidth;
+    NSInteger page = lround(fractionalPage);
+    [pages setCurrentPage: page];
 }
 
 - (IBAction)pageTurn:(id)sender {
