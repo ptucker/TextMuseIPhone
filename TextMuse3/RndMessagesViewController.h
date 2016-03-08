@@ -30,6 +30,7 @@ DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     NSArray* allMessages;
     NSArray* pinnedMessages;
     BOOL showPinned;
+    BOOL showEvents;
 }
 
 -(IBAction)addEvent:(id)sender;

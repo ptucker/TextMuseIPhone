@@ -62,7 +62,7 @@
                                 <rect key="frame" x="20" y="79" width="280" height="57"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Location" textAlignment="natural" minimumFontSize="17" id="6xi-sw-xS2">
@@ -490,12 +490,12 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sYc-fb-cG4">
-                                        <rect key="frame" x="122" y="4" width="85" height="32"/>
+                                        <rect key="frame" x="114" y="4" width="97" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <state key="normal" title="event" image="calendar-plus.png"/>
                                         <connections>
-                                            <action selector="addEvent:" destination="4sn-wL-anZ" eventType="touchUpInside" id="3Cb-gn-Utn"/>
+                                            <action selector="toggleEventFilter:" destination="4sn-wL-anZ" eventType="touchUpInside" id="v3U-8H-vGc"/>
                                         </connections>
                                     </button>
                                 </subviews>

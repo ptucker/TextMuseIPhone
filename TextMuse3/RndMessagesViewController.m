@@ -36,6 +36,7 @@ NSArray* colorsTitle;
     messages = [[UITableView alloc] initWithFrame:frmMessages];
     [[self view] addSubview:messages];
     showPinned = false;
+    showEvents = false;
     
     if (colors == nil)
         [self setColors];
@@ -43,16 +44,18 @@ NSArray* colorsTitle;
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [messages addSubview:refreshControl];
-    
-    UIImage* settings = [UIImage imageNamed:@"gear.png"];
-    UIImage *scaledSettings = [UIImage imageWithCGImage:[settings CGImage]
-                                                  scale:73.0/30
-                                            orientation:(settings.imageOrientation)];
+
+    UIImage* imgEvent = [UIImage imageNamed:@"calendar-plus"];
+    UIImage *scaledSettings = [UIImage imageWithCGImage:[imgEvent CGImage]
+                                                  scale:48.0/30
+                                            orientation:(imgEvent.imageOrientation)];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
-                                                                   action:@selector(settings:)];
+                                                                   action:@selector(addEvent:)];
     [[self navigationItem] setRightBarButtonItem: rightButton];
+
+    
     [[self navigationController] setDelegate:self];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
@@ -103,6 +106,8 @@ NSArray* colorsTitle;
     [[btnHome imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [[btnEvent imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [[btnGroup imageView] setContentMode:UIViewContentModeScaleAspectFit];
+    [btnEvent setTitle:@"events" forState:UIControlStateNormal];
+    [btnEvent setTitle:@"all" forState:UIControlStateSelected];
 }
 
 -(void)navigationController:(UINavigationController *)navigationController
@@ -283,8 +288,10 @@ NSArray* colorsTitle;
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
         [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
-        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage* imgNotes = [[UIImage imageNamed:@"note-text"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnEvent setImage:imgEvent forState:UIControlStateNormal];
+        [btnEvent setImage:imgNotes forState:UIControlStateSelected];
         [btnEvent setTintColor:colorTint];
         [btnEvent setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -343,9 +350,11 @@ NSArray* colorsTitle;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == categoryTable)
-        return [[Data getCategories] count] + 1; //add one for pinned category
+        return [[Data getCategories] count] + 2; //add one for pinned category and one for settings
     else if (showPinned)
         return [pinnedMessages count];
+    else if (showEvents)
+        return [[Data getMessagesForCategory:@"Events"] count];
     else
         return [[Data getAllMessages] count];
 }
@@ -354,8 +363,13 @@ NSArray* colorsTitle;
     if (tableView == categoryTable)
         return 46.0;
     else {
-        Message* msg = showPinned ? [pinnedMessages objectAtIndex:[indexPath row]] :
-                                    [[Data getAllMessages] objectAtIndex:[indexPath row]];
+        Message* msg = nil;
+        if (showPinned)
+            msg = [pinnedMessages objectAtIndex:[indexPath row]];
+        else if (showEvents)
+            msg = [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+        else
+            msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
     }
 }
@@ -367,13 +381,13 @@ NSArray* colorsTitle;
     else {
         static NSString *TextCellIdentifier = @"txtmessages";
         static NSString *ImgCellIdentifier = @"imgmessages";
-        Message* msg = showPinned ? [pinnedMessages objectAtIndex:[indexPath row]] :
-                                    [[Data getAllMessages] objectAtIndex:[indexPath row]];
-        /*
-        MessageTableViewCell *cell = ([msg img] != nil) ?
-                                    [tableView dequeueReusableCellWithIdentifier:ImgCellIdentifier] :
-                                    [tableView dequeueReusableCellWithIdentifier:TextCellIdentifier];
-         */
+        Message* msg = nil;
+        if (showPinned)
+            msg = [pinnedMessages objectAtIndex:[indexPath row]];
+        else if (showEvents)
+            msg = [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+        else
+            msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         MessageTableViewCell* cell = nil;
         if (cell == nil) {
             cell = ([msg mediaUrl] != nil) ?
@@ -401,6 +415,11 @@ NSArray* colorsTitle;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
         if ([indexPath row] == 0) {
+            [self settings:nil];
+            [self hideCategoryList];
+            return;
+        }
+        else if ([indexPath row] == 1) {
             [self showPinned:nil];
             [self hideCategoryList];
             return;
@@ -412,8 +431,12 @@ NSArray* colorsTitle;
         }
     }
     else {
-        CurrentMessage = showPinned ? [pinnedMessages objectAtIndex:[indexPath row]] :
-                                      [[Data getAllMessages] objectAtIndex:[indexPath row]];
+        if (showPinned)
+            CurrentMessage = [pinnedMessages objectAtIndex:[indexPath row]];
+        else if (showEvents)
+            CurrentMessage = [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+        else
+            CurrentMessage = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         CurrentCategory = showPinned ? @"PinnedMessages" : [CurrentMessage category];
     }
     
@@ -428,10 +451,16 @@ NSArray* colorsTitle;
     UITableViewCell* cell = [[UITableViewCell alloc] init];
     [cell setBackgroundColor:[UIColor blackColor]];
     [[cell textLabel] setTextColor:[UIColor whiteColor]];
-    NSString* categoryName = (iCategory == 0) ? @"Pinned" : [[Data getCategories] objectAtIndex:iCategory-1];
+    NSString* categoryName = nil;
+    if (iCategory == 0)
+        categoryName = @"Settings";
+    else if (iCategory == 1)
+        categoryName = @"Pinned";
+    else
+        categoryName = [[Data getCategories] objectAtIndex:iCategory-2];
     [[cell textLabel] setText:categoryName];
     
-    if (!(iCategory == 0 || [[Data getRequiredCategories] containsObject:categoryName])) {
+    if (!(iCategory == 0 || iCategory == 1 || [[Data getRequiredCategories] containsObject:categoryName])) {
         CGRect frmCheck = CGRectMake(width-46, 2, 42, 42);
         UICheckButton* chk = [[UICheckButton alloc] initWithFrame:frmCheck];
         [chk setExtra:categoryName];
@@ -476,6 +505,7 @@ NSArray* colorsTitle;
 }
 
 -(IBAction)showPinned:(id)sender {
+    showEvents = false;
     if ([[Data getPinnedMessages] count] == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Pinned Messages"
                                                         message:@"You don't have any pinned messages yet. Click on the pin icon for a message you want to save, and it will be displayed here."
@@ -496,6 +526,13 @@ NSArray* colorsTitle;
 
 -(IBAction)addEvent:(id)sender {
     [self performSegueWithIdentifier:@"AddEvent" sender:self];
+}
+
+-(IBAction)toggleEventFilter:(id)sender {
+    showPinned = false;
+    showEvents = !showEvents;
+    [btnEvent setSelected:showEvents];
+    [messages reloadData];
 }
 
 -(long) chosenCategory:(long)selectedCategory {
