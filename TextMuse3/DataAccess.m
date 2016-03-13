@@ -253,14 +253,15 @@ NSString* localNotes = @"notes.xml";
         if ([l respondsToSelector:@selector(dataRefresh)])
             [l performSelector:@selector(dataRefresh)];
     }
-    
+
+    /*
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Download Error"
                                                     message:[error localizedDescription]
                                                    delegate:nil
                                           cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
                                           otherButtonTitles:nil, nil];
     [alert show];
-    
+    */
     conn = nil;
 }
 

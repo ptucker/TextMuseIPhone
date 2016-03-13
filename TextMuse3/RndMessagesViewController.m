@@ -323,7 +323,7 @@ NSArray* colorsTitle;
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
         [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
-        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnEvent setImage:imgEvent forState:UIControlStateNormal];
         [btnEvent setTintColor:colorTint];
         [btnEvent setTitleColor:colorTint forState:UIControlStateNormal];
