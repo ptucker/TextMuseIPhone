@@ -220,7 +220,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
             req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
                                           cachePolicy:NSURLRequestReloadIgnoringCacheData
                                       timeoutInterval:30];
-            [req setHTTPBody:[[NSString stringWithFormat:@"app=%ld&game=%@", -1*(long)[msg msgId], AppID]
+            [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&game=%ld", AppID, -1*(long)[msg msgId]]
                               dataUsingEncoding:NSUTF8StringEncoding]];
         }
         [req setHTTPMethod:@"POST"];
