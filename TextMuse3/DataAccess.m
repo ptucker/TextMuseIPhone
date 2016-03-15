@@ -878,9 +878,13 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             NSString* msgs = NSLocalizedString(@"Your Messages Title", nil);
             NSMutableArray* removes = [[NSMutableArray alloc] init];
             for (NSString* c in [CategoryList keyEnumerator]) {
-                if ([tmpCategories objectForKey:c] == nil && ![c isEqualToString:photos] &&
-                        ![c isEqualToString:msgs])
+                if (([tmpCategories objectForKey:c] == nil ||
+                            [[[tmpCategories objectForKey:c] messages] count] == 0) &&
+                        ![c isEqualToString:photos] && ![c isEqualToString:msgs]) {
                     [removes addObject:c];
+                    if ([tmpCategories objectForKey:c] != nil)
+                        [tmpCategories removeObjectForKey:c];
+                }
             }
             for (NSString* r in removes)
                 [CategoryList removeObjectForKey:r];

@@ -17,6 +17,7 @@
 
 NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
+NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 
 @interface MessagesViewController ()
 
@@ -32,16 +33,12 @@ NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
                              [UIFont fontWithName:@"Lato-Medium" size:18.0], NSFontAttributeName, nil];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:txtAttrs forState:UIControlStateNormal];
     
-    if (![CurrentCategory isEqualToString:@"PinnedMessages"]) {
-        UIImage* flagit = [UIImage imageNamed:@"flag-variant.png"];
-        UIImage *scaledFlag = [UIImage imageWithCGImage:[flagit CGImage]
-                                                      scale:48.0/30
-                                                orientation:(flagit.imageOrientation)];
-        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledFlag
-                                                                        style:UIBarButtonItemStylePlain
-                                                                       target:self
-                                                                       action:@selector(flagit:)];
-        [[self navigationItem] setRightBarButtonItem: rightButton];
+    if (![CurrentCategory isEqualToString:@"PinnedMessages"])
+    {
+        if ([CurrentCategory isEqualToString:@"Badges"])
+            [self setRightButtonRemit];
+        else
+            [self setRightButtonFlag];
     }
     else
         [[self navigationItem] setRightBarButtonItem: nil];
@@ -85,16 +82,6 @@ NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
     CGFloat pageWidth = [scrollview frame].size.width;
     int page = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
     
-    /*
-    long p = [pages currentPage];
-    Message* m = [quotes objectAtIndex:p];
-    if (page != [pages currentPage]) {
-        [m setNewMsg:NO];
-        if ([starImages count] > 0)
-            [[starImages objectAtIndex:p] setHidden:YES];
-    }
-     */
-    
     Message* msg = [quotes objectAtIndex:page];
     if ([msg liked])
         [highlightButton setImage:[UIImage imageNamed:@"yellowHighlighter.png"]
@@ -104,6 +91,30 @@ NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
                          forState:UIControlStateNormal];
     
     [pages setCurrentPage: (page / pageDivisor)];
+}
+
+-(void)setRightButtonFlag {
+    UIImage* flagit = [UIImage imageNamed:@"flag-variant.png"];
+    UIImage *scaledFlag = [UIImage imageWithCGImage:[flagit CGImage]
+                                              scale:48.0/30
+                                        orientation:(flagit.imageOrientation)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledFlag
+                                                                    style:UIBarButtonItemStylePlain
+                                                                   target:self
+                                                                   action:@selector(flagit:)];
+    [[self navigationItem] setRightBarButtonItem: rightButton];
+}
+
+-(void)setRightButtonRemit {
+    UIImage* flagit = [UIImage imageNamed:@"currency-usd.png"];
+    UIImage *scaledFlag = [UIImage imageWithCGImage:[flagit CGImage]
+                                              scale:48.0/30
+                                        orientation:(flagit.imageOrientation)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledFlag
+                                                                    style:UIBarButtonItemStylePlain
+                                                                   target:self
+                                                                   action:@selector(remitit:)];
+    [[self navigationItem] setRightBarButtonItem: rightButton];
 }
 
 -(void)showMessages {
@@ -171,11 +182,22 @@ NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
                                                    delegate:self
                                           cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
                                           otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+    [alert setTag:100];
+    [alert show];
+}
+
+-(IBAction)remitit:(id)sender {
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
+                                                    message:@"Are you sure you want to remit this badge?"
+                                                   delegate:self
+                                          cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
+                                          otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+    [alert setTag:101];
     [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
+    if (buttonIndex == 0 && ([alertView tag] == 100 || [alertView tag] == 101)) {
         CGFloat pageWidth = [scrollview frame].size.width;
         int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
         NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
@@ -183,26 +205,43 @@ NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
         Message*msg = [msgs objectAtIndex:p];
         
         [SqlDb flagMessage:msg];
+        [Data reloadData];
         
-        [self showMessages];
-        
-        NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlFlagNote]
-                                                           cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                                       timeoutInterval:30];
+        NSMutableURLRequest* req = nil;
+        if ([alertView tag] == 100) {
+            req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlFlagNote]
+                                          cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                      timeoutInterval:30];
+            [req setHTTPBody:[[NSString stringWithFormat:@"id=%ld", (long)[msg msgId]]
+                              dataUsingEncoding:NSUTF8StringEncoding]];
+            
+        }
+        else if ([alertView tag] == 101) {
+            req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
+                                          cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                      timeoutInterval:30];
+            [req setHTTPBody:[[NSString stringWithFormat:@"app=%ld&game=%@", -1*(long)[msg msgId], AppID]
+                              dataUsingEncoding:NSUTF8StringEncoding]];
+        }
         [req setHTTPMethod:@"POST"];
-        [req setHTTPBody:[[NSString stringWithFormat:@"id=%ld", (long)[msg msgId]]
-                          dataUsingEncoding:NSUTF8StringEncoding]];
-        
         NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
                                                                 delegate:nil
                                                         startImmediately:YES];
-
-        //If we deleted the last one, scroll to the new last one
-        if (p == [msgs count]-1) {
-            CGRect frame = [scrollview frame];
-            CGRect frameScroll = CGRectMake([scrollview contentSize].width - frame.size.width, 0,
-                                            frame.size.width, frame.size.height);
-            [scrollview scrollRectToVisible:frameScroll animated:YES];
+        
+        if ([msgs count] == 1) {
+            //if we deleted the only one, then get out of this view
+            [[self navigationController] popViewControllerAnimated:YES];
+        }
+        else {
+            [self showMessages];
+            
+            //If we deleted the last one, scroll to the new last one
+            if (p == [msgs count]-1) {
+                CGRect frame = [scrollview frame];
+                CGRect frameScroll = CGRectMake([scrollview contentSize].width - frame.size.width, 0,
+                                                frame.size.width, frame.size.height);
+                [scrollview scrollRectToVisible:frameScroll animated:YES];
+            }
         }
     }
 }
