@@ -472,7 +472,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qXK-Zg-adm">
-                                        <rect key="frame" x="4" y="4" width="74" height="32"/>
+                                        <rect key="frame" x="4" y="4" width="85" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <state key="normal" title="home" image="home.png"/>
@@ -481,7 +481,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8Sx-EF-WVk">
-                                        <rect key="frame" x="234" y="4" width="82" height="32"/>
+                                        <rect key="frame" x="224" y="4" width="92" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <state key="normal" title="groups" image="account-multiple.png"/>
@@ -849,9 +849,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="account-multiple.png" width="36" height="36"/>
+        <image name="account-multiple.png" width="48" height="48"/>
         <image name="calendar-plus.png" width="48" height="48"/>
-        <image name="home.png" width="36" height="36"/>
+        <image name="home.png" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ynu-Ad-b5Z"/>
