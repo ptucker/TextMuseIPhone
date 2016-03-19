@@ -354,7 +354,7 @@ NSArray* colorsTitle;
     else if (showPinned)
         return [pinnedMessages count];
     else if (showEvents)
-        return [[Data getMessagesForCategory:@"Events"] count];
+        return [[Data getEventMessages] count];// [[Data getMessagesForCategory:@"Events"] count];
     else
         return [[Data getAllMessages] count];
 }
@@ -367,7 +367,8 @@ NSArray* colorsTitle;
         if (showPinned)
             msg = [pinnedMessages objectAtIndex:[indexPath row]];
         else if (showEvents)
-            msg = [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+            //[[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+            msg = [[Data getEventMessages] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
@@ -385,7 +386,8 @@ NSArray* colorsTitle;
         if (showPinned)
             msg = [pinnedMessages objectAtIndex:[indexPath row]];
         else if (showEvents)
-            msg = [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+             //[[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+            msg = [[Data getEventMessages] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         MessageTableViewCell* cell = nil;
@@ -434,7 +436,8 @@ NSArray* colorsTitle;
         if (showPinned)
             CurrentMessage = [pinnedMessages objectAtIndex:[indexPath row]];
         else if (showEvents)
-            CurrentMessage = [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+            // [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
+            CurrentMessage = [[Data getEventMessages] objectAtIndex:[indexPath row]];
         else
             CurrentMessage = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         CurrentCategory = showPinned ? @"PinnedMessages" : [CurrentMessage category];

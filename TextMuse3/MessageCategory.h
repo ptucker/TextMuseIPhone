@@ -17,6 +17,7 @@
 @property (atomic) BOOL chosen;
 @property (atomic, retain) SponsorInfo* sponsor;
 @property (atomic) BOOL useIcon;
+@property (atomic) BOOL eventToggle;
 @property (atomic) NSUInteger order;
 @property (atomic, retain) NSMutableArray* messages;
 

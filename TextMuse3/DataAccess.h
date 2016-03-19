@@ -77,6 +77,7 @@
 -(UserContact*)findUserByPhone:(NSString*)targetPhone;
 -(UserContact*)chooseRandomContact;
 -(NSArray*)getAllMessages;
+-(NSArray*)getEventMessages;
 -(NSArray*)getPinnedMessages;
 -(NSArray*)resortMessages;
 -(void)setMessagePin:(Message*)msg withValue:(BOOL)pin;

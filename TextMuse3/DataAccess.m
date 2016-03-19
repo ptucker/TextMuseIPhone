@@ -515,6 +515,15 @@ NSString* localNotes = @"notes.xml";
     return allMessages;
 }
 
+-(NSArray*)getEventMessages {
+    NSMutableArray* eventMessages = [[NSMutableArray alloc] init];
+    for (int i=0; i<[allMessages count]; i++) {
+        if ([[allMessages objectAtIndex:i] eventToggle])
+            [eventMessages addObject:[allMessages objectAtIndex:i]];
+    }
+    return eventMessages;
+}
+
 -(NSArray*)getPinnedMessages {
     return [SqlDb getPinnedMessages];
 }
@@ -779,6 +788,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             if (CategoryList != nil && [[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"0"])
                 [CategoryList setObject:@"1" forKey:[currentCategory name]];
         }
+        [currentCategory setEventToggle:([attributeDict objectForKey:@"event"] != nil &&
+                                         [[attributeDict objectForKey:@"event"] isEqualToString: @"1"])];
         versionMsg = NO;
         if ([attributeDict objectForKey:@"version"] != nil)
             versionMsg = [[attributeDict objectForKey:@"version"] isEqualToString:@"1"];
@@ -856,6 +867,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [msg setPinned:[self isPinned:msg]];
             [msg setEventDate:currentEventDate];
             [msg setEventLocation:currentEventLoc];
+            [msg setEventToggle:[currentCategory eventToggle]];
             categoryOrder++;
             [[currentCategory messages] addObject:msg];
             if (versionMsg)

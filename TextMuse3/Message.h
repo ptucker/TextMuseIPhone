@@ -36,6 +36,7 @@
     NSString* url;
     NSString* eventLocation;
     NSString* eventDate;
+    BOOL eventToggle;
     
     UIActivityIndicatorView* activityView;
     UIWebView* web;
@@ -61,6 +62,7 @@
 @property (nonatomic, readonly, copy) NSString* url;
 @property (nonatomic, readwrite, copy) NSString* eventLocation;
 @property (nonatomic, readwrite, copy) NSString* eventDate;
+@property (nonatomic, readwrite) BOOL eventToggle;
 @property (nonatomic, readonly, copy) NSString* sponsorUrl;
 @property (nonatomic, readonly, copy) NSString* sponsorIcon;
 
