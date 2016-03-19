@@ -264,6 +264,8 @@ NSArray* colorsTitle;
     
     [messages reloadData];
     
+    [btnEvent setHidden:[[Data getEventMessages] count] == 0];
+    
     [refreshControl endRefreshing];
 }
 
