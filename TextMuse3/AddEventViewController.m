@@ -35,6 +35,10 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
         [btnSubmit setBackgroundColor:[Skin getDarkestColor]];
     else
         [btnSubmit setBackgroundColor:[UIColor darkGrayColor]];
+    
+    CGSize sz = [[self view] frame].size;
+    sz.height = sz.height + 200;
+    [scroller setContentSize:sz];
 }
 
 - (void)didReceiveMemoryWarning {

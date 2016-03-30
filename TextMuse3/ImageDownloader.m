@@ -251,7 +251,7 @@ NSObject* lockDownloading;
             if (downloading == 0)
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
         }
-        NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
+        //NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
     }
 }
 

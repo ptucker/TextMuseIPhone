@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
+		2D1F54321C9E285400BC2261 /* LaunchImage-1242.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D1F54311C9E285400BC2261 /* LaunchImage-1242.png */; };
 		2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D236B031C115DA900CDE1F7 /* SendMessage.m */; };
 		2D292F661C9DC606000B6A14 /* walk_one.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D292F651C9DC606000B6A14 /* walk_one.png */; };
 		2D2BA08A1C80EF01001DC30E /* calendar-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D2BA0891C80EF01001DC30E /* calendar-plus.png */; };
@@ -137,6 +138,7 @@
 		2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUsViewController.m; sourceTree = "<group>"; };
 		2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		2D1F54311C9E285400BC2261 /* LaunchImage-1242.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchImage-1242.png"; sourceTree = "<group>"; };
 		2D236B021C115DA900CDE1F7 /* SendMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMessage.h; sourceTree = "<group>"; };
 		2D236B031C115DA900CDE1F7 /* SendMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMessage.m; sourceTree = "<group>"; };
 		2D292F651C9DC606000B6A14 /* walk_one.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walk_one.png; sourceTree = "<group>"; };
@@ -501,6 +503,7 @@
 				2D4AC7E31B22BCAC00749074 /* LaunchImage_750.png */,
 				2DC75F851BA141A90025AB8A /* LaunchImage-568h.png */,
 				2DC75F861BA141A90025AB8A /* LaunchImage-568h@2x.png */,
+				2D1F54311C9E285400BC2261 /* LaunchImage-1242.png */,
 				2D4AC7E11B22BC6400749074 /* LaunchImage.png */,
 				2DF67BD41C4CA7A800329DC8 /* link.png */,
 				2D343EB81C60692600587D19 /* menu.png */,
@@ -739,6 +742,7 @@
 				2D32407E1C2F520F00E4E59B /* ImageMessageTableViewCell.xib in Resources */,
 				2DF080A81AE625FC0003A277 /* CategoriesTableViewCell.xib in Resources */,
 				2DF67BDB1C4CA7A800329DC8 /* greyheart.png in Resources */,
+				2D1F54321C9E285400BC2261 /* LaunchImage-1242.png in Resources */,
 				2DF67BDD1C4CA7A800329DC8 /* heart_red.png in Resources */,
 				2D3CDB891C97BFE300D8A2F5 /* currency-usd.png in Resources */,
 				2D3316091C8D01B2009A3C70 /* walk_four.png in Resources */,

@@ -112,6 +112,21 @@ MFMessageComposeViewController* msgcontroller = nil;
                                                     startImmediately:YES];
 }
 
+-(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
+    //Append the newly arrived data to whatever we’ve seen so far
+    [inetdata appendData:data];
+}
+
+-(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
+    NSLog([error localizedDescription]);
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
+    NSString* data = [NSString stringWithUTF8String:[inetdata bytes]];
+    NSLog(data);
+}
+
+
 -(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     if (result != MessageComposeResultSent) {
         if (result == MessageComposeResultFailed) {

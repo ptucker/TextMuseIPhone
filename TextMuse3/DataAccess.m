@@ -300,7 +300,7 @@ NSString* localNotes = @"notes.xml";
     tmpRegMessages = [[NSMutableArray alloc] init];
     tmpVersionMessages = [[NSMutableArray alloc] init];
     parseFailed = false;
-    NSString* xml = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
+    //NSString* xml = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:inetdata];
     [parser setDelegate:self];
     [parser parse];

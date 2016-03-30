@@ -11,7 +11,7 @@
 #import "ImageDownloader.h"
 #import "SendMessage.h"
 
-@interface ContactsTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate> {
+@interface ContactsTableViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, NSURLConnectionDelegate> {
     ImageDownloader* loader;
     NSMutableData* inetdata;
     SendMessage* sendMessage;

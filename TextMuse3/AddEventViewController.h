@@ -17,6 +17,8 @@
     IBOutlet UITextField* txtDate;
     IBOutlet UITextField* txtEmail;
     IBOutlet UIButton* btnSubmit;
+    
+    IBOutlet UIScrollView* scroller;
 }
 
 @property (nonatomic, strong, readonly) UITapGestureRecognizer* singleTapRecognizer;

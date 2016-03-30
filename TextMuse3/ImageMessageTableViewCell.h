@@ -14,6 +14,6 @@
     IBOutlet UIImageView* imgContent;
 }
 
--(void)setMsgImage;
+-(void)setMsgImage:(Message*)msg forFrame:(CGRect)frmContentImage withDefault:(UIImage*)img;
 
 @end
