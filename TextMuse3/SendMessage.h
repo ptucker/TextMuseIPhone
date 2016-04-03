@@ -17,6 +17,7 @@ extern MFMessageComposeViewController* msgcontroller;
     UIViewController* _parent;
     ImageDownloader* loader;
     NSMutableData* inetdata;
+    int sendcount;
 }
 
 -(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController*)parent;

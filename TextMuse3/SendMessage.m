@@ -20,6 +20,7 @@ MFMessageComposeViewController* msgcontroller = nil;
 
 -(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController *)parent {
     _parent = parent;
+    sendcount = [contactlist count];
     if (msgcontroller == nil)
         msgcontroller = [[MFMessageComposeViewController alloc] init];
 
@@ -33,7 +34,6 @@ MFMessageComposeViewController* msgcontroller = nil;
     
     if([MFMessageComposeViewController canSendText])
     {
-        [self updateMessageCount:[CurrentMessage msgId] withCount:(unsigned int)[contactlist count]];
         NSMutableArray* phones = [[NSMutableArray alloc] init];
         for (UserContact*c in contactlist) {
             [phones addObject:[c getPhone]];
@@ -122,10 +122,9 @@ MFMessageComposeViewController* msgcontroller = nil;
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
-    NSString* data = [NSString stringWithUTF8String:[inetdata bytes]];
-    NSLog(data);
+    //NSString* data = [NSString stringWithUTF8String:[inetdata bytes]];
+    //NSLog(data);
 }
-
 
 -(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     if (result != MessageComposeResultSent) {
@@ -141,6 +140,7 @@ MFMessageComposeViewController* msgcontroller = nil;
         [msgcontroller dismissViewControllerAnimated:YES completion:nil];
     }
     else
+        [self updateMessageCount:[CurrentMessage msgId] withCount:(unsigned int)sendcount];
         [msgcontroller dismissViewControllerAnimated:YES completion:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [_parent dismissViewControllerAnimated:YES completion:nil];
