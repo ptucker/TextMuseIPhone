@@ -28,12 +28,14 @@ typedef void(*callback)(void);
     callback _cback;
     
     NSMutableData* inetdata;
+    BOOL complete;
+    int cappend;
     NSURLConnection* connection;
 }
 
-@property (readonly, retain) NSMutableData* inetdata;
-@property (readonly, retain) NSString* mimeType;
-@property (readonly) BOOL isVideo;
+@property (readwrite, retain) NSMutableData* inetdata;
+@property (readwrite, retain) NSString* mimeType;
+@property (readwrite) BOOL isVideo;
 
 -(id)initWithUrl:(NSString*)url forMessage:(Message*)msg forImgView:(UIImageView*)view;
 -(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view;
@@ -51,5 +53,6 @@ typedef void(*callback)(void);
 +(NSString*)GetYoutubeId:(NSString*)youtubeUrl;
 +(NSString *)mimeTypeByGuessingFromData:(NSData *)data;
 +(void)CancelDownloads;
++(BOOL)canShutdown;
 
 @end

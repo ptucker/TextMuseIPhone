@@ -11,6 +11,8 @@
 #include <libkern/OSAtomic.h>
 
 int downloading = 0;
+int copying = 0;
+BOOL shutdownPending = false;
 const int MAXDOWNLOAD = 48;
 const int MAXRETRY = 5;
 NSMutableArray* downloadQueue = nil;
@@ -125,6 +127,15 @@ NSObject* lockDownloading;
     }
 }
 
++(BOOL)canShutdown {
+    BOOL ret = true;
+    @synchronized (lockDownloading) {
+        shutdownPending = true;
+        ret = (copying == 0);
+    }
+    return ret;
+}
+
 -(void)checkCache {
     retryCount = 0;
     NSString* u = _url;
@@ -144,8 +155,11 @@ NSObject* lockDownloading;
         inetdata = [NSMutableData dataWithContentsOfFile:cachedFile];
         if (inetdata != nil) {
             mimeType = [ImageDownloader mimeTypeByGuessingFromData:inetdata];
-            if (mimeType != nil)
+            if ([mimeType isEqual: @"image/png"] && ![self dataIsValidPNG:inetdata])
+                mimeType = nil;
+            if (mimeType != nil) {
                 [self useImageData];
+            }
             else {
                 @synchronized(CachedMediaMapping) {
                     [CachedMediaMapping removeObjectForKey:u];
@@ -178,12 +192,48 @@ NSObject* lockDownloading;
     }
     
     return nil;
+}
+
+- (BOOL)dataIsValidPNG:(NSData *)data
+{
+    if (!data || data.length < 12)
+    {
+        return NO;
+    }
     
+    NSInteger totalBytes = data.length;
+    const char *bytes = (const char *)[data bytes];
+    
+    bool ret = (bytes[0] == (char)0x89 && // PNG
+            bytes[1] == (char)0x50 &&
+            bytes[2] == (char)0x4e &&
+            bytes[3] == (char)0x47 &&
+            bytes[4] == (char)0x0d &&
+            bytes[5] == (char)0x0a &&
+            bytes[6] == (char)0x1a &&
+            bytes[7] == (char)0x0a &&
+            
+            bytes[totalBytes - 12] == (char)0x00 && // IEND
+            bytes[totalBytes - 11] == (char)0x00 &&
+            bytes[totalBytes - 10] == (char)0x00 &&
+            bytes[totalBytes - 9] == (char)0x00 &&
+            bytes[totalBytes - 8] == (char)0x49 &&
+            bytes[totalBytes - 7] == (char)0x45 &&
+            bytes[totalBytes - 6] == (char)0x4e &&
+            bytes[totalBytes - 5] == (char)0x44 &&
+            bytes[totalBytes - 4] == (char)0xae &&
+            bytes[totalBytes - 3] == (char)0x42 &&
+            bytes[totalBytes - 2] == (char)0x60 &&
+            bytes[totalBytes - 1] == (char)0x82);
+    
+    if (!ret)
+        NSLog(@"bad png");
+    return ret;
 }
 
 -(BOOL)load {
     BOOL ret = false;
-    if (_url == nil)
+    if (_url == nil || inetdata != nil)
         return ret;
     
     [self checkCache];
@@ -211,6 +261,7 @@ NSObject* lockDownloading;
                                          timeoutInterval:30];
     
     inetdata = [[NSMutableData alloc] init];
+    cappend = 0;
     connection = [[NSURLConnection alloc] initWithRequest:request
                                                  delegate:self
                                          startImmediately:YES];
@@ -235,6 +286,7 @@ NSObject* lockDownloading;
 
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
     //Append the newly arrived data to whatever we’ve seen so far
+    cappend++;
     [inetdata appendData:data];
 }
 
@@ -265,9 +317,10 @@ NSObject* lockDownloading;
     if (waiting != nil)
         [waiting startDownload];
     
-    [self useImageData];
-
     NSString* u = [[[connection currentRequest] URL] description];
+    [self useImageData];
+    //if (cappend > 1 && ![u containsString:@"%"])
+    //    NSLog([NSString stringWithFormat:@"(%d): %@", cappend, u]);
     BOOL saveFile = false;
     @synchronized(CachedMediaMapping) {
         saveFile = ([CachedMediaMapping objectForKey:u] == nil ||
@@ -281,14 +334,29 @@ NSObject* lockDownloading;
         BOOL writeSucceeded = [inetdata writeToFile:tmpfile atomically:YES];
 
         if (writeSucceeded) {
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-            NSString *cachesDirectory = [paths objectAtIndex:0];
-            NSString* mapfile = [cachesDirectory stringByAppendingPathComponent:uniqueFileName];
-            [[NSFileManager defaultManager] moveItemAtPath:tmpfile toPath:mapfile error:nil];
-            
-            @synchronized(CachedMediaMapping) {
-                [CachedMediaMapping setValue:mapfile forKey:u];
-                [Settings SaveCachedMapFile];
+            BOOL shutdown = false;
+            @synchronized (lockDownloading) {
+                copying++;
+                shutdown = shutdownPending;
+            }
+            if (!shutdown) {
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                NSString *cachesDirectory = [paths objectAtIndex:0];
+                NSString* mapfile = [cachesDirectory stringByAppendingPathComponent:uniqueFileName];
+                BOOL move = [[NSFileManager defaultManager] moveItemAtPath:tmpfile toPath:mapfile error:nil];
+                
+                if (move) {
+                    @synchronized(CachedMediaMapping) {
+                        [CachedMediaMapping setValue:mapfile forKey:u];
+                        [Settings SaveCachedMapFile];
+                    }
+                    @synchronized (lockDownloading) {
+                        copying--;
+                    }
+                }
+                else {
+                    NSLog(@"error moving ...");
+                }
             }
         }
     }
@@ -307,8 +375,26 @@ NSObject* lockDownloading;
                 [iv setFrame:CGRectMake(2, 2, [_view frame].size.width-4, [_view frame].size.height-4)];
                 [_view addSubview:iv];
             }
-            else
-                [_view setImage:[UIImage imageWithData:copy]];
+            else {
+                if (![mimeType isEqual: @"image/png"] || [self dataIsValidPNG:copy])
+                    [_view setImage:[UIImage imageWithData:copy]];
+                else {
+                    if (retryCount < MAXRETRY) {
+                        retryCount++;
+                        
+                        inetdata = nil;
+                        [self startDownload];
+                    }
+                    else {
+                        @synchronized(lockDownloading) {
+                            downloading--;
+                            if (downloading == 0)
+                                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+                        }
+                        //NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
+                    }
+                }
+            }
         }
     }
     if (_msg != nil) {

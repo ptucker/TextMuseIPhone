@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ImageDownloader.h"
 #import "Settings.h"
 #import "WalkthroughViewController.h"
 #import "ImageDownloader.h"
@@ -341,6 +342,13 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+    //Wait for all downloaded files to get copied
+    double ms = [[NSDate date] timeIntervalSince1970];
+    while (![ImageDownloader canShutdown] && ([[NSDate date] timeIntervalSince1970] - ms < 5000)) {
+        [NSThread sleepForTimeInterval:0.20];
+    }
+    
     [self addNotification];
 }
 

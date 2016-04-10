@@ -512,7 +512,9 @@ NSString* localNotes = @"notes.xml";
 }
 
 -(NSArray*)getAllMessages {
-    return allMessages;
+    NSOrderedSet *orderedSet = [NSOrderedSet orderedSetWithArray:allMessages];
+    NSArray *ret = [orderedSet array];
+    return ret;
 }
 
 -(NSArray*)getEventMessages {

@@ -392,6 +392,7 @@ NSArray* colorsTitle;
             msg = [[Data getEventMessages] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
+        
         MessageTableViewCell* cell = nil;
         if (cell == nil) {
             cell = ([msg mediaUrl] != nil) ?
