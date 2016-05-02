@@ -560,12 +560,22 @@ NSString* localNotes = @"notes.xml";
 }
 
 -(void)setMessagePin:(Message*)msg withValue:(BOOL)pin {
+    Message*m = [self findMessageWithID:[msg msgId]];
+    
+    if (m != nil)
+        [m setPinned:pin];
+}
+
+-(Message*)findMessageWithID:(int)msgid {
+    Message* ret;
     for (Message* m in allMessages) {
-        if ([m msgId] == [msg msgId]) {
-            [m setPinned:pin];
+        if ([m msgId] == msgid) {
+            ret = m;
             break;
         }
     }
+    
+    return ret;
 }
 
 -(int)getMessageScore:(Message*)m {

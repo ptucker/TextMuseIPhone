@@ -81,6 +81,7 @@
 -(NSArray*)getPinnedMessages;
 -(NSArray*)resortMessages;
 -(void)setMessagePin:(Message*)msg withValue:(BOOL)pin;
+-(Message*)findMessageWithID:(int)msgid;
 -(NSArray*)getMessagesForCategory:(NSString*)category;
 -(int)getNewMessageCountForCategory:(NSString*)category;
 -(Message*)chooseRandomMessage;

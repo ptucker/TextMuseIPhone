@@ -12,6 +12,7 @@ DataAccess* Data;
 NSString* CurrentCategory;
 long CurrentColorIndex;
 Message* CurrentMessage;
+int HighlightedMessageID;
 NSString* CurrentGroup;
 SqlData* SqlDb;
 
@@ -22,6 +23,7 @@ SqlData* SqlDb;
     Data = [[DataAccess alloc] init];
     CurrentCategory = @"Trending";
     CurrentColorIndex = 0;
+    HighlightedMessageID = 0;
 }
 
 @end

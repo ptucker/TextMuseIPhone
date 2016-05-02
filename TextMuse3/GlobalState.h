@@ -17,6 +17,7 @@ extern DataAccess* Data;
 extern NSString* CurrentCategory;
 extern long CurrentColorIndex;
 extern Message* CurrentMessage;
+extern int HighlightedMessageID;
 extern NSString* CurrentGroup;
 extern SqlData* SqlDb;
 

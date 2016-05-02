@@ -160,6 +160,17 @@ NSArray* colorsTitle;
                                        userInfo:nil
                                         repeats:NO];
     }
+
+    if (HighlightedMessageID != 0) {
+        CurrentMessage = [Data findMessageWithID:HighlightedMessageID];
+        if (CurrentMessage != nil) {
+            CurrentCategory = showPinned ? @"PinnedMessages" : [CurrentMessage category];
+            CurrentColorIndex = HighlightedMessageID % [colors count];
+            HighlightedMessageID = 0;
+            
+            [self performSegueWithIdentifier:@"SelectMessage" sender:self];
+        }
+    }
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl {

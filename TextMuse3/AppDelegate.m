@@ -10,6 +10,7 @@
 #import "ImageDownloader.h"
 #import "Settings.h"
 #import "WalkthroughViewController.h"
+#import "MessagesViewController.h"
 #import "ImageDownloader.h"
 #import "FLAnimatedImage.h"
 @interface AppDelegate ()
@@ -68,7 +69,13 @@
         else
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
     });
-    //sleep(2.0);
+    
+    NSDictionary* notifications = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (notifications != nil) {
+        NSString* highlight = [notifications objectForKey:@"highlight"];
+        if (highlight != nil)
+            HighlightedMessageID = [highlight intValue];
+    }
 
     return YES;
 }
@@ -145,21 +152,45 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 }
 
 // Because toast alerts don't work when the app is running, the app handles them.
-// This uses the userInfo in the payload to display a UIAlertView.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (NotificationOn) {
-        /*
-         NSMutableString* msgs = [[NSMutableString alloc] init];
-         for (NSString* k in [userInfo keyEnumerator]) {
-         [msgs appendFormat:@"\n%@: %@", k, [userInfo objectForKey:k]];
-         }
-         */
-        NSString* msg = [userInfo objectForKey:@"alert"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
-                                                        message:msg delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
-                                              otherButtonTitles:nil, nil];
-        [alert show];
+        UIApplicationState state = [application applicationState];
+        NSString* highlight = [userInfo objectForKey:@"highlight"];
+        if (highlight != nil)
+            HighlightedMessageID = [highlight intValue];
+        if (state == UIApplicationStateActive) {
+            NSString* msg = [userInfo objectForKey:@"alert"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
+                                                            message:msg delegate:self
+                                                  cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                                  otherButtonTitles:NSLocalizedString(@"Cancel Button", nil), nil];
+            [alert show];
+        }
+        //else
+        //    [self jumpToMessage];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0)
+        [self jumpToMessage];
+}
+
+-(void)jumpToMessage {
+    //User tapped on a notification. Go straight to the message
+    if (HighlightedMessageID != 0) {
+        Message* msg = [Data findMessageWithID:HighlightedMessageID];
+        HighlightedMessageID = 0;
+        if (msg != nil) {
+            CurrentMessage = msg;
+            CurrentCategory = [CurrentMessage category];
+            CurrentColorIndex = 0;
+            
+            UINavigationController* nav = (UINavigationController*) [[self window] rootViewController];
+            UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            MessagesViewController* mvc = [storyboard instantiateViewControllerWithIdentifier:@"SelectMessage"];
+            [nav pushViewController:mvc animated:YES];
+        }
     }
 }
 
