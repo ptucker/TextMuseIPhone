@@ -238,6 +238,7 @@ SkinInfo* Skin;
             [NamedGroups setObject:[[NSArray alloc] init] forKey:@"Study Group"];
         }
 
+        /*
         if ([defs dictionaryForKey:SettingCategoryList] != nil) {
             CategoryList = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingCategoryList]];
         }
@@ -255,8 +256,10 @@ SkinInfo* Skin;
                 [CategoryList setObject:[ChosenCategories containsObject:c] ? @"1" : @"0" forKey:c];
             }
         }
-        [CategoryList setObject:@"1" forKey:NSLocalizedString(@"Your Photos Title", nil)];
-        [CategoryList setObject:@"1" forKey:NSLocalizedString(@"Your Messages Title", nil)];
+         */
+        if ([defs dictionaryForKey:SettingCategoryList] != nil)
+            [self ConvertCategoriesToDb];
+        [self UpdateCategoryList];
         
         LastNoteDownload = nil;
         if ([defs stringForKey:SettingLastNoteDownload] != nil &&
@@ -494,6 +497,34 @@ SkinInfo* Skin;
         txt = [txt stringByReplacingOccurrencesOfString:@"{RecentNote}" withString:msg];
     }
     return txt;
+}
+
++(void)ConvertCategoriesToDb {
+    NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
+
+    NSDictionary* cats = [NSMutableDictionary dictionaryWithDictionary:[defs dictionaryForKey:SettingCategoryList]];
+    for (NSString* cat in [cats allKeys]) {
+        [SqlDb categoryExists:cat];
+        if (![[cats objectForKey:cat] isEqualToString:@"0"])
+            [SqlDb addChosenCategory:cat];
+    }
+    
+    [defs removeObjectForKey:SettingCategoryList];
+}
+
++(void) UpdateCategoryList {
+    CategoryList = [[NSMutableDictionary alloc] init];
+    NSArray* cats = [SqlDb getExistingCategories];
+    for (NSString*c in cats) {
+        [CategoryList setObject:@"0" forKey:c];
+    }
+    cats = [SqlDb getChosenCategories];
+    for (NSString*c in cats) {
+        if ([CategoryList objectForKey:c] != nil)
+            [CategoryList setObject:@"1" forKey:c];
+    }
+    [CategoryList setObject:@"1" forKey:NSLocalizedString(@"Your Photos Title", nil)];
+    [CategoryList setObject:@"1" forKey:NSLocalizedString(@"Your Messages Title", nil)];
 }
 
 @end

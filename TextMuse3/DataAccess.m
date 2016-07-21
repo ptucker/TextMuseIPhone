@@ -23,6 +23,7 @@
 
 NSString* urlNotes = @"http://www.textmuse.com/admin/notes.php";
 NSString* localNotes = @"notes.xml";
+const int HIDEMESSAGE = 1000;
 
 @implementation DataAccess
 @synthesize contactFilter;
@@ -547,15 +548,28 @@ NSString* localNotes = @"notes.xml";
             r++;
         }
     }
+
+    [allMessages filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id obj, NSDictionary* bindings) {
+        return [self getMessageScore:(Message*)obj] < HIDEMESSAGE || Skin == nil;
+    }]];
 }
 
 -(NSArray*)resortMessages {
-    [allMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
+    [tmpVersionMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
         int score1 = [self getMessageScore:(Message*)m1];
         int score2 = [self getMessageScore:(Message*)m2];
         
         return (score1 < score2) ? NSOrderedAscending : (score1 > score2) ? NSOrderedDescending : NSOrderedSame;
     }];
+    [tmpRegMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {
+        int score1 = [self getMessageScore:(Message*)m1];
+        int score2 = [self getMessageScore:(Message*)m2];
+        
+        return (score1 < score2) ? NSOrderedAscending : (score1 > score2) ? NSOrderedDescending : NSOrderedSame;
+    }];
+    
+    [self mergeMessages];
+    
     return allMessages;
 }
 
@@ -584,7 +598,7 @@ NSString* localNotes = @"notes.xml";
     //if ([[categories objectForKey:[m category]] sponsor] == NULL)
         //s += 5;
     if (CategoryList != nil && [[CategoryList objectForKey:[m category]] isEqualToString: @"0"])
-        s += 1000;
+        s += HIDEMESSAGE;
     
     if (![m newMsg])
         s += 4;
@@ -737,6 +751,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     currentElement = elementName;
     if ([elementName isEqualToString:@"notes"]) {
+        [SqlDb archiveAllCategories];
         LastNoteDownload = [attributeDict objectForKey:@"ts"];
         if (AppID == nil || ![AppID isEqualToString:[attributeDict objectForKey:@"app"]]) {
             AppID = [attributeDict objectForKey:@"app"];
@@ -777,6 +792,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     else if ([elementName isEqualToString:@"c"]) {
         categoryOrder = 0;
         NSString* name = [attributeDict objectForKey:@"name"];
+        [SqlDb categoryExists:name];
         name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         isBadge = [name isEqualToString:@"Badges"];
 
@@ -788,13 +804,11 @@ Message* recentMsgs[RECENTWATCHCOUNT];
                                          ![[attributeDict objectForKey:@"new"] isEqualToString:@"0"])];
         [currentCategory setChosen:(CategoryList == nil ||
                                     [CategoryList objectForKey:[currentCategory name]] == nil ||
-                                    ![[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"0"] ||
-                                    [currentCategory newCategory])];
+                                    ![[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"0"])];
         [currentCategory setMessages:[[NSMutableArray alloc] init]];
         if ([currentCategory required]) {
             if (InitialCategory == nil || [InitialCategory length] == 0) {
                 InitialCategory = [currentCategory name];
-                //CurrentCategory = [currentCategory name];
                 [Settings SaveSetting:InitialCategory withValue:[currentCategory name]];
             }
             if (CategoryList != nil && [[CategoryList objectForKey:[currentCategory name]] isEqualToString:@"0"])
@@ -802,6 +816,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         }
         [currentCategory setEventToggle:([attributeDict objectForKey:@"event"] != nil &&
                                          [[attributeDict objectForKey:@"event"] isEqualToString: @"1"])];
+        if ([CategoryList objectForKey:name] == nil)
+            [CategoryList setObject:([currentCategory eventToggle] ? @"1" : @"0") forKey:name];
         versionMsg = NO;
         if ([attributeDict objectForKey:@"version"] != nil)
             versionMsg = [[attributeDict objectForKey:@"version"] isEqualToString:@"1"];
@@ -820,8 +836,10 @@ Message* recentMsgs[RECENTWATCHCOUNT];
                 [currentCategory setSponsor:sponsor];
             }
         }
-        if (CategoryList != nil && [currentCategory newCategory]) {
+        //if (CategoryList != nil && [currentCategory newCategory]) {
+        if (CategoryList != nil && [currentCategory sponsor] != nil) {
             [CategoryList setObject:@"1" forKey:[currentCategory name]];
+            [SqlDb addChosenCategory:[currentCategory name]];
         }
 
         [tmpCategories setValue:currentCategory forKey:name];
@@ -893,27 +911,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     }
     else if ([elementName isEqualToString:@"notes"]) {
         if (!notificationOnly) {
-            for (NSString* c in [tmpCategories keyEnumerator]) {
-                if ([CategoryList objectForKey:c] == nil)
-                    [CategoryList setObject:@"1" forKey:c];
-            }
-            
-            NSString* photos = NSLocalizedString(@"Your Photos Title", nil);
-            NSString* msgs = NSLocalizedString(@"Your Messages Title", nil);
-            NSMutableArray* removes = [[NSMutableArray alloc] init];
-            for (NSString* c in [CategoryList keyEnumerator]) {
-                if (([tmpCategories objectForKey:c] == nil ||
-                            [[[tmpCategories objectForKey:c] messages] count] == 0) &&
-                        ![c isEqualToString:photos] && ![c isEqualToString:msgs]) {
-                    [removes addObject:c];
-                    if ([tmpCategories objectForKey:c] != nil)
-                        [tmpCategories removeObjectForKey:c];
-                }
-            }
-            for (NSString* r in removes)
-                [CategoryList removeObjectForKey:r];
-            
-            [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
+            [Settings UpdateCategoryList];
         }
 
         [tmpVersionMessages sortUsingComparator:^NSComparisonResult(id m1, id m2) {

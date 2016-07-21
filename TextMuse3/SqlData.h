@@ -25,4 +25,11 @@
 -(BOOL)isFlagged:(Message*) msg;
 -(BOOL)isFlaggedId:(int) msgId;
 
+-(void)archiveAllCategories;
+-(void)categoryExists:(NSString*)cat;
+-(NSArray*)getChosenCategories;
+-(NSArray*)getExistingCategories;
+-(void)addChosenCategory:(NSString*)cat;
+-(void)removeChosenCategory:(NSString*)cat;
+
 @end

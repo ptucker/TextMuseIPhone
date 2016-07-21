@@ -30,6 +30,7 @@
 +(void) AddContact:(NSString*)contact forGroup:(NSString*)group;
 +(void) RemoveContact:(NSString*)contact fromGroup:(NSString*)group;
 +(NSString*) GetNotificationText:(DataAccess*)data;
++(void) UpdateCategoryList;
 
 @end
 

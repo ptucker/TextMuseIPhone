@@ -20,7 +20,7 @@ const int maxRecentIDs = 10;
 DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     IBOutlet UITableView* messages;
     IBOutlet UIButton* btnHome;
-    IBOutlet UIButton* btnEvent;
+    IBOutlet UIButton* btnBadges;
     IBOutlet UIButton* btnGroup;
     UITableView* categoryTable;
     UIRefreshControl *refreshControl;
@@ -35,6 +35,7 @@ DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     BOOL showEvents;
 }
 
+-(IBAction) showBadges:(id)sender;
 -(IBAction)addEvent:(id)sender;
 -(IBAction)settings:(id)sender;
 -(IBAction)home:(id)sender;

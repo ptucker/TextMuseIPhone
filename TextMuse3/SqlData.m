@@ -32,6 +32,10 @@
             if (sqlite3_prepare(db, [flagged UTF8String], -1, &stmt, nil) == SQLITE_OK) {
                 sqlite3_step(stmt);
             }
+            NSString* cats = @"create table if not exists Categories (name text, chosen int, archived int);";
+            if (sqlite3_prepare(db, [cats UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+                sqlite3_step(stmt);
+            }
         }
         else {
             UIAlertView* av = [[UIAlertView alloc] initWithTitle:@"error"
@@ -140,5 +144,92 @@
     
     return ret;
 }
+
+-(void)archiveAllCategories {
+    if (db == nil) return;
+
+    sqlite3_stmt* stmt;
+    NSString* cats = @"update Categories set archived = 1;";
+    if (sqlite3_prepare(db, [cats UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        sqlite3_step(stmt);
+    }
+}
+
+-(void)categoryExists:(NSString*)cat {
+    if (db == nil) return;
+    
+    NSString* fetch = [NSString stringWithFormat:@"select name from Categories where name='%@';", cat];
+    sqlite3_stmt* stmt;
+    BOOL ret = false;
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+    }
+    if (!ret) {
+        fetch = [NSString stringWithFormat:@"insert into Categories (name, chosen, archived) values ('%@', 0, 0)",
+                 cat];
+    }
+    else {
+        fetch = [NSString stringWithFormat:@"update Categories set archived=0 where name='%@'", cat];
+    }
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+    }
+}
+
+-(NSArray*)getChosenCategories {
+    if (db == nil) return nil;
+    
+    NSString* fetch = @"select name from Categories where archived=0 and chosen=1;";
+    sqlite3_stmt* stmt;
+    NSMutableArray* ret = [[NSMutableArray alloc] init];
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            char* data = (char*)sqlite3_column_text(stmt, 0);
+            NSString* cat = (data == nil) ? nil : [NSString stringWithUTF8String:data];
+            [ret addObject:cat];
+        }
+    }
+    
+    return ret;
+}
+
+-(NSArray*)getExistingCategories {
+    if (db == nil) return nil;
+    
+    NSString* fetch = @"select name from Categories where archived=0;";
+    sqlite3_stmt* stmt;
+    NSMutableArray* ret = [[NSMutableArray alloc] init];
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            char* data = (char*)sqlite3_column_text(stmt, 0);
+            NSString* cat = (data == nil) ? nil : [NSString stringWithUTF8String:data];
+            [ret addObject:cat];
+        }
+    }
+    
+    return ret;
+}
+
+-(void)addChosenCategory:(NSString*)cat {
+    if (db == nil) return;
+    
+    BOOL ret = false;
+    NSString* fetch = [NSString stringWithFormat:@"update Categories set chosen=1 where name='%@';", cat];
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+    }
+}
+-(void)removeChosenCategory:(NSString*)cat {
+    if (db == nil) return;
+    
+    BOOL ret = false;
+    NSString* fetch = [NSString stringWithFormat:@"update Categories set chosen=0 where name='%@';", cat];
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
+        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+    }
+}
+
 
 @end

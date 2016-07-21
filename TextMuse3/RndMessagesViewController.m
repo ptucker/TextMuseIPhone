@@ -104,10 +104,10 @@ NSArray* colorsTitle;
     [[self navigationItem] setLeftBarButtonItem:leftButton];
     
     [[btnHome imageView] setContentMode:UIViewContentModeScaleAspectFit];
-    [[btnEvent imageView] setContentMode:UIViewContentModeScaleAspectFit];
+    [[btnBadges imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [[btnGroup imageView] setContentMode:UIViewContentModeScaleAspectFit];
-    [btnEvent setTitle:@"events" forState:UIControlStateNormal];
-    [btnEvent setTitle:@"all" forState:UIControlStateSelected];
+    [btnBadges setTitle:@"badges" forState:UIControlStateNormal];
+    [btnBadges setTitle:@"all" forState:UIControlStateSelected];
 }
 
 -(void)navigationController:(UINavigationController *)navigationController
@@ -275,7 +275,7 @@ NSArray* colorsTitle;
     
     [messages reloadData];
     
-    [btnEvent setHidden:[[Data getEventMessages] count] == 0];
+    //[btnBadges setHidden:[[Data getEventMessages] count] == 0];
     
     [refreshControl endRefreshing];
 }
@@ -301,12 +301,12 @@ NSArray* colorsTitle;
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
         [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
-        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage* imgBadge = [[UIImage imageNamed:@"bandcamp"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIImage* imgNotes = [[UIImage imageNamed:@"note-text"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [btnEvent setImage:imgEvent forState:UIControlStateNormal];
-        [btnEvent setImage:imgNotes forState:UIControlStateSelected];
-        [btnEvent setTintColor:colorTint];
-        [btnEvent setTitleColor:colorTint forState:UIControlStateNormal];
+        [btnBadges setImage:imgBadge forState:UIControlStateNormal];
+        [btnBadges setImage:imgNotes forState:UIControlStateSelected];
+        [btnBadges setTintColor:colorTint];
+        [btnBadges setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
@@ -336,10 +336,10 @@ NSArray* colorsTitle;
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
         [btnHome setTitleColor:colorTint forState:UIControlStateNormal];
-        UIImage* imgEvent = [[UIImage imageNamed:@"calendar-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [btnEvent setImage:imgEvent forState:UIControlStateNormal];
-        [btnEvent setTintColor:colorTint];
-        [btnEvent setTitleColor:colorTint forState:UIControlStateNormal];
+        UIImage* imgBadge = [[UIImage imageNamed:@"bandcamp"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [btnBadges setImage:imgBadge forState:UIControlStateNormal];
+        [btnBadges setTintColor:colorTint];
+        [btnBadges setTitleColor:colorTint forState:UIControlStateNormal];
         UIImage* imgGroup = [[UIImage imageNamed:@"account-multiple"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
@@ -497,12 +497,16 @@ NSArray* colorsTitle;
     UICheckButton* chk = (UICheckButton*)sender;
     [chk setSelected:![chk isSelected]];
     
-    if ([[CategoryList objectForKey:[chk extra]] isEqualToString:@"0"])
+    if ([[CategoryList objectForKey:[chk extra]] isEqualToString:@"0"]) {
         [CategoryList setObject:@"1" forKey:[chk extra]];
-    else
+        [SqlDb addChosenCategory:[chk extra]];
+    }
+    else {
         [CategoryList setObject:@"0" forKey:[chk extra]];
+        [SqlDb removeChosenCategory:[chk extra]];
+    }
 
-    [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
+    //[Settings SaveSetting:SettingCategoryList withValue:CategoryList];
     for (NSString*c in [Data getCategories]) {
         MessageCategory*mc = [Data getCategory:c];
         [mc setChosen:![[CategoryList objectForKey:c] isEqualToString:@"0"]];
@@ -545,11 +549,8 @@ NSArray* colorsTitle;
     [self performSegueWithIdentifier:@"AddEvent" sender:self];
 }
 
--(IBAction)toggleEventFilter:(id)sender {
-    showPinned = false;
-    showEvents = !showEvents;
-    [btnEvent setSelected:showEvents];
-    [messages reloadData];
+-(IBAction)showBadges:(id)sender {
+    
 }
 
 -(long) chosenCategory:(long)selectedCategory {
