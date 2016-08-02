@@ -50,6 +50,31 @@
         </mutableArray>
     </customFonts>
     <scenes>
+        <!--Badges-->
+        <scene sceneID="dfK-5m-kYj">
+            <objects>
+                <viewController id="0qD-lQ-kW7" customClass="BadgesViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze3-kX-gRz">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="G8b-Bm-36c">
+                                <rect key="frame" x="0.0" y="66" width="320" height="502"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Badges" id="eEj-Sh-z25"/>
+                    <connections>
+                        <outlet property="tableview" destination="G8b-Bm-36c" id="dho-d8-YCD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mC1-sU-IZ4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-807" y="-1015"/>
+        </scene>
         <!--Add Event-->
         <scene sceneID="Itd-4X-sQO">
             <objects>
@@ -523,6 +548,7 @@
                         <segue destination="yLr-zO-1M3" kind="push" identifier="registerInitial" id="MVW-gx-UGH"/>
                         <segue destination="ngF-ER-qsv" kind="push" identifier="SendMessage" id="ynu-Ad-b5Z"/>
                         <segue destination="y4r-5l-tYZ" kind="push" identifier="AddEvent" id="Pcx-nJ-Vem"/>
+                        <segue destination="0qD-lQ-kW7" kind="push" identifier="ViewBadges" id="KoT-dO-rUY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzL-bm-eLj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -861,10 +887,10 @@
         <image name="home.png" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gIs-SO-9jD"/>
         <segue reference="ynu-Ad-b5Z"/>
-        <segue reference="udu-bJ-qbO"/>
-        <segue reference="MVW-gx-UGH"/>
+        <segue reference="gIs-SO-9jD"/>
         <segue reference="BNQ-99-bBq"/>
+        <segue reference="udu-bJ-qbO"/>
+        <segue reference="hFR-dd-hXs"/>
     </inferredMetricsTieBreakers>
 </document>

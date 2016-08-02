@@ -64,12 +64,12 @@ const NSInteger numberOfComponents = 2;
     self.dataSource = self;
     
     [self selectToday];
-    if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0) {
-        [self selectRow: ([UserBirthMonth integerValue] - 1)
+    if ([[CurrentUser UserBirthMonth] length] > 0 && [[CurrentUser UserBirthYear] length] > 0) {
+        [self selectRow: ([[CurrentUser UserBirthMonth] integerValue] - 1)
             inComponent: MONTH
                animated: YES];
         
-        [self selectRow: ([UserBirthYear integerValue] - minYear)
+        [self selectRow: ([[CurrentUser UserBirthYear] integerValue] - minYear)
             inComponent: YEAR
                animated: YES];
     }

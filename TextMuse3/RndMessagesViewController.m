@@ -550,7 +550,7 @@ NSArray* colorsTitle;
 }
 
 -(IBAction)showBadges:(id)sender {
-    
+    [self performSegueWithIdentifier:@"ViewBadges" sender:self];
 }
 
 -(long) chosenCategory:(long)selectedCategory {

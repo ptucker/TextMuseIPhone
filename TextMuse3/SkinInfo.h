@@ -17,6 +17,7 @@
 
 @property long SkinID;
 @property NSString* SkinName;
+@property NSString* MasterName;
 @property NSMutableArray* LaunchImageURL;
 @property NSString* Color1;
 @property NSString* Color2;

@@ -12,7 +12,7 @@
 #import "ImageDownloader.h"
 #import "FLAnimatedImage.h"
 
-@interface Message : NSObject <UIWebViewDelegate> {
+@interface Message : NSObject <UIWebViewDelegate, NSURLConnectionDelegate> {
     int msgId;
     int order;
     int yourtextIndex;
@@ -21,6 +21,7 @@
     BOOL liked;
     BOOL badge;
     
+    int discoverPoints, sharePoints, goPoints;
     int likeCount;
     BOOL version;
     ImageDownloader* loader;
@@ -30,6 +31,8 @@
     NSString* imgType;
     NSString* msgUrl;
     NSString* category;
+    
+    NSMutableData* inetdata;
     
     NSString* text;
     NSString* mediaUrl;
@@ -49,6 +52,9 @@
 @property (readwrite) BOOL liked;
 @property (readwrite) BOOL badge;
 @property (readwrite) int likeCount;
+@property (readwrite) int discoverPoints;
+@property (readwrite) int sharePoints;
+@property (readwrite) int goPoints;
 @property (readwrite) BOOL version;
 @property (readonly) ImageDownloader* loader;
 @property (nonatomic, readwrite, copy) NSData* img;

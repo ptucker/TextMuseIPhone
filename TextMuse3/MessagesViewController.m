@@ -14,10 +14,13 @@
 #import "GlobalState.h"
 #import "DataAccess.h"
 #import "SqlData.h"
+#import "SuccessParser.h"
 
 NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
 NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
+NSString* urlViewCategory = @"http://www.textmuse.com/admin/viewcategory.php";
+NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 
 @interface MessagesViewController ()
 
@@ -33,12 +36,29 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
                              [UIFont fontWithName:@"Lato-Medium" size:18.0], NSFontAttributeName, nil];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:txtAttrs forState:UIControlStateNormal];
     
+    MessageCategory* mc = [Data getCategory:CurrentCategory];
     if (![CurrentCategory isEqualToString:@"PinnedMessages"])
     {
         if ([CurrentCategory isEqualToString:@"Badges"])
             [self setRightButtonRemit];
-        else
+        else {
             [self setRightButtonFlag];
+
+            if ([mc catid] != 0) {
+                NSURL* url = [NSURL URLWithString:urlViewCategory];
+                NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
+                                                                   cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                               timeoutInterval:30];
+                inetdata = [[NSMutableData alloc] init];
+                [req setHTTPMethod:@"POST"];
+                [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&cat=%d", AppID, [mc catid]]
+                                  dataUsingEncoding:NSUTF8StringEncoding]];
+                
+                NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                                        delegate:self
+                                                                startImmediately:YES];
+            }
+        }
     }
     else
         [[self navigationItem] setRightBarButtonItem: nil];
@@ -91,6 +111,25 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
                          forState:UIControlStateNormal];
     
     [pages setCurrentPage: (page / pageDivisor)];
+}
+
+-(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
+    //Append the newly arrived data to whatever we’ve seen so far
+    [inetdata appendData:data];
+}
+
+-(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
+    //NSLog([error localizedDescription]);
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
+    SuccessParser* sp = [[SuccessParser alloc] initWithXml:inetdata];
+    
+    [CurrentUser setExplorerPoints:[sp ExplorerPoints]];
+    [CurrentUser setSharerPoints:[sp SharerPoints]];
+    [CurrentUser setMusePoints:[sp MusePoints]];
+    //NSString* data = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
+    //NSLog(data);
 }
 
 -(void)setRightButtonFlag {

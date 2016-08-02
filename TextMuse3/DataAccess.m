@@ -760,6 +760,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             [appDelegate registerRemoteNotificationWithAzure];
         }
+        [CurrentUser setExplorerPoints:[[attributeDict objectForKey:@"ep"] intValue]];
+        [CurrentUser setSharerPoints:[[attributeDict objectForKey:@"sp"] intValue]];
+        [CurrentUser setMusePoints:[[attributeDict objectForKey:@"mp"] intValue]];
         
         [Settings SaveSetting:SettingLastNoteDownload withValue:LastNoteDownload];
     }
@@ -771,6 +774,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         
         [Skin setSkinID:[[attributeDict objectForKey:@"id"] integerValue]];
         [Skin setSkinName:[attributeDict objectForKey:@"name"]];
+        [Skin setMasterName:[attributeDict objectForKey:@"master"]];
         [Skin setColor1:[attributeDict objectForKey:@"c1"]];
         [Skin setColor2:[attributeDict objectForKey:@"c2"]];
         [Skin setColor3:[attributeDict objectForKey:@"c3"]];
@@ -798,6 +802,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 
         currentCategory = [[MessageCategory alloc] initWithName:name];
         [currentCategory setOrder:[tmpCategories count]];
+        [currentCategory setCatid:([[attributeDict allKeys] containsObject:@"id"] ?
+                                   [[attributeDict objectForKey:@"id"] intValue] : 0)];
         [currentCategory setRequired:([[attributeDict allKeys] containsObject:@"required"] &&
                                       ![[attributeDict objectForKey:@"required"] isEqualToString:@"0"])];
         [currentCategory setNewCategory:([[attributeDict allKeys] containsObject:@"new"] &&
@@ -857,6 +863,15 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         likeCount = 0;
         if ([attributeDict objectForKey:@"likecount"] != nil)
             likeCount = [[attributeDict objectForKey:@"likecount"] intValue];
+        discoverPoints = 0;
+        if ([attributeDict objectForKey:@"dp"] != nil)
+            discoverPoints = [[attributeDict objectForKey:@"dp"] intValue];
+        sharePoints = 0;
+        if ([attributeDict objectForKey:@"sp"] != nil)
+            sharePoints = [[attributeDict objectForKey:@"sp"] intValue];
+        goPoints = 0;
+        if ([attributeDict objectForKey:@"gp"] != nil)
+            goPoints = [[attributeDict objectForKey:@"gp"] intValue];
         currentEventLoc = [attributeDict objectForKey:@"loc"];
         currentEventDate = [attributeDict objectForKey:@"edate"];
         xmldata = [[NSMutableString alloc] init];
@@ -891,6 +906,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
                                                  isNew:newMsg];
             [msg setLiked:likedMsg];
             [msg setLikeCount:likeCount];
+            [msg setDiscoverPoints:discoverPoints];
+            [msg setSharePoints:sharePoints];
+            [msg setGoPoints:goPoints];
             [msg setBadge:isBadge];
             [msg setVersion:versionMsg];
             [msg setOrder:categoryOrder];

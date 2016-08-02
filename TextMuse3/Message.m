@@ -9,11 +9,13 @@
 #import "Message.h"
 #import "Settings.h"
 #import "YTPlayerView.h"
+#import "SuccessParser.h"
 
 YTPlayerView* globalYTPlayer = nil;
+NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 
 @implementation Message
-@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, liked, likeCount, pinned, badge;
+@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints;
 
 -(id)initWithId:(int)i message:(NSString *)m forCategory:(NSString*)c isNew:(BOOL)n {
     //msg = m;
@@ -309,6 +311,8 @@ YTPlayerView* globalYTPlayer = nil;
     NSURLRequest* req = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:u]];
     [web loadRequest:req];
     
+    [self sendSeeItRequest];
+    
     if (close) {
         CGRect endFrame = frmView;
         endFrame.origin.y = 0;
@@ -317,6 +321,40 @@ YTPlayerView* globalYTPlayer = nil;
         } completion: ^(BOOL f) {
         }];
     }
+}
+
+-(void)sendSeeItRequest {
+    NSURL* url = [NSURL URLWithString:urlNoteSeeIt];
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
+                                                       cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                   timeoutInterval:30];
+    inetdata = [[NSMutableData alloc] init];
+    [req setHTTPMethod:@"POST"];
+    NSString* post = [NSString stringWithFormat:@"app=%@&note=%d", AppID, msgId];
+    [req setHTTPBody:[post dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:self
+                                                    startImmediately:YES];
+}
+
+-(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
+    //Append the newly arrived data to whatever we’ve seen so far
+    [inetdata appendData:data];
+}
+
+-(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
+    NSLog([error localizedDescription]);
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
+    SuccessParser* sp = [[SuccessParser alloc] initWithXml:inetdata];
+    
+    [CurrentUser setExplorerPoints:[sp ExplorerPoints]];
+    [CurrentUser setSharerPoints:[sp SharerPoints]];
+    [CurrentUser setMusePoints:[sp MusePoints]];
+    //NSString* data = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
+    //NSLog(data);
 }
 
 -(void)closeWeb:(id)sender {

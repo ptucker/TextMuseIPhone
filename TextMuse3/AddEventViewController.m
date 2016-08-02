@@ -9,6 +9,7 @@
 #import "AddEventViewController.h"
 #import "Settings.h"
 #import "GlobalState.h"
+#import "SuccessParser.h"
 
 @interface AddEventViewController ()
 
@@ -28,8 +29,8 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
     [tvDesc setTextColor:[UIColor darkGrayColor]];
     [tvDesc setDelegate:self];
     
-    if ([UserEmail length] > 0)
-        [txtEmail setText:UserEmail];
+    if ([[CurrentUser UserEmail] length] > 0)
+        [txtEmail setText:[CurrentUser UserEmail]];
     
     if (Skin != nil)
         [btnSubmit setBackgroundColor:[Skin getDarkestColor]];
@@ -160,9 +161,15 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
     NSString* title = @"Failed";
     if ([msg containsString:@"<blocked/>"])
         msg = @"Please refrain from foul language in your events";
-    else if ([msg containsString:@"<success/>"]) {
+    else if ([msg containsString:@"<success"]) {
         msg = @"Your event has been uploaded";
         title = @"Complete";
+
+        SuccessParser* sp = [[SuccessParser alloc] initWithXml:inetdata];
+        
+        [CurrentUser setExplorerPoints:[sp ExplorerPoints]];
+        [CurrentUser setSharerPoints:[sp SharerPoints]];
+        [CurrentUser setMusePoints:[sp MusePoints]];
     }
     else {
         NSUInteger start = [msg rangeOfString:@"<err>"].location + 5;

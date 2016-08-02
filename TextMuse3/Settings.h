@@ -9,6 +9,7 @@
 #import "Message.h"
 #import "DataAccess.h"
 #import "SkinInfo.h"
+#import "UserInfo.h"
 #import <Foundation/Foundation.h>
 
 @interface Settings : NSObject
@@ -96,11 +97,7 @@ extern BOOL SortLastName;
 extern NSMutableDictionary* CategoryList;
 extern BOOL ShowIntro;
 extern BOOL AskRegistration;
-extern NSString* UserName;
-extern NSString* UserEmail;
-extern NSString* UserAge;
-extern NSString* UserBirthMonth;
-extern NSString* UserBirthYear;
+extern UserInfo* CurrentUser;
 extern NSString* AppID;
 extern SkinInfo* Skin;
 

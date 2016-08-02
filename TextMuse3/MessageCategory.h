@@ -12,6 +12,7 @@
 @interface MessageCategory : NSObject
 
 @property (atomic, retain) NSString* name;
+@property (atomic) int catid;
 @property (atomic) BOOL newCategory;
 @property (atomic) BOOL required;
 @property (atomic) BOOL chosen;

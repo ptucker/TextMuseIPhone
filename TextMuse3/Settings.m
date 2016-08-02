@@ -80,11 +80,7 @@ NSMutableDictionary* ActiveURLs = nil;
 
 NSString* LastNoteDownload;
 
-NSString* UserName;
-NSString* UserEmail;
-NSString* UserAge;
-NSString* UserBirthMonth;
-NSString* UserBirthYear;
+UserInfo *CurrentUser;
 NSString* AppID;
 SkinInfo* Skin;
 
@@ -269,21 +265,22 @@ SkinInfo* Skin;
         //[defs removeObjectForKey:SettingUserName];
         //[defs removeObjectForKey:SettingUserEmail];
         //[defs removeObjectForKey:SettingUserAge];
+        CurrentUser = [[UserInfo alloc] init];
         if ([defs stringForKey:SettingUserName] != nil &&
             [[defs stringForKey:SettingUserName] length] > 0)
-            UserName = [defs stringForKey:SettingUserName];
+            [CurrentUser setUserName: [defs stringForKey:SettingUserName]];
         if ([defs stringForKey:SettingUserEmail] != nil &&
             [[defs stringForKey:SettingUserEmail] length] > 0)
-            UserEmail = [defs stringForKey:SettingUserEmail];
+            [CurrentUser setUserEmail: [defs stringForKey:SettingUserEmail]];
         if ([defs stringForKey:SettingUserAge] != nil &&
             [[defs stringForKey:SettingUserAge] length] > 0)
-            UserAge = [defs stringForKey:SettingUserAge];
+            [CurrentUser setUserAge: [defs stringForKey:SettingUserAge]];
         if ([defs stringForKey:SettingUserBirthMonth] != nil &&
             [[defs stringForKey:SettingUserBirthMonth] length] > 0)
-            UserBirthMonth = [defs stringForKey:SettingUserBirthMonth];
+            [CurrentUser setUserBirthMonth: [defs stringForKey:SettingUserBirthMonth]];
         if ([defs stringForKey:SettingUserBirthYear] != nil &&
             [[defs stringForKey:SettingUserBirthYear] length] > 0)
-            UserBirthYear = [defs stringForKey:SettingUserBirthYear];
+            [CurrentUser setUserBirthYear: [defs stringForKey:SettingUserBirthYear]];
         if ([defs stringForKey:SettingAppID] != nil &&
             [[defs stringForKey:SettingAppID] length] > 0)
             AppID = [defs stringForKey:SettingAppID];

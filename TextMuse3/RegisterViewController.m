@@ -34,16 +34,16 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
     frm.origin.y = [lblBirth frame].origin.y + [lblBirth frame].size.height + 8;
     frm.size.height = 162;// [btnPrivacy frame].origin.y - (frm.origin.y + frm.size.height + 16);
     [birthPicker setFrame:frm];
-    if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0) {
+    if ([[CurrentUser UserBirthMonth] length] > 0 && [[CurrentUser UserBirthYear] length] > 0) {
         ;
     }
     [[self view] addSubview:birthPicker];
     
-    if ([UserName length] > 0)
-        [txtName setText:UserName];
-    if ([UserEmail length] > 0)
-        [txtEmail setText:UserEmail];
-    if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0) {
+    if ([[CurrentUser UserName] length] > 0)
+        [txtName setText:[CurrentUser UserName]];
+    if ([[CurrentUser UserEmail] length] > 0)
+        [txtEmail setText:[CurrentUser UserEmail]];
+    if ([[CurrentUser UserBirthMonth] length] > 0 && [[CurrentUser UserBirthYear] length] > 0) {
         
     }
     
@@ -95,9 +95,9 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
     if ([[txtName text] length] > 0 && [[txtEmail text] length] > 0) {
         if ([self checkAge]) {
             [Settings SaveSetting:SettingUserName withValue:[txtName text]];
-            UserName = [txtName text];
+            [CurrentUser setUserName: [txtName text]];
             [Settings SaveSetting:SettingUserEmail withValue:[txtEmail text]];
-            UserEmail = [txtEmail text];
+            [CurrentUser setUserEmail: [txtEmail text]];
             NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"MM"];
             NSString* m = [formatter stringFromDate:[birthPicker date]];
@@ -110,9 +110,9 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
                     NSString* smo = [NSString stringWithFormat:@"%ld", (long)mo];
                     NSString* syr = [NSString stringWithFormat:@"%ld", (long)yr];
                     [Settings SaveSetting:SettingUserBirthMonth withValue:smo];
-                    UserBirthMonth = smo;
+                    [CurrentUser setUserBirthMonth: smo];
                     [Settings SaveSetting:SettingUserBirthYear withValue:syr];
-                    UserBirthYear = syr;
+                    [CurrentUser setUserBirthYear: syr];
                 }
             }
             
@@ -165,11 +165,13 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
                                                    timeoutInterval:30];
     [req setHTTPMethod:@"POST"];
     NSString* urlStr;
-    if ([UserBirthMonth length] > 0 && [UserBirthYear length] > 0)
+    if ([[CurrentUser UserBirthMonth] length] > 0 && [[CurrentUser UserBirthYear] length] > 0)
         urlStr = [NSString stringWithFormat:@"name=%@&email=%@&bmonth=%@&byear=%@&appid=%@",
-                  UserName, UserEmail, UserBirthMonth, UserBirthYear, AppID];
+                  [CurrentUser UserName], [CurrentUser UserEmail], [CurrentUser UserBirthMonth],
+                  [CurrentUser UserBirthYear], AppID];
     else
-        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&appid=%@", UserName, UserEmail, AppID];
+        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&appid=%@",
+                  [CurrentUser UserName], [CurrentUser UserEmail], AppID];
     NSData* urlData = [urlStr dataUsingEncoding:NSUTF8StringEncoding];
     [req setHTTPBody:urlData];
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req

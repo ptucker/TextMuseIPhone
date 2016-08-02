@@ -12,6 +12,7 @@
 #import "UICheckButton.h"
 #import "Settings.h"
 #import "ChoosePhoneView.h"
+#import "SuccessParser.h"
 
 NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 MFMessageComposeViewController* msgcontroller = nil;
@@ -122,7 +123,12 @@ MFMessageComposeViewController* msgcontroller = nil;
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
-    //NSString* data = [NSString stringWithUTF8String:[inetdata bytes]];
+    SuccessParser* sp = [[SuccessParser alloc] initWithXml:inetdata];
+    
+    [CurrentUser setExplorerPoints:[sp ExplorerPoints]];
+    [CurrentUser setSharerPoints:[sp SharerPoints]];
+    [CurrentUser setMusePoints:[sp MusePoints]];
+    //NSString* data = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
     //NSLog(data);
 }
 

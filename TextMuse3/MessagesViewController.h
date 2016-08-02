@@ -10,7 +10,7 @@
 #import "SendMessage.h"
 #import "UICaptionButton.h"
 
-@interface MessagesViewController : UIViewController<UIScrollViewDelegate> {
+@interface MessagesViewController : UIViewController<UIScrollViewDelegate, NSURLConnectionDelegate> {
     IBOutlet UIView* header;
     IBOutlet UILabel* headerLabel;
     IBOutlet UICaptionButton* selectButton;
@@ -23,6 +23,7 @@
     CGRect frameStart;
     
     SendMessage* sendMessage;
+    NSMutableData* inetdata;
 }
 
 -(IBAction)backButton:(id)sender;
