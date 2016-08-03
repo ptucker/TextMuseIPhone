@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" launchScreen="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="Lato-Medium.ttf">
-            <string>Lato-Medium</string>
-        </mutableArray>
         <mutableArray key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
             <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
@@ -19,31 +18,45 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.5.6.194" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ODb-1v-qYn">
-                    <rect key="frame" x="8" y="474" width="304" height="30"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="Lato-Medium" family="Lato" pointSize="24"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TextMuse" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Q71-Hw-FLc">
-                    <rect key="frame" x="8" y="426" width="304" height="40"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="36"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TransparentButterfly.png" id="qfv-yE-s4r">
-                    <rect key="frame" x="40" y="164" width="240" height="240"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TransparentButterfly" translatesAutoresizingMaskIntoConstraints="NO" id="u2d-gi-hju">
+                    <rect key="frame" x="37" y="161" width="246" height="246"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="u2d-gi-hju" secondAttribute="height" multiplier="1:1" id="OUf-Pd-bOc"/>
+                    </constraints>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TextMuse" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFg-tA-wdO">
+                    <rect key="frame" x="37" y="384" width="246" height="41"/>
+                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="34"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 2.1.0.238" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hhK-7i-FBB">
+                    <rect key="frame" x="37" y="433" width="246" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="moN-uL-vJB"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.08235294118" green="0.77647058820000003" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="hhK-7i-FBB" firstAttribute="trailing" secondItem="u2d-gi-hju" secondAttribute="trailing" id="4EE-go-ChN"/>
+                <constraint firstAttribute="trailing" secondItem="u2d-gi-hju" secondAttribute="trailing" constant="37" id="6Hn-lG-2ag"/>
+                <constraint firstItem="hhK-7i-FBB" firstAttribute="leading" secondItem="kFg-tA-wdO" secondAttribute="leading" id="GFg-6e-Dsa"/>
+                <constraint firstItem="u2d-gi-hju" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="37" id="MD7-5i-FlB"/>
+                <constraint firstItem="hhK-7i-FBB" firstAttribute="trailing" secondItem="kFg-tA-wdO" secondAttribute="trailing" id="PKG-Ct-GMd"/>
+                <constraint firstItem="u2d-gi-hju" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="161" id="btl-jZ-VSi"/>
+                <constraint firstItem="hhK-7i-FBB" firstAttribute="leading" secondItem="u2d-gi-hju" secondAttribute="leading" id="gZz-S5-oA1"/>
+                <constraint firstItem="hhK-7i-FBB" firstAttribute="top" secondItem="kFg-tA-wdO" secondAttribute="bottom" constant="8" symbolic="YES" id="qtG-Yh-bD8"/>
+                <constraint firstItem="hhK-7i-FBB" firstAttribute="top" secondItem="u2d-gi-hju" secondAttribute="bottom" constant="26" id="tjC-Z3-n3t"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
     <resources>
-        <image name="TransparentButterfly.png" width="246" height="246"/>
+        <image name="TransparentButterfly" width="246" height="246"/>
     </resources>
 </document>
