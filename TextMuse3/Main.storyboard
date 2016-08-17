@@ -50,6 +50,55 @@
         </mutableArray>
     </customFonts>
     <scenes>
+        <!--Shake to Play-->
+        <scene sceneID="xj2-WF-ih6">
+            <objects>
+                <viewController title="Shake to Play" id="McS-5d-Adl" customClass="ShakeToPlayViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zpV-Vy-hBF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView userInteractionEnabled="NO" contentMode="scaleToFill" id="Y7m-Ci-Nik">
+                                <rect key="frame" x="63" y="132" width="237" height="106"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </pickerView>
+                            <pickerView userInteractionEnabled="NO" contentMode="scaleToFill" id="btH-n6-iLf">
+                                <rect key="frame" x="63" y="258" width="237" height="106"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Uie-IQ-3OD">
+                                <rect key="frame" x="31" y="299" width="24" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="lock-open.png"/>
+                                <state key="selected" image="lock.png"/>
+                                <connections>
+                                    <action selector="lock:" destination="McS-5d-Adl" eventType="touchUpInside" id="tjo-Lg-HVr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="K9c-84-55V">
+                                <rect key="frame" x="31" y="173" width="24" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="lock-open.png"/>
+                                <state key="selected" image="lock.png"/>
+                                <connections>
+                                    <action selector="lock:" destination="McS-5d-Adl" eventType="touchUpInside" id="yQ4-2g-mDy"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Shake To Play" id="t2v-Pk-66N"/>
+                    <connections>
+                        <outlet property="btnContactLock" destination="K9c-84-55V" id="hWg-Bm-G4a"/>
+                        <outlet property="btnTextLock" destination="Uie-IQ-3OD" id="9Ke-aA-YE5"/>
+                        <outlet property="pickerContacts" destination="Y7m-Ci-Nik" id="CDa-go-p9K"/>
+                        <outlet property="pickerTexts" destination="btH-n6-iLf" id="ZX0-iw-4PK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mPT-Z5-iN4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1467" y="-680"/>
+        </scene>
         <!--Badges-->
         <scene sceneID="dfK-5m-kYj">
             <objects>
@@ -549,11 +598,12 @@
                         <segue destination="ngF-ER-qsv" kind="push" identifier="SendMessage" id="ynu-Ad-b5Z"/>
                         <segue destination="y4r-5l-tYZ" kind="push" identifier="AddEvent" id="Pcx-nJ-Vem"/>
                         <segue destination="0qD-lQ-kW7" kind="push" identifier="ViewBadges" id="KoT-dO-rUY"/>
+                        <segue destination="McS-5d-Adl" kind="push" identifier="ShakeToPlay" id="Es4-jd-Gza"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzL-bm-eLj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-807" y="-365"/>
+            <point key="canvasLocation" x="-825" y="-317"/>
         </scene>
         <!--TextMuse-->
         <scene sceneID="ufC-wZ-h7g">
@@ -729,7 +779,7 @@
                                 </searchBar>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="contacts" id="SJg-RX-hXW">
-                                        <rect key="frame" x="0.0" y="66" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="130" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SJg-RX-hXW" id="CiA-qZ-79R">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -793,7 +843,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="group" id="Kns-rY-DH0">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Kns-rY-DH0" id="bMp-mn-ViW">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -847,7 +897,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="member" id="dCV-rq-iYJ">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dCV-rq-iYJ" id="c5q-Gj-BhK">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -885,12 +935,14 @@
         <image name="account-multiple.png" width="48" height="48"/>
         <image name="bandcamp.png" width="36" height="36"/>
         <image name="home.png" width="48" height="48"/>
+        <image name="lock-open.png" width="24" height="24"/>
+        <image name="lock.png" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ynu-Ad-b5Z"/>
-        <segue reference="gIs-SO-9jD"/>
-        <segue reference="BNQ-99-bBq"/>
         <segue reference="udu-bJ-qbO"/>
-        <segue reference="hFR-dd-hXs"/>
+        <segue reference="BNQ-99-bBq"/>
+        <segue reference="MVW-gx-UGH"/>
+        <segue reference="gIs-SO-9jD"/>
+        <segue reference="ynu-Ad-b5Z"/>
     </inferredMetricsTieBreakers>
 </document>

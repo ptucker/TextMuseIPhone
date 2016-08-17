@@ -77,6 +77,7 @@
             HighlightedMessageID = [highlight intValue];
     }
 
+    [application setApplicationSupportsShakeToEdit:YES];
     return YES;
 }
 

@@ -263,6 +263,19 @@ NSArray* colorsTitle;
 
 - (void)viewDidAppear:(BOOL)animated {
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
+    [self becomeFirstResponder];
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [self becomeFirstResponder];
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    [self performSegueWithIdentifier:@"ShakeToPlay" sender:self];
 }
 
 - (void)didReceiveMemoryWarning {

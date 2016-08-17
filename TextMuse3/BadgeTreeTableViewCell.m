@@ -24,18 +24,18 @@
         case Explorer:
             title = [NSString stringWithFormat:@"(%d/10) Explorer Badge", [CurrentUser ExplorerPoints]];
             desc = @"You are great at discovering events and getting out there.\n\t1pt: Open the app daily\n\t1pt: Open an event category\n\t2pts: Remit a deal";
-            badge = [UIImage imageNamed:@"bandcamp"];
+            badge = [UIImage imageNamed:@"v4-1_Explorer"];
             dimimage = [CurrentUser ExplorerPoints] < 10;
             break;
         case Sharer:
             title = [NSString stringWithFormat:@"(%d/10) Sharer Badge", [CurrentUser SharerPoints]];
-            badge = [UIImage imageNamed:@"bandcamp"];
+            badge = [UIImage imageNamed:@"v4-1_Sharer"];
             desc = @"You are the information source for great things. Your friends rely on you to know what’s happening.\n\t1pt: Text a deal or event to friends\n\t2pts: Create an event";
             dimimage = [CurrentUser SharerPoints] < 10;
             break;
         case Muse:
             title = [NSString stringWithFormat:@"(%d/10) Muse Badge", [CurrentUser MusePoints]];
-            badge = [UIImage imageNamed:@"bandcamp"];
+            badge = [UIImage imageNamed:@"v4-1_TextMuse"];
             desc = @"You are the social leader. You get the group together and find great things to do.\n\t1pt: Open the app daily\n\t1pt: Open an event category\n\t2pts: Remit a deal";
             dimimage = [CurrentUser MusePoints] < 10;
             break;
@@ -45,7 +45,7 @@
             dim += [CurrentUser MusePoints] >= 10 ? 1 : 0;
             title = [NSString stringWithFormat:@"(%d/2) %@ Badge", dim, [Skin MasterName]];
             desc = @"You are great at discovering events and getting out there.\n\t2pts: Remit a deal in a group";
-            badge = [UIImage imageNamed:@"bandcamp"];
+            badge = [UIImage imageNamed:@"v4-1_DuckMaster"];
             dimimage = dim < 2;
             break;
     }

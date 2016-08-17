@@ -595,19 +595,23 @@ const int HIDEMESSAGE = 1000;
 -(int)getMessageScore:(Message*)m {
     int s = arc4random() % 3;
     
-    //if ([[categories objectForKey:[m category]] sponsor] == NULL)
+    if ([[m category] isEqualToString:@"Badges"])
+        s = 0;
+    else {
+        //if ([[categories objectForKey:[m category]] sponsor] == NULL)
         //s += 5;
-    if (CategoryList != nil && [[CategoryList objectForKey:[m category]] isEqualToString: @"0"])
-        s += HIDEMESSAGE;
-    
-    if (![m newMsg])
-        s += 4;
-    if (![m liked])
-        s += 1;
-    if (![m pinned])
-        s += 1;
-    
-    s += ([m order] / 3);
+        if (CategoryList != nil && [[CategoryList objectForKey:[m category]] isEqualToString: @"0"])
+            s += HIDEMESSAGE;
+        
+        if (![m newMsg])
+            s += 4;
+        if (![m liked])
+            s += 1;
+        if (![m pinned])
+            s += 1;
+        
+        s += ([m order] / 3);
+    }
     
     return s;
 }
@@ -753,6 +757,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     if ([elementName isEqualToString:@"notes"]) {
         [SqlDb archiveAllCategories];
         LastNoteDownload = [attributeDict objectForKey:@"ts"];
+        /*
         if (AppID == nil || ![AppID isEqualToString:[attributeDict objectForKey:@"app"]]) {
             AppID = [attributeDict objectForKey:@"app"];
             [Settings SaveSetting:SettingAppID withValue:AppID];
@@ -760,6 +765,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             [appDelegate registerRemoteNotificationWithAzure];
         }
+         */
         [CurrentUser setExplorerPoints:[[attributeDict objectForKey:@"ep"] intValue]];
         [CurrentUser setSharerPoints:[[attributeDict objectForKey:@"sp"] intValue]];
         [CurrentUser setMusePoints:[[attributeDict objectForKey:@"mp"] intValue]];
