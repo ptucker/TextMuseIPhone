@@ -128,8 +128,8 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
         NSString* date = [[txtDate text] stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
         NSString* email = [[txtEmail text] stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
         NSString* loc = [[txtLocation text] stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
-        NSString* urlStr = [NSString stringWithFormat:@"desc=%@&edate=%@&email=%@&spon=%ld",
-                            desc, date, email, [Skin SkinID]];
+        NSString* urlStr = [NSString stringWithFormat:@"desc=%@&edate=%@&email=%@&spon=%ld&app=%@",
+                            desc, date, email, [Skin SkinID], AppID];
         if ([[txtLocation text] length] > 0)
             urlStr = [NSString stringWithFormat:@"%@&loc=%@", urlStr, loc];
         NSData* urlData = [urlStr dataUsingEncoding:NSUTF8StringEncoding];

@@ -757,7 +757,6 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     if ([elementName isEqualToString:@"notes"]) {
         [SqlDb archiveAllCategories];
         LastNoteDownload = [attributeDict objectForKey:@"ts"];
-        /*
         if (AppID == nil || ![AppID isEqualToString:[attributeDict objectForKey:@"app"]]) {
             AppID = [attributeDict objectForKey:@"app"];
             [Settings SaveSetting:SettingAppID withValue:AppID];
@@ -765,7 +764,6 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             [appDelegate registerRemoteNotificationWithAzure];
         }
-         */
         [CurrentUser setExplorerPoints:[[attributeDict objectForKey:@"ep"] intValue]];
         [CurrentUser setSharerPoints:[[attributeDict objectForKey:@"sp"] intValue]];
         [CurrentUser setMusePoints:[[attributeDict objectForKey:@"mp"] intValue]];
