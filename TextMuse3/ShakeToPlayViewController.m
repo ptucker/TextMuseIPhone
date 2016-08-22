@@ -44,20 +44,22 @@
     [btnSendIt addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
     [[self view] addSubview:btnSendIt];
     
-
-    
-    chkRecentContacts = [[UICheckButton alloc] initWithFrame:CGRectMake(8, frmContactPicker.origin.y - 30,
-                                                                        20, 20)];
-    [chkRecentContacts setSelected:YES];
-    [chkRecentContacts addTarget:self action:@selector(contactList:)
-                forControlEvents:UIControlEventTouchUpInside];
-    [[self view] addSubview:chkRecentContacts];
-    
-    UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(44, frmContactPicker.origin.y - 30,
-                                                             [[self view] frame].size.width - 40, 20)];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
-    [lbl setText:@"recent contacts"];
-    [[self view] addSubview:lbl];
+    if (RecentContacts != nil && [RecentContacts count] > 0) {
+        chkRecentContacts = [[UICheckButton alloc] initWithFrame:CGRectMake(8, frmContactPicker.origin.y - 30,
+                                                                            20, 20)];
+        [chkRecentContacts setSelected:YES];
+        [chkRecentContacts addTarget:self action:@selector(contactList:)
+                    forControlEvents:UIControlEventTouchUpInside];
+        [[self view] addSubview:chkRecentContacts];
+        
+        UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(44, frmContactPicker.origin.y - 30,
+                                                                 [[self view] frame].size.width - 40, 20)];
+        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
+        [lbl setText:@"recent contacts"];
+        [[self view] addSubview:lbl];
+    }
+    else
+        recentContacts = false;
 }
 
 -(NSUInteger)getContactCount {
