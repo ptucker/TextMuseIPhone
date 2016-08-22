@@ -56,7 +56,7 @@
     UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(44, frmContactPicker.origin.y - 30,
                                                              [[self view] frame].size.width - 40, 20)];
     [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
-    [lbl setText:@"all contacts"];
+    [lbl setText:@"recent contacts"];
     [[self view] addSubview:lbl];
 }
 
