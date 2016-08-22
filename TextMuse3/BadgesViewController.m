@@ -30,13 +30,13 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [indexPath row] == selectedRow ? 180 : 40;
+    return [indexPath row] == selectedRow ? 220 : 80;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BadgeTreeTableViewCell* cell = nil;
     
-    CGRect frm = CGRectMake(0, 0, [[self view] frame].size.width, 40);
+    CGRect frm = CGRectMake(0, 0, [[self view] frame].size.width, 80);
     switch ([indexPath row]) {
         case 0: cell = [[BadgeTreeTableViewCell alloc] initWithFrame:frm forBadge:Explorer];
             break;

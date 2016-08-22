@@ -23,6 +23,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    recentContacts = true;
+    
     sendMessage = [[SendMessage alloc] init];
     
     [pickerContacts setDelegate:self];
@@ -33,6 +35,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     CGRect frmMessagePicker = [pickerTexts frame];
+    CGRect frmContactPicker = [pickerContacts frame];
     CGRect frmSendBtn = CGRectMake(([[self view] frame].size.width/2) - 72,
                                    frmMessagePicker.origin.y + frmMessagePicker.size.height + 20, 144, 36);
     btnSendIt = [[UICaptionButton alloc] initWithFrame:frmSendBtn
@@ -40,6 +43,37 @@
                                           andRightText:@"text it"];
     [btnSendIt addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
     [[self view] addSubview:btnSendIt];
+    
+
+    
+    chkRecentContacts = [[UICheckButton alloc] initWithFrame:CGRectMake(8, frmContactPicker.origin.y - 30,
+                                                                        20, 20)];
+    [chkRecentContacts setSelected:YES];
+    [chkRecentContacts addTarget:self action:@selector(contactList:)
+                forControlEvents:UIControlEventTouchUpInside];
+    [[self view] addSubview:chkRecentContacts];
+    
+    UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(44, frmContactPicker.origin.y - 30,
+                                                             [[self view] frame].size.width - 40, 20)];
+    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
+    [lbl setText:@"all contacts"];
+    [[self view] addSubview:lbl];
+}
+
+-(NSUInteger)getContactCount {
+    if (RecentContacts == nil || [RecentContacts count] == 0 || !recentContacts)
+        return [[Data getContacts] count];
+    else {
+        return [RecentContacts count];
+    }
+}
+
+-(UserContact*) getContactAt:(NSInteger)idx {
+    if (RecentContacts == nil || [RecentContacts count] == 0 || !recentContacts)
+        return [[Data getContacts] objectAtIndex:idx];
+    else {
+        return [Data findUserByPhone:[RecentContacts objectAtIndex:idx]];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -68,9 +102,7 @@
     }
     if (![btnContactLock isSelected]) {
         int c = arc4random();
-        c = (RecentContacts == nil || [RecentContacts count] == 0) ?
-                c % [[Data getContacts] count] :
-                c % [RecentContacts count];
+        c = c % [self getContactCount];
         [pickerContacts selectRow:c inComponent:0 animated:YES];
     }
 }
@@ -82,38 +114,61 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component;
 {
-    if (pickerView == pickerContacts) {
-        if (RecentContacts == nil || [RecentContacts count] == 0)
-            return [[Data getContacts] count];
-        else
-            return [RecentContacts count];
-    }
+    if (pickerView == pickerContacts)
+        return [self getContactCount];
     else
         return [[Data getEventMessages] count];
 }
 
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
+-(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-    if (pickerView == pickerContacts) {
-        UserContact* uc = nil;
-        if (RecentContacts == nil || [RecentContacts count] == 0)
-            uc = [[Data getContacts] objectAtIndex:row];
-        else {
-            uc = [Data findUserByPhone:[RecentContacts objectAtIndex:row]];
-        }
-        return [NSString stringWithFormat:@"%@ %@", [uc firstName], [uc lastName]];
-    }
+    if (pickerView == pickerContacts)
+        return 40;
     else
-        return [[[Data getEventMessages] objectAtIndex:row] text];
+        return 60;
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row
+          forComponent:(NSInteger)component reusingView:(UIView *)view {
+    UIView* ret = nil;
+    if (pickerView == pickerContacts) {
+        UserContact* uc = [self getContactAt:row];
+        UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 40)];
+        [lbl setText:[NSString stringWithFormat:@"%@ %@", [uc firstName], [uc lastName]]];
+        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+        ret = lbl;
+    }
+    else {
+        ret = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 60)];
+        UILabel* lbl = nil;
+        Message* msg = [[Data getEventMessages] objectAtIndex:row];
+        if ([msg img] != nil) {
+            UIImageView* imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,60,60)];
+            [imgview setImage:[UIImage imageWithData:[msg img]]];
+            [imgview setContentMode:UIViewContentModeScaleAspectFit];
+            [ret addSubview:imgview];
+            lbl = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, [pickerView frame].size.width - 60, 60)];
+        }
+        else {
+            lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 60)];
+        }
+        [lbl setText:[msg text]];
+        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+        
+        [ret addSubview:lbl];
+    }
+    return ret;
+}
+
+-(void)contactList:(id)sender {
+    [chkRecentContacts setSelected:![chkRecentContacts isSelected]];
+    recentContacts = [chkRecentContacts isSelected];
+    [pickerContacts reloadAllComponents];
 }
 
 -(void)sendMessage:(id)sender {
     Message* msg = [[Data getEventMessages] objectAtIndex:[pickerTexts selectedRowInComponent:0]];
-    UserContact* uc = nil;
-    if (RecentContacts == nil || [RecentContacts count] == 0)
-        uc = [[Data getContacts] objectAtIndex:[pickerContacts selectedRowInComponent:0]];
-    else
-        uc = [Data findUserByPhone:[RecentContacts objectAtIndex:[pickerContacts selectedRowInComponent:0]]];
+    UserContact* uc = [self getContactAt:[pickerContacts selectedRowInComponent:0]];
     
     CurrentCategory = [msg category];
     CurrentMessage = msg;

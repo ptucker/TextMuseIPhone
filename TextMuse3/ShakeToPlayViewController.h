@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UICaptionButton.h"
+#import "UICheckButton.h"
 #import "Message.h"
 #import "UserContact.h"
 #import "SendMessage.h"
@@ -18,6 +19,9 @@
     IBOutlet UIPickerView* pickerContacts;
     IBOutlet UIPickerView* pickerTexts;
     
+    BOOL recentContacts;
+    
+    UICheckButton* chkRecentContacts;
     UICaptionButton* btnSendIt;
     
     SendMessage* sendMessage;
