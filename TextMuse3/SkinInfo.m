@@ -35,6 +35,8 @@
         [self setMainWindowTitle:[decoder decodeObjectForKey:@"main"]];
         [self setIconButtonURL:[decoder decodeObjectForKey:@"icon"]];
         [self setHomeURL:[decoder decodeObjectForKey:@"home"]];
+        [self setMasterName:[decoder decodeObjectForKey:@"master"]];
+        [self setMasterBadgeURL:[decoder decodeObjectForKey:@"masterbadge"]];
     }
     return self;
 }
@@ -49,6 +51,8 @@
     [encoder encodeObject:[self MainWindowTitle] forKey:@"main"];
     [encoder encodeObject:[self IconButtonURL] forKey:@"icon"];
     [encoder encodeObject:[self HomeURL] forKey:@"home"];
+    [encoder encodeObject:[self MasterName] forKey:@"master"];
+    [encoder encodeObject:[self MasterBadgeURL] forKey:@"masterbadge"];
 }
 
 +(long) getHexDigit:(unichar) c {
@@ -73,6 +77,22 @@
     long b = [self getHexValue:[color substringWithRange:NSMakeRange(4, 2)]];
     
     return [UIColor colorWithRed:r/256.0 green:g/256.0 blue:b/256.0 alpha:1.0];
+}
+
+-(NSString*)MasterBadgeURL {
+    return masterBadgeUrl;
+}
+
+-(void)setMasterBadgeURL:(NSString *)MasterBadgeURL {
+    if (MasterBadgeURL != nil) {
+        masterBadgeUrl = MasterBadgeURL;
+        loader = [[ImageDownloader alloc] initWithUrl:masterBadgeUrl];
+        [loader load];
+    }
+}
+
+-(NSData*)getBadgeImage {
+    return [loader inetdata];
 }
 
 -(UIColor*)getDarkestColor {

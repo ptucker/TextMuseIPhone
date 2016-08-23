@@ -779,6 +779,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         [Skin setSkinID:[[attributeDict objectForKey:@"id"] integerValue]];
         [Skin setSkinName:[attributeDict objectForKey:@"name"]];
         [Skin setMasterName:[attributeDict objectForKey:@"master"]];
+        [Skin setMasterBadgeURL:[attributeDict objectForKey:@"masterurl"]];
         [Skin setColor1:[attributeDict objectForKey:@"c1"]];
         [Skin setColor2:[attributeDict objectForKey:@"c2"]];
         [Skin setColor3:[attributeDict objectForKey:@"c3"]];

@@ -45,7 +45,7 @@
             dim += [CurrentUser MusePoints] >= 10 ? 1 : 0;
             title = [NSString stringWithFormat:@"(%d/2) %@ Badge", dim, [Skin MasterName]];
             desc = @"You are great at discovering events and getting out there.\n\t2pts: Remit a deal in a group";
-            badge = [UIImage imageNamed:@"v4-1_DuckMaster"];
+            badge = [UIImage imageWithData:[Skin getBadgeImage]];
             dimimage = dim < 2;
             break;
     }

@@ -8,16 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-
+#import "ImageDownloader.h"
 @interface SkinInfo : NSObject <NSCoding> {
     UIColor* _color1;
     UIColor* _color2;
     UIColor* _color3;
+    
+    NSString* masterBadgeUrl;
+    ImageDownloader* loader;
+    NSMutableData* badge;
 }
 
 @property long SkinID;
 @property NSString* SkinName;
 @property NSString* MasterName;
+@property NSString* MasterBadgeURL;
 @property NSMutableArray* LaunchImageURL;
 @property NSString* Color1;
 @property NSString* Color2;
@@ -27,6 +32,8 @@
 @property NSString* HomeURL;
 
 +(UIColor*)createColor:(NSString*)color;
+
+-(NSData*)getBadgeImage;
 
 -(UIColor*) createColor1;
 -(UIColor*) createColor2;
