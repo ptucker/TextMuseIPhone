@@ -265,10 +265,12 @@ SkinInfo* Skin;
         //[defs removeObjectForKey:SettingUserName];
         //[defs removeObjectForKey:SettingUserEmail];
         //[defs removeObjectForKey:SettingUserAge];
-        CurrentUser = [[UserInfo alloc] init];
-        if ([defs stringForKey:SettingUserName] != nil &&
-            [[defs stringForKey:SettingUserName] length] > 0)
-            [CurrentUser setUserName: [defs stringForKey:SettingUserName]];
+        if (CurrentUser == nil) {
+            CurrentUser = [[UserInfo alloc] init];
+            if ([defs stringForKey:SettingUserName] != nil &&
+                [[defs stringForKey:SettingUserName] length] > 0)
+                [CurrentUser setUserName: [defs stringForKey:SettingUserName]];
+        }
         if ([defs stringForKey:SettingUserEmail] != nil &&
             [[defs stringForKey:SettingUserEmail] length] > 0)
             [CurrentUser setUserEmail: [defs stringForKey:SettingUserEmail]];

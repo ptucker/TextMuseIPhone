@@ -14,7 +14,7 @@ extern NSArray* colors;
 extern NSArray* colorsText;
 extern NSArray* colorsTitle;
 
-const int maxRecentIDs = 10;
+extern const int maxRecentIDs;
 
 @interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,
 DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {

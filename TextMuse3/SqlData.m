@@ -120,20 +120,11 @@
 }
 
 -(BOOL)isFlagged:(Message*)msg {
-    if (db == nil) return false;
-
-    BOOL ret = false;
-    NSString* fetch = [NSString stringWithFormat:@"select msgid from Flagged where msgid=%d;", [msg msgId]];
-    sqlite3_stmt* stmt;
-    if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
-        ret = (sqlite3_step(stmt) == SQLITE_ROW);
-    }
-    
-    return ret;
+    return [self isFlaggedId:[msg msgId]];
 }
 
 -(BOOL)isFlaggedId:(int)msgId {
-    if (db == nil) return false;
+    if (db == nil || msgId < 0) return false;
     
     BOOL ret = false;
     NSString* fetch = [NSString stringWithFormat:@"select msgid from Flagged where msgid=%d;", msgId];

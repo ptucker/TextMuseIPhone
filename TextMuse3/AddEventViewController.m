@@ -164,6 +164,8 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
     else if ([msg containsString:@"<success"]) {
         msg = @"Your event has been uploaded";
         title = @"Complete";
+        
+        [Data reloadData];
 
         SuccessParser* sp = [[SuccessParser alloc] initWithXml:inetdata];
         

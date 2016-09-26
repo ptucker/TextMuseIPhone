@@ -22,6 +22,8 @@ NSArray* colors;
 NSArray* colorsText;
 NSArray* colorsTitle;
 
+const int maxRecentIDs = 10;
+
 @interface RndMessagesViewController ()
 
 @end

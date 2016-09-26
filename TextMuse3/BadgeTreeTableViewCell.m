@@ -36,17 +36,18 @@
         case Muse:
             title = [NSString stringWithFormat:@"(%d/10) Muse Badge", [CurrentUser MusePoints]];
             badge = [UIImage imageNamed:@"v4-1_TextMuse"];
-            desc = @"You are the social leader. You get the group together and find great things to do.\n\t1pt: Open the app daily\n\t1pt: Open an event category\n\t2pts: Remit a deal";
+            desc = @"You are the social leader. You get the group together and find great things to do.\n\t2pts: Remit a deal as a group";
             dimimage = [CurrentUser MusePoints] < 10;
             break;
         case Master:
             dim = [CurrentUser ExplorerPoints] >= 10 ? 1 : 0;
             dim += [CurrentUser SharerPoints] >= 10 ? 1 : 0;
             dim += [CurrentUser MusePoints] >= 10 ? 1 : 0;
-            title = [NSString stringWithFormat:@"(%d/2) %@ Badge", dim, [Skin MasterName]];
-            desc = @"You are great at discovering events and getting out there.\n\t2pts: Remit a deal in a group";
+            title = [NSString stringWithFormat:@"%@ Badge", [Skin MasterName]];
+            desc = @"You are great at discovering events and getting out there.\n\tReceive 25 or more points.\n\tHave two or more badges.";
             badge = [UIImage imageWithData:[Skin getBadgeImage]];
-            dimimage = dim < 2;
+            dimimage = dim < 2 ||
+                ([CurrentUser ExplorerPoints] + [CurrentUser SharerPoints] + [CurrentUser MusePoints] < 25);
             break;
     }
     
