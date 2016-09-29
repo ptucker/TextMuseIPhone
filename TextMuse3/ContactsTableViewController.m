@@ -53,11 +53,25 @@ NSMutableArray* searchContacts;
     fontBold = [UIFont fontWithName:@"Lato-Regular" size:18];
     fontLight = [UIFont fontWithName:@"Lato-Light" size:18];
     
+    [self fixCancelButton:searchbar];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+-(void)fixCancelButton:(UIView*)search {
+    for (UIView* v in [search subviews]) {
+        if ([v isKindOfClass:[UIButton class]]) {
+            UIButton* b = (UIButton*)v;
+            [b setTitle:@"Done" forState:UIControlStateNormal];
+            return;
+        }
+        else
+            [self fixCancelButton:v];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
