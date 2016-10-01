@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SendMessage.h"
+#import "MessageView.h"
 #import "UICaptionButton.h"
 
 @interface MessagesViewController : UIViewController<UIScrollViewDelegate, NSURLConnectionDelegate> {
@@ -24,6 +25,8 @@
     
     SendMessage* sendMessage;
     NSMutableData* inetdata;
+    
+    MessageView* msgviews[5];
 }
 
 -(IBAction)backButton:(id)sender;

@@ -9,7 +9,6 @@
 #import "MessagesViewController.h"
 #import "RndMessagesViewController.h"
 #import "Message.h"
-#import "MessageView.h"
 #import "Settings.h"
 #import "GlobalState.h"
 #import "DataAccess.h"
@@ -30,7 +29,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
     NSDictionary* txtAttrs =[NSDictionary dictionaryWithObjectsAndKeys:
                              [UIFont fontWithName:@"Lato-Medium" size:18.0], NSFontAttributeName, nil];
@@ -98,6 +97,8 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
                         [Data getMessagesForCategory:CurrentCategory];
     if ([quotes count] == 0) return;
     
+    [self showMessages];
+    
     // Update the page when more than 50% of the previous/next page is visible
     CGFloat pageWidth = [scrollview frame].size.width;
     int page = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
@@ -157,26 +158,52 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 }
 
 -(void)showMessages {
-    for (UIView* v in [scrollview subviews])
-        [v removeFromSuperview];
+    //for (UIView* v in [scrollview subviews])
+    //    [v removeFromSuperview];
     
     CGRect frame = [scrollview frame];
     frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
     NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
                                                                     [Data getMessagesForCategory:CurrentCategory];
-    for (int i=0; i<[msgs count]; i++) {
-        Message* msg = [msgs objectAtIndex:i];
-        MessageView* mv = [[MessageView alloc] initWithFrame:frame];
-        
-        [mv setupViewForMessage:msg
-                        inFrame:frame
-                      withColor:[colors objectAtIndex:CurrentColorIndex]
-                          index:CurrentColorIndex];
-        
-        [scrollview addSubview:mv];
-        if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
-            frameStart.origin.x = frame.origin.x;
-        frame.origin.x += frame.size.width;
+    
+    CGFloat pageWidth = [scrollview frame].size.width;
+    long start = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) - 1;
+    if (start < 0) start = 0;
+    else if (start + 5 > [msgs count]) start = [msgs count] - 5;
+    long stop = MIN(start + 5, [msgs count]);
+    frame.origin.x = (start * frame.size.width);
+    
+    //First, go through and remove frames that are no longer in the window
+    while (msgviews[0] != nil && msgviews[0].frame.origin.x < frame.origin.x) {
+        [msgviews[0] removeFromSuperview];
+        for (int i=0; i<4; i++)
+            msgviews[i] = msgviews[i+1];
+        msgviews[4] = nil;
+    }
+    while (msgviews[4] != nil && msgviews[4].frame.origin.x > (frame.origin.x + 4 * frame.size.width)) {
+        [msgviews[4] removeFromSuperview];
+        for (int i=4; i>0; i--)
+            msgviews[i] = msgviews[i-1];
+        msgviews[0] = nil;
+    }
+    
+    for (long i=start; i<stop; i++) {
+        if (msgviews[i-start] == nil) {
+            CGRect first = msgviews[1].frame;
+            Message* msg = [msgs objectAtIndex:i];
+            frame.origin.x = i * frame.size.width;
+            MessageView* mv = [[MessageView alloc] initWithFrame:frame];
+            
+            [mv setupViewForMessage:msg
+                            inFrame:frame
+                          withColor:[colors objectAtIndex:CurrentColorIndex]
+                              index:CurrentColorIndex];
+            
+            [scrollview addSubview:mv];
+            if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
+                frameStart.origin.x = frame.origin.x;
+            msgviews[i-start] = mv;
+        }
     }
     
     Message* msg = [msgs objectAtIndex:0];
