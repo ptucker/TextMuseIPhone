@@ -127,7 +127,7 @@
     if (pickerView == pickerContacts)
         return 40;
     else
-        return 60;
+        return 120;
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row
@@ -141,19 +141,20 @@
         ret = lbl;
     }
     else {
-        ret = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 60)];
+        ret = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 120)];
         UILabel* lbl = nil;
         Message* msg = [[Data getEventMessages] objectAtIndex:row];
         if ([msg img] != nil) {
-            UIImageView* imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,60,60)];
+            UIImageView* imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0,30,60,60)];
             [imgview setImage:[UIImage imageWithData:[msg img]]];
             [imgview setContentMode:UIViewContentModeScaleAspectFit];
             [ret addSubview:imgview];
-            lbl = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, [pickerView frame].size.width - 60, 60)];
+            lbl = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, [pickerView frame].size.width - 60, 120)];
         }
         else {
-            lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 60)];
+            lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 120)];
         }
+        [lbl setNumberOfLines:0];
         [lbl setText:[msg text]];
         [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
         
