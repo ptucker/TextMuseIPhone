@@ -11,6 +11,7 @@
 @implementation MemberTableData
 
 -(id)init {
+    self = [super init];
     [self setAdds:[[NSMutableArray alloc] init]];
     [self setRemoves:[[NSMutableArray alloc] init]];
     

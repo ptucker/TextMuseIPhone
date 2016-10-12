@@ -86,7 +86,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     }
     [btnSeeAll setFrame:frmSeeAll];
     if (btnLike == nil) {
-        NSString* clike = [msg likeCount] != 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
+        //NSString* clike = [msg likeCount] != 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
         NSString* img = [msg liked] ? @"heart_red" : @"heart_dkgrey";
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:[UIImage imageNamed:img]

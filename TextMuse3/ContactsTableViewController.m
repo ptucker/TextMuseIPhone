@@ -75,6 +75,7 @@ NSMutableArray* searchContacts;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     if ([NamedGroups count] > 0) {
         NSMutableArray* gs = [[NSMutableArray alloc] init];
         for (NSString* k in [NamedGroups keyEnumerator]) {

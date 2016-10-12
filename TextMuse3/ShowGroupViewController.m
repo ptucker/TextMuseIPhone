@@ -34,6 +34,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [tableview reloadData];
 }
 

@@ -34,6 +34,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     CGRect frmMessagePicker = [pickerTexts frame];
     CGRect frmContactPicker = [pickerContacts frame];
     CGRect frmSendBtn = CGRectMake(([[self view] frame].size.width/2) - 72,
@@ -79,12 +80,14 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [self play];
 
     [self becomeFirstResponder];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     [self becomeFirstResponder];
 }
 

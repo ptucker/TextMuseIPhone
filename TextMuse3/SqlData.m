@@ -176,8 +176,8 @@
     if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             char* data = (char*)sqlite3_column_text(stmt, 0);
-            NSString* cat = (data == nil) ? nil : [NSString stringWithUTF8String:data];
-            [ret addObject:cat];
+            if (data != nil)
+                [ret addObject:[NSString stringWithUTF8String:data]];
         }
     }
     
@@ -193,8 +193,8 @@
     if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             char* data = (char*)sqlite3_column_text(stmt, 0);
-            NSString* cat = (data == nil) ? nil : [NSString stringWithUTF8String:data];
-            [ret addObject:cat];
+            if (data != nil)
+                [ret addObject:[NSString stringWithUTF8String:data]];
         }
     }
     
@@ -204,21 +204,19 @@
 -(void)addChosenCategory:(NSString*)cat {
     if (db == nil) return;
     
-    BOOL ret = false;
     NSString* fetch = [NSString stringWithFormat:@"update Categories set chosen=1 where name='%@';", cat];
     sqlite3_stmt* stmt;
     if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
-        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+        sqlite3_step(stmt);
     }
 }
 -(void)removeChosenCategory:(NSString*)cat {
     if (db == nil) return;
     
-    BOOL ret = false;
     NSString* fetch = [NSString stringWithFormat:@"update Categories set chosen=0 where name='%@';", cat];
     sqlite3_stmt* stmt;
     if (sqlite3_prepare(db, [fetch UTF8String], -1, &stmt, nil) == SQLITE_OK) {
-        ret = (sqlite3_step(stmt) == SQLITE_ROW);
+        sqlite3_step(stmt);
     }
 }
 

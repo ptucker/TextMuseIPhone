@@ -23,20 +23,20 @@
     switch (badgetype) {
         case Explorer:
             title = [NSString stringWithFormat:@"(%d/10) Explorer Badge", [CurrentUser ExplorerPoints]];
-            desc = @"You are great at discovering events and getting out there.\n\t1pt: Open the app daily\n\t1pt: Open an event category\n\t2pts: Remit a deal";
+            desc = @"You are great at discovering cool activities on or around campus\n\t1pt: Open the app daily\n\t1pt: Open a deal or event\n\t2pts: Remit an activity";
             badge = [UIImage imageNamed:@"v4-1_Explorer"];
             dimimage = [CurrentUser ExplorerPoints] < 10;
             break;
         case Sharer:
             title = [NSString stringWithFormat:@"(%d/10) Sharer Badge", [CurrentUser SharerPoints]];
             badge = [UIImage imageNamed:@"v4-1_Sharer"];
-            desc = @"You are the information source for great things. Your friends rely on you to know what’s happening.\n\t1pt: Text a deal or event to friends\n\t2pts: Create an event";
+            desc = @"You are the go-to person for an awesome social life. Your friends rely on you to know what's goin' on\n\t1pt: Text a deal or event to friends\n\t2pts: Create and share an event";
             dimimage = [CurrentUser SharerPoints] < 10;
             break;
         case Muse:
             title = [NSString stringWithFormat:@"(%d/10) Muse Badge", [CurrentUser MusePoints]];
             badge = [UIImage imageNamed:@"v4-1_TextMuse"];
-            desc = @"You are the social leader. You get the group together and find great things to do.\n\t2pts: Remit a deal as a group";
+            desc = @"You are the social leader. You get the group together to have a rockin' good time.\n\t2pts: Remit an activity as a group";
             dimimage = [CurrentUser MusePoints] < 10;
             break;
         case Master:
@@ -44,7 +44,7 @@
             dim += [CurrentUser SharerPoints] >= 10 ? 1 : 0;
             dim += [CurrentUser MusePoints] >= 10 ? 1 : 0;
             title = [NSString stringWithFormat:@"%@ Badge", [Skin MasterName]];
-            desc = @"You are great at discovering events and getting out there.\n\tReceive 25 or more points.\n\tHave two or more badges.";
+            desc = @"You've achieved \"Master\" status at discovering cool activities on or around campus\n\tReceive 25 or more points.\n\tHave two or more badges.";
             badge = [UIImage imageWithData:[Skin getBadgeImage]];
             dimimage = dim < 2 ||
                 ([CurrentUser ExplorerPoints] + [CurrentUser SharerPoints] + [CurrentUser MusePoints] < 25);

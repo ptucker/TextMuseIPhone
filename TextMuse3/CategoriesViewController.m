@@ -137,6 +137,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     //Show splash screen for 2 seconds
     if (splash == nil) {
         if (Skin != nil) {
@@ -238,6 +239,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     reminderButtonState = SHOW_TEXT;
     [[[self  navigationItem] backBarButtonItem] setTitle:@"Back"];
     

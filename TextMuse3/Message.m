@@ -18,6 +18,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 @synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints;
 
 -(id)initWithId:(int)i message:(NSString *)m forCategory:(NSString*)c isNew:(BOOL)n {
+    self = [super init];
+    
     //msg = m;
     msgId = i;
     newMsg = n;
@@ -36,6 +38,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 
 -(id)initWithId:(int)i text:(NSString *)t mediaUrl:(NSString*)murl url:(NSString*)u
         forCategory:(NSString*)c isNew:(BOOL)n {
+    self = [super init];
+    
     //msg = t;
     text = t;
     mediaUrl = murl;
@@ -53,6 +57,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 }
 
 -(id)initFromStorage:(NSString *)stored {
+    self = [super init];
+    
     int ich = -1;
     for (int i=0; ich == -1 && i < [stored length]; i++) {
         if ([stored characterAtIndex:i] == '@')
@@ -73,6 +79,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 }
 
 -(id)initFromUserPhoto:(ALAsset *)a {
+    self = [super init];
     msgId = -2;
     newMsg = NO;
     category = NSLocalizedString(@"Your Photos Title", nil);
@@ -84,6 +91,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 }
 
 -(id)initFromUserText:(NSString *)msg atIndex:(int)i {
+    self = [super init];
     msgId = -3;
     newMsg = NO;
     yourtextIndex = i;
@@ -153,9 +161,9 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     if (mediaUrl != nil) {
         //Check if this is a youtube URL
         NSString* ytid = [ImageDownloader GetYoutubeId:mediaUrl];
-        NSString* appUrl = mediaUrl;
-        if (ytid != nil)
-            appUrl = [NSString stringWithFormat:@"youtube://%@", ytid];
+        //NSString* appUrl = mediaUrl;
+        //if (ytid != nil)
+        //    appUrl = [NSString stringWithFormat:@"youtube://%@", ytid];
         
         if (ytid != nil) {
             UIButton* btn = (UIButton*)sender;
@@ -324,8 +332,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 }
 
 -(void)sendSeeItRequest {
-    NSURL* url = [NSURL URLWithString:urlNoteSeeIt];
-    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
+    NSURL* urlS = [NSURL URLWithString:urlNoteSeeIt];
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:urlS
                                                        cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                    timeoutInterval:30];
     inetdata = [[NSMutableData alloc] init];
@@ -344,7 +352,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 }
 
 -(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
-    NSLog([error localizedDescription]);
+    //NSLog([error localizedDescription]);
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{

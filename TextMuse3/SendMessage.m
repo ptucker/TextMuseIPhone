@@ -21,7 +21,7 @@ MFMessageComposeViewController* msgcontroller = nil;
 
 -(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController *)parent {
     _parent = parent;
-    sendcount = [contactlist count];
+    sendcount = (int)[contactlist count];
     if (msgcontroller == nil)
         msgcontroller = [[MFMessageComposeViewController alloc] init];
 
@@ -47,15 +47,15 @@ MFMessageComposeViewController* msgcontroller = nil;
                             [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
         NSString* text = ([CurrentMessage getFullMessage] == nil ? @"" : [CurrentMessage getFullMessage]);
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
-        NSString* sponsor = @"";
+        //NSString* sponsor = @"";
 #ifdef WHITWORTH
-        sponsor = @"Whitworth ";
+        //sponsor = @"Whitworth ";
 #endif
 #ifdef UOREGON
-        sponsor = @"Oregon ";
+        //sponsor = @"Oregon ";
 #endif
-        if (Skin != nil)
-            sponsor = [[Skin SkinName] stringByAppendingString:@" "];
+        //if (Skin != nil)
+            //sponsor = [[Skin SkinName] stringByAppendingString:@" "];
         
         //NSString* tagline = [NSString stringWithFormat: @"\n\nSent by %@TextMuse - http://bit.ly/1QDXyfj", sponsor];
         NSString* tagline = @"";
@@ -119,7 +119,7 @@ MFMessageComposeViewController* msgcontroller = nil;
 }
 
 -(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
-    NSLog([error localizedDescription]);
+    //NSLog([error localizedDescription]);
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{

@@ -148,6 +148,7 @@ const int maxRecentIDs = 10;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     //Show splash screen for 2 seconds
     if (splash == nil) {
         if (Skin != nil) {
@@ -264,11 +265,13 @@ const int maxRecentIDs = 10;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
     [self becomeFirstResponder];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     [self becomeFirstResponder];
 }
 

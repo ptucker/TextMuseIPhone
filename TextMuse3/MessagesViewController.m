@@ -83,6 +83,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 }
 
 -(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     if (frameStart.origin.x >= frameStart.size.width)
         [scrollview scrollRectToVisible:frameStart animated:animated];
 }
@@ -189,7 +190,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     
     for (long i=start; i<stop; i++) {
         if (msgviews[i-start] == nil) {
-            CGRect first = msgviews[1].frame;
+            //CGRect first = msgviews[1].frame;
             Message* msg = [msgs objectAtIndex:i];
             frame.origin.x = i * frame.size.width;
             MessageView* mv = [[MessageView alloc] initWithFrame:frame];

@@ -37,6 +37,7 @@ NSString* urlFeedback = @"http://www.textmuse.com/admin/postfeedback.php";
 }
 
 -(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     // Register for the events
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector (keyboardDidShow:)
@@ -45,6 +46,7 @@ NSString* urlFeedback = @"http://www.textmuse.com/admin/postfeedback.php";
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

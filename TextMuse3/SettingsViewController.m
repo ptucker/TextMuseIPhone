@@ -51,11 +51,13 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     tmpCategoryList = [NSMutableDictionary dictionaryWithDictionary:CategoryList];
     discardChanges = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     if (discardChanges)
         CategoryList = [NSMutableDictionary dictionaryWithDictionary:tmpCategoryList];
 }
