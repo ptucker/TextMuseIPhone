@@ -12,6 +12,7 @@
     UITapGestureRecognizer* _singleTapRecognizer;
     NSMutableData* inetdata;
     
+    IBOutlet UILabel* lbl;
     IBOutlet UITextView* tvDesc;
     IBOutlet UITextField* txtLocation;
     IBOutlet UITextField* txtDate;

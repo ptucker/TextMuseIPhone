@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11198.2" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="dCH-QF-mLU">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="dCH-QF-mLU">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -99,7 +99,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="kMH-J4-udR">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" id="kMH-J4-udR">
                                 <frame key="frameInset"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -159,6 +159,7 @@
                     <navigationItem key="navigationItem" title="Add Event" id="HiB-Ex-MZq"/>
                     <connections>
                         <outlet property="btnSubmit" destination="ULJ-my-1SW" id="fxi-TQ-NOq"/>
+                        <outlet property="lbl" destination="vJs-qv-64P" id="bPt-MP-Mk5"/>
                         <outlet property="scroller" destination="kMH-J4-udR" id="nVK-8L-cfI"/>
                         <outlet property="tvDesc" destination="7VM-qD-YZg" id="AIp-qa-CDx"/>
                         <outlet property="txtDate" destination="SW7-QX-A0t" id="Z0H-7X-ymT"/>
@@ -356,7 +357,7 @@
                                         <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jga-0d-bfW" id="b5i-BW-aHM">
-                                            <frame key="frameInset" width="375" height="43.5"/>
+                                            <frame key="frameInset" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7IM-If-DoC">
@@ -912,10 +913,10 @@
         <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qmB-NK-YC8"/>
-        <segue reference="uk3-ye-d2w"/>
-        <segue reference="gIs-SO-9jD"/>
         <segue reference="udu-bJ-qbO"/>
-        <segue reference="MVW-gx-UGH"/>
+        <segue reference="gIs-SO-9jD"/>
+        <segue reference="uk3-ye-d2w"/>
+        <segue reference="qmB-NK-YC8"/>
+        <segue reference="hFR-dd-hXs"/>
     </inferredMetricsTieBreakers>
 </document>

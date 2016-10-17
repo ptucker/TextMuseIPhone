@@ -36,10 +36,20 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
         [btnSubmit setBackgroundColor:[Skin getDarkestColor]];
     else
         [btnSubmit setBackgroundColor:[UIColor darkGrayColor]];
-    
+}
+
+-(void)viewWillAppear:(BOOL)animated {
     CGSize sz = [[self view] frame].size;
     sz.height = sz.height + 200;
     [scroller setContentSize:sz];
+    [scroller setFrame:[[self view] frame]];
+    
+    NSArray* views = [NSArray arrayWithObjects:lbl, tvDesc, txtEmail, txtLocation, txtDate, btnSubmit, nil];
+    for (UIView* v in views) {
+        CGRect frm = [v frame];
+        frm.size.width = sz.width - 40;
+        [v setFrame:frm];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,6 +117,7 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
 }
 
 -(IBAction)submitEvent:(id)sender {
+    
     BOOL legal = [[tvDesc text] length] > 0 && [[txtDate text] length] > 0 && [[txtEmail text] length] > 0;
     legal &= [self legalEmail:[txtEmail text]];
     
