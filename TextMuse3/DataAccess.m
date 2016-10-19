@@ -745,6 +745,15 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     [selectContacts removeAllObjects];
 }
 
+-(int)getInt:(NSDictionary*) dict forAttribute:(NSString*)attr {
+    int ret = 0;
+    NSString* s = [dict objectForKey:attr];
+    if (s != nil)
+        ret = [s intValue];
+    
+    return ret;
+}
+
 -(void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
     //abort the data load
     tmpCategories = categories;
@@ -764,9 +773,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             [appDelegate registerRemoteNotificationWithAzure];
         }
-        [CurrentUser setExplorerPoints:[[attributeDict objectForKey:@"ep"] intValue]];
-        [CurrentUser setSharerPoints:[[attributeDict objectForKey:@"sp"] intValue]];
-        [CurrentUser setMusePoints:[[attributeDict objectForKey:@"mp"] intValue]];
+        [CurrentUser setExplorerPoints:[self getInt:attributeDict forAttribute:@"ep"]];
+        [CurrentUser setSharerPoints:[self getInt:attributeDict forAttribute:@"sp"]];
+        [CurrentUser setMusePoints:[self getInt:attributeDict forAttribute:@"mp"]];
         
         [Settings SaveSetting:SettingLastNoteDownload withValue:LastNoteDownload];
     }
