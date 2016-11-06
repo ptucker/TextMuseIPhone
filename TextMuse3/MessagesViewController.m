@@ -78,6 +78,14 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     [lowerView addSubview:selectButton];
     
     [scrollview setDelegate:self];
+    
+    msgviews = [[NSMutableArray alloc] initWithCapacity:5];
+    msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ?
+            [Data getPinnedMessages] : [Data getMessagesForCategory:CurrentCategory];
+    
+    yellowHighlighter = [UIImage imageNamed:@"yellowHighlighter.png"];
+    greyHighlighter = [UIImage imageNamed:@"greyHighlighter.png"];
+
 
     [self showMessages];
 }
@@ -164,35 +172,39 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     
     CGRect frame = [scrollview frame];
     frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
-    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
-                                                                    [Data getMessagesForCategory:CurrentCategory];
     
     CGFloat pageWidth = [scrollview frame].size.width;
     long start = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) - 1;
     if (start < 0) start = 0;
-    else if (start + 5 > [msgs count]) start = [msgs count] - 5;
+    else if (start + 5 > [msgs count] && [msgs count] >= 5) start = [msgs count] - 5;
     long stop = MIN(start + 5, [msgs count]);
     frame.origin.x = (start * frame.size.width);
     
     //First, go through and remove frames that are no longer in the window
-    while (msgviews[0] != nil && msgviews[0].frame.origin.x < frame.origin.x) {
-        [msgviews[0] removeFromSuperview];
-        for (int i=0; i<4; i++)
-            msgviews[i] = msgviews[i+1];
-        msgviews[4] = nil;
+    [self checkRefCounts];
+    while ([msgviews count] > 0 &&
+           ((MessageView*)[msgviews objectAtIndex:0]).frame.origin.x < frame.origin.x) {
+        [((MessageView*)[msgviews objectAtIndex:0]) removeFromSuperview];
+        [msgviews removeObjectAtIndex:0];
     }
-    while (msgviews[4] != nil && msgviews[4].frame.origin.x > (frame.origin.x + 4 * frame.size.width)) {
-        [msgviews[4] removeFromSuperview];
-        for (int i=4; i>0; i--)
-            msgviews[i] = msgviews[i-1];
-        msgviews[0] = nil;
+    [self checkRefCounts];
+    while ([msgviews count] > 0 &&
+           ((MessageView*)[msgviews objectAtIndex:[msgviews count]-1]).frame.origin.x < frame.origin.x) {
+        [((MessageView*)[msgviews objectAtIndex:[msgviews count]-1]) removeFromSuperview];
+        [msgviews removeObjectAtIndex:[msgviews count]-1];
     }
     
+    [self checkRefCounts];
+    CGFloat minx = CGFLOAT_MAX, maxx = -1;
+    if ([msgviews count] != 0) {
+        minx = ((MessageView*)[msgviews objectAtIndex:0]).frame.origin.x;
+        maxx =((MessageView*)[msgviews objectAtIndex:[msgviews count]-1]).frame.origin.x;
+    }
     for (long i=start; i<stop; i++) {
-        if (msgviews[i-start] == nil) {
+        frame.origin.x = i * frame.size.width;
+        if (frame.origin.x < minx || frame.origin.x > maxx) {
             //CGRect first = msgviews[1].frame;
             Message* msg = [msgs objectAtIndex:i];
-            frame.origin.x = i * frame.size.width;
             MessageView* mv = [[MessageView alloc] initWithFrame:frame];
             
             [mv setupViewForMessage:msg
@@ -203,17 +215,17 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
             [scrollview addSubview:mv];
             if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
                 frameStart.origin.x = frame.origin.x;
-            msgviews[i-start] = mv;
+            [msgviews insertObject:mv atIndex:i-start];
         }
     }
+    [self checkRefCounts];
     
-    Message* msg = [msgs objectAtIndex:0];
+    int page = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
+    Message* msg = [msgs objectAtIndex:page];
     if ([msg liked])
-        [highlightButton setImage:[UIImage imageNamed:@"yellowHighlighter.png"]
-                         forState:UIControlStateNormal];
+        [highlightButton setImage:yellowHighlighter forState:UIControlStateNormal];
     else
-        [highlightButton setImage:[UIImage imageNamed:@"greyHighlighter.png"]
-                         forState:UIControlStateNormal];
+        [highlightButton setImage:greyHighlighter forState:UIControlStateNormal];
     
     unsigned long cnt = [msgs count];
     [scrollview setContentSize:CGSizeMake(frame.size.width * cnt, frame.size.height)];
@@ -221,6 +233,14 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     //Only allow up to 15 dots
     pageDivisor = (cnt/15) + 1;
     [pages setNumberOfPages:(cnt/pageDivisor)];
+}
+
+-(void)checkRefCounts {
+    /*
+    for (MessageView* mv in msgviews) {
+        NSLog(@"%@", [NSString stringWithFormat:@"%ld", CFGetRetainCount((__bridge CFTypeRef)(mv))]);
+    }
+     */
 }
 
 - (IBAction)changePage {

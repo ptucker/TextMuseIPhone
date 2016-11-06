@@ -26,7 +26,12 @@
     SendMessage* sendMessage;
     NSMutableData* inetdata;
     
-    MessageView* msgviews[5];
+    //MessageView* msgviews[5];
+    NSMutableArray* msgviews;
+    NSArray* msgs;
+    
+    UIImage* yellowHighlighter;
+    UIImage* greyHighlighter;
 }
 
 -(IBAction)backButton:(id)sender;

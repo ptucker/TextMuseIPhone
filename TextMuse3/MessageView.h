@@ -26,5 +26,6 @@
 }
 
 -(void)setupViewForMessage:(Message *)msg inFrame:(CGRect)frame withColor:(UIColor*)color index:(long)i;
+-(void)setupImageForMessage:(Message*)msg inFrame:(CGRect)frame;
 
 @end
