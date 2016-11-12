@@ -74,7 +74,9 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     selectButton = [[UICaptionButton alloc] initWithFrame:frmSelect
                                                 withImage:[UIImage imageNamed:@"TextMuseButton"]
                                                   andRightText:@"text it"];
-    [selectButton addTarget:self action:@selector(chooseMessage:) forControlEvents:UIControlEventTouchUpInside];
+    [selectButton addTarget:self
+                     action:@selector(chooseMessage:)
+           forControlEvents:UIControlEventTouchUpInside];
     [lowerView addSubview:selectButton];
     
     [scrollview setDelegate:self];
@@ -100,6 +102,14 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
                                                      target:self
                                                      action:@selector(remitit:)];
 
+    CGRect frame = [scrollview frame];
+    frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    for (int i=0; i<[msgs count]; i++) {
+        Message* msg = [msgs objectAtIndex:i];
+        if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
+            frameStart.origin.x = (i * frame.size.width);
+    }
+    
     [self showMessages];
 }
 
@@ -164,7 +174,6 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     //    [v removeFromSuperview];
     
     CGRect frame = [scrollview frame];
-    frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
     
     CGFloat pageWidth = [scrollview frame].size.width;
     long start = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) - 1;
@@ -206,8 +215,6 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
                               index:CurrentColorIndex];
             
             [scrollview addSubview:mv];
-            if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
-                frameStart.origin.x = frame.origin.x;
             [msgviews insertObject:mv atIndex:i-start];
         }
     }
@@ -252,8 +259,6 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 -(IBAction)flagit:(id)sender {
     CGFloat pageWidth = [scrollview frame].size.width;
     int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
-    [Data getMessagesForCategory:CurrentCategory];
     Message*msg = [msgs objectAtIndex:p];
     
     NSString* msgText = [[msg text] length] > 0 ? [msg text] : @"this message";
