@@ -85,7 +85,20 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     
     yellowHighlighter = [UIImage imageNamed:@"yellowHighlighter.png"];
     greyHighlighter = [UIImage imageNamed:@"greyHighlighter.png"];
-
+    flag = [UIImage imageWithCGImage:[[UIImage imageNamed:@"flag-variant.png"] CGImage]
+                                              scale:48.0/30
+                                        orientation:(flag.imageOrientation)];
+    flagButton = [[UIBarButtonItem alloc] initWithImage:flag
+                                                  style:UIBarButtonItemStylePlain
+                                                 target:self
+                                                 action:@selector(flagit:)];
+    currency = [UIImage imageWithCGImage:[[UIImage imageNamed:@"currency-usd.png"] CGImage]
+                                   scale:48.0/30
+                             orientation:(flag.imageOrientation)];
+    currencyButton = [[UIBarButtonItem alloc] initWithImage:currency
+                                                      style:UIBarButtonItemStylePlain
+                                                     target:self
+                                                     action:@selector(remitit:)];
 
     [self showMessages];
 }
@@ -102,9 +115,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
-    NSArray* quotes = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
-                        [Data getMessagesForCategory:CurrentCategory];
-    if ([quotes count] == 0) return;
+    if ([msgs count] == 0) return;
     
     [self showMessages];
     
@@ -112,13 +123,11 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     CGFloat pageWidth = [scrollview frame].size.width;
     int page = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
     
-    Message* msg = [quotes objectAtIndex:page];
+    Message* msg = [msgs objectAtIndex:page];
     if ([msg liked])
-        [highlightButton setImage:[UIImage imageNamed:@"yellowHighlighter.png"]
-                         forState:UIControlStateNormal];
+        [highlightButton setImage:yellowHighlighter forState:UIControlStateNormal];
     else
-        [highlightButton setImage:[UIImage imageNamed:@"greyHighlighter.png"]
-                         forState:UIControlStateNormal];
+        [highlightButton setImage:greyHighlighter forState:UIControlStateNormal];
     
     [pages setCurrentPage: (page / pageDivisor)];
 }
@@ -143,27 +152,11 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 }
 
 -(void)setRightButtonFlag {
-    UIImage* flagit = [UIImage imageNamed:@"flag-variant.png"];
-    UIImage *scaledFlag = [UIImage imageWithCGImage:[flagit CGImage]
-                                              scale:48.0/30
-                                        orientation:(flagit.imageOrientation)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledFlag
-                                                                    style:UIBarButtonItemStylePlain
-                                                                   target:self
-                                                                   action:@selector(flagit:)];
-    [[self navigationItem] setRightBarButtonItem: rightButton];
+    [[self navigationItem] setRightBarButtonItem: flagButton];
 }
 
 -(void)setRightButtonRemit {
-    UIImage* flagit = [UIImage imageNamed:@"currency-usd.png"];
-    UIImage *scaledFlag = [UIImage imageWithCGImage:[flagit CGImage]
-                                              scale:48.0/30
-                                        orientation:(flagit.imageOrientation)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledFlag
-                                                                    style:UIBarButtonItemStylePlain
-                                                                   target:self
-                                                                   action:@selector(remitit:)];
-    [[self navigationItem] setRightBarButtonItem: rightButton];
+    [[self navigationItem] setRightBarButtonItem: currencyButton];
 }
 
 -(void)showMessages {

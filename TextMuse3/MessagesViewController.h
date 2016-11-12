@@ -32,6 +32,10 @@
     
     UIImage* yellowHighlighter;
     UIImage* greyHighlighter;
+    UIImage* flag;
+    UIImage* currency;
+    UIBarButtonItem* flagButton;
+    UIBarButtonItem* currencyButton;
 }
 
 -(IBAction)backButton:(id)sender;
