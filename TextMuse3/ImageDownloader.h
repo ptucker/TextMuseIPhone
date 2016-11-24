@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MessageUI/MessageUI.h>
+#import "UICaptionButton.h"
 
 typedef void(*callback)(void);
 
@@ -16,6 +17,7 @@ typedef void(*callback)(void);
 @interface ImageDownloader : NSObject<NSURLConnectionDelegate> {
     NSString* _url;
     UIButton* _btn;
+    UICaptionButton* _cbtn;
     UIImageView* _view;
     UITableView* _tableView;
     UINavigationItem* _navigationItem;
@@ -42,6 +44,7 @@ typedef void(*callback)(void);
 -(id)initWithUrl:(NSString*)url forImgView:(UIImageView*)view chooseBackground:(NSArray*)colors;
 -(id)initWithUrl:(NSString*)url forMessage:(Message*)msg;
 -(id)initWithUrl:(NSString*)url forButton:(UIButton*)btn;
+-(id)initWithUrl:(NSString*)url forCaptionButton:(UICaptionButton*)cbtn;
 -(id)initWithUrl:(NSString*)url forNavigationItemLeftButton:(UINavigationItem*)navigationItem
       withTarget:(id)target withSelector:(SEL)selector;
 -(id)initWithUrl:(NSString*)url;

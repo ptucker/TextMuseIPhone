@@ -82,6 +82,14 @@ NSObject* lockDownloading;
     return [self init];
 }
 
+-(id)initWithUrl:(NSString*)url forCaptionButton:(UICaptionButton*)cbtn {
+    _url = url;
+    _cbtn = cbtn;
+    
+    
+    return [self init];
+}
+
 -(void)addImageView:(UIImageView*)view {
     _view = view;
 }
@@ -406,6 +414,12 @@ NSObject* lockDownloading;
             [_btn setImage:[UIImage imageWithData:copy] forState:UIControlStateNormal];
             [_btn setContentMode:UIViewContentModeScaleAspectFit];
             [_btn setHidden:NO];
+        }
+    }
+    if (_cbtn != nil) {
+        if ([[mimeType substringToIndex:6] isEqualToString:@"image/"]) {
+            [_cbtn setImage:[UIImage imageWithData:copy]];
+            [_cbtn setHidden:NO];
         }
     }
     if (_navigationItem != nil) {

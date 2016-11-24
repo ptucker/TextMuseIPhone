@@ -52,7 +52,10 @@
     int likeCount;
     int discoverPoints, sharePoints, goPoints;
     BOOL versionMsg;
-    NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate;
+    BOOL following;
+    NSString* sponsorID;
+    NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate,
+                *currentSponsorName, *currentSponsorLogo;
     
     //NSString* documentdir;
     

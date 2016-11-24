@@ -48,7 +48,7 @@ const int HIDEMESSAGE = 1000;
     }
     
     selectContacts = [[NSMutableArray alloc] init];
-    
+    SponsorFollows = [[NSMutableSet alloc] init];
     notificationOnly = false;
     
     pinnedMsgs = [SqlDb getPinnedMessages];
@@ -888,15 +888,23 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             goPoints = [[attributeDict objectForKey:@"gp"] intValue];
         currentEventLoc = [attributeDict objectForKey:@"loc"];
         currentEventDate = [attributeDict objectForKey:@"edate"];
+        following = [attributeDict objectForKey:@"follow"] != nil ?
+                        [[attributeDict objectForKey:@"follow"] intValue] != 0 : NO;
+        sponsorID = [attributeDict objectForKey:@"notesponsor"] != nil &&
+                        [[attributeDict objectForKey:@"notesponsor"] intValue] != 0 ?
+            [attributeDict objectForKey:@"notesponsor"] : @"";
         xmldata = [[NSMutableString alloc] init];
         currentText = nil;
         currentMediaUrl = nil;
         currentUrl = nil;
+        currentSponsorName = nil;
+        currentSponsorLogo = nil;
     }
     else if ([elementName isEqualToString:@"t"])
         xmldata = [[NSMutableString alloc] init];
     else if ([elementName isEqualToString:@"text"] || [elementName isEqualToString:@"media"] ||
-                                                      [elementName isEqualToString:@"url"])
+             [elementName isEqualToString:@"url"] || [elementName isEqualToString:@"sp_name"] ||
+             [elementName isEqualToString:@"sp_logo"])
         partsdata = [[NSMutableString alloc] init];
 }
 
@@ -906,6 +914,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     else if ([currentElement isEqualToString:@"text"] || [currentElement isEqualToString:@"media"] ||
              [currentElement isEqualToString:@"url"])
          [partsdata appendString:string];
+    else if ([currentElement isEqualToString:@"sp_name"] || [currentElement isEqualToString:@"sp_logo"])
+        [partsdata appendString:string];
 }
 
 -(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
@@ -930,6 +940,12 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [msg setEventDate:currentEventDate];
             [msg setEventLocation:currentEventLoc];
             [msg setEventToggle:[currentCategory eventToggle]];
+            [msg setSponsorID:sponsorID];
+            [msg setSponsorName:currentSponsorName];
+            [msg setSponsorLogo:currentSponsorLogo];
+            [msg setFollowing:following];
+            if (following)
+                [SponsorFollows addObject:[NSString stringWithFormat:@"spon%@", sponsorID]];
             categoryOrder++;
             [[currentCategory messages] addObject:msg];
             if (versionMsg)
@@ -966,6 +982,13 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentMediaUrl = partsdata;
     else if ([elementName isEqualToString:@"url"] && [partsdata length] > 0)
         currentUrl = partsdata;
+    else if ([elementName isEqualToString:@"sp_name"] && [partsdata length] > 0)
+        currentSponsorName = partsdata;
+    else if ([elementName isEqualToString:@"sp_logo"] && [partsdata length] > 0) {
+        currentSponsorLogo = partsdata;
+        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:currentSponsorLogo];
+        [loader load];
+    }
 }
 
 -(BOOL)isPinned:(Message*)msg {

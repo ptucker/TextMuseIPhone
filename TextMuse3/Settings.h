@@ -100,6 +100,7 @@ extern BOOL AskRegistration;
 extern UserInfo* CurrentUser;
 extern NSString* AppID;
 extern SkinInfo* Skin;
+extern NSMutableSet* SponsorFollows;
 
 extern NSString* CachedMediaMappingFile;
 extern NSMutableDictionary* CachedMediaMapping;

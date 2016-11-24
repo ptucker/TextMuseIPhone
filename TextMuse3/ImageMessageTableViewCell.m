@@ -7,6 +7,7 @@
 //
 
 #import "ImageMessageTableViewCell.h"
+#import "ImageUtil.h"
 
 @implementation ImageMessageTableViewCell
 
@@ -35,7 +36,7 @@ UIImage* imgLoading;
     else {
         if (imgLoading == nil) {
             imgLoading = [UIImage imageNamed:@"TransparentButterfly"];
-            imgLoading = [self applyAlpha:0.70 toImage:imgLoading];
+            imgLoading = [ImageUtil applyAlpha:0.70 toImage:imgLoading];
         }
         img = imgLoading;
     }
@@ -105,60 +106,6 @@ UIImage* imgLoading;
         [imgContent setImage:img];
     }
     
-}
-/*
-- (UIImage *)applyAlpha:(CGFloat) alpha toImage:(UIImage*)img{
-    UIGraphicsBeginImageContextWithOptions([img size], NO, 0.0f);
-    
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-    //CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextRef ctx = CGBitmapContextCreate(nil, [img size].width, [img size].height, 8, 0, colorSpace, kCGImageAlphaNone);
-    
-    CGRect area = CGRectMake(0, 0, [img size].width, [img size].height);
-    
-    CGContextScaleCTM(ctx, 1, -1);
-    CGContextTranslateCTM(ctx, 0, -area.size.height);
-    
-    CGContextSetBlendMode(ctx, kCGBlendModeMultiply);
-    
-    CGContextSetAlpha(ctx, alpha);
-    
-    CGContextDrawImage(ctx, area, [img CGImage]);
-    
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    
-    return newImage;
-}
-*/
-
-- (UIImage *)applyAlpha:(CGFloat) alpha toImage:(UIImage *)image
-{
-    // image is an instance of UIImage class that we will convert to grayscale
-    CGFloat actualWidth = image.size.width;
-    CGFloat actualHeight = image.size.height;
-    
-    CGRect imageRect = CGRectMake(0, 0, actualWidth, actualHeight);
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-    
-    CGContextRef context = CGBitmapContextCreate(nil, actualWidth, actualHeight, 8, 0, colorSpace, kCGImageAlphaNone);
-    CGContextDrawImage(context, imageRect, [image CGImage]);
-    
-    CGImageRef grayImage = CGBitmapContextCreateImage(context);
-    CGColorSpaceRelease(colorSpace);
-    CGContextRelease(context);
-    
-    context = CGBitmapContextCreate(nil, actualWidth, actualHeight, 8, 0, nil, kCGImageAlphaOnly);
-    CGContextDrawImage(context, imageRect, [image CGImage]);
-    CGImageRef mask = CGBitmapContextCreateImage(context);
-    CGContextRelease(context);
-    
-    UIImage *grayScaleImage = [UIImage imageWithCGImage:CGImageCreateWithMask(grayImage, mask) scale:image.scale orientation:image.imageOrientation];
-    CGImageRelease(grayImage);
-    CGImageRelease(mask);
-    
-    return grayScaleImage;
 }
 
 @end

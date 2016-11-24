@@ -7,6 +7,7 @@
 //
 
 #import "UICaptionButton.h"
+#import "ImageUtil.h"
 
 @implementation UICaptionButton
 
@@ -27,6 +28,18 @@
 
     [self addViews];
 
+    return self;
+}
+
+-(id)initWithFrame:(CGRect)frame withImage:(UIImage*)img andText:(NSString*)txt
+      withFontsize:(CGFloat)fontsize{
+    self = [super initWithFrame:frame];
+    _text = txt;
+    _image = img;
+    _fontsize = fontsize;
+    
+    [self addViews];
+    
     return self;
 }
 
@@ -52,6 +65,10 @@
 }
 
 -(void)addViews {
+    if (_image == nil) {
+        _image = [UIImage imageNamed:@"TransparentButterfly"];
+        _image = [ImageUtil applyAlpha:0.70 toImage:_image];
+    }
     _imgview = [[UIImageView alloc] initWithImage:_image];
     [_imgview setContentMode:UIViewContentModeScaleAspectFit];
     [self addSubview:_imgview];
@@ -84,7 +101,7 @@
     
     [_caption setText:_text];
     [_caption setFrame:frmBottomText];
-    CGFloat fontsize = frmBottomText.size.height;
+    CGFloat fontsize = (_fontsize == 0) ? frmBottomText.size.height : _fontsize;
     UIFont* fnt = [UIFont fontWithName:@"Lato-Medium" size:fontsize];
     [_caption setFont:fnt];
     
@@ -114,8 +131,13 @@
     [_caption setTextColor:color];
 }
 
+-(void)setCaptionFontSize:(CGFloat)size {
+    [_caption setFont:[UIFont fontWithName:@"Lato-Medium" size:size]];
+}
+
 -(void)setImage:(UIImage*)img {
     [_imgview setImage:img];
+    [_imgview setContentMode:UIViewContentModeScaleAspectFit];
 
     [self setupViews];
 }

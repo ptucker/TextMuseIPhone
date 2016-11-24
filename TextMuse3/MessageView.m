@@ -11,6 +11,10 @@
 #import "GlobalState.h"
 #import "Settings.h"
 #import "FLAnimatedImage.h"
+#import "UICaptionButton.h"
+#import "AppDelegate.h"
+
+NSString* urlFollowSponsor = @"http://www.textmuse.com/admin/following.php";
 
 @implementation MessageView
 
@@ -72,6 +76,10 @@ UIImage* openInNew = nil;
     CGRect frmPin = CGRectMake(frame.size.width-8-104, frame.size.height-24, 104, 24);
     CGRect frmLike = CGRectMake(12, frame.size.height-24, 96, 24);
     CGRect frmBtnDetails = CGRectMake(frame.size.width/2-48, frame.size.height-24, 96, 24);
+    CGFloat btnFollowSide = frame.size.height/5;
+    CGRect frmFollow = CGRectMake(frame.size.width - 8 - btnFollowSide,
+                                  frame.size.height - 48 - btnFollowSide,
+                                  btnFollowSide, btnFollowSide);
     
     if ([msg img] == nil) {
         imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
@@ -105,12 +113,13 @@ UIImage* openInNew = nil;
         frmRightQuote.size.height = frmRightQuote.size.width = 24;
         frmLblContent.origin.y = frmLeftQuote.origin.y;
         frmLblContent.size.height = 44;
+        frmFollow.origin.y = frmLblContent.origin.y - btnFollowSide - 8;
         
         fontSize = 18;
     }
     if (frame.size.height < 350)
         fontSize -= 4;
-
+    
     NSString* txt = [msg getFullMessage];
     if ([[msg mediaUrl] isEqualToString:@"usertext://"]) {
         imgLeftQuote = [[UIImageView alloc] initWithFrame:frmLeftQuote];
@@ -196,6 +205,35 @@ UIImage* openInNew = nil;
 
     [btnDetails addTarget:self action:@selector(messageFollow:)
          forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([[msg sponsorName] length] > 0) {
+        NSString* followText = [NSString stringWithFormat:@"%@follow%@", [msg following] ? @"un" : @"",
+                                [msg sponsorLogo] == nil ?
+                                [NSString stringWithFormat:@"\n%@", [msg sponsorName]] : @""];
+        UIButton* btnFollow = nil;
+        if ([msg sponsorLogo] != nil && [[msg sponsorLogo] length] > 0) {
+            btnFollow = [[UICaptionButton alloc] initWithFrame:frmFollow withImage:nil
+                                                       andText:followText
+                                                  withFontsize:16.0];
+            ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[msg sponsorLogo]
+                                                          forCaptionButton:(UICaptionButton*)btnFollow];
+            [loader load];
+        }
+        else {
+            btnFollow = [[UIButton alloc] initWithFrame:frmFollow];
+            [btnFollow setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [[btnFollow titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:12]];
+            [[btnFollow titleLabel] setNumberOfLines:0];
+            [btnFollow setTitle:followText forState:UIControlStateNormal];
+        }
+        [btnFollow addTarget:self
+                      action:@selector(followSponsor:)
+            forControlEvents:UIControlEventTouchUpInside];
+        [btnFollow setBackgroundColor:[UIColor lightGrayColor]];
+        [[btnFollow layer] setCornerRadius:15.0];
+        [btnFollow setAlpha:0.8];
+        [self addSubview:btnFollow];
+    }
 }
 
 -(void)setupImageForMessage:(Message*)msg inFrame:(CGRect)frame {
@@ -262,6 +300,37 @@ UIImage* openInNew = nil;
 
 -(IBAction)messageFollow:(id)sender{
     [message follow:sender];
+}
+
+-(IBAction)followSponsor:(id)sender {
+    [message setFollowing:![message following]];
+    NSString* url = [NSString stringWithFormat:@"%@?app=%@&sponsor=%@&follow=%@",
+                     urlFollowSponsor, AppID, [message sponsorID], ([message following] ? @"1" : @"0")];
+
+    NSMutableURLRequest* req = [NSMutableURLRequest
+                                requestWithURL:[NSURL URLWithString:url]
+                                cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                timeoutInterval:30];
+    
+    NSString* followText = [NSString stringWithFormat:@"%@follow%@", [message following] ? @"un" : @"",
+                            [message sponsorLogo] == nil ?
+                            [NSString stringWithFormat:@"\n%@", [message sponsorName]] : @""];
+    if ([sender isKindOfClass:[UICaptionButton class]])
+        [(UICaptionButton*)sender setCaption:followText];
+    else
+        [(UIButton*)sender setTitle:followText forState:UIControlStateNormal];
+
+    
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:nil
+                                                    startImmediately:YES];
+
+    if ([message following])
+        [SponsorFollows addObject:[NSString stringWithFormat:@"spon%@", [message sponsorID]]];
+    else
+        [SponsorFollows removeObject:[NSString stringWithFormat:@"spon%@", [message sponsorID]]];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate registerRemoteNotificationWithAzure];
 }
 
 -(IBAction)pinMessage:(id)sender {

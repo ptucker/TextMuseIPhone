@@ -11,5 +11,5 @@
 @interface ImageUtil : NSObject
 
 +(UIImage*) scaleImage:(UIImage*)img forFrame:(CGRect)frame;
-
++ (UIImage *)applyAlpha:(CGFloat) alpha toImage:(UIImage *)image;
 @end

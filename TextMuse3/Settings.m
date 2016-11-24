@@ -83,6 +83,7 @@ NSString* LastNoteDownload;
 UserInfo *CurrentUser;
 NSString* AppID;
 SkinInfo* Skin;
+NSMutableSet* SponsorFollows;
 
 @implementation Settings
 
@@ -287,6 +288,7 @@ SkinInfo* Skin;
             [[defs stringForKey:SettingAppID] length] > 0)
             AppID = [defs stringForKey:SettingAppID];
         Skin = nil;
+        SponsorFollows = [[NSMutableSet alloc] init];
         if ([defs objectForKey:SettingSkin] != nil) {
             NSData* data = [defs objectForKey:SettingSkin];
             Skin = [NSKeyedUnarchiver unarchiveObjectWithData:data];

@@ -72,7 +72,9 @@
     
     NSDictionary* notifications = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (notifications != nil) {
-        NSString* highlight = [notifications objectForKey:@"highlight"];
+        NSDictionary* aps = [notifications objectForKey:@"aps"];
+        NSString* highlight = (aps != nil) ? [aps objectForKey:@"highlight"] :
+                                             [notifications objectForKey:@"highlight"];
         if (highlight != nil)
             HighlightedMessageID = [highlight intValue];
     }
@@ -136,6 +138,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
     if (AppID != nil)
         [tags addObject:AppID];
+    for (NSString* s in SponsorFollows) {
+        [tags addObject:s];
+    }
 
     [hub registerNativeWithDeviceToken:[self deviceToken] tags:tags completion:^(NSError* error) {
         if (error != nil) {
@@ -156,19 +161,20 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (NotificationOn) {
         UIApplicationState state = [application applicationState];
-        NSString* highlight = [userInfo objectForKey:@"highlight"];
-        if (highlight != nil)
-            HighlightedMessageID = [highlight intValue];
-        if (state == UIApplicationStateActive) {
-            NSString* msg = [userInfo objectForKey:@"alert"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
-                                                            message:msg delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
-                                                  otherButtonTitles:NSLocalizedString(@"Cancel Button", nil), nil];
-            [alert show];
+        NSDictionary* aps = [userInfo objectForKey:@"aps"];
+        if (aps != nil) {
+            NSString* highlight = [aps objectForKey:@"highlight"];
+            if (highlight != nil)
+                HighlightedMessageID = [highlight intValue];
+            if (state == UIApplicationStateActive) {
+                NSString* msg = [aps objectForKey:@"alert"];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
+                                                                message:msg delegate:self
+                                                      cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                                      otherButtonTitles:NSLocalizedString(@"Cancel Button", nil), nil];
+                [alert show];
+            }
         }
-        //else
-        //    [self jumpToMessage];
     }
 }
 
