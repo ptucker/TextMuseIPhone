@@ -187,8 +187,9 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     //User tapped on a notification. Go straight to the message
     if (HighlightedMessageID != 0) {
         Message* msg = [Data findMessageWithID:HighlightedMessageID];
-        HighlightedMessageID = 0;
         if (msg != nil) {
+            HighlightedMessageID = 0;
+
             CurrentMessage = msg;
             CurrentCategory = [CurrentMessage category];
             CurrentColorIndex = 0;

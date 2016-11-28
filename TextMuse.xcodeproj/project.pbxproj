@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
+		2D1EC0C51DEB688F006F2B2A /* EmailValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D1EC0C41DEB688F006F2B2A /* EmailValidator.m */; };
 		2D236B041C115DA900CDE1F7 /* SendMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D236B031C115DA900CDE1F7 /* SendMessage.m */; };
 		2D23F4831D5270A2001D38E5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D23F4821D5270A2001D38E5 /* LaunchScreen.xib */; };
 		2D2A67EA1D4C4A0E00E833FF /* BadgeTreeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2A67E91D4C4A0E00E833FF /* BadgeTreeTableViewCell.m */; };
@@ -94,6 +95,8 @@
 		2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUsViewController.m; sourceTree = "<group>"; };
 		2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		2D1EC0C31DEB688F006F2B2A /* EmailValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailValidator.h; sourceTree = "<group>"; };
+		2D1EC0C41DEB688F006F2B2A /* EmailValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailValidator.m; sourceTree = "<group>"; };
 		2D236B021C115DA900CDE1F7 /* SendMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMessage.h; sourceTree = "<group>"; };
 		2D236B031C115DA900CDE1F7 /* SendMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMessage.m; sourceTree = "<group>"; };
 		2D23F4821D5270A2001D38E5 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
@@ -496,6 +499,8 @@
 				2D36EDA51D4AAC070062C45E /* UserInfo.m */,
 				2D36EDA71D4AB15F0062C45E /* SuccessParser.h */,
 				2D36EDA81D4AB15F0062C45E /* SuccessParser.m */,
+				2D1EC0C31DEB688F006F2B2A /* EmailValidator.h */,
+				2D1EC0C41DEB688F006F2B2A /* EmailValidator.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -670,6 +675,7 @@
 				2DF080AB1AE625FC0003A277 /* DataAccess.m in Sources */,
 				2D3240851C2FB06F00E4E59B /* MessageTableViewCell.m in Sources */,
 				2DF080A91AE625FC0003A277 /* CategoriesViewController.m in Sources */,
+				2D1EC0C51DEB688F006F2B2A /* EmailValidator.m in Sources */,
 				2D36EDA91D4AB15F0062C45E /* SuccessParser.m in Sources */,
 				2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */,
 				2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */,

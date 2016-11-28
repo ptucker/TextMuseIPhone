@@ -8,6 +8,7 @@
 
 #import "RegisterViewController.h"
 #import "Settings.h"
+#import "EmailValidator.h"
 
 @interface RegisterViewController ()
 
@@ -92,7 +93,8 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
 }
 
 -(IBAction)registerUser:(id)sender {
-    if ([[txtName text] length] > 0 && [[txtEmail text] length] > 0) {
+    if ([[txtName text] length] > 0 && [[txtEmail text] length] > 0 &&
+            [EmailValidator IsValidEmail:[txtEmail text] Strict:YES]) {
         if ([self checkAge]) {
             [Settings SaveSetting:SettingUserName withValue:[txtName text]];
             [CurrentUser setUserName: [txtName text]];

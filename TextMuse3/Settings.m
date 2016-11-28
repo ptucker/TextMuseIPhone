@@ -426,6 +426,12 @@ NSMutableSet* SponsorFollows;
     [defs synchronize];
 }
 
++(void)UpdateGroup:(NSString*)grp withContacts:(NSArray*)cs {
+    NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
+    [defs setObject:cs forKey:grp];
+    [defs synchronize];
+}
+
 +(void)RemoveContact:(NSString*)contact fromGroup:(NSString*)group {
     NSMutableArray* cs = [NSMutableArray arrayWithArray:[NamedGroups objectForKey:group]];
     [cs removeObject:contact];
@@ -449,6 +455,8 @@ NSMutableSet* SponsorFollows;
     NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
     
     cs = [NSMutableArray arrayWithArray:[defs objectForKey:group]];
+    if (cs == nil)
+        cs = [[NSMutableArray alloc] init];
     [cs addObject:contact];
     [defs setObject:cs forKey:group];
     [defs synchronize];

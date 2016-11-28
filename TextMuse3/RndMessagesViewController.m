@@ -164,6 +164,10 @@ const int maxRecentIDs = 10;
                                         repeats:NO];
     }
 
+    [self jumpToMessage];
+}
+
+-(void)jumpToMessage {
     if (HighlightedMessageID != 0) {
         CurrentMessage = [Data findMessageWithID:HighlightedMessageID];
         if (CurrentMessage != nil) {
@@ -292,6 +296,8 @@ const int maxRecentIDs = 10;
     [self updateSkin];
     
     [messages reloadData];
+    
+    [self jumpToMessage];
     
     //[btnBadges setHidden:[[Data getEventMessages] count] == 0];
     

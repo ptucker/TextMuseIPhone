@@ -491,6 +491,9 @@ NSMutableArray* searchContacts;
             [cs addObject:[c numberToUse]];
         }
         [NamedGroups setObject:cs forKey:[self GroupName]];
+
+        [Settings UpdateGroup:[self GroupName] withContacts:cs];
+        
         [[self navigationController] popViewControllerAnimated:YES];
     }
     else if ([checkedContacts count] > 1) {

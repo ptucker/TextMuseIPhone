@@ -28,6 +28,7 @@
 +(void) SaveUserMessages;
 +(void) AddGroup:(NSString*)grp withContacts:(NSArray*)contacts;
 +(void) RemoveGroup:(NSString*)grp;
++(void)UpdateGroup:(NSString*)grp withContacts:(NSArray*)cs;
 +(void) AddContact:(NSString*)contact forGroup:(NSString*)group;
 +(void) RemoveContact:(NSString*)contact fromGroup:(NSString*)group;
 +(NSString*) GetNotificationText:(DataAccess*)data;

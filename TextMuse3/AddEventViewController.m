@@ -10,6 +10,7 @@
 #import "Settings.h"
 #import "GlobalState.h"
 #import "SuccessParser.h"
+#import "EmailValidator.h"
 
 @interface AddEventViewController ()
 
@@ -119,11 +120,11 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
 -(IBAction)submitEvent:(id)sender {
     
     BOOL legal = [[tvDesc text] length] > 0 && [[txtDate text] length] > 0 && [[txtEmail text] length] > 0;
-    legal &= [self legalEmail:[txtEmail text]];
+    legal &= [EmailValidator IsValidEmail:[txtEmail text] Strict:YES];
     
     if (!legal) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Incomplete Event"
-                                                        message:@"Your event must complete all required fields"
+                                                        message:@"Your event must complete all required fields, and give a valid email address."
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil, nil];
@@ -202,10 +203,6 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
                                           cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
                                           otherButtonTitles:nil, nil];
     [alert show];
-}
-
--(BOOL)legalEmail:(NSString*)email {
-    return [email rangeOfString:@"^.+@.+\\..{2,}$" options:NSRegularExpressionSearch].location != NSNotFound;
 }
 
 /*
