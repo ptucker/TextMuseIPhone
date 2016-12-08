@@ -15,7 +15,7 @@ YTPlayerView* globalYTPlayer = nil;
 NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 
 @implementation Message
-@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, sponsorName, sponsorLogo, following, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints;
+@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, sponsorID, sponsorName, sponsorLogo, following, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints;
 
 -(id)initWithId:(int)i message:(NSString *)m forCategory:(NSString*)c isNew:(BOOL)n {
     self = [super init];

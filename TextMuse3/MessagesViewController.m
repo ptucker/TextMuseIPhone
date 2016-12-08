@@ -285,9 +285,9 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     if (buttonIndex == 0 && ([alertView tag] == 100 || [alertView tag] == 101)) {
         CGFloat pageWidth = [scrollview frame].size.width;
         int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-        NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+        NSArray* ms = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
         [Data getMessagesForCategory:CurrentCategory];
-        Message*msg = [msgs objectAtIndex:p];
+        Message*msg = [ms objectAtIndex:p];
         
         [SqlDb flagMessage:msg];
         [Data reloadData];

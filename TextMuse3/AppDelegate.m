@@ -67,6 +67,7 @@
             [[UIApplication sharedApplication] registerForRemoteNotifications];
         }
         else
+            //Deprecated in iOS 8
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
     });
     
@@ -294,8 +295,8 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     if ([dateOfInterest timeIntervalSinceNow] > day*7)
         return nil;
     
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents *weekdayComponents =[gregorian components:NSWeekdayCalendarUnit fromDate:dateOfInterest];
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *weekdayComponents =[gregorian components:NSCalendarUnitWeekday fromDate:dateOfInterest];
     NSInteger weekday = [weekdayComponents weekday];
     // weekday 1 = Sunday for Gregorian calendar
     switch (weekday) {

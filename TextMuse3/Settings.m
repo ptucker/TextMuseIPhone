@@ -287,6 +287,9 @@ NSMutableSet* SponsorFollows;
         if ([defs stringForKey:SettingAppID] != nil &&
             [[defs stringForKey:SettingAppID] length] > 0)
             AppID = [defs stringForKey:SettingAppID];
+        //Bug fix to make sure anyone with this appid gets a new one.
+        if ([AppID isEqualToString: @"55339"])
+            AppID = nil;
         Skin = nil;
         SponsorFollows = [[NSMutableSet alloc] init];
         if ([defs objectForKey:SettingSkin] != nil) {
