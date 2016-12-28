@@ -63,32 +63,6 @@
     [categories setDataSource:self];
     
     [categories setBackgroundColor:[UIColor whiteColor]];
-#ifdef WHITWORTH
-    [[self navigationItem] setTitle:@"Whitworth TextMuse"];
-
-    UIImage* o = [UIImage imageNamed:@"w.png"];
-    UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                           scale:174.0/30
-                                     orientation:(o.imageOrientation)];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(showCategoryList:)];
-    [[self navigationItem] setLeftBarButtonItem:leftButton];
-#endif
-#ifdef UOREGON
-    [[self navigationItem] setTitle:@"Oregon TextMuse"];
-
-    UIImage* o = [UIImage imageNamed:@"o.png"];
-    UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                           scale:o.size.width/30
-                                     orientation:(o.imageOrientation)];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(showCategoryList:)];
-    [[self navigationItem] setLeftBarButtonItem:leftButton];
-#endif
     
     if (Skin != nil) {
         [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];

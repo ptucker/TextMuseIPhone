@@ -47,17 +47,7 @@ MFMessageComposeViewController* msgcontroller = nil;
                             [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
         NSString* text = ([CurrentMessage getFullMessage] == nil ? @"" : [CurrentMessage getFullMessage]);
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
-        //NSString* sponsor = @"";
-#ifdef WHITWORTH
-        //sponsor = @"Whitworth ";
-#endif
-#ifdef UOREGON
-        //sponsor = @"Oregon ";
-#endif
-        //if (Skin != nil)
-            //sponsor = [[Skin SkinName] stringByAppendingString:@" "];
-        
-        //NSString* tagline = [NSString stringWithFormat: @"\n\nSent by %@TextMuse - http://bit.ly/1QDXyfj", sponsor];
+
         NSString* tagline = @"";
         //if (arc4random() % 10 == 0)
         message = [message stringByAppendingString:tagline];

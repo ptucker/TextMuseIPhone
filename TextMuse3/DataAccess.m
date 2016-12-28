@@ -158,16 +158,16 @@ const int HIDEMESSAGE = 1000;
     NSString* appid = (AppID != nil) ? [NSString stringWithFormat:@"&app=%@", AppID] : @"";
     NSString* notif = (notificationOnly) ? @"&notifyonly=1" : @"";
     NSString* sponsor = @"";
-#ifdef WHITWORTH
-    sponsor = @"&sponsor=6";
-#endif
-#ifdef UOREGON
-    sponsor = @"&sponsor=7";
-#endif
+#ifdef UNIVERSITY
     if (Skin != nil)
         sponsor = [NSString stringWithFormat:@"&sponsor=%ld", [Skin SkinID]];
+#endif
+#ifdef HUMANIX
+    sponsor = @"&sponsor=82";
+#endif
     NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@",
                       urlNotes, lastDownload, appid, notif, sponsor];
+    
     if (!notificationOnly)
         LastNoteDownload = [dateformat stringFromDate:[NSDate date]];
     NSURL* url = [NSURL URLWithString:surl];

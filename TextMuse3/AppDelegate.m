@@ -95,13 +95,10 @@
     
     UIColor* colorTint = nil;
     
-#ifdef UOREGON
-    //ffef01
-    colorTint = [UIColor colorWithRed:255.0/256 green:239.0/256 blue:1.0/256 alpha:1.0];
-#endif
-#ifdef WHITWORTH
-    //c20202
-    colorTint = [UIColor colorWithRed:194.0/256 green:2.0/256 blue:2.0/256 alpha:1.0];
+#ifdef HUMANIX
+    Skin = nil;
+    //007db1
+    colorTint = [UIColor colorWithRed:0.0/256 green:126.0/256 blue:177.0/256 alpha:1.0];
 #endif
     
     if (Skin != nil)

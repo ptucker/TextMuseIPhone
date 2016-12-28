@@ -61,11 +61,13 @@ const int maxRecentIDs = 10;
     [[self navigationController] setDelegate:self];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
+#ifdef UNIVERSITY
     if (ShowIntro) {
         [self showWalkthrough];
         
         [self showChooseSkin];
     }
+#endif
     
     [Data addListener:self];
     
@@ -74,27 +76,6 @@ const int maxRecentIDs = 10;
     
     [messages setBackgroundColor:[UIColor whiteColor]];
     
-    /*
-    if (Skin != nil) {
-        [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
-        ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
-                                               forNavigationItemLeftButton:[self navigationItem]
-                                                                withTarget:self
-                                                              withSelector:@selector(showCategoryList:)];
-        [downloader load];
-    }
-    else {
-        UIImage* o = [UIImage imageNamed:@"TextMuseButton"];
-        UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                               scale:60.0/30
-                                         orientation:(o.imageOrientation)];
-        UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self
-                                                                      action:@selector(showCategoryList:)];
-        [[self navigationItem] setLeftBarButtonItem:leftButton];
-    }
-     */
     UIImage* o = [UIImage imageNamed:@"menu"];
     UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
                                            scale:48.0/30
@@ -120,17 +101,20 @@ const int maxRecentIDs = 10;
 }
 
 -(void)setColors {
-    colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor blackColor], [UIColor blackColor],
+    colorsText = [NSArray arrayWithObjects:[UIColor blackColor],
+                  [UIColor blackColor], [UIColor blackColor],
                   nil];
-#ifdef WHITWORTH
-    //Crimson, Black, Grey
-    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:194/255.0 green:2/255.0 blue:2/255.0 alpha:1.0], [UIColor blackColor], [UIColor colorWithRed:68/255.0 green:68/255.0 blue:68/255.0 alpha:1.0], nil];
-#endif
-#ifdef UOREGON
+#ifdef HUMANIX 
+    //007db1, white, bb6b1e
     //Yellow, Green, Grey
-    colors = [NSArray arrayWithObjects: [UIColor colorWithRed:255/255.0 green:239/255.0 blue:1/255.0 alpha:1.0], [UIColor colorWithRed:0/255.0 green:73/255.0 blue:0/255.0 alpha:1.0], [UIColor colorWithRed:105/255.0 green:107/255.0 blue:106/255.0 alpha:1.0], nil];
-    colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor whiteColor], [UIColor whiteColor], nil];
-    colorsTitle = [NSArray arrayWithObjects:[UIColor blackColor], [colors objectAtIndex:1], [colors objectAtIndex:2], nil];
+    colors = [NSArray arrayWithObjects:
+              [UIColor colorWithRed:0.0/255.0 green:126.0/255.0 blue:177/255.0 alpha:1.0],
+              [UIColor whiteColor],
+              [UIColor colorWithRed:187.0/255.0 green:107.0/255.0 blue:30.0/255.0 alpha:1.0], nil];
+    colorsText = [NSArray arrayWithObjects:[UIColor whiteColor],
+                  [UIColor blackColor], [UIColor whiteColor], nil];
+    colorsTitle = [NSArray arrayWithObjects:[UIColor whiteColor], [colors objectAtIndex:1],
+                   [colors objectAtIndex:2], nil];
 #endif
     if (Skin != nil) {
         colors = [NSArray arrayWithObjects:[Skin createColor1], [Skin createColor2], [Skin createColor3], nil];
@@ -150,6 +134,7 @@ const int maxRecentIDs = 10;
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     //Show splash screen for 2 seconds
+#ifdef UNIVERSITY
     if (splash == nil) {
         if (Skin != nil) {
             [self showSkinSplash:[[self view] frame]];
@@ -163,7 +148,8 @@ const int maxRecentIDs = 10;
                                        userInfo:nil
                                         repeats:NO];
     }
-
+#endif
+    
     [self jumpToMessage];
 }
 
@@ -348,13 +334,9 @@ const int maxRecentIDs = 10;
          */
     }
     else {
-        //Green, Orange, Blue
-        colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
-        colorsText = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor blackColor],
-                      [UIColor blackColor], nil];
-        colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
-                       [colors objectAtIndex:2], nil];
-        UIColor* colorTint = [UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0];
+        [self setColors];
+        
+        UIColor* colorTint = [colors objectAtIndex:2];// [UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
         UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnHome setImage:imgHome forState:UIControlStateNormal];
