@@ -21,6 +21,7 @@
     IBOutlet UISwitch* notes;
     IBOutlet UISlider* notesCount;
     IBOutlet UIView* viewBottomContainer;
+    IBOutlet UIButton* btnVersions;
 }
 
 -(IBAction)switchContacts:(id)sender;

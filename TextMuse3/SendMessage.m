@@ -51,6 +51,10 @@ MFMessageComposeViewController* msgcontroller = nil;
         NSString* tagline = @"";
         //if (arc4random() % 10 == 0)
         message = [message stringByAppendingString:tagline];
+        if ([Preamble length] > 0)
+            message = [NSString stringWithFormat:@"%@ %@", Preamble, message];
+        if ([Inquiry length] > 0)
+            message = [NSString stringWithFormat:@"%@ (%@)", message, Inquiry];
         if (([CurrentMessage mediaUrl] == nil || [[CurrentMessage mediaUrl] length] == 0) &&
             [CurrentMessage img] == nil)
             [msgcontroller setBody: message];

@@ -43,6 +43,10 @@
         }
     }
     
+#ifdef HUMANIX
+    [btnVersions setHidden:true];
+#endif
+    
     [chosenCategories setDataSource:self];
     [chosenCategories setDelegate:self];
     [chosenCategories setEditing:NO];

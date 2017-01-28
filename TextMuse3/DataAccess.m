@@ -905,6 +905,10 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     }
     else if ([elementName isEqualToString:@"t"])
         xmldata = [[NSMutableString alloc] init];
+    else if ([elementName isEqualToString:@"p"])
+        xmldata = [[NSMutableString alloc] init];
+    else if ([elementName isEqualToString:@"i"])
+        xmldata = [[NSMutableString alloc] init];
     else if ([elementName isEqualToString:@"text"] || [elementName isEqualToString:@"media"] ||
              [elementName isEqualToString:@"url"] || [elementName isEqualToString:@"sp_name"] ||
              [elementName isEqualToString:@"sp_logo"])
@@ -912,7 +916,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
 }
 
 -(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    if ([currentElement isEqualToString:@"n"] || [currentElement isEqualToString:@"t"])
+    if ([currentElement isEqualToString:@"n"] || [currentElement isEqualToString:@"t"]
+         || [currentElement isEqualToString:@"p"] || [currentElement isEqualToString:@"i"])
         [xmldata appendString:string];
     else if ([currentElement isEqualToString:@"text"] || [currentElement isEqualToString:@"media"] ||
              [currentElement isEqualToString:@"url"])
@@ -959,6 +964,14 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     }
     else if ([elementName isEqualToString:@"t"]) {
         [NotificationMsgs addObject:xmldata];
+    }
+    else if ([elementName isEqualToString:@"p"]) {
+        Preamble = xmldata;
+        [Settings SaveSetting:SettingPreamble withValue:Preamble];
+    }
+    else if ([elementName isEqualToString:@"i"]) {
+        Inquiry = xmldata;
+        [Settings SaveSetting:SettingInquiry withValue:Inquiry];
     }
     else if ([elementName isEqualToString:@"notes"]) {
         if (!notificationOnly) {

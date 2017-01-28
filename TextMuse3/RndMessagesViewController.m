@@ -51,12 +51,13 @@ const int maxRecentIDs = 10;
     UIImage *scaledSettings = [UIImage imageWithCGImage:[imgEvent CGImage]
                                                   scale:48.0/30
                                             orientation:(imgEvent.imageOrientation)];
+#ifdef UNIVERSITY
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
                                                                    action:@selector(addEvent:)];
     [[self navigationItem] setRightBarButtonItem: rightButton];
-
+#endif
     
     [[self navigationController] setDelegate:self];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];

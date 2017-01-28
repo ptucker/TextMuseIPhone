@@ -35,6 +35,8 @@ NSString* SettingNotificationDate = @"SettingNotificationDate";
 NSString* SettingNotificationDates = @"SettingNotificationDates";
 NSString* SettingNotificationOn = @"SettingNotificationOn";
 NSString* SettingNotificationMsgs = @"SettingNotificationMsgs";
+NSString* SettingPreamble = @"SettingPreamble";
+NSString* SettingInquiry = @"SettingInquiry";
 NSString* SettingShowIntro = @"SettingShowIntro";
 NSString* SettingAskRegistration = @"SettingAskRegistration";
 NSString* SettingNamedGroups = @"SettingNamedGroups";
@@ -54,6 +56,8 @@ NSString* ReminderDateFormat = @"dd/MM/yyyy HH:mm:ss";
 NSString* NotificationDateFormat = @"dd/MM/yyyy 12:00:00";
 BOOL NotificationOn = YES;
 BOOL NotificationRegistered = YES;
+NSString* Preamble;
+NSString* Inquiry;
 
 NSMutableArray* RecentContacts = nil;
 int MaxRecentContacts = 5;
@@ -211,6 +215,10 @@ NSMutableSet* SponsorFollows;
             NotificationOn = [[defs stringForKey:SettingNotificationOn] isEqualToString:@"1"];
         if ([defs arrayForKey:SettingNotificationMsgs] != nil)
             NotificationMsgs = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingNotificationMsgs]];
+        if ([defs stringForKey:SettingPreamble] != nil)
+            Preamble = [defs stringForKey:SettingPreamble];
+        if ([defs stringForKey:SettingInquiry] != nil)
+            Inquiry = [defs stringForKey:SettingInquiry];
 
         if ([defs stringForKey:SettingShowIntro] != nil &&
             [[defs stringForKey:SettingShowIntro] length] == 1)

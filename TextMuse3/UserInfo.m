@@ -56,6 +56,7 @@
 }
 
 -(void)showMessage:(NSString*)msg withBadge:(NSString*)badge {
+#ifndef HUMANIX
     msg = [NSString stringWithFormat:@"You got your first %@ points! Track your points by clicking on the Badge button toward your %@ badge!", msg, msg];
     
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"First Points" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -74,6 +75,7 @@
         CGRect frmAlert = [alert frame];
         [img setFrame:CGRectMake(10, frmAlert.size.height-70, 60, 60)];
     }
+#endif
 }
 
 @end
