@@ -36,6 +36,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:txtAttrs forState:UIControlStateNormal];
     
     MessageCategory* mc = [Data getCategory:CurrentCategory];
+    [self initButtons];
     if (![CurrentCategory isEqualToString:@"PinnedMessages"])
     {
         if ([CurrentCategory isEqualToString:@"Badges"])
@@ -71,6 +72,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     //[selectButton setBackgroundColor:currColor];
     //[selectButton setTitleColor:[colorsText objectAtIndex:CurrentColorIndex] forState:UIControlStateNormal];
     CGRect frmSelect = CGRectMake([[self view] frame].size.width/2 - 72, 24, 144, 36);
+#ifndef OODLES
     selectButton = [[UICaptionButton alloc] initWithFrame:frmSelect
                                                 withImage:[UIImage imageNamed:@"TextMuseButton"]
                                                   andRightText:@"text it"];
@@ -78,18 +80,38 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
                      action:@selector(chooseMessage:)
            forControlEvents:UIControlEventTouchUpInside];
     [lowerView addSubview:selectButton];
-    
+#else
+    frmSelect.origin.x -= 50;
+    frmSelect.size.width += 100;
+    UILabel* lbl = [[UILabel alloc] initWithFrame:frmSelect];
+    [lbl setText:@"Share. Go. Win."];
+    [lbl setTextAlignment:NSTextAlignmentCenter];
+    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+    [lowerView addSubview:lbl];
+#endif
     [scrollview setDelegate:self];
     
+    CGRect frame = [scrollview frame];
+    frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    for (int i=0; i<[msgs count]; i++) {
+        Message* msg = [msgs objectAtIndex:i];
+        if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
+            frameStart.origin.x = (i * frame.size.width);
+    }
+    
+    [self showMessages];
+}
+
+-(void)initButtons {
     msgviews = [[NSMutableArray alloc] initWithCapacity:5];
     msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ?
-            [Data getPinnedMessages] : [Data getMessagesForCategory:CurrentCategory];
+    [Data getPinnedMessages] : [Data getMessagesForCategory:CurrentCategory];
     
     yellowHighlighter = [UIImage imageNamed:@"yellowHighlighter.png"];
     greyHighlighter = [UIImage imageNamed:@"greyHighlighter.png"];
     flag = [UIImage imageWithCGImage:[[UIImage imageNamed:@"flag-variant.png"] CGImage]
-                                              scale:48.0/30
-                                        orientation:(flag.imageOrientation)];
+                               scale:48.0/30
+                         orientation:(flag.imageOrientation)];
     flagButton = [[UIBarButtonItem alloc] initWithImage:flag
                                                   style:UIBarButtonItemStylePlain
                                                  target:self
@@ -101,16 +123,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
                                                       style:UIBarButtonItemStylePlain
                                                      target:self
                                                      action:@selector(remitit:)];
-
-    CGRect frame = [scrollview frame];
-    frameStart = CGRectMake(0, 0, frame.size.width, frame.size.height);
-    for (int i=0; i<[msgs count]; i++) {
-        Message* msg = [msgs objectAtIndex:i];
-        if (CurrentMessage != nil && [CurrentMessage msgId] == [msg msgId])
-            frameStart.origin.x = (i * frame.size.width);
-    }
     
-    [self showMessages];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -162,7 +175,9 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 }
 
 -(void)setRightButtonFlag {
+#ifdef UNIVERSITY
     [[self navigationItem] setRightBarButtonItem: flagButton];
+#endif
 }
 
 -(void)setRightButtonRemit {
@@ -213,6 +228,8 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
                             inFrame:frame
                           withColor:[colors objectAtIndex:CurrentColorIndex]
                               index:CurrentColorIndex];
+            [mv setObjSendMessage:self];
+            [mv setSelSendMessage:@selector(chooseMessage:)];
             
             [scrollview addSubview:mv];
             [msgviews insertObject:mv atIndex:i-start];

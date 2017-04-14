@@ -19,6 +19,7 @@ extern const int maxRecentIDs;
 @interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,
 DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     IBOutlet UITableView* messages;
+    IBOutlet UIView* bottomMenu;
     IBOutlet UIButton* btnHome;
     IBOutlet UIButton* btnBadges;
     IBOutlet UIButton* btnGroup;

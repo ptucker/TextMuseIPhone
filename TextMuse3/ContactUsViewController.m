@@ -107,6 +107,9 @@ NSString* urlFeedback = @"http://www.textmuse.com/admin/postfeedback.php";
                                                         startImmediately:YES];
         
         [[self navigationController] popViewControllerAnimated:YES];
+        
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Thank you for your feedback" delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil, nil];
+        [alert show];
     }
 }
 

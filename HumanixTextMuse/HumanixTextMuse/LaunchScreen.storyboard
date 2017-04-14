@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -19,65 +18,48 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="lz7-sw-2M6"/>
-                        <viewControllerLayoutGuide type="bottom" id="uJF-Dd-CYk"/>
-                    </layoutGuides>
-                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" preservesSuperviewLayoutMargins="YES" text="  Copyright © 2016 L.A. Loosh. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="obG-Y5-kRd">
-                                <rect key="frame" x="18.637396694234553" y="627" width="335" height="20"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright © 2017 L.A. Loosh. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" id="obG-Y5-kRd">
+                                <rect key="frame" x="18.5" y="627" width="335" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" image="humanix.png" translatesAutoresizingMaskIntoConstraints="NO" id="J8D-Cc-3gI">
-                                <rect key="frame" x="88" y="28" width="197" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="197" id="XUO-Op-KBb"/>
-                                    <constraint firstAttribute="height" constant="50" id="tHI-bA-CxB"/>
-                                </constraints>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" image="TransparentButterfly" translatesAutoresizingMaskIntoConstraints="NO" id="EA5-C0-5qq">
-                                <rect key="frame" x="65.930785123979831" y="206" width="240.00000000000006" height="240"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="240" id="1BC-fd-uOs"/>
-                                    <constraint firstAttribute="width" constant="240" id="wUW-Xg-gPd"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" preservesSuperviewLayoutMargins="YES" text="TextMuse" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gFp-WC-Ge3">
-                                <rect key="frame" x="18.637396694234553" y="425" width="335" height="52"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Powered by Humanix" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gFp-WC-Ge3">
+                                <rect key="frame" x="20" y="567" width="335" height="52"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="32"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TransparentButterfly" id="EA5-C0-5qq">
+                                <rect key="frame" x="245" y="459" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hiremenwlogo.jpg" id="zjn-um-QfK">
+                                <rect key="frame" x="20" y="148" width="339" height="136"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.49019607843137253" blue="0.69411764705882351" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="J8D-Cc-3gI" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="72" id="0Rk-gY-BYd"/>
-                            <constraint firstItem="gFp-WC-Ge3" firstAttribute="top" secondItem="J8D-Cc-3gI" secondAttribute="bottom" constant="347" id="6kX-2h-JSQ"/>
-                            <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="2.6400000000000001" id="6mH-T9-DLe"/>
-                            <constraint firstItem="EA5-C0-5qq" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="49.93" id="7wu-Cd-whp"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="J8D-Cc-3gI" secondAttribute="trailing" constant="74" id="9W4-Sn-IMp"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="EA5-C0-5qq" secondAttribute="trailing" constant="53.07" id="Uun-kA-Ev4"/>
-                            <constraint firstItem="uJF-Dd-CYk" firstAttribute="top" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="ZHa-zh-xmm"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="obG-Y5-kRd" secondAttribute="trailing" constant="2.6400000000000001" id="fSs-WA-wic"/>
-                            <constraint firstItem="EA5-C0-5qq" firstAttribute="top" secondItem="J8D-Cc-3gI" secondAttribute="bottom" constant="128" id="lXj-Bb-dMr"/>
-                            <constraint firstItem="J8D-Cc-3gI" firstAttribute="top" secondItem="lz7-sw-2M6" secondAttribute="bottom" constant="8" id="rWd-ue-1OZ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="gFp-WC-Ge3" secondAttribute="trailing" constant="5.3600000000000003" id="w79-BC-bdk"/>
-                            <constraint firstItem="gFp-WC-Ge3" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="2.6400000000000001" id="wkD-co-0z7"/>
-                        </constraints>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52" y="374.66266866566718"/>
+            <point key="canvasLocation" x="32.5" y="416.5"/>
         </scene>
     </scenes>
     <resources>
         <image name="TransparentButterfly" width="246" height="246"/>
-        <image name="humanix.png" width="197" height="50"/>
+        <image name="hiremenwlogo.jpg" width="1024" height="412"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
+    </simulatedMetricsContainer>
 </document>

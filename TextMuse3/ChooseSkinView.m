@@ -25,7 +25,7 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     
     CGRect frmTitle = CGRectMake(10, frame.origin.y, frame.size.width-20, 32);
     UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-    [lblTitle setText:@"Choose TextMuse Version"];
+    [lblTitle setText:@"Choose Version"];
     [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
     [lblTitle setTextColor:[UIColor blackColor]];
     [self addSubview:lblTitle];
@@ -46,7 +46,11 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [skins setDataSource:self];
     
     inetdata = [[NSMutableData alloc] init];
-    NSURL* url = [NSURL URLWithString:urlGetSkins];
+    NSString* getskins = urlGetSkins;
+#ifdef OODLES
+    getskins = [NSString stringWithFormat:@"%@?edition=91", urlGetSkins];
+#endif
+    NSURL* url = [NSURL URLWithString:getskins];
     NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
     
     if (activityView == nil)
@@ -149,6 +153,7 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
 qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if (skinNames == nil) {
         skinNames = [[NSMutableArray alloc] init];
+#ifndef OODLES
         [skinNames addObject:@"Main"];
         skinIcons = [[NSMutableArray alloc] init];
         [skinIcons addObject:@"TransparentButterfly.png"];
@@ -156,6 +161,7 @@ qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
         [skinIDs addObject:@"-1"];
         skinColors = [[NSMutableArray alloc] init];
         [skinColors addObject:@"000000"];
+#endif
     }
     
     if ([elementName isEqualToString:@"s"]) {

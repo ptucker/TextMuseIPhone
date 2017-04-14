@@ -78,11 +78,13 @@ const int HIDEMESSAGE = 1000;
     
     [self loadFromInternet];
     
+#ifdef UNIVERSITY
     if (!notificationOnly) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self loadLocalImages];
         });
     }
+#endif
 }
 
 -(void) loadFromFile {
@@ -164,6 +166,9 @@ const int HIDEMESSAGE = 1000;
 #endif
 #ifdef HUMANIX
     sponsor = @"&sponsor=82";
+#endif
+#ifdef OODLES
+    sponsor = @"&sponsor=91";
 #endif
     NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@",
                       urlNotes, lastDownload, appid, notif, sponsor];
@@ -415,11 +420,13 @@ const int HIDEMESSAGE = 1000;
     for (NSString* m in sorted)
         [cs addObject:m];
 
+#ifdef UNIVERSITY
     if (localImages != nil && [localImages count] > 0)
         [cs addObject:NSLocalizedString(@"Your Photos Title", nil)];
     [cs addObject:NSLocalizedString(@"Your Messages Title", nil)];
     if (SaveRecentMessages && [RecentMessages count] > 0)
         [cs addObject:NSLocalizedString(@"Recent Messages Title", nil)];
+#endif
     
     return cs;
 }
@@ -431,13 +438,16 @@ const int HIDEMESSAGE = 1000;
         if ([[categories objectForKey:c] required])
             [cs addObject:c];
     }
+
+#ifdef UNIVERSITY
     int i=0;
     if (localImages != nil && [localImages count] > 0)
         [cs insertObject:NSLocalizedString(@"Your Photos Title", nil) atIndex:i++];
     [cs insertObject:NSLocalizedString(@"Your Messages Title", nil) atIndex:i++];
     if (SaveRecentMessages && [RecentMessages count] > 0)
         [cs insertObject:NSLocalizedString(@"Recent Messages Title", nil) atIndex:i];
-
+#endif
+    
     return cs;
 }
 
@@ -963,7 +973,11 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         }
     }
     else if ([elementName isEqualToString:@"t"]) {
-        [NotificationMsgs addObject:xmldata];
+        NSString* m = xmldata;
+#ifdef OODLES
+        m = [xmldata stringByReplacingOccurrencesOfString:@"TextMuse" withString:@"Oodles"];
+#endif
+        [NotificationMsgs addObject:m];
     }
     else if ([elementName isEqualToString:@"p"]) {
         Preamble = xmldata;

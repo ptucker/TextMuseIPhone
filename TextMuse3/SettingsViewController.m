@@ -46,6 +46,9 @@
 #ifdef HUMANIX
     [btnVersions setHidden:true];
 #endif
+#ifdef OODLES
+    [btnVersions setHidden:true];
+#endif
     
     [chosenCategories setDataSource:self];
     [chosenCategories setDelegate:self];

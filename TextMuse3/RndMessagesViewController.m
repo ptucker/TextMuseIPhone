@@ -33,8 +33,19 @@ const int maxRecentIDs = 10;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    CGRect frmMessages = CGRectMake(0, 65, [[self view] frame].size.width,
-                                    [[self view] frame].size.height - 65 - 40);
+    [self defaultSkin];
+    
+    int messagesHeight = [[self view] frame].size.height - 65 - 40;
+#ifdef HUMANIX
+    [[self navigationItem] setTitle:@"Hire Me Northwest"];
+#endif
+#ifdef OODLES
+    [[self navigationItem] setTitle:@"Oodles"];
+    [bottomMenu setHidden:YES];
+    messagesHeight += 40;
+#endif
+    
+    CGRect frmMessages = CGRectMake(0, 65, [[self view] frame].size.width, messagesHeight);
     messages = [[UITableView alloc] initWithFrame:frmMessages];
     [[self view] addSubview:messages];
     showPinned = false;
@@ -47,11 +58,11 @@ const int maxRecentIDs = 10;
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [messages addSubview:refreshControl];
 
+#ifdef UNIVERSITY
     UIImage* imgEvent = [UIImage imageNamed:@"calendar-plus"];
     UIImage *scaledSettings = [UIImage imageWithCGImage:[imgEvent CGImage]
                                                   scale:48.0/30
                                             orientation:(imgEvent.imageOrientation)];
-#ifdef UNIVERSITY
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
@@ -62,7 +73,7 @@ const int maxRecentIDs = 10;
     [[self navigationController] setDelegate:self];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
     
-#ifdef UNIVERSITY
+#ifndef HUMANIX
     if (ShowIntro) {
         [self showWalkthrough];
         
@@ -92,6 +103,51 @@ const int maxRecentIDs = 10;
     [[btnGroup imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [btnBadges setTitle:@"badges" forState:UIControlStateNormal];
     [btnBadges setTitle:@"all" forState:UIControlStateSelected];
+    
+#ifndef UNIVERSITY
+    [btnBadges setHidden:YES];
+#endif
+}
+
+-(void)defaultSkin {
+#ifdef HUMANIX
+    Skin = [[SkinInfo alloc] init];
+    
+    [Skin setSkinID:82];
+    [Skin setSkinName:@"HireMeNW"];
+    [Skin setMasterName:@"HireMeNW"];
+    [Skin setMasterBadgeURL:@""];
+    [Skin setColor1:@"8dc73f"];
+    [Skin setColor2:@"ffffff"];
+    [Skin setColor3:@"231f20"];
+    [Skin setHomeURL:@"http://www.humanix.com"];
+    [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
+    [Skin setMainWindowTitle:@"Hire Me NW"];
+    [Skin setIconButtonURL:@""];
+    
+    [Settings SaveSkinData];
+    
+    [self updateSkin];
+#endif
+#ifdef OODLES
+    Skin = [[SkinInfo alloc] init];
+    
+    [Skin setSkinID:91];
+    [Skin setSkinName:@"Oodles"];
+    [Skin setMasterName:@"Oodles"];
+    [Skin setMasterBadgeURL:@""];
+    [Skin setColor1:@"73bedc"];
+    [Skin setColor2:@"000000"];
+    [Skin setColor3:@"ffffff"];
+    [Skin setHomeURL:@"http://www.textmuse.com"];
+    [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
+    [Skin setMainWindowTitle:@"Oodles"];
+    [Skin setIconButtonURL:@""];
+    
+    [Settings SaveSkinData];
+    
+    [self updateSkin];
+#endif
 }
 
 -(void)navigationController:(UINavigationController *)navigationController
@@ -105,18 +161,7 @@ const int maxRecentIDs = 10;
     colorsText = [NSArray arrayWithObjects:[UIColor blackColor],
                   [UIColor blackColor], [UIColor blackColor],
                   nil];
-#ifdef HUMANIX 
-    //007db1, white, bb6b1e
-    //Yellow, Green, Grey
-    colors = [NSArray arrayWithObjects:
-              [UIColor colorWithRed:0.0/255.0 green:126.0/255.0 blue:177/255.0 alpha:1.0],
-              [UIColor whiteColor],
-              [UIColor colorWithRed:187.0/255.0 green:107.0/255.0 blue:30.0/255.0 alpha:1.0], nil];
-    colorsText = [NSArray arrayWithObjects:[UIColor whiteColor],
-                  [UIColor blackColor], [UIColor whiteColor], nil];
-    colorsTitle = [NSArray arrayWithObjects:[UIColor whiteColor], [colors objectAtIndex:1],
-                   [colors objectAtIndex:2], nil];
-#endif
+
     if (Skin != nil) {
         colors = [NSArray arrayWithObjects:[Skin createColor1], [Skin createColor2], [Skin createColor3], nil];
         colorsText = [NSArray arrayWithObjects:[Skin createTextColor1], [Skin createTextColor2], [Skin createTextColor3], nil];
@@ -255,7 +300,7 @@ const int maxRecentIDs = 10;
     [splash removeFromSuperview];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+-(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
     [self becomeFirstResponder];
@@ -270,8 +315,10 @@ const int maxRecentIDs = 10;
     return YES;
 }
 
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+-(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+#ifdef UNIVERSITY
     [self performSegueWithIdentifier:@"ShakeToPlay" sender:self];
+#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -286,9 +333,24 @@ const int maxRecentIDs = 10;
     
     [self jumpToMessage];
     
-    //[btnBadges setHidden:[[Data getEventMessages] count] == 0];
-    
     [refreshControl endRefreshing];
+
+#ifdef OODLES
+    if ([Data getCategory:@"Badges"] != nil) {
+        UIImage* imgEvent = [UIImage imageNamed:@"Oodles__badge_for_top-right-corner_of_app_small"];
+        UIImage *scaledSettings = [UIImage imageWithCGImage:[imgEvent CGImage]
+                                                      scale:94.0/30
+                                                orientation:(imgEvent.imageOrientation)];
+        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
+                                                                        style:UIBarButtonItemStylePlain
+                                                                       target:self
+                                                                       action:@selector(gotoBadgeCategory:)];
+        [[self navigationItem] setRightBarButtonItem: rightButton];
+    }
+    else {
+        [[self navigationItem] setRightBarButtonItem: nil];
+    }
+#endif
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue*)segue sender:(nullable id)sender {
@@ -324,7 +386,16 @@ const int maxRecentIDs = 10;
         [btnGroup setTitleColor:colorTint forState:UIControlStateNormal];
         
         //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
-        [[self navigationItem] setTitle:[NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]]];
+        NSString* title = nil;
+#ifdef HUMANIX
+        title = @"Hire Me Northwest";
+#endif
+#ifdef OODLES
+        title = @"Oodles";
+#endif
+        if (title == nil)
+            title = [NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]];
+        [[self navigationItem] setTitle:title];
         
         /*
         ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
@@ -369,8 +440,12 @@ const int maxRecentIDs = 10;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    BOOL supportPinned = YES;
+#ifdef OODLES
+    supportPinned = NO;
+#endif
     if (tableView == categoryTable)
-        return [[Data getCategories] count] + 2; //add one for pinned category and one for settings
+        return [[Data getCategories] count] + (supportPinned ? 2 : 1); //add one for pinned category and one for settings
     else if (showPinned)
         return [pinnedMessages count];
     else if (showEvents)
@@ -437,12 +512,16 @@ const int maxRecentIDs = 10;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
+        BOOL supportPinned = YES;
+#ifdef OODLES
+        supportPinned = NO;
+#endif
         if ([indexPath row] == 0) {
             [self settings:nil];
             [self hideCategoryList];
             return;
         }
-        else if ([indexPath row] == 1) {
+        else if ([indexPath row] == 1 && supportPinned) {
             [self showPinned:nil];
             [self hideCategoryList];
             return;
@@ -472,16 +551,20 @@ const int maxRecentIDs = 10;
 }
 
 -(UITableViewCell*)createCategoryCell:(long)iCategory forWidth:(CGFloat)width {
+    BOOL supportPinned = YES;
+#ifdef OODLES
+    supportPinned = NO;
+#endif
     UITableViewCell* cell = [[UITableViewCell alloc] init];
     [cell setBackgroundColor:[UIColor blackColor]];
     [[cell textLabel] setTextColor:[UIColor whiteColor]];
     NSString* categoryName = nil;
     if (iCategory == 0)
         categoryName = @"Settings";
-    else if (iCategory == 1)
+    else if (iCategory == 1 && supportPinned)
         categoryName = @"Pinned";
     else
-        categoryName = [[Data getCategories] objectAtIndex:iCategory-2];
+        categoryName = [[Data getCategories] objectAtIndex:iCategory- (supportPinned ? 2 : 1)];
     [[cell textLabel] setText:categoryName];
     
     if (!(iCategory == 0 || iCategory == 1 || [[Data getRequiredCategories] containsObject:categoryName])) {
@@ -554,6 +637,13 @@ const int maxRecentIDs = 10;
 
 -(IBAction)addEvent:(id)sender {
     [self performSegueWithIdentifier:@"AddEvent" sender:self];
+}
+
+-(IBAction)gotoBadgeCategory:(id)sender {
+    CurrentCategory = @"Badges";
+    CurrentColorIndex = 0;
+
+    [self performSegueWithIdentifier:@"SelectMessage" sender:self];
 }
 
 -(IBAction)showBadges:(id)sender {
@@ -654,8 +744,12 @@ const int maxRecentIDs = 10;
     [walkthroughView addSubview:scroller];
     
     int pagecount = 5;
+#ifdef OODLES
+    pagecount = 6;
+#endif
     [pages setNumberOfPages:pagecount];
     int x = 0;
+#ifdef UNIVERSITY
     NSString* images[] = {
         @"walk_one", @"walk_two", @"walk_three", @"walk_four", @"walk_five"
     };
@@ -666,6 +760,24 @@ const int maxRecentIDs = 10;
         @"... and before you send it, edit it to give it that personal touch.",
         @"Touch the cog to personalize TextMuse – choose which categories you want to see and send us feedback."
     };
+#endif
+#ifdef OODLES
+    NSString* images[] = {
+        @"Oodles_Logo_BIG_final_400", @"oodles_two", @"ScrSht_3", @"ScrSht_4", @"ScrSht_5", @"Oodles_Logo_BIG_final_400"
+    };
+    NSString* txts[] = {
+        @"Oodles gives you and your friends hot deals and events around campus. And the more you do together, the more you get!",
+        @"Oodles features three types of content. Food and drink deals, Campus Located Events and Student Generated Events.",
+        @"Tier #1, just show the hot deal or event in-app to the vendor and enjoy. Many of these can only be found on Oodles.",
+        @"Tier #2, share the hot deal or event with your friends to get a better deal.",
+        @"Tier #3, enjoy the hot deal or event together with your friends for maximum value.",
+        @"So, go out there and have Oodles & Oodles of fun on campus with your friends."
+    };
+#endif
+#ifdef HUMANIX
+    NSString* images[] = {};
+    NSString* txts[] = {};
+#endif
     CGFloat txtHeight = 80;
     frmScroll.size.height -= frmScroll.origin.y;
     for (int i=0; i<pagecount; i++) {
@@ -678,7 +790,12 @@ const int maxRecentIDs = 10;
             frmImg.size.height -= 40;
             
             UILabel* hdr = [[UILabel alloc] initWithFrame:frmHeader];
+#ifdef UNIVERSITY
             [hdr setText:@"Welcome to TextMuse!"];
+#endif
+#ifdef OODLES
+            [hdr setText:@"Welcome to Oodles!"];
+#endif
             [hdr setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
             [hdr setTextColor:[UIColor blackColor]];
             [hdr setTextAlignment:NSTextAlignmentCenter];
@@ -733,11 +850,12 @@ const int maxRecentIDs = 10;
 
 -(IBAction)closeWalkthrough:(id)sender {
     [walkthroughView removeFromSuperview];
+#ifdef UNIVERSITY
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
     [[[self  navigationItem] backBarButtonItem] setTitle:@"Skip"];
     ShowIntro = NO;
     [self performSegueWithIdentifier:@"registerInitial" sender:self];
-    
+#endif
     [Settings SaveSetting:SettingShowIntro withValue:@"0"];
 }
 

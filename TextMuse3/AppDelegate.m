@@ -100,7 +100,11 @@
     //007db1
     colorTint = [UIColor colorWithRed:0.0/256 green:126.0/256 blue:177.0/256 alpha:1.0];
 #endif
-    
+#ifdef OODLES
+    Skin = nil;
+    //73bedc
+    colorTint = [UIColor colorWithRed:115.0/256 green:190/256 blue:236.0/256 alpha:1.0];
+#endif
     if (Skin != nil)
         colorTint = [Skin createColor1];
 

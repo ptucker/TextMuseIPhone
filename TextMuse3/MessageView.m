@@ -168,30 +168,57 @@ UIImage* openInNew = nil;
         [self addSubview:lblContent];
     }
 
-    UIImage* like = [msg liked] ? likeRed : likeGrey;
     //NSString* likeText = [msg likeCount] > 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
     if (btnLike == nil) {
+#ifdef OODLES
+        btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
+                                               withImage:[UIImage imageNamed:@"See-It-icon_64"]
+                                            andRightText:@"See"];
+        [btnLike addTarget:self action:@selector(messageFollow:)
+          forControlEvents:UIControlEventTouchUpInside];
+#else
+        UIImage* like = [msg liked] ? likeRed : likeGrey;
         btnLike = [[UICaptionButton alloc] initWithFrame:frmLike
                                                withImage:like
                                             andRightText:@"like it"];
+        [btnLike addTarget:self action:@selector(likeMessage:) forControlEvents:UIControlEventTouchUpInside];
+#endif
         [btnLike setCaptionColor:[UIColor darkGrayColor]];
+        [btnLike setFrame:frmLike];
+#ifdef OODLES
+        if (![msg badge])
+            [self addSubview:btnLike];
+#else
         [self addSubview:btnLike];
+#endif
     }
-    [btnLike setImage:like];
-    [btnLike setFrame:frmLike];
-    [btnLike addTarget:self action:@selector(likeMessage:) forControlEvents:UIControlEventTouchUpInside];
 
+#ifndef OODLES
     UIImage* pin = [msg pinned] ? pinRed : pinGrey;
     if (btnPin == nil) {
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:pin
                                                 andRightText:@"save it"];
         [btnPin setCaptionColor:[UIColor darkGrayColor]];
-        [self addSubview:btnPin];
     }
-    [btnPin setImage:pin];
+#else
+    if (btnPin == nil) {
+        btnPin = [[UICaptionButton alloc] initWithFrame:frmPin
+                                              withImage:[UIImage imageNamed:@"share-it-icon_64"]
+                                           andRightText:@"Share"];
+        [btnPin setCaptionColor:[UIColor darkGrayColor]];
+    }
+#endif
+#ifdef OODLES
+    if (![msg badge])
+        [self addSubview:btnPin];
+#else
+    [self addSubview:btnPin];
+#endif
+    
     [btnPin setFrame:frmPin];
     [btnPin addTarget:self action:@selector(pinMessage:) forControlEvents:UIControlEventTouchUpInside];
-
+    
+#ifndef OODLES
     if (btnDetails == nil) {
         btnDetails = [[UICaptionButton alloc] initWithFrame:frmBtnDetails
                                                   withImage:openInNew
@@ -205,7 +232,9 @@ UIImage* openInNew = nil;
 
     [btnDetails addTarget:self action:@selector(messageFollow:)
          forControlEvents:UIControlEventTouchUpInside];
+#endif
     
+#ifndef OODLES
     if ([[msg sponsorName] length] > 0) {
         NSString* followText = [NSString stringWithFormat:@"%@follow%@", [msg following] ? @"un" : @"",
                                 [msg sponsorLogo] == nil ?
@@ -234,6 +263,7 @@ UIImage* openInNew = nil;
         [btnFollow setAlpha:0.8];
         [self addSubview:btnFollow];
     }
+#endif
 }
 
 -(void)setupImageForMessage:(Message*)msg inFrame:(CGRect)frame {
@@ -334,6 +364,7 @@ UIImage* openInNew = nil;
 }
 
 -(IBAction)pinMessage:(id)sender {
+#ifndef OODLES
     [message setPinned:![message pinned]];
     [Data setMessagePin:message withValue:[message pinned]];
     
@@ -343,6 +374,12 @@ UIImage* openInNew = nil;
         [SqlDb unpinMessage:message];
     
     [btnPin setImage:([message pinned] ? pinRed : pinGrey)];
+#else
+    SEL selector = [self selSendMessage];
+    IMP imp = [[self objSendMessage] methodForSelector:selector];
+    void (*func)(id, SEL, id) = (void *)imp;
+    func([self objSendMessage], selector, sender);
+#endif
 }
 
 -(IBAction)likeMessage:(id)sender {
