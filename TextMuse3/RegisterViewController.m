@@ -167,13 +167,17 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
                                                    timeoutInterval:30];
     [req setHTTPMethod:@"POST"];
     NSString* urlStr;
+    NSString* app = @"6";
+#ifdef OODLES
+    app = @"91";
+#endif
     if ([[CurrentUser UserBirthMonth] length] > 0 && [[CurrentUser UserBirthYear] length] > 0)
-        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&bmonth=%@&byear=%@&appid=%@",
+        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&bmonth=%@&byear=%@&appid=%@&app=%@",
                   [CurrentUser UserName], [CurrentUser UserEmail], [CurrentUser UserBirthMonth],
-                  [CurrentUser UserBirthYear], AppID];
+                  [CurrentUser UserBirthYear], AppID, app];
     else
-        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&appid=%@",
-                  [CurrentUser UserName], [CurrentUser UserEmail], AppID];
+        urlStr = [NSString stringWithFormat:@"name=%@&email=%@&appid=%@&app=%@",
+                  [CurrentUser UserName], [CurrentUser UserEmail], AppID, app];
     NSData* urlData = [urlStr dataUsingEncoding:NSUTF8StringEncoding];
     [req setHTTPBody:urlData];
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req

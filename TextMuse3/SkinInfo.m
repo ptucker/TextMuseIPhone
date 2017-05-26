@@ -19,7 +19,7 @@
  @property NSString* Color3;
  @property NSString* MainWindowTitle;
  @property NSString* IconButtonURL;
- @property NSString* HomeURL;
+ @property(nonatomic)  NSString* HomeURL;
  */
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -153,6 +153,15 @@
 
 -(UIColor*)createTextColor3 {
     return [self createTextColor:[self Color3]];
+}
+
+-(long)SkinID {
+    return self->_SkinID;
+}
+
+- (void) setSkinID:(long)SkinID
+{
+    self->_SkinID = SkinID;
 }
 
 @end

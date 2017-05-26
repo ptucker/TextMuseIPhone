@@ -17,6 +17,8 @@
     NSString* masterBadgeUrl;
     ImageDownloader* loader;
     NSMutableData* badge;
+    
+    long _SkinID;
 }
 
 @property long SkinID;

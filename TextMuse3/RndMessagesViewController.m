@@ -203,7 +203,7 @@ const int maxRecentIDs = 10;
     if (HighlightedMessageID != 0) {
         CurrentMessage = [Data findMessageWithID:HighlightedMessageID];
         if (CurrentMessage != nil) {
-            CurrentCategory = showPinned ? @"PinnedMessages" : [CurrentMessage category];
+            CurrentCategory = [CurrentMessage category];
             CurrentColorIndex = HighlightedMessageID % [colors count];
             HighlightedMessageID = 0;
             
@@ -851,13 +851,20 @@ const int maxRecentIDs = 10;
 -(IBAction)closeWalkthrough:(id)sender {
     [walkthroughView removeFromSuperview];
 #ifdef UNIVERSITY
+    [self performRegistration];
+#endif
+#ifdef OODLES
+    [self performRegistration];
+#endif
+    
+    [Settings SaveSetting:SettingShowIntro withValue:@"0"];
+}
+
+-(void)performRegistration {
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
     [[[self  navigationItem] backBarButtonItem] setTitle:@"Skip"];
     ShowIntro = NO;
     [self performSegueWithIdentifier:@"registerInitial" sender:self];
-#endif
-    [Settings SaveSetting:SettingShowIntro withValue:@"0"];
 }
-
 
 @end

@@ -131,8 +131,13 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     if ([self deviceToken] == nil) return;
     
     NSString* conn = @"Endpoint=sb://textmusehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=9hnIUk/Qjj9zusMfK570F10o5mXY1F9eXVS8REI3ZCw=";
+    NSString* hubname = @"textmusehub";
+#ifdef OODLES
+    conn = @"Endpoint=sb://textmusehub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=m0/PylSpLc4XVxpPtSZzl/bPP22ZwICk/+P477TQPhs=";
+    hubname = @"oodleshub";
+#endif
     SBNotificationHub* hub = [[SBNotificationHub alloc] initWithConnectionString:conn
-                                                             notificationHubPath:@"textmusehub"];
+                                                             notificationHubPath:hubname];
 
     long skinid = (Skin != nil) ? [Skin SkinID] : 0;
     NSMutableSet* tags =
@@ -244,6 +249,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 -(void)addNotification {
     if (!NotificationOn) return;
     
+#ifdef UNIVERSITY
     [Settings LoadSettings];
     BOOL n = (NotificationDates == nil || [NotificationDates count] == 0);
     NSDate* notification;
@@ -286,6 +292,9 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     }
     
     [Settings SaveSetting:SettingNotificationDates withValue:NotificationDates];
+#else
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+#endif
 }
 
 -(NSDate*)getNextNotifyDate:(NSDate*)dateOfInterest {

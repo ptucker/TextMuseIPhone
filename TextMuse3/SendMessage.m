@@ -43,8 +43,12 @@ MFMessageComposeViewController* msgcontroller = nil;
         [msgcontroller setRecipients: phones];
         [msgcontroller setMessageComposeDelegate: self];
         
+#ifdef OODLES
+        NSString* urlAdd = @" (http://apple.co/2pekrPf)";
+#else
         NSString* urlAdd = ([CurrentMessage url] == nil ? @"" :
                             [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
+#endif
         NSString* text = ([CurrentMessage getFullMessage] == nil ? @"" : [CurrentMessage getFullMessage]);
         NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
 
