@@ -10,6 +10,8 @@
 #import "MessageTableViewCell.h"
 #import "GlobalState.h"
 #import "Settings.h"
+#import "ImageUtil.h"
+#import "TextUtil.h"
 
 NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 
@@ -27,11 +29,12 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     _nav = nav;
     
     CGSize sizeParent = CGSizeMake(size.width-16, 133);
-    if ([msg img] != nil)
-        sizeParent = [MessageTableViewCell GetContentSizeForImage:[UIImage imageWithData:[msg img]]
-                                                           inSize:size];
-    
     CGFloat bottomY = sizeParent.height + 40;
+    if ([msg mediaUrl] != nil) {
+        CGFloat height = [MessageTableViewCell GetCellHeightForMessage:msg inSize:size];
+        sizeParent = CGSizeMake(size.width, height);
+        bottomY = height - 40;
+    }
     
     frmTitle = CGRectMake(35, 8, size.width - 8 - 35, 21);
     frmSeeAll = CGRectMake(size.width - 14 - 8, 8, 14, 21);
@@ -108,6 +111,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     }
     [btnLike setFrame:frmLike];
 #ifndef OODLES
+    /*
     if (btnPin == nil) {
         NSString* pinImg = [msg pinned] ? @"pin_red" : @"pin_dkgrey";
         btnPin = [[UICaptionButton alloc] initWithFrame:frmPin withImage:[UIImage imageNamed:pinImg]
@@ -117,6 +121,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
         [self addSubview:btnPin];
     }
     [btnPin setFrame:frmPin];
+     */
 #endif
     if (btnSend == nil) {
 #ifdef OODLES
@@ -246,32 +251,20 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     _tableView = tableView;
 }
 
-+(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent {
-    CGFloat heightParent = 133;
-    CGFloat widthParent = sizeParent.width;
-    CGSize size = [img size];
-    CGFloat ratio = size.height / size.width;
-    if (size.height > heightParent) {
-        if (size.width <= widthParent)
-            heightParent = size.height;
-        else {
-            heightParent = ratio * widthParent;
-        }
-    }
-    if (heightParent > (sizeParent.height / 2.5)) {
-        heightParent = (sizeParent.height / 2.5);
-        widthParent = (1/ratio) * heightParent;
-    }
-    
-    return CGSizeMake(widthParent, heightParent);
-}
-
 +(CGFloat)GetCellHeightForMessage:(Message *)msg inSize:(CGSize)size {
     CGFloat height = 225.0;
     if (![msg isImgNull]) {
         UIImage* img = [UIImage imageWithData:[msg img]];
-        CGSize sizeContent = [MessageTableViewCell GetContentSizeForImage:img inSize:size];
+        CGSize sizeContent = [ImageUtil GetContentSizeForImage:img inSize:size];
         height = 92.0 + sizeContent.height;
+        
+    }
+    
+    if ([msg mediaUrl] != nil) {
+        if ([[msg text] length] > 0) {
+            CGSize sizeText = [TextUtil GetContentSizeForText:[msg text] inSize:size];
+            height += sizeText.height + 4;
+        }
     }
     return height;
 }

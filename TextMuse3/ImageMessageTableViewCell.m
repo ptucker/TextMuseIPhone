@@ -8,6 +8,7 @@
 
 #import "ImageMessageTableViewCell.h"
 #import "ImageUtil.h"
+#import "TextUtil.h"
 
 @implementation ImageMessageTableViewCell
 
@@ -21,6 +22,20 @@ UIImage* imgLoading;
               title:(NSString*)title
            sponsor:(SponsorInfo *)sponsor
             message:(Message*)msg {
+    UIImage* img = nil;
+    bool loading = [msg img] == nil;
+    if (!loading)
+        img = [UIImage imageWithData:[msg img]];
+    else {
+        if (imgLoading == nil) {
+            imgLoading = [UIImage imageNamed:@"TransparentButterfly"];
+            imgLoading = [ImageUtil applyAlpha:0.70 toImage:imgLoading];
+        }
+        img = imgLoading;
+        [[msg loader] addImageView:imgContent];
+        [[msg loader] addTableView:_tableView];
+    }
+    
     [super showForSize:size
            usingParent:nav
              withColor:color
@@ -30,19 +45,17 @@ UIImage* imgLoading;
                sponsor:sponsor
                message:msg];
     
-    UIImage* img = nil;
-    if ([msg img] != nil)
-        img = [UIImage imageWithData:[msg img]];
-    else {
-        if (imgLoading == nil) {
-            imgLoading = [UIImage imageNamed:@"TransparentButterfly"];
-            imgLoading = [ImageUtil applyAlpha:0.70 toImage:imgLoading];
-        }
-        img = imgLoading;
-    }
+    CGSize sizeTemplate = CGSizeMake(size.width-16, size.height);
+    CGSize sizeText = [TextUtil GetContentSizeForText:[msg text]
+                                               inSize:CGSizeMake(sizeTemplate.width,sizeTemplate.height)];
+    CGSize sizeImg = CGSizeMake(sizeTemplate.width, 93);
+    if (!loading)
+        sizeImg = [ImageUtil GetContentSizeForImage:img inSize:sizeTemplate];
     
-    CGRect frmContentImage = CGRectMake(0, 0, frmParent.size.width, frmParent.size.height);
-    CGRect frmContentLabel = CGRectMake(8, frmParent.size.height - 21, frmParent.size.width-16, 21);
+    CGRect frmContentImage = CGRectMake((sizeTemplate.width-sizeImg.width)/2, 0, sizeImg.width,
+                                        sizeImg.height);
+    CGRect frmContentLabel = CGRectMake((sizeTemplate.width - sizeText.width)/2, sizeImg.height+4,
+                                        sizeText.width, sizeText.height);
     CGRect frmContentFrame = CGRectMake(0, frmParent.size.height - 21, frmParent.size.width, 21);
     frmLogo = CGRectMake(frmContentFrame.size.width - 41, 13, 21, 21);
     
@@ -50,13 +63,14 @@ UIImage* imgLoading;
 
     if ([[msg text] length] > 0) {
         UIView* vFrame = [[UIView alloc] initWithFrame:frmContentFrame];
-        [vFrame setBackgroundColor:[UIColor darkGrayColor]];
-        [vFrame setAlpha:0.80];
+        //[vFrame setBackgroundColor:[UIColor darkGrayColor]];
+        //[vFrame setAlpha:0.80];
         [viewParent addSubview:vFrame];
         [viewParent bringSubviewToFront:vFrame];
         
         [lblContent setHidden:NO];
-        [lblContent setTextColor:[UIColor whiteColor]];
+        [lblContent setNumberOfLines:0];
+        [lblContent setTextColor:[UIColor blackColor]];
         [lblContent setTextAlignment:NSTextAlignmentCenter];
         [viewParent bringSubviewToFront:lblContent];
     }
@@ -64,11 +78,6 @@ UIImage* imgLoading;
         [lblContent setHidden:YES];
     }
     
-    if ([msg img] == nil) {
-        [[msg loader] addImageView:imgContent];
-        [[msg loader] addTableView:_tableView];
-    }
-
     [lblContent setFrame:frmContentLabel];
     [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
 

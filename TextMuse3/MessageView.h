@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Message.h"
+#import "SendMessage.h"
 #import "UICaptionButton.h"
 #import "FLAnimatedImage.h"
 
@@ -18,17 +19,53 @@
     UIButton* imgContent;
     UILabel* lblContent;
     UITextView* tvContent;
-    UICaptionButton* btnLike;
-    UICaptionButton* btnPin;
-    UICaptionButton* btnDetails;
+    //UICaptionButton* btnLike;
+    //UICaptionButton* btnPin;
+    UIButton* btnDetails;
+    UIButton* btnText;
+    UIButton* btnFollow;
     
     Message* message;
 }
 
 @property (readwrite) id objSendMessage;
 @property (readwrite) SEL selSendMessage;
+@property (readwrite) bool showBadges;
+@property (readwrite) bool isFullScreen;
 
 -(void)setupViewForMessage:(Message *)msg inFrame:(CGRect)frame withColor:(UIColor*)color index:(long)i;
--(void)setupImageForMessage:(Message*)msg inFrame:(CGRect)frame;
+
+//-(void)setLikeButtonForMessage:(Message*)msg inView:(UIView*)subview;
+//-(void)setPinButtonForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setTextItButtonForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setSeeItButtonForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setFollowButtonForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setDetailsTextForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setDetailsForMessage:(Message*)msg inView:(UIView*)subview;
+
+-(IBAction)close:(id)sender;
+
++(MessageView*)setupViewForMessage:(Message*)msg
+                           inFrame:(CGRect)frame
+                        withBadges:(bool) b
+                        fullScreen:(bool)f
+                         withColor:(UIColor*)color
+                             index:(long)i;
+
++(MessageView*)setupViewForMessage:(Message*)msg
+                        withBadges:(bool) b
+                        fullScreen:(bool)f
+                           inFrame:(CGRect)frame;
 
 @end
+
+extern UIImage* bubble1;
+extern UIImage* bubble2;
+extern UIImage* bubble3;
+extern UIImage* leftQuote;
+extern UIImage* rightQuote;
+extern UIImage* likeRed;
+extern UIImage* likeGrey;
+extern UIImage* pinRed;
+extern UIImage* pinGrey;
+extern UIImage* openInNew;

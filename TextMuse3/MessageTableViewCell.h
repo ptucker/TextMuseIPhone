@@ -40,7 +40,6 @@
     IBOutlet UICaptionButton* btnSend;
 }
 
-+(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent;
 +(CGFloat) GetCellHeightForMessage:(Message*)msg inSize:(CGSize)size;
 
 -(void)showForSize:(CGSize)size

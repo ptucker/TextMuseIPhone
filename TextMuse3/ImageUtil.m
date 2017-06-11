@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 LaLoosh. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "ImageUtil.h"
 
 @implementation ImageUtil
@@ -53,5 +52,37 @@
     return grayScaleImage;
 }
 
++(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent {
+    return [self GetContentSizeForImage:img inSize:sizeParent forCell:YES];
+}
+
++(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent forCell:(bool)cell {
+    CGFloat heightParent = sizeParent.height;// 133;
+    CGFloat widthParent = sizeParent.width;
+    CGSize size = [img size];
+    CGFloat ratio = size.height / size.width;
+    if (size.height > heightParent && size.width <= widthParent)
+        heightParent = size.height;
+    else
+        heightParent = ratio * widthParent;
+
+    if (cell && heightParent > (sizeParent.height / 2.5)) {
+        heightParent = (sizeParent.height / 2.5);
+        widthParent = (1/ratio) * heightParent;
+    }
+    
+    return CGSizeMake(widthParent, heightParent);
+}
+
++ (UIImage *) imageFromColor:(UIColor *)color {
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
 
 @end

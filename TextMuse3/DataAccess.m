@@ -420,11 +420,13 @@ const int HIDEMESSAGE = 1000;
         [cs addObject:m];
 
 #ifdef UNIVERSITY
+    /*
     if (localImages != nil && [localImages count] > 0)
         [cs addObject:NSLocalizedString(@"Your Photos Title", nil)];
     [cs addObject:NSLocalizedString(@"Your Messages Title", nil)];
     if (SaveRecentMessages && [RecentMessages count] > 0)
         [cs addObject:NSLocalizedString(@"Recent Messages Title", nil)];
+     */
 #endif
     
     return cs;
@@ -801,9 +803,14 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         [Skin setSkinName:[attributeDict objectForKey:@"name"]];
         [Skin setMasterName:[attributeDict objectForKey:@"master"]];
         [Skin setMasterBadgeURL:[attributeDict objectForKey:@"masterurl"]];
+        /*
         [Skin setColor1:[attributeDict objectForKey:@"c1"]];
         [Skin setColor2:[attributeDict objectForKey:@"c2"]];
         [Skin setColor3:[attributeDict objectForKey:@"c3"]];
+         */
+        [Skin setColor1:[SkinInfo Color1TextMuse]];
+        [Skin setColor2:[SkinInfo Color2TextMuse]];
+        [Skin setColor3:[SkinInfo Color3TextMuse]];
         [Skin setHomeURL:[attributeDict objectForKey:@"home"]];
         [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
         [Skin setMainWindowTitle:[attributeDict objectForKey:@"title"]];
@@ -911,6 +918,10 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentUrl = nil;
         currentSponsorName = nil;
         currentSponsorLogo = nil;
+        currentSendCount = nil;
+        currentVisitCount = nil;
+        currentBadgeURL = nil;
+        currentWinnerText = nil;
     }
     else if ([elementName isEqualToString:@"t"])
         xmldata = [[NSMutableString alloc] init];
@@ -920,7 +931,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         xmldata = [[NSMutableString alloc] init];
     else if ([elementName isEqualToString:@"text"] || [elementName isEqualToString:@"media"] ||
              [elementName isEqualToString:@"url"] || [elementName isEqualToString:@"sp_name"] ||
-             [elementName isEqualToString:@"sp_logo"])
+             [elementName isEqualToString:@"sp_logo"] || [elementName isEqualToString:@"send"] ||
+             [elementName isEqualToString:@"visit"] || [elementName isEqualToString:@"winner"] ||
+             [elementName isEqualToString:@"badge"])
         partsdata = [[NSMutableString alloc] init];
 }
 
@@ -960,6 +973,12 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [msg setSponsorID:sponsorID];
             [msg setSponsorName:currentSponsorName];
             [msg setSponsorLogo:currentSponsorLogo];
+            if (currentSendCount != nil)
+                [msg setSendcount:[currentSendCount intValue]];
+            if (currentVisitCount != nil)
+                [msg setVisitcount:[currentVisitCount intValue]];
+            [msg setBadgeURL:currentBadgeURL];
+            [msg setWinnerText:currentWinnerText];
             [msg setFollowing:following];
             if (following)
                 [SponsorFollows addObject:[NSString stringWithFormat:@"spon%@", sponsorID]];
@@ -1018,6 +1037,14 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:currentSponsorLogo];
         [loader load];
     }
+    else if ([elementName isEqualToString:@"send"] && [partsdata length] > 0)
+        currentSendCount = partsdata;
+    else if ([elementName isEqualToString:@"visit"] && [partsdata length] > 0)
+        currentVisitCount = partsdata;
+    else if ([elementName isEqualToString:@"winner"] && [partsdata length] > 0)
+        currentWinnerText = partsdata;
+    else if ([elementName isEqualToString:@"badge"] && [partsdata length] > 0)
+        currentBadgeURL = partsdata;
 }
 
 -(BOOL)isPinned:(Message*)msg {

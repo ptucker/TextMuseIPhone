@@ -7,9 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface ImageUtil : NSObject
 
 +(UIImage*) scaleImage:(UIImage*)img forFrame:(CGRect)frame;
-+ (UIImage *)applyAlpha:(CGFloat) alpha toImage:(UIImage *)image;
++(UIImage *)applyAlpha:(CGFloat) alpha toImage:(UIImage *)image;
++(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent;
++(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent forCell:(bool)cell;
++(UIImage *) imageFromColor:(UIColor *)color;
 @end

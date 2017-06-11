@@ -222,12 +222,19 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
         if (frame.origin.x < minx || frame.origin.x > maxx) {
             //CGRect first = msgviews[1].frame;
             Message* msg = [msgs objectAtIndex:i];
+            /*
             MessageView* mv = [[MessageView alloc] initWithFrame:frame];
             
             [mv setupViewForMessage:msg
                             inFrame:frame
                           withColor:[colors objectAtIndex:CurrentColorIndex]
                               index:CurrentColorIndex];
+             */
+            MessageView* mv = [MessageView setupViewForMessage:msg
+                                                       inFrame:frame
+                                                    withBadges:NO
+                                                    fullScreen:NO
+                                                     withColor:[colors objectAtIndex:i] index:CurrentColorIndex];
             [mv setObjSendMessage:self];
             [mv setSelSendMessage:@selector(chooseMessage:)];
             
@@ -352,9 +359,9 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     //long p = [pages currentPage];
     CGFloat pageWidth = [scrollview frame].size.width;
     int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+    NSArray* ms = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
                                         [Data getMessagesForCategory:CurrentCategory];
-    CurrentMessage = [msgs objectAtIndex:p];
+    CurrentMessage = [ms objectAtIndex:p];
 
     if ([[Data getContacts] count] == 0) {
         if (sendMessage == nil)

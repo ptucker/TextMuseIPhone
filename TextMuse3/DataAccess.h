@@ -55,7 +55,8 @@
     BOOL following;
     NSString* sponsorID;
     NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate,
-                *currentSponsorName, *currentSponsorLogo;
+                *currentSponsorName, *currentSponsorLogo, *currentBadgeURL, *currentWinnerText,
+                *currentSendCount, *currentVisitCount;
     
     //NSString* documentdir;
     

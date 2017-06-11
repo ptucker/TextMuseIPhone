@@ -79,6 +79,10 @@
 @property (nonatomic, readwrite) BOOL following;
 @property (nonatomic, readonly, copy) NSString* sponsorUrl;
 @property (nonatomic, readonly, copy) NSString* sponsorIcon;
+@property (nonatomic, readwrite) int sendcount;
+@property (nonatomic, readwrite) int visitcount;
+@property (nonatomic, readwrite, copy) NSString* winnerText;
+@property (nonatomic, readwrite, copy) NSString* badgeURL;
 
 -(id)initWithId:(int)i text:(NSString *)t mediaUrl:(NSString*)murl url:(NSString*)u
     forCategory:(NSString*)c isNew:(BOOL)n;

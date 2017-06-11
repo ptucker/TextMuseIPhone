@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GlobalState.h"
 #import "ImageDownloader.h"
+#import "SendMessage.h"
 
 extern NSArray* colors;
 extern NSArray* colorsText;
@@ -23,6 +24,7 @@ DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     IBOutlet UIButton* btnHome;
     IBOutlet UIButton* btnBadges;
     IBOutlet UIButton* btnGroup;
+    IBOutlet UIButton* btnCategoryList;
     UITableView* categoryTable;
     UIRefreshControl *refreshControl;
     UIView* splash;
@@ -34,6 +36,8 @@ DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     NSArray* pinnedMessages;
     BOOL showPinned;
     BOOL showEvents;
+    SendMessage* sendMessage;
+    NSString* categoryFilter;
 }
 
 -(IBAction) showBadges:(id)sender;

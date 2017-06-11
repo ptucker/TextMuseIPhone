@@ -12,11 +12,13 @@
 #import "TextMessageTableViewCell.h"
 #import "MessageCategory.h"
 #import "Message.h"
+#import "TextUtil.h"
 #import "ImageDownloader.h"
 #import "Settings.h"
 #import "ChooseSkinView.h"
 #import "UICheckButton.h"
 #import "ContactsTableViewController.h"
+#import "MessageView.h"
 
 NSArray* colors;
 NSArray* colorsText;
@@ -35,7 +37,7 @@ const int maxRecentIDs = 10;
     
     [self defaultSkin];
     
-    int messagesHeight = [[self view] frame].size.height - 65 - 40;
+    int messagesHeight = [[self view] frame].size.height - 95;
 #ifdef HUMANIX
     [[self navigationItem] setTitle:@"Hire Me Northwest"];
 #endif
@@ -45,7 +47,11 @@ const int maxRecentIDs = 10;
     messagesHeight += 40;
 #endif
     
-    CGRect frmMessages = CGRectMake(0, 65, [[self view] frame].size.width, messagesHeight);
+    categoryFilter = @"all";
+    
+    [self setupCategoryButton];
+    
+    CGRect frmMessages = CGRectMake(0, 95, [[self view] frame].size.width, messagesHeight);
     messages = [[UITableView alloc] initWithFrame:frmMessages];
     [[self view] addSubview:messages];
     showPinned = false;
@@ -88,14 +94,14 @@ const int maxRecentIDs = 10;
     
     [messages setBackgroundColor:[UIColor whiteColor]];
     
-    UIImage* o = [UIImage imageNamed:@"menu"];
+    UIImage* o = [UIImage imageNamed:@"gear"];
     UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                           scale:48.0/30
+                                           scale:73.0/30
                                      orientation:(o.imageOrientation)];
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
-                                                                  action:@selector(showCategoryList:)];
+                                                                  action:@selector(settings:)];
     [[self navigationItem] setLeftBarButtonItem:leftButton];
     
     [[btnHome imageView] setContentMode:UIViewContentModeScaleAspectFit];
@@ -170,7 +176,10 @@ const int maxRecentIDs = 10;
     
     if (colors == nil)
         //Green, Orange, Blue
-        colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
+        colors = [NSArray arrayWithObjects: [SkinInfo createColor:[SkinInfo Color1TextMuse]],
+                  [SkinInfo createColor:[SkinInfo Color2TextMuse]],
+                  [SkinInfo createColor:[SkinInfo Color3TextMuse]],
+                  nil];
     if (colorsTitle == nil)
         colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
                        [colors objectAtIndex:2], nil];
@@ -179,6 +188,7 @@ const int maxRecentIDs = 10;
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    /*
     //Show splash screen for 2 seconds
 #ifdef UNIVERSITY
     if (splash == nil) {
@@ -195,6 +205,7 @@ const int maxRecentIDs = 10;
                                         repeats:NO];
     }
 #endif
+     */
     
     [self jumpToMessage];
 }
@@ -394,7 +405,7 @@ const int maxRecentIDs = 10;
         title = @"Oodles";
 #endif
         if (title == nil)
-            title = [NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]];
+            title = @"TextMuse";// [NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]];
         [[self navigationItem] setTitle:title];
         
         /*
@@ -437,19 +448,64 @@ const int maxRecentIDs = 10;
         [[self navigationItem] setLeftBarButtonItem:leftButton];
          */
     }
+    
+    [self setupCategoryButton];
+}
+
+-(void) setupCategoryButton {
+    CGRect frmCategoryListBtn = CGRectMake(0, 65, [[self view] frame].size.width, 30);
+    if (btnCategoryList != nil)
+        [btnCategoryList removeFromSuperview];
+
+    UIFont* fntTitle = [UIFont fontWithName:@"Lato-Medium" size:20];
+    btnCategoryList = [[UIButton alloc] initWithFrame:frmCategoryListBtn];
+    [btnCategoryList setBackgroundColor:[UIColor lightGrayColor]];
+    CGRect frmTitle;
+    if (Skin != nil && [Skin SkinName] != nil) {
+        CGSize sizeLabel = [TextUtil GetContentSizeForText:[Skin SkinName]
+                                                    inSize:frmCategoryListBtn.size
+                                                   forFont:fntTitle];
+        frmTitle = CGRectMake((frmCategoryListBtn.size.width - sizeLabel.width) / 2, 3,
+                                     sizeLabel.width, sizeLabel.height);
+        UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
+        [lblTitle setText:[Skin SkinName]];
+        [btnCategoryList addSubview:lblTitle];
+        
+        UIImageView* img = [[UIImageView alloc] initWithFrame:CGRectMake(frmTitle.origin.x - 32,
+                                                                         3, 24, 24)];
+        [btnCategoryList addSubview:img];
+        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
+                                                            forImgView:img];
+        [loader load];
+    }
+    else {
+        CGSize sizeLabel = [TextUtil GetContentSizeForText:@"Categories"
+                                                    inSize:frmCategoryListBtn.size
+                                                   forFont:fntTitle];
+        frmTitle = CGRectMake((frmCategoryListBtn.size.width - sizeLabel.width) / 2, 3,
+                                     sizeLabel.width, sizeLabel.height);
+        UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
+        [lblTitle setText:@"Categories"];
+        [btnCategoryList addSubview:lblTitle];
+    }
+    UIImageView* imgDown = [[UIImageView alloc] initWithFrame:CGRectMake(frmTitle.origin.x + frmTitle.size.width + 4, 3, 24, 24)];
+    [imgDown setImage:[UIImage imageNamed:@"ic_details"]];
+    [btnCategoryList addTarget:self action:@selector(showCategoryList:)
+              forControlEvents:UIControlEventTouchUpInside];
+    [btnCategoryList addSubview:imgDown];
+
+    [[self view] addSubview:btnCategoryList];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    BOOL supportPinned = YES;
-#ifdef OODLES
-    supportPinned = NO;
-#endif
     if (tableView == categoryTable)
-        return [[Data getCategories] count] + (supportPinned ? 2 : 1); //add one for pinned category and one for settings
+        return [[Data getCategories] count] + 1;
     else if (showPinned)
         return [pinnedMessages count];
     else if (showEvents)
         return [[Data getEventMessages] count];// [[Data getMessagesForCategory:@"Events"] count];
+    else if (![categoryFilter isEqualToString:@"all"])
+        return [[Data getMessagesForCategory:categoryFilter] count];
     else
         return [[Data getAllMessages] count];
 }
@@ -464,6 +520,8 @@ const int maxRecentIDs = 10;
         else if (showEvents)
             //[[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
             msg = [[Data getEventMessages] objectAtIndex:[indexPath row]];
+        else if (![categoryFilter isEqualToString:@"all"])
+            msg = [[Data getMessagesForCategory:categoryFilter] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
@@ -472,7 +530,7 @@ const int maxRecentIDs = 10;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
-        return [self createCategoryCell:[indexPath row] forWidth:[tableView frame].size.width];
+        return [self createCategoryCell:[indexPath row] forWidth:([[self view] frame].size.width / 2)];
     }
     else {
         static NSString *TextCellIdentifier = @"txtmessages";
@@ -483,6 +541,8 @@ const int maxRecentIDs = 10;
         else if (showEvents)
              //[[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
             msg = [[Data getEventMessages] objectAtIndex:[indexPath row]];
+        else if (![categoryFilter isEqualToString:@"all"])
+            msg = [[Data getMessagesForCategory:categoryFilter] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         
@@ -497,7 +557,7 @@ const int maxRecentIDs = 10;
         }
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell showForSize:[[self view] frame].size
+        [cell showForSize:[tableView frame].size
               usingParent:self
                  withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
                  textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
@@ -512,25 +572,16 @@ const int maxRecentIDs = 10;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
-        BOOL supportPinned = YES;
-#ifdef OODLES
-        supportPinned = NO;
-#endif
-        if ([indexPath row] == 0) {
-            [self settings:nil];
-            [self hideCategoryList];
-            return;
-        }
-        else if ([indexPath row] == 1 && supportPinned) {
-            [self showPinned:nil];
-            [self hideCategoryList];
-            return;
-        }
-        else {
-            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-            CurrentCategory = [[cell textLabel] text];
-            CurrentMessage = nil;
-        }
+        UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+        CurrentCategory = [[cell textLabel] text];
+        categoryFilter = [[cell textLabel] text];
+        CurrentMessage = nil;
+
+        CurrentColorIndex = [indexPath row] % [colors count];
+        
+        [self hideCategoryList];
+        
+        [messages reloadData];
     }
     else {
         if (showPinned)
@@ -538,72 +589,67 @@ const int maxRecentIDs = 10;
         else if (showEvents)
             // [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
             CurrentMessage = [[Data getEventMessages] objectAtIndex:[indexPath row]];
+        else if (![categoryFilter isEqualToString:@"all"])
+            CurrentMessage = [[Data getMessagesForCategory:categoryFilter] objectAtIndex:[indexPath row]];
         else
             CurrentMessage = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         CurrentCategory = showPinned ? @"PinnedMessages" : [CurrentMessage category];
+
+        [self hideCategoryList];
+
+        //[self performSegueWithIdentifier:@"SelectMessage" sender:self];
+        
+        [self animateMessage];
     }
-    
-    CurrentColorIndex = [indexPath row] % [colors count];
-    
-    [self hideCategoryList];
-    
-    [self performSegueWithIdentifier:@"SelectMessage" sender:self];
 }
+
+-(void) animateMessage {
+    CGFloat top = 60;
+    CGRect frmEnd = [[self view] frame];
+    frmEnd.origin.y += top;
+    frmEnd.size.height -= top;
+    CGRect frmStart = frmEnd;
+    frmStart.origin.y -= frmStart.size.height;
+    MessageView* mv = [MessageView setupViewForMessage:CurrentMessage
+                                               inFrame:frmEnd
+                                            withBadges:YES
+                                            fullScreen:YES
+                                             withColor:[colors objectAtIndex:CurrentColorIndex]
+                                                 index:CurrentColorIndex];
+
+    [mv setObjSendMessage:self];
+    [mv setSelSendMessage:@selector(chooseMessage:)];
+    [mv setFrame: frmStart];
+    [[self view] addSubview:mv];
+    
+    [UIView animateWithDuration:0.5
+                     animations: ^{ [mv setFrame: frmEnd]; }
+                     completion: nil];
+}
+
+-(IBAction)chooseMessage:(id)sender {
+    if ([[Data getContacts] count] == 0) {
+        if (sendMessage == nil)
+            sendMessage = [[SendMessage alloc] init];
+        [sendMessage sendMessageTo:nil from:self];
+    }
+    else
+        [self performSegueWithIdentifier:@"ChooseContact" sender:self];
+}
+
 
 -(UITableViewCell*)createCategoryCell:(long)iCategory forWidth:(CGFloat)width {
-    BOOL supportPinned = YES;
-#ifdef OODLES
-    supportPinned = NO;
-#endif
     UITableViewCell* cell = [[UITableViewCell alloc] init];
-    [cell setBackgroundColor:[UIColor blackColor]];
-    [[cell textLabel] setTextColor:[UIColor whiteColor]];
-    NSString* categoryName = nil;
-    if (iCategory == 0)
-        categoryName = @"Settings";
-    else if (iCategory == 1 && supportPinned)
-        categoryName = @"Pinned";
-    else
-        categoryName = [[Data getCategories] objectAtIndex:iCategory- (supportPinned ? 2 : 1)];
+    [cell setBackgroundColor:[UIColor lightGrayColor]];
+    [[cell textLabel] setTextColor:[UIColor blackColor]];
+    NSString* categoryName = (iCategory == 0) ? @"all" : [[Data getCategories] objectAtIndex:iCategory-1];
     [[cell textLabel] setText:categoryName];
-    
-    if (!(iCategory == 0 || iCategory == 1 || [[Data getRequiredCategories] containsObject:categoryName])) {
-        CGRect frmCheck = CGRectMake(width-46, 2, 42, 42);
-        UICheckButton* chk = [[UICheckButton alloc] initWithFrame:frmCheck];
-        [chk setExtra:categoryName];
-        [chk addTarget:self action:@selector(chooseCategory:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [cell addSubview:chk];
-        if ([CategoryList objectForKey:categoryName] == nil)
-            [CategoryList setObject:@"1" forKey:categoryName];
-        BOOL selected = ![[CategoryList objectForKey:categoryName] isEqualToString: @"0"];
-        [chk setSelected:selected];
-    }
+    if (categoryName == categoryFilter)
+        [[cell textLabel] setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
+    else
+        [[cell textLabel] setFont:[UIFont fontWithName:@"Lato-Light" size:20]];
     
     return cell;
-}
-
--(IBAction)chooseCategory:(id)sender {
-    UICheckButton* chk = (UICheckButton*)sender;
-    [chk setSelected:![chk isSelected]];
-    
-    if ([[CategoryList objectForKey:[chk extra]] isEqualToString:@"0"]) {
-        [CategoryList setObject:@"1" forKey:[chk extra]];
-        [SqlDb addChosenCategory:[chk extra]];
-    }
-    else {
-        [CategoryList setObject:@"0" forKey:[chk extra]];
-        [SqlDb removeChosenCategory:[chk extra]];
-    }
-
-    //[Settings SaveSetting:SettingCategoryList withValue:CategoryList];
-    for (NSString*c in [Data getCategories]) {
-        MessageCategory*mc = [Data getCategory:c];
-        [mc setChosen:![[CategoryList objectForKey:c] isEqualToString:@"0"]];
-    }
-    
-    [Data resortMessages];
-    [self dataRefresh];
 }
 
 -(IBAction)home:(id)sender {
@@ -683,13 +729,16 @@ const int maxRecentIDs = 10;
     if (categoryTable == nil) {
         UIView* parent = [messages superview];
         CGRect frmTable = [messages frame];
-        frmTable.size.width = frmTable.size.width * 0.8;
+        frmTable.size.width = 2*[messages frame].size.width / 3;
+        frmTable.origin.x = [messages frame].size.width / 6;
+        //frmTable.size.height = 2*[messages frame].size.height / 3;
+        frmTable.size.height = MIN(46*([[Data getCategories] count]+1), [messages frame].size.height-50);
         CGRect frmNext = frmTable;
-        frmTable.origin.x = -frmTable.size.width;
+        frmTable.size.height = 0;
         categoryTable = [[UITableView alloc] initWithFrame:frmTable];
         [categoryTable setDelegate:self];
         [categoryTable setDataSource:self];
-        [categoryTable setBackgroundColor:[UIColor blackColor]];
+        [categoryTable setBackgroundColor:[UIColor lightGrayColor]];
         
         [parent addSubview:categoryTable];
         [UIView animateWithDuration:0.5 animations:^{[categoryTable setFrame:frmNext];}];
@@ -701,7 +750,7 @@ const int maxRecentIDs = 10;
 
 -(void)hideCategoryList {
     CGRect frmNext = [categoryTable frame];
-    frmNext.origin.x = -frmNext.size.width;
+    frmNext.size.height = 0;
     [UIView animateWithDuration:0.5
                      animations:^{[categoryTable setFrame:frmNext];}
                      completion:^(BOOL finished){
