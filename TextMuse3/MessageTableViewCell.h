@@ -35,9 +35,9 @@
     IBOutlet UILabel* lblTitle;
     IBOutlet UIImageView* imgLogo;
     IBOutlet UIButton* btnSeeAll;
-    IBOutlet UICaptionButton* btnLike;
-    IBOutlet UICaptionButton* btnPin;
-    IBOutlet UICaptionButton* btnSend;
+    IBOutlet UIButton* btnLike;
+    //IBOutlet UICaptionButton* btnPin;
+    IBOutlet UIButton* btnSend;
 }
 
 +(CGFloat) GetCellHeightForMessage:(Message*)msg inSize:(CGSize)size;

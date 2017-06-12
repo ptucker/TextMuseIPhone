@@ -197,39 +197,43 @@ UIImage* openInNew = nil;
 }
 
 -(void)setDetailsTextForMessage:(Message*)msg inView:(UIView*)subview {
+    CGFloat textTop = 10;
+    if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
+        for (int i=1; i<=3; i++) {
+            UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake(i*60, 10, 48, 48)];
+            [subview addSubview:imgBadge];
+            ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[msg badgeURL]
+                                                                forImgView:imgBadge];
+            [loader load];
+        }
+        textTop += 48;
+    }
+
     NSString* twotier = [msg sendcount] != 0 ?
-        [NSString stringWithFormat:@"Send to %d friends: %@", [msg sendcount], [msg winnerText]] : @"";
+        [NSString stringWithFormat:@"Text to %d: %@", [msg sendcount], [msg winnerText]] : @"";
     NSString* threetier = [msg visitcount] != 0 ?
-        [NSString stringWithFormat:@"Visit with %d friends who also have the badge to get an even better deal", [msg visitcount]] : @"";
+        [NSString stringWithFormat:@"Come with %d badges for an even better deal", [msg visitcount]] : @"";
     
     UIFont* fontDetails = [UIFont fontWithName:@"Lato-Light" size:18];
     
-    CGSize frameText = CGSizeMake([subview frame].size.width - 100, [subview frame].size.height);
+    CGSize frameText = CGSizeMake([subview frame].size.width - 140, [subview frame].size.height);
     CGSize szTwo = [TextUtil GetContentSizeForText:twotier inSize:frameText forFont:fontDetails];
     CGSize szThree = [TextUtil GetContentSizeForText:threetier inSize:frameText forFont:fontDetails];
     
-    UILabel* lblTwo = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, szTwo.width, szTwo.height)];
+    UILabel* lblTwo = [[UILabel alloc] initWithFrame:CGRectMake(10, textTop, szTwo.width, szTwo.height)];
     [lblTwo setText:twotier];
     [lblTwo setNumberOfLines:0];
     [lblTwo setFont:fontDetails];
     [lblTwo setTextColor:[UIColor blackColor]];
     [subview addSubview:lblTwo];
 
-    UILabel* lblThree = [[UILabel alloc] initWithFrame:CGRectMake(10, szTwo.height + 10,
+    UILabel* lblThree = [[UILabel alloc] initWithFrame:CGRectMake(10, szTwo.height + textTop,
                                                                   szThree.width, szThree.height)];
     [lblThree setText:threetier];
     [lblThree setNumberOfLines:0];
     [lblThree setFont:fontDetails];
     [lblThree setTextColor:[UIColor blackColor]];
     [subview addSubview:lblThree];
-    
-    if ([msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
-        UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake([subview frame].size.width - 120, 160, 48, 48)];
-        [subview addSubview:imgBadge];
-        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[msg badgeURL]
-                                                            forImgView:imgBadge];
-        [loader load];
-    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

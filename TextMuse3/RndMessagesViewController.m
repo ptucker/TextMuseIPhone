@@ -760,9 +760,9 @@ const int maxRecentIDs = 10;
 }
 
 -(void)showWalkthrough {
-    CGRect frmView = [[self view] frame];
-    frmView.origin.y += 60;
-    frmView.size.height -= 60;
+    CGRect frmView = [messages frame];// [[self view] frame];
+    //frmView.origin.y += 60;
+    //frmView.size.height -= 60;
     walkthroughView = [[UIView alloc] initWithFrame:frmView];
     [walkthroughView setBackgroundColor:[UIColor whiteColor]];
     [[self view] addSubview:walkthroughView];

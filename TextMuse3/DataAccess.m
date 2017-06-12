@@ -944,7 +944,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
     else if ([currentElement isEqualToString:@"text"] || [currentElement isEqualToString:@"media"] ||
              [currentElement isEqualToString:@"url"])
          [partsdata appendString:string];
-    else if ([currentElement isEqualToString:@"sp_name"] || [currentElement isEqualToString:@"sp_logo"])
+    else if ([currentElement isEqualToString:@"sp_name"] || [currentElement isEqualToString:@"sp_logo"] ||
+             [currentElement isEqualToString:@"send"]  || [currentElement isEqualToString:@"visit"] ||
+             [currentElement isEqualToString:@"winner"] || [currentElement isEqualToString:@"badge"])
         [partsdata appendString:string];
 }
 
