@@ -37,7 +37,6 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     }
     
     frmTitle = CGRectMake(35, 8, size.width - 8 - 35, 21);
-    frmSeeAll = CGRectMake(size.width - 14 - 8, 8, 14, 21);
     frmLike = CGRectMake(8, bottomY, 84, 21);
     frmPin = CGRectMake(size.width/2 - 46, bottomY, 92, 21);
     frmSend = CGRectMake(size.width - 8 - 84, bottomY, 84, 21);
@@ -79,17 +78,6 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     }
     [imgLogo setFrame:frmLogo];
 #endif
-    if (btnSeeAll == nil) {
-        btnSeeAll = [[UIButton alloc] initWithFrame:frmSeeAll];
-        [[btnSeeAll titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
-        [btnSeeAll setTitleColor:colorTitle forState:UIControlStateNormal];
-        [btnSeeAll setTitle:@">" forState:UIControlStateNormal];
-        
-        [btnSeeAll addTarget:self action:@selector(showCategory:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [self addSubview:btnSeeAll];
-    }
-    [btnSeeAll setFrame:frmSeeAll];
     /*
     if (btnLike == nil) {
         //NSString* clike = [msg likeCount] != 0 ? [NSString stringWithFormat:@"%d", [msg likeCount]] : @"";
@@ -152,7 +140,10 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
     }
     [btnSend setFrame:frmSend];
     
-    [lblTitle setText:[msg category]];
+    NSString* titletext = [msg category];
+    if ([[msg sponsorName] length] > 0)
+        titletext = [NSString stringWithFormat:@"%@/%@", [msg category], [msg sponsorName]];
+    [lblTitle setText:titletext];
     [lblTitle setTextColor:[UIColor darkGrayColor]];
     [lblContent setTextColor:[UIColor darkGrayColor]];
     //[lblTitle setTextColor:colorTitle];

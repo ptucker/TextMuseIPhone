@@ -56,7 +56,7 @@
     NSString* sponsorID;
     NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate,
                 *currentSponsorName, *currentSponsorLogo, *currentBadgeURL, *currentWinnerText,
-                *currentSendCount, *currentVisitCount;
+                *currentVisitWinnerText, *currentSendCount, *currentVisitCount;
     
     //NSString* documentdir;
     

@@ -17,6 +17,9 @@
 #import "UICaptionButton.h"
 #import "AppDelegate.h"
 
+//#define BUTTONSSIDE
+#define BUTTONSBOTTOM
+
 NSString* urlFollowSponsor = @"http://www.textmuse.com/admin/following.php";
 
 @implementation MessageView
@@ -71,9 +74,16 @@ UIImage* openInNew = nil;
                                       index:-1];
 }
 
--(id)init {
+-(id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
     [self setShowBadges:NO];
     [self setIsFullScreen:NO];
+    
+    UISwipeGestureRecognizer* swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                                                action:@selector(close:)];
+    [swipe setDirection:UISwipeGestureRecognizerDirectionUp];
+    [swipe setDelaysTouchesBegan:YES];
+    [self addGestureRecognizer:swipe];
     
     return self;
 }
@@ -134,13 +144,20 @@ UIImage* openInNew = nil;
     [self setTextItButtonForMessage:msg inView:subview];
     [self setSeeItButtonForMessage:msg inView:subview];
     [self setFollowButtonForMessage:msg inView:subview];
-    
+
     [self setDetailsTextForMessage:msg inView:subview];
 }
 
 -(void)setTextItButtonForMessage:(Message*)msg inView:(UIView *)subview {
+    CGRect frmView = [subview frame];
     if (btnText == nil) {
-        CGRect frmButton = CGRectMake([subview frame].size.width - 120, 10, 112, 32);
+#ifdef BUTTONSSIDE
+        CGRect frmButton = CGRectMake(frmView.size.width - 120, 10, 112, 32);
+#endif
+#ifdef BUTTONSBOTTOM
+        CGFloat buttonWidth = frmView.size.width / 4;
+        CGRect frmButton = CGRectMake(10, 10, buttonWidth, 32);
+#endif
         btnText = [[UIButton alloc] initWithFrame:frmButton];
         [btnText setTitle:@"Text It" forState:UIControlStateNormal];
         [self setPropsForButton:btnText withColor:[SkinInfo Color1TextMuse]];
@@ -151,11 +168,19 @@ UIImage* openInNew = nil;
 }
 
 -(void)setSeeItButtonForMessage:(Message*)msg inView:(UIView *)subview {
+    CGRect frmView = [subview frame];
 #ifndef OODLES
     if (btnDetails == nil) {
-        CGRect frmButton = CGRectMake([subview frame].size.width - 120, 50, 112, 32);
+#ifdef BUTTONSSIDE
+        CGRect frmButton = CGRectMake(frmView.size.width - 120, 50, 112, 32);
+#endif
+#ifdef BUTTONSBOTTOM
+        CGFloat buttonWidth = frmView.size.width / 4;
+        CGFloat x = (frmView.size.width / 2) - (buttonWidth / 2);
+        CGRect frmButton = CGRectMake(x, 10, buttonWidth, 32);
+#endif
         btnDetails = [[UIButton alloc] initWithFrame:frmButton];
-        [btnDetails setTitle:@"See It" forState:UIControlStateNormal];
+        [btnDetails setTitle:@"Details" forState:UIControlStateNormal];
         [self setPropsForButton:btnDetails withColor:[SkinInfo Color2TextMuse]];
         [btnDetails setHidden:[msg url] == nil || [[msg url] length] == 0];
         [subview addSubview:btnDetails];
@@ -169,11 +194,18 @@ UIImage* openInNew = nil;
 }
 
 -(void)setFollowButtonForMessage:(Message*)msg inView:(UIView *)subview {
+    CGRect frmView = [subview frame];
 #ifndef OODLES
     if (btnFollow == nil && [[msg sponsorName] length] > 0) {
-        NSString* followText = [NSString stringWithFormat:@"%@ollow%@", [msg following] ? @"Unf" : @"F",
-                                [NSString stringWithFormat:@"\n%@", [msg sponsorName]]];
-        CGRect frmButton = CGRectMake([subview frame].size.width - 120, 90, 112, 64);
+        NSString* followText = [NSString stringWithFormat:@"%@ollow", [msg following] ? @"Unf" : @"F"];
+#ifdef BUTTONSSIDE
+        CGRect frmButton = CGRectMake(frmView.size.width - 120, 90, 112, 32);
+#endif
+#ifdef BUTTONSBOTTOM
+        CGFloat buttonWidth = frmView.size.width / 4;
+        CGRect frmButton = CGRectMake(frmView.size.width - 10 - buttonWidth,
+                                      10, buttonWidth, 32);
+#endif
         btnFollow = [[UIButton alloc] initWithFrame:frmButton];
         [self setPropsForButton:btnFollow withColor:[SkinInfo Color3TextMuse]];
         [[btnFollow titleLabel] setNumberOfLines:2];
@@ -186,7 +218,7 @@ UIImage* openInNew = nil;
 }
 
 -(void) setPropsForButton:(UIButton*)btn withColor:(NSString*)color {
-    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [[btn titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
     [[btn titleLabel] setNumberOfLines:1];
 
@@ -197,42 +229,66 @@ UIImage* openInNew = nil;
 }
 
 -(void)setDetailsTextForMessage:(Message*)msg inView:(UIView*)subview {
+#ifdef BUTTONSSIDE
     CGFloat textTop = 10;
+    int start = (([subview frame].size.width - 140) / 2) - 83;
+#endif
+#ifdef BUTTONSBOTTOM
+    CGFloat textTop = 50;
+    int start = ([subview frame].size.width / 2) - 83;
+#endif
+    CGFloat imgSize = ([subview frame].size.height < 250) ? 32 : 48;
+
     if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
-        for (int i=1; i<=3; i++) {
-            UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake(i*60, 10, 48, 48)];
+        for (int i=0; i<3; i++) {
+            UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake(start + (i*60), textTop,
+                                                                                  imgSize, imgSize)];
             [subview addSubview:imgBadge];
             ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[msg badgeURL]
                                                                 forImgView:imgBadge];
             [loader load];
         }
-        textTop += 48;
+        textTop += imgSize;
     }
 
     NSString* twotier = [msg sendcount] != 0 ?
         [NSString stringWithFormat:@"Text to %d: %@", [msg sendcount], [msg winnerText]] : @"";
     NSString* threetier = [msg visitcount] != 0 ?
-        [NSString stringWithFormat:@"Come with %d badges for an even better deal", [msg visitcount]] : @"";
+        [NSString stringWithFormat:@"Visit with %d badges: %@", [msg visitcount], [msg visitWinnerText]] : @"";
     
-    UIFont* fontDetails = [UIFont fontWithName:@"Lato-Light" size:18];
+    uint fontsize = ([subview frame].size.height < 250) ? 14 : 18;
+    UIFont* fontDetails = [UIFont fontWithName:@"Lato-Light" size:fontsize];
     
+#ifdef BUTTONSSIDE
     CGSize frameText = CGSizeMake([subview frame].size.width - 140, [subview frame].size.height);
     CGSize szTwo = [TextUtil GetContentSizeForText:twotier inSize:frameText forFont:fontDetails];
     CGSize szThree = [TextUtil GetContentSizeForText:threetier inSize:frameText forFont:fontDetails];
+    CGFloat lblx2 = 10;
+    CGFloat lblx3 = 10;
+#endif
+#ifdef BUTTONSBOTTOM
+    CGSize frameText = CGSizeMake([subview frame].size.width - 20, [subview frame].size.height);
+    CGSize szTwo = [TextUtil GetContentSizeForText:twotier inSize:frameText forFont:fontDetails];
+    CGSize szThree = [TextUtil GetContentSizeForText:threetier inSize:frameText forFont:fontDetails];
+    CGFloat lblx2 = ([subview frame].size.width - szTwo.width) / 2;
+    CGFloat lblx3 = ([subview frame].size.width - szThree.width) / 2;
+#endif
     
-    UILabel* lblTwo = [[UILabel alloc] initWithFrame:CGRectMake(10, textTop, szTwo.width, szTwo.height)];
+    UILabel* lblTwo = [[UILabel alloc] initWithFrame:CGRectMake(lblx2, textTop, szTwo.width, szTwo.height)];
     [lblTwo setText:twotier];
     [lblTwo setNumberOfLines:0];
     [lblTwo setFont:fontDetails];
     [lblTwo setTextColor:[UIColor blackColor]];
+    [lblTwo setTextAlignment:NSTextAlignmentCenter];
     [subview addSubview:lblTwo];
 
-    UILabel* lblThree = [[UILabel alloc] initWithFrame:CGRectMake(10, szTwo.height + textTop,
+    UILabel* lblThree = [[UILabel alloc] initWithFrame:CGRectMake(lblx3, szTwo.height + textTop + 8,
                                                                   szThree.width, szThree.height)];
     [lblThree setText:threetier];
     [lblThree setNumberOfLines:0];
     [lblThree setFont:fontDetails];
     [lblThree setTextColor:[UIColor blackColor]];
+    [lblThree setTextAlignment:NSTextAlignmentCenter];
     [subview addSubview:lblThree];
 }
 

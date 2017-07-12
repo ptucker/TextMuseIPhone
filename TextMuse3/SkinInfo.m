@@ -23,15 +23,27 @@
  */
 
 +(NSString*) Color1TextMuse {
-    return @"00ac65";// [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0];
+    NSString* ret =  @"00ac65";
+#ifdef NRCC
+    ret = @"eb181f";
+#endif;
+    return ret;
 }
 
 +(NSString*) Color2TextMuse {
-    return @"e9662c"; //[UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0];
+    NSString* ret = @"e9662c"; //[UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0];
+#ifdef NRCC
+    ret = @"2b388a";
+#endif
+    return ret;
 }
 
 +(NSString*) Color3TextMuse {
-    return @"16c2ef"; //[UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0];
+    NSString* ret =  @"16c2ef"; //[UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0];
+#ifdef NRCC
+    ret = @"ffffff";
+#endif
+    return ret;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

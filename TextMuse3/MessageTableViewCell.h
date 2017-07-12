@@ -19,7 +19,6 @@
     CGRect frmParent;
     CGRect frmLogo;
     CGRect frmTitle;
-    CGRect frmSeeAll;
     CGRect frmLike;
     CGRect frmPin;
     CGRect frmSend;
@@ -34,7 +33,6 @@
     IBOutlet UILabel* lblContent;
     IBOutlet UILabel* lblTitle;
     IBOutlet UIImageView* imgLogo;
-    IBOutlet UIButton* btnSeeAll;
     IBOutlet UIButton* btnLike;
     //IBOutlet UICaptionButton* btnPin;
     IBOutlet UIButton* btnSend;

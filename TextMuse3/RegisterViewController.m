@@ -171,6 +171,9 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
 #ifdef OODLES
     app = @"91";
 #endif
+#ifdef OODLES
+    app = @"115";
+#endif
     if ([[CurrentUser UserBirthMonth] length] > 0 && [[CurrentUser UserBirthYear] length] > 0)
         urlStr = [NSString stringWithFormat:@"name=%@&email=%@&bmonth=%@&byear=%@&appid=%@&app=%@",
                   [CurrentUser UserName], [CurrentUser UserEmail], [CurrentUser UserBirthMonth],

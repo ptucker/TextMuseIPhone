@@ -82,6 +82,7 @@
 @property (nonatomic, readwrite) int sendcount;
 @property (nonatomic, readwrite) int visitcount;
 @property (nonatomic, readwrite, copy) NSString* winnerText;
+@property (nonatomic, readwrite, copy) NSString* visitWinnerText;
 @property (nonatomic, readwrite, copy) NSString* badgeURL;
 
 -(id)initWithId:(int)i text:(NSString *)t mediaUrl:(NSString*)murl url:(NSString*)u

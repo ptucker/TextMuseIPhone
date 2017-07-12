@@ -46,6 +46,11 @@ const int maxRecentIDs = 10;
     [bottomMenu setHidden:YES];
     messagesHeight += 40;
 #endif
+#ifdef NRCC
+    [[self navigationItem] setTitle:@"NRCC"];
+    [bottomMenu setHidden:YES];
+    messagesHeight += 40;
+#endif
     
     categoryFilter = @"all";
     
@@ -69,23 +74,33 @@ const int maxRecentIDs = 10;
     UIImage *scaledSettings = [UIImage imageWithCGImage:[imgEvent CGImage]
                                                   scale:48.0/30
                                             orientation:(imgEvent.imageOrientation)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
+    UIBarButtonItem *eventButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
                                                                    action:@selector(addEvent:)];
-    [[self navigationItem] setRightBarButtonItem: rightButton];
+    [[self navigationItem] setLeftBarButtonItem: eventButton];
 #endif
     
     [[self navigationController] setDelegate:self];
-    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
+    if ([colorsText count] > 0) {
+        UIColor* colorTint = [colorsText objectAtIndex:0];
+        UIColor* colorBkgd = [colors objectAtIndex:2];
+        [[[self navigationController] navigationBar] setTintColor:colorTint];
+        [[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
+    }
     
-#ifndef HUMANIX
+#ifdef HUMANIX
+    ShowIntro = NO;
+#endif
+#ifdef NRCC
+    ShowIntro = NO;
+#endif
+    
     if (ShowIntro) {
         [self showWalkthrough];
         
         [self showChooseSkin];
     }
-#endif
     
     [Data addListener:self];
     
@@ -98,11 +113,11 @@ const int maxRecentIDs = 10;
     UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
                                            scale:73.0/30
                                      orientation:(o.imageOrientation)];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(settings:)];
-    [[self navigationItem] setLeftBarButtonItem:leftButton];
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:scaledO
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(settings:)];
+    [[self navigationItem] setRightBarButtonItem:settingsButton];
     
     [[btnHome imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [[btnBadges imageView] setContentMode:UIViewContentModeScaleAspectFit];
@@ -148,6 +163,25 @@ const int maxRecentIDs = 10;
     [Skin setHomeURL:@"http://www.textmuse.com"];
     [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
     [Skin setMainWindowTitle:@"Oodles"];
+    [Skin setIconButtonURL:@""];
+    
+    [Settings SaveSkinData];
+    
+    [self updateSkin];
+#endif
+#ifdef NRCC
+    Skin = [[SkinInfo alloc] init];
+    
+    [Skin setSkinID:115];
+    [Skin setSkinName:@"NRCC"];
+    [Skin setMasterName:@"NRCC"];
+    [Skin setMasterBadgeURL:@""];
+    [Skin setColor1:@"eb181f"];
+    [Skin setColor2:@"2b388a"];
+    [Skin setColor3:@"ffffff"];
+    [Skin setHomeURL:@"http://www.textmuse.com"];
+    [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
+    [Skin setMainWindowTitle:@"NRCC"];
     [Skin setIconButtonURL:@""];
     
     [Settings SaveSkinData];
@@ -379,8 +413,10 @@ const int maxRecentIDs = 10;
                       [Skin createTextColor3], nil];
         colorsTitle = [NSArray arrayWithArray:colors];
         
-        UIColor* colorTint = [Skin createColor1];
+        UIColor* colorTint = [colorsText objectAtIndex:0];
+        UIColor* colorBkgd = [colors objectAtIndex:2];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
+        [[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
         UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
@@ -403,6 +439,9 @@ const int maxRecentIDs = 10;
 #endif
 #ifdef OODLES
         title = @"Oodles";
+#endif
+#ifdef NRCC
+        title = @"NRCC";
 #endif
         if (title == nil)
             title = @"TextMuse";// [NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]];
@@ -490,6 +529,7 @@ const int maxRecentIDs = 10;
     }
     UIImageView* imgDown = [[UIImageView alloc] initWithFrame:CGRectMake(frmTitle.origin.x + frmTitle.size.width + 4, 3, 24, 24)];
     [imgDown setImage:[UIImage imageNamed:@"ic_details"]];
+    [btnCategoryList setBackgroundColor:[UIColor lightGrayColor]];
     [btnCategoryList addTarget:self action:@selector(showCategoryList:)
               forControlEvents:UIControlEventTouchUpInside];
     [btnCategoryList addSubview:imgDown];
@@ -683,6 +723,7 @@ const int maxRecentIDs = 10;
 
 -(IBAction)addEvent:(id)sender {
     [self performSegueWithIdentifier:@"AddEvent" sender:self];
+    
 }
 
 -(IBAction)gotoBadgeCategory:(id)sender {
@@ -824,6 +865,10 @@ const int maxRecentIDs = 10;
     };
 #endif
 #ifdef HUMANIX
+    NSString* images[] = {};
+    NSString* txts[] = {};
+#endif
+#ifdef NRCC
     NSString* images[] = {};
     NSString* txts[] = {};
 #endif

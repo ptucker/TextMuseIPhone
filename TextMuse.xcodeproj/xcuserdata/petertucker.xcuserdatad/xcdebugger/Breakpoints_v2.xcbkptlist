@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TextMuse3/MessageTableViewCell.m"
-            timestampString = "518908774.191822"
+            timestampString = "520204739.185806"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "+GetCellHeightForMessage:inSize:"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TextMuse3/RndMessagesViewController.m"
-            timestampString = "518845690.091073"
+            timestampString = "520207017.851114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
-            landmarkName = "-updateSkin"
+            startingLineNumber = "382"
+            endingLineNumber = "382"
+            landmarkName = "-dataRefresh"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,12 +74,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TextMuse3/RndMessagesViewController.m"
-            timestampString = "518845690.091073"
+            timestampString = "520207017.851114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "465"
-            endingLineNumber = "465"
-            landmarkName = "-setupCategoryButton"
+            startingLineNumber = "472"
+            endingLineNumber = "472"
+            landmarkName = "-updateSkin"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -106,12 +106,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TextMuse3/MessageView.m"
-            timestampString = "518831744.737449"
+            timestampString = "519596370.432183"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "-setDetailsForMessage:inView:"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "@implementation MessageView"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TextMuse3/RndMessagesViewController.m"
+            timestampString = "520207017.851114"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "509"
+            endingLineNumber = "509"
+            landmarkName = "-setupCategoryButton"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -122,28 +138,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TextMuse3/RndMessagesViewController.m"
-            timestampString = "518846099.940337"
+            timestampString = "520208021.656697"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "502"
-            endingLineNumber = "502"
-            landmarkName = "-tableView:numberOfRowsInSection:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TextMuse3/RndMessagesViewController.m"
-            timestampString = "518846724.756511"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "732"
-            endingLineNumber = "732"
-            landmarkName = "-showCategoryList:"
+            startingLineNumber = "741"
+            endingLineNumber = "741"
+            landmarkName = "-chosenCategory:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -169,28 +169,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TextMuse3/MessageView.m"
-            timestampString = "518907583.165567"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "211"
-            endingLineNumber = "211"
-            landmarkName = "-setDetailsTextForMessage:inView:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "TextMuse3/DataAccess.m"
-            timestampString = "518907006.127916"
+            timestampString = "521591463.735732"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1043"
-            endingLineNumber = "1043"
+            startingLineNumber = "1046"
+            endingLineNumber = "1046"
             landmarkName = "-parser:didEndElement:namespaceURI:qualifiedName:"
             landmarkType = "7">
          </BreakpointContent>
@@ -202,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TextMuse3/DataAccess.m"
-            timestampString = "518907006.127916"
+            timestampString = "521591463.735732"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "979"
-            endingLineNumber = "979"
+            startingLineNumber = "981"
+            endingLineNumber = "981"
             landmarkName = "-parser:didEndElement:namespaceURI:qualifiedName:"
             landmarkType = "7">
          </BreakpointContent>
@@ -234,12 +218,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TextMuse3/MessageView.m"
-            timestampString = "518907247.91995"
+            timestampString = "519596370.432183"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "-setFollowButtonForMessage:inView:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TextMuse3/MessageView.m"
+            timestampString = "520205888.368577"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
+            landmarkName = "-setDetailsTextForMessage:inView:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TextMuse3/ChooseSkinView.m"
+            timestampString = "520452917.149279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "-tableView:numberOfRowsInSection:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TextMuse3/ChooseSkinView.m"
+            timestampString = "520452920.18934"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

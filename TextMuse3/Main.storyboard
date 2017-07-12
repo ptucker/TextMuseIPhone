@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="dCH-QF-mLU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="dCH-QF-mLU">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -97,7 +97,7 @@
         <!--Add Event-->
         <scene sceneID="Itd-4X-sQO">
             <objects>
-                <viewController title="Add Event" id="y4r-5l-tYZ" customClass="AddEventViewController" sceneMemberID="viewController">
+                <viewController title="Add Event" modalTransitionStyle="crossDissolve" modalPresentationStyle="currentContext" id="y4r-5l-tYZ" customClass="AddEventViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cRz-6e-FLG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -577,7 +577,9 @@
                         <segue destination="A8v-W0-SOT" kind="push" identifier="SelectMessage" id="gIs-SO-9jD"/>
                         <segue destination="yLr-zO-1M3" kind="push" identifier="registerInitial" id="MVW-gx-UGH"/>
                         <segue destination="ngF-ER-qsv" kind="push" identifier="SendMessage" id="ynu-Ad-b5Z"/>
-                        <segue destination="y4r-5l-tYZ" kind="push" identifier="AddEvent" id="Pcx-nJ-Vem"/>
+                        <segue destination="y4r-5l-tYZ" kind="popover" identifier="AddEvent" popoverAnchorView="1tC-cm-YOQ" id="Pcx-nJ-Vem">
+                            <popoverArrowDirection key="popoverArrowDirection" left="YES"/>
+                        </segue>
                         <segue destination="0qD-lQ-kW7" kind="push" identifier="ViewBadges" id="KoT-dO-rUY"/>
                         <segue destination="McS-5d-Adl" kind="push" identifier="ShakeToPlay" id="Es4-jd-Gza"/>
                     </connections>

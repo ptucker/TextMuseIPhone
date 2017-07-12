@@ -105,6 +105,10 @@
     //73bedc
     colorTint = [UIColor colorWithRed:115.0/256 green:190/256 blue:236.0/256 alpha:1.0];
 #endif
+#ifdef NRCC
+    Skin = nil;
+    colorTint = [SkinInfo createColor:[SkinInfo Color1TextMuse]];
+#endif
     if (Skin != nil)
         colorTint = [Skin createColor1];
 

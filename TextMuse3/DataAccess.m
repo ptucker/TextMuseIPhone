@@ -133,6 +133,9 @@ const int HIDEMESSAGE = 1000;
 #ifdef OODLES
     initialXMLFile = @"oodlesdata";
 #endif
+#ifdef NRCC
+    initialXMLFile = @"nrccdata";
+#endif
     NSString *filePath = [[NSBundle mainBundle] pathForResource:initialXMLFile ofType:@"xml"];
     NSString* initialXML = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
@@ -168,6 +171,9 @@ const int HIDEMESSAGE = 1000;
 #endif
 #ifdef OODLES
     sponsor = @"&sponsor=91";
+#endif
+#ifdef NRCC
+    sponsor = @"&sponsor=115";
 #endif
     NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@",
                       urlNotes, lastDownload, appid, notif, sponsor];
@@ -922,6 +928,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentVisitCount = nil;
         currentBadgeURL = nil;
         currentWinnerText = nil;
+        currentVisitWinnerText = nil;
     }
     else if ([elementName isEqualToString:@"t"])
         xmldata = [[NSMutableString alloc] init];
@@ -933,7 +940,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
              [elementName isEqualToString:@"url"] || [elementName isEqualToString:@"sp_name"] ||
              [elementName isEqualToString:@"sp_logo"] || [elementName isEqualToString:@"send"] ||
              [elementName isEqualToString:@"visit"] || [elementName isEqualToString:@"winner"] ||
-             [elementName isEqualToString:@"badge"])
+             [elementName isEqualToString:@"visitwinner"] || [elementName isEqualToString:@"badge"])
         partsdata = [[NSMutableString alloc] init];
 }
 
@@ -946,7 +953,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
          [partsdata appendString:string];
     else if ([currentElement isEqualToString:@"sp_name"] || [currentElement isEqualToString:@"sp_logo"] ||
              [currentElement isEqualToString:@"send"]  || [currentElement isEqualToString:@"visit"] ||
-             [currentElement isEqualToString:@"winner"] || [currentElement isEqualToString:@"badge"])
+             [currentElement isEqualToString:@"winner"] || [currentElement isEqualToString:@"badge"] ||
+             [currentElement isEqualToString:@"visitwinner"])
         [partsdata appendString:string];
 }
 
@@ -981,6 +989,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
                 [msg setVisitcount:[currentVisitCount intValue]];
             [msg setBadgeURL:currentBadgeURL];
             [msg setWinnerText:currentWinnerText];
+            [msg setVisitWinnerText:currentVisitWinnerText];
             [msg setFollowing:following];
             if (following)
                 [SponsorFollows addObject:[NSString stringWithFormat:@"spon%@", sponsorID]];
@@ -996,6 +1005,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         NSString* m = xmldata;
 #ifdef OODLES
         m = [xmldata stringByReplacingOccurrencesOfString:@"TextMuse" withString:@"Oodles"];
+#endif
+#ifdef NRCC
+        m = [xmldata stringByReplacingOccurrencesOfString:@"TextMuse" withString:@"NRCC"];
 #endif
         [NotificationMsgs addObject:m];
     }
@@ -1045,6 +1057,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentVisitCount = partsdata;
     else if ([elementName isEqualToString:@"winner"] && [partsdata length] > 0)
         currentWinnerText = partsdata;
+    else if ([elementName isEqualToString:@"visitwinner"] && [partsdata length] > 0)
+        currentVisitWinnerText = partsdata;
     else if ([elementName isEqualToString:@"badge"] && [partsdata length] > 0)
         currentBadgeURL = partsdata;
 }

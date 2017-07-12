@@ -50,6 +50,9 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
 #ifdef OODLES
     getskins = [NSString stringWithFormat:@"%@?edition=91", urlGetSkins];
 #endif
+#ifdef NRCC
+    getskins = [NSString stringWithFormat:@"%@?edition=115", urlGetSkins];
+#endif
     NSURL* url = [NSURL URLWithString:getskins];
     NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
     
@@ -153,7 +156,7 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
 qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if (skinNames == nil) {
         skinNames = [[NSMutableArray alloc] init];
-#ifndef OODLES
+#ifdef UNIVERSITY
         [skinNames addObject:@"Main"];
         skinIcons = [[NSMutableArray alloc] init];
         [skinIcons addObject:@"TransparentButterfly.png"];

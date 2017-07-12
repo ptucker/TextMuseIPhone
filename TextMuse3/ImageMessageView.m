@@ -54,7 +54,7 @@
     CGFloat fontSize = 18.0;
     if (frame.size.height < 350)
         fontSize -= 6;
-    UIFont* fontText = [UIFont fontWithName:@"Lato-Light" size:fontSize];
+    UIFont* fontText = [UIFont fontWithName:@"Lato-Medium" size:fontSize];
     CGSize sizeText = CGSizeMake(frame.size.width-88, frame.size.height - 80);
     sizeText = [TextUtil GetContentSizeForText:[msg text] inSize:sizeText forFont:fontText];
     CGRect frmImage = [self setupImageForMessage:msg inFrame:frame];
