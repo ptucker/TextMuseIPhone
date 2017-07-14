@@ -53,8 +53,6 @@
 	</dict>
 	<key>NSContactsUsageDescription</key>
 	<string>Share great TextMuse content with your current contacts</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Make your photos easily sharable with all your friends</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

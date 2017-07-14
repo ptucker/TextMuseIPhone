@@ -56,6 +56,7 @@
 }
 
 -(void)showMessage:(NSString*)msg withBadge:(NSString*)badge {
+    /*
 #ifdef UNIVERSITY
     msg = [NSString stringWithFormat:@"You got your first %@ points! Track your points by clicking on the Badge button toward your %@ badge!", msg, msg];
     
@@ -76,6 +77,7 @@
         [img setFrame:CGRectMake(10, frmAlert.size.height-70, 60, 60)];
     }
 #endif
+     */
 }
 
 @end

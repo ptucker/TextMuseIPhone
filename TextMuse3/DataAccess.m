@@ -210,6 +210,7 @@ const int HIDEMESSAGE = 1000;
 }
 
 -(void)loadLocalImages {
+    /*
     NSMutableArray* dates = [[NSMutableArray alloc] init];
     localImages = [[NSMutableArray alloc] init];
     ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
@@ -254,6 +255,7 @@ const int HIDEMESSAGE = 1000;
     } failureBlock:^(NSError *error) {
         NSLog(@"error enumerating AssetLibrary groups %@\n", error);
     }];
+     */
 }
 
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
