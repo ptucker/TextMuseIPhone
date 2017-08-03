@@ -48,6 +48,11 @@
 		2DCA7A061B58530000698E97 /* text.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA7A051B58530000698E97 /* text.xml */; };
 		2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */; };
 		2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC521AECAA80002DA914 /* SettingsViewController.m */; };
+		2DE001E51F33C6CE00FBB7FC /* walkthru_five.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E01F33C6CE00FBB7FC /* walkthru_five.png */; };
+		2DE001E61F33C6CE00FBB7FC /* walkthru_four.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E11F33C6CE00FBB7FC /* walkthru_four.png */; };
+		2DE001E71F33C6CE00FBB7FC /* walkthru_one.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E21F33C6CE00FBB7FC /* walkthru_one.png */; };
+		2DE001E81F33C6CE00FBB7FC /* walkthru_three.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E31F33C6CE00FBB7FC /* walkthru_three.png */; };
+		2DE001E91F33C6CE00FBB7FC /* walkthru_two.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E41F33C6CE00FBB7FC /* walkthru_two.png */; };
 		2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */; };
 		2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */; };
 		2DE627EF1C3B15A200F3BE36 /* UICaptionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE627EE1C3B15A200F3BE36 /* UICaptionButton.m */; };
@@ -168,6 +173,11 @@
 		2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICheckButton.m; sourceTree = "<group>"; };
 		2DCDFC511AECAA80002DA914 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2DCDFC521AECAA80002DA914 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		2DE001E01F33C6CE00FBB7FC /* walkthru_five.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_five.png; sourceTree = "<group>"; };
+		2DE001E11F33C6CE00FBB7FC /* walkthru_four.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_four.png; sourceTree = "<group>"; };
+		2DE001E21F33C6CE00FBB7FC /* walkthru_one.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_one.png; sourceTree = "<group>"; };
+		2DE001E31F33C6CE00FBB7FC /* walkthru_three.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_three.png; sourceTree = "<group>"; };
+		2DE001E41F33C6CE00FBB7FC /* walkthru_two.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_two.png; sourceTree = "<group>"; };
 		2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = ../../../WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
 		2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMessaging.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMessaging.framework"; sourceTree = "<group>"; };
 		2DE627ED1C3B15A200F3BE36 /* UICaptionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICaptionButton.h; sourceTree = "<group>"; };
@@ -446,6 +456,11 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2DE001E01F33C6CE00FBB7FC /* walkthru_five.png */,
+				2DE001E11F33C6CE00FBB7FC /* walkthru_four.png */,
+				2DE001E21F33C6CE00FBB7FC /* walkthru_one.png */,
+				2DE001E31F33C6CE00FBB7FC /* walkthru_three.png */,
+				2DE001E41F33C6CE00FBB7FC /* walkthru_two.png */,
 				2DB49B121F19743C0058C1BB /* bandcamp.png */,
 				2D4EAB7C1EE75E660043DB5E /* ic_details.png */,
 				2D2DE0751EDA6958005B0CDA /* ic_bookmark.png */,
@@ -659,12 +674,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D01F4031ED8D0D400DD9D91 /* textmusedata.xml in Resources */,
+				2DE001E61F33C6CE00FBB7FC /* walkthru_four.png in Resources */,
+				2DE001E71F33C6CE00FBB7FC /* walkthru_one.png in Resources */,
+				2DE001E91F33C6CE00FBB7FC /* walkthru_two.png in Resources */,
 				2DF080591AE625410003A277 /* Images.xcassets in Resources */,
 				2DF080B41AE625FC0003A277 /* Lato-Medium.ttf in Resources */,
+				2DE001E51F33C6CE00FBB7FC /* walkthru_five.png in Resources */,
 				2DEEED101D5BCC9400BA459A /* v4-1_Sharer.png in Resources */,
 				2D3240791C2F51F800E4E59B /* TextMessageTableViewCell.xib in Resources */,
 				2DF080B31AE625FC0003A277 /* Lato-Light.ttf in Resources */,
 				2DED8B2A1D5A45F100F5E8DE /* lock-open.png in Resources */,
+				2DE001E81F33C6CE00FBB7FC /* walkthru_three.png in Resources */,
 				2D01F4051ED8D0EE00DD9D91 /* oodlesdata.xml in Resources */,
 				2D32407E1C2F520F00E4E59B /* ImageMessageTableViewCell.xib in Resources */,
 				2DB49B131F19743C0058C1BB /* bandcamp.png in Resources */,

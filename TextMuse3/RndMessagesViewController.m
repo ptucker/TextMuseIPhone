@@ -840,13 +840,17 @@ const int maxRecentIDs = 10;
     [pages setNumberOfPages:pagecount];
     int x = 0;
 #ifdef UNIVERSITY
+    // mdpi: 166 X 288
+    // hdpi: 252 X 437
+    // xhdpi: 333 X 577
+    // xxhdpi: 504 X 874
     NSString* images[] = {
-        @"walk_one", @"walk_two", @"walk_three", @"walk_four", @"walk_five"
+        @"walkthru_one", @"walkthru_two", @"walkthru_three", @"walkthru_four", @"walkthru_five"
     };
     NSString* txts[] = {
         @"Every day, you’ll find great local deals, great events, university news and other fun stuff.",
-        @"Choose a text to see more, save it for later or share it with someone.",
-        @"Choose a friend or group. If they have more than one number, swipe left and select the best number.",
+        @"Choose a text to share it with friends, see more, or follow the sponsor.",
+        @"Choose a friend or group. If they have more than one number, swipe left and select the best number ...",
         @"... and before you send it, edit it to give it that personal touch.",
         @"Touch the cog to personalize TextMuse – choose which categories you want to see and send us feedback."
     };
