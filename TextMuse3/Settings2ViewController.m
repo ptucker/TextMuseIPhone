@@ -1,23 +1,22 @@
 //
-//  SettingsViewController.m
-//  TextMuse3
+//  Settings2ViewController.m
+//  TextMuse
 //
-//  Created by Peter Tucker on 4/25/15.
-//  Copyright (c) 2015 LaLoosh. All rights reserved.
+//  Created by Peter Tucker on 8/4/17.
+//  Copyright © 2017 LaLoosh. All rights reserved.
 //
 
-#import "SettingsViewController.h"
+#import "Settings2ViewController.h"
 #import "GlobalState.h"
 #import "UICheckButton.h"
 #import "Settings.h"
-#import "MessageCategory.h"
 #import "ChooseSkinView.h"
 
-@interface SettingsViewController ()
+@interface Settings2ViewController ()
 
 @end
 
-@implementation SettingsViewController
+@implementation Settings2ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,12 +30,6 @@
     [notesCount setEnabled:SaveRecentMessages];
     [notesCount setValue:MaxRecentMessages];
     
-    if (CategoryList == nil) {
-        for (NSString*c in [Data getCategories]) {
-            [CategoryList setObject:@"1" forKey:c];
-        }
-    }
-    
 #ifdef HUMANIX
     [btnVersions setHidden:true];
 #endif
@@ -46,18 +39,18 @@
 #ifdef NRCC
     [btnVersions setHidden:true];
 #endif
-    
+
+    if (CategoryList == nil) {
+        for (NSString*c in [Data getCategories]) {
+            [CategoryList setObject:@"1" forKey:c];
+        }
+    }
+
     [chosenCategories setDataSource:self];
     [chosenCategories setDelegate:self];
     [chosenCategories setEditing:NO];
     
     [chosenCategories reloadData];
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    tmpCategoryList = [NSMutableDictionary dictionaryWithDictionary:CategoryList];
-    discardChanges = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -70,19 +63,6 @@
     // Dispose of any resources that can be recreated.
 }
 
--(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
--(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //Hide the delete button
-    return UITableViewCellEditingStyleNone;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [[Data getCategories] count];
 }
@@ -92,12 +72,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"shownCategory"
-                                                            forIndexPath:indexPath];
+    UITableViewCell* cell = [[UITableViewCell alloc] init];
     
-    UILabel* category = (UILabel*)[cell viewWithTag:100];
+    UILabel* category = [[UILabel alloc] initWithFrame:CGRectMake(40, 5,
+                                                                  [tableView frame].size.width - 50, 25)];
     NSString* categoryName = [[Data getCategories] objectAtIndex:[indexPath row]];
     [category setText:categoryName];
+    [cell addSubview:category];
     
     if (![[Data getRequiredCategories] containsObject:categoryName]) {
         UICheckButton* btncheck = (UICheckButton*)[cell viewWithTag:102];
@@ -112,7 +93,7 @@
             [CategoryList setObject:@"1" forKey:categoryName];
         BOOL selected = ![[CategoryList objectForKey:categoryName] isEqualToString: @"0"];
         [btncheck setSelected:selected];
-    
+        
         if ([btncheck tag] == 0) {
             [btncheck setTag:102];
             [cell addSubview:btncheck];
@@ -134,25 +115,6 @@
         [self check:chk];
 }
 
--(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
-     toIndexPath:(NSIndexPath *)destinationIndexPath {
-    NSArray* categories = [Data getCategories];
-    NSString* categoryMove = [categories objectAtIndex:[sourceIndexPath row]];
-    int precpos = 1;
-    if ([categories objectAtIndex:[destinationIndexPath row]] > 0) {
-        NSString* categoryPrec = [categories objectAtIndex:[destinationIndexPath row]-1];
-        precpos = [[CategoryList objectForKey:categoryPrec] intValue];
-    }
-    int newpos = precpos+1;
-    [CategoryList setValue:[NSString stringWithFormat:@"%d", newpos] forKey:categoryMove];
-    for (unsigned long i=[destinationIndexPath row]; i<[categories count]; i++) {
-        NSString* cat = [categories objectAtIndex:i];
-        int ipos = [[CategoryList objectForKey:cat] intValue];
-        if (ipos < (newpos + 1) && ![cat isEqualToString:categoryMove])
-            [CategoryList setValue:[NSString stringWithFormat:@"%d", (newpos+1)] forKey:cat];
-    }
-}
-
 -(IBAction)check:(id)sender {
     UICheckButton* btn = (UICheckButton*)sender;
     NSString* categoryName = [btn extra];
@@ -171,34 +133,8 @@
         }
         pos = [NSString stringWithFormat:@"%d", (max+1)];
     }
-
-    [CategoryList setObject:pos forKey:categoryName];
-}
-
--(IBAction)registerUser:(id)sender {
-
-}
-
--(IBAction)feedback:(id)sender {
     
-}
-
--(IBAction)skins:(id)sender {
-    CGRect frm = [[self view] frame];
-    CGFloat topmargin = 32; // frmNav.size.height;
-    frm.origin.y = topmargin; // + frm.size.height;
-    frm.size.height -= topmargin;
-
-    //ChooseSkinView* skinview = ChooseSkinView.alloc().initWithFrame(frm);
-    ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
-    [[self view] addSubview:skinview];
-    /*
-    CGRect frmDest = frm;
-    frmDest.origin.y = topmargin;
-    [UIView animateWithDuration:0.75f animations:^{
-        [skinview setFrame:frmDest];
-    }];
-     */
+    [CategoryList setObject:pos forKey:categoryName];
 }
 
 -(IBAction)switchContacts:(id)sender {
@@ -209,8 +145,17 @@
     [notesCount setEnabled:[notes isOn]];
 }
 
+-(IBAction)skins:(id)sender {
+    CGRect frm = [[self view] frame];
+    CGFloat topmargin = 32; // frmNav.size.height;
+    frm.origin.y = topmargin; // + frm.size.height;
+    frm.size.height -= topmargin;
+    
+    ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
+    [[self view] addSubview:skinview];
+}
+
 -(void)saveSettings {
-    discardChanges = NO;
     [Settings SaveSetting:SettingCategoryList withValue:CategoryList];
     for (NSString*c in [Data getCategories]) {
         MessageCategory*mc = [Data getCategory:c];
@@ -230,13 +175,11 @@
     [Settings SaveSetting:SettingSaveRecentContacts withValue:SaveRecentContacts ? @"YES" : @"NO"];
     MaxRecentContacts = (int)[contactCount value];
     [Settings SaveSetting:SettingRecentContactsCount withValue:[NSString stringWithFormat:@"%d", MaxRecentContacts]];
-
+    
     SaveRecentMessages = [notes isOn];
     [Settings SaveSetting:SettingSaveRecentMessages withValue:SaveRecentMessages ? @"YES" : @"NO"];
     MaxRecentMessages = (int)[notesCount value];
     [Settings SaveSetting:SettingRecentMessagesCount withValue:[NSString stringWithFormat:@"%d", MaxRecentMessages]];
-    
-    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 /*

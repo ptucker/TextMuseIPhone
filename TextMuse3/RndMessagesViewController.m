@@ -71,14 +71,14 @@ const int maxRecentIDs = 10;
 
 #ifdef UNIVERSITY
     UIImage* imgEvent = [UIImage imageNamed:@"calendar-plus"];
-    UIImage *scaledSettings = [UIImage imageWithCGImage:[imgEvent CGImage]
+    UIImage *scaledEvent = [UIImage imageWithCGImage:[imgEvent CGImage]
                                                   scale:48.0/30
                                             orientation:(imgEvent.imageOrientation)];
-    UIBarButtonItem *eventButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
+    UIBarButtonItem *eventButton = [[UIBarButtonItem alloc] initWithImage:scaledEvent
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
                                                                    action:@selector(addEvent:)];
-    [[self navigationItem] setLeftBarButtonItem: eventButton];
+    [[self navigationItem] setRightBarButtonItem: eventButton];
 #endif
     
     [[self navigationController] setDelegate:self];
@@ -117,7 +117,7 @@ const int maxRecentIDs = 10;
                                                                        style:UIBarButtonItemStylePlain
                                                                       target:self
                                                                       action:@selector(settings:)];
-    [[self navigationItem] setRightBarButtonItem:settingsButton];
+    [[self navigationItem] setLeftBarButtonItem:settingsButton];
     
     [[btnHome imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [[btnBadges imageView] setContentMode:UIViewContentModeScaleAspectFit];
@@ -960,7 +960,7 @@ const int maxRecentIDs = 10;
 
 -(void)performRegistration {
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
-    [[[self  navigationItem] backBarButtonItem] setTitle:@"Skip"];
+    [[[self navigationItem] backBarButtonItem] setTitle:@"Skip"];
     ShowIntro = NO;
     [self performSegueWithIdentifier:@"registerInitial" sender:self];
 }

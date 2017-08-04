@@ -47,12 +47,12 @@
 		2DCA59061B6ECB260011FCDB /* UISuggestionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCA59051B6ECB260011FCDB /* UISuggestionButton.m */; };
 		2DCA7A061B58530000698E97 /* text.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA7A051B58530000698E97 /* text.xml */; };
 		2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */; };
-		2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC521AECAA80002DA914 /* SettingsViewController.m */; };
 		2DE001E51F33C6CE00FBB7FC /* walkthru_five.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E01F33C6CE00FBB7FC /* walkthru_five.png */; };
 		2DE001E61F33C6CE00FBB7FC /* walkthru_four.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E11F33C6CE00FBB7FC /* walkthru_four.png */; };
 		2DE001E71F33C6CE00FBB7FC /* walkthru_one.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E21F33C6CE00FBB7FC /* walkthru_one.png */; };
 		2DE001E81F33C6CE00FBB7FC /* walkthru_three.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E31F33C6CE00FBB7FC /* walkthru_three.png */; };
 		2DE001E91F33C6CE00FBB7FC /* walkthru_two.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE001E41F33C6CE00FBB7FC /* walkthru_two.png */; };
+		2DE001EC1F34E31000FBB7FC /* Settings2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE001EB1F34E31000FBB7FC /* Settings2ViewController.m */; };
 		2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */; };
 		2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */; };
 		2DE627EF1C3B15A200F3BE36 /* UICaptionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE627EE1C3B15A200F3BE36 /* UICaptionButton.m */; };
@@ -171,13 +171,13 @@
 		2DCA7A051B58530000698E97 /* text.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = text.xml; path = ../../../../../Dropbox/text.xml; sourceTree = "<group>"; };
 		2DCDFC491AEC98EB002DA914 /* UICheckButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICheckButton.h; sourceTree = "<group>"; };
 		2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICheckButton.m; sourceTree = "<group>"; };
-		2DCDFC511AECAA80002DA914 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		2DCDFC521AECAA80002DA914 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2DE001E01F33C6CE00FBB7FC /* walkthru_five.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_five.png; sourceTree = "<group>"; };
 		2DE001E11F33C6CE00FBB7FC /* walkthru_four.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_four.png; sourceTree = "<group>"; };
 		2DE001E21F33C6CE00FBB7FC /* walkthru_one.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_one.png; sourceTree = "<group>"; };
 		2DE001E31F33C6CE00FBB7FC /* walkthru_three.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_three.png; sourceTree = "<group>"; };
 		2DE001E41F33C6CE00FBB7FC /* walkthru_two.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthru_two.png; sourceTree = "<group>"; };
+		2DE001EA1F34E31000FBB7FC /* Settings2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings2ViewController.h; sourceTree = "<group>"; };
+		2DE001EB1F34E31000FBB7FC /* Settings2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings2ViewController.m; sourceTree = "<group>"; };
 		2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = ../../../WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
 		2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMessaging.framework; path = "../../../azuresdk-iOS-v1.2.4/WindowsAzureMessaging.framework"; sourceTree = "<group>"; };
 		2DE627ED1C3B15A200F3BE36 /* UICaptionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICaptionButton.h; sourceTree = "<group>"; };
@@ -353,8 +353,6 @@
 		2DCDFC4D1AECAA13002DA914 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				2DCDFC511AECAA80002DA914 /* SettingsViewController.h */,
-				2DCDFC521AECAA80002DA914 /* SettingsViewController.m */,
 				2D0C2CF31B07E2F8001D6E9B /* ContactUsViewController.h */,
 				2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */,
 				2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */,
@@ -363,6 +361,8 @@
 				2DC52F011B0846C300E95D15 /* BirthPickerView.m */,
 				2DC760511B84328300FFF404 /* ChooseSkinView.h */,
 				2DC760521B84328300FFF404 /* ChooseSkinView.m */,
+				2DE001EA1F34E31000FBB7FC /* Settings2ViewController.h */,
+				2DE001EB1F34E31000FBB7FC /* Settings2ViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -723,6 +723,7 @@
 				2DF080A41AE625FC0003A277 /* AppDelegate.m in Sources */,
 				2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */,
 				2DC697481B829022001ACC24 /* SkinInfo.m in Sources */,
+				2DE001EC1F34E31000FBB7FC /* Settings2ViewController.m in Sources */,
 				2D3240781C2F51F800E4E59B /* TextMessageTableViewCell.m in Sources */,
 				2D2A67EA1D4C4A0E00E833FF /* BadgeTreeTableViewCell.m in Sources */,
 				2DC959081AFBAED000BAB0A7 /* ImageUtil.m in Sources */,
@@ -748,7 +749,6 @@
 				2D36EDA91D4AB15F0062C45E /* SuccessParser.m in Sources */,
 				2DCA58F51B6EA53D0011FCDB /* YTPlayerView.m in Sources */,
 				2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */,
-				2DCDFC531AECAA80002DA914 /* SettingsViewController.m in Sources */,
 				2DE627EF1C3B15A200F3BE36 /* UICaptionButton.m in Sources */,
 				2DF080B81AE625FC0003A277 /* MessagesViewController.m in Sources */,
 				2DCA59061B6ECB260011FCDB /* UISuggestionButton.m in Sources */,
