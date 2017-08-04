@@ -118,8 +118,9 @@
 -(IBAction)check:(id)sender {
     UICheckButton* btn = (UICheckButton*)sender;
     NSString* categoryName = [btn extra];
-    NSString* pos = @"0";
     [btn setSelected:![btn isSelected]];
+    /*
+     NSString* pos = @"0";
     if ([btn isSelected]) {
         NSArray* categories = [Data getCategories];
         int max = -1;
@@ -133,8 +134,13 @@
         }
         pos = [NSString stringWithFormat:@"%d", (max+1)];
     }
+    */
     
-    [CategoryList setObject:pos forKey:categoryName];
+    [CategoryList setObject:[btn isSelected] ? @"1" : @"0" forKey:categoryName];
+    if ([btn isSelected])
+        [SqlDb addChosenCategory:categoryName];
+    else
+        [SqlDb removeChosenCategory:categoryName];
 }
 
 -(IBAction)switchContacts:(id)sender {

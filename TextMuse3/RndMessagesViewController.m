@@ -10,6 +10,7 @@
 #import "WalkthroughViewController.h"
 #import "ImageMessageTableViewCell.h"
 #import "TextMessageTableViewCell.h"
+#import "Settings2ViewController.h"
 #import "MessageCategory.h"
 #import "Message.h"
 #import "TextUtil.h"
@@ -193,8 +194,12 @@ const int maxRecentIDs = 10;
 -(void)navigationController:(UINavigationController *)navigationController
      willShowViewController:(UIViewController *)viewController
                    animated:(BOOL)animated {
-    if (viewController == self)
-        [messages reloadData];
+    if (viewController == self) {
+        segueSettings ? [Data reloadData] : [messages reloadData];
+        segueSettings = NO;
+    }
+    else if ([viewController isKindOfClass:[Settings2ViewController class]])
+        segueSettings = YES;
 }
 
 -(void)setColors {

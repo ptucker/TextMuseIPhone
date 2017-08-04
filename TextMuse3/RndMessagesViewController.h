@@ -32,12 +32,12 @@ DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     UIPageControl* pages;
     UIScrollView* scroller;
     NSTimer* timerReminder;
-    NSArray* allMessages;
     NSArray* pinnedMessages;
     BOOL showPinned;
     BOOL showEvents;
     SendMessage* sendMessage;
     NSString* categoryFilter;
+    bool segueSettings;
 }
 
 -(IBAction) showBadges:(id)sender;

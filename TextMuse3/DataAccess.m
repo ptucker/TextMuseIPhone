@@ -559,13 +559,14 @@ const int HIDEMESSAGE = 1000;
     if (bs == nil)
         allMessages = [[NSMutableArray alloc] init];
     else
-        allMessages = [NSMutableArray arrayWithArray:[self getMessagesForCategory:@"Badges"]];
-    while (v < [tmpVersionMessages count] || r < [tmpRegMessages count]) {
+        allMessages = [NSMutableArray arrayWithArray:bs];
+    while (v < [tmpVersionMessages count]) {
         if (v < [tmpVersionMessages count]){
             [allMessages addObject:[tmpVersionMessages objectAtIndex:v]];
             v++;
         }
-        if (r < [tmpRegMessages count]) {
+        int s = arc4random() % 3; //Only show regular messages 1 out of 4 times
+        if (r < [tmpRegMessages count] && s == 0) {
             [allMessages addObject:[tmpRegMessages objectAtIndex:r]];
             r++;
         }
