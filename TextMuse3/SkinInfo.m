@@ -26,7 +26,7 @@
     NSString* ret =  @"00ac65";
 #ifdef NRCC
     ret = @"eb181f";
-#endif;
+#endif
     return ret;
 }
 

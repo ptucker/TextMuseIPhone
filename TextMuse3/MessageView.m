@@ -21,6 +21,7 @@
 #define BUTTONSBOTTOM
 
 NSString* urlFollowSponsor = @"http://www.textmuse.com/admin/following.php";
+NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 
 @implementation MessageView
 
@@ -159,7 +160,10 @@ UIImage* openInNew = nil;
         CGRect frmButton = CGRectMake(10, 10, buttonWidth, 32);
 #endif
         btnText = [[UIButton alloc] initWithFrame:frmButton];
-        [btnText setTitle:@"Text It" forState:UIControlStateNormal];
+        if ([msg badge])
+            [btnText setTitle:@"Remit It" forState:UIControlStateNormal];
+        else
+            [btnText setTitle:@"Text It" forState:UIControlStateNormal];
         [self setPropsForButton:btnText withColor:[SkinInfo Color1TextMuse]];
         [subview addSubview:btnText];
     }
@@ -400,14 +404,43 @@ UIImage* openInNew = nil;
 }
 
 -(IBAction)sendMessage:(id)sender {
-    CurrentMessage = message;
-    
-    if ([[Data getContacts] count] == 0) {
-        SendMessage* sendMessage = [[SendMessage alloc] init];
-        [sendMessage sendMessageTo:nil from:[self objSendMessage]];
+    if ([message badge]) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
+                                                        message:@"Are you sure you want to remit this badge?"
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
+                                              otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+        [alert show];
     }
-    else
-        [[self objSendMessage] performSegueWithIdentifier:@"SendMessage" sender:self];
+    else {
+        CurrentMessage = message;
+        if ([[Data getContacts] count] == 0) {
+            SendMessage* sendMessage = [[SendMessage alloc] init];
+            [sendMessage sendMessageTo:nil from:[self objSendMessage]];
+        }
+        else
+            [[self objSendMessage] performSegueWithIdentifier:@"SendMessage" sender:self];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [SqlDb flagMessage:message];
+        [Data reloadData];
+        
+        NSMutableURLRequest* req = nil;
+        req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
+                                      cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                  timeoutInterval:30];
+        [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&game=%ld", AppID, -1*(long)[message msgId]]
+                          dataUsingEncoding:NSUTF8StringEncoding]];
+        [req setHTTPMethod:@"POST"];
+        NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                                delegate:nil
+                                                        startImmediately:YES];
+        
+        [self close:nil];
+    }
 }
 
 -(IBAction)close:(id)sender {

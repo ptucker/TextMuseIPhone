@@ -17,7 +17,7 @@
 
 NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
-NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
+NSString* urlRemitBadgeX = @"http://www.textmuse.com/admin/remitbadge.php";
 NSString* urlViewCategory = @"http://www.textmuse.com/admin/viewcategory.php";
 NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 
@@ -326,7 +326,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
             
         }
         else if ([alertView tag] == 101) {
-            req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
+            req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadgeX]
                                           cachePolicy:NSURLRequestReloadIgnoringCacheData
                                       timeoutInterval:30];
             [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&game=%ld", AppID, -1*(long)[msg msgId]]

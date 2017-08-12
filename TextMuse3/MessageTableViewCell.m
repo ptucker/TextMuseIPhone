@@ -14,6 +14,7 @@
 #import "TextUtil.h"
 
 NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
+extern NSString* urlRemitBadge;
 
 @implementation MessageTableViewCell
 
@@ -120,7 +121,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
         NSString* rightText2 = @"Share";
 #else
         NSString* imgSend = @"TextMuseButton";
-        NSString* rightText2 = @"text it";
+        NSString* rightText2 = [msg badge] ? @"remit it" : @"text it";
 #endif
         bool send = true;
 #ifdef OODLES
@@ -128,7 +129,7 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 #endif
         if (send) {
             btnSend = [[UIButton alloc] initWithFrame:frmSend];
-            [btnSend setTitle:@"Text It" forState:UIControlStateNormal];
+            [btnSend setTitle:rightText2 forState:UIControlStateNormal];
             UIColor* bkg = [SkinInfo createColor:[SkinInfo Color1TextMuse]];
             [btnSend setBackgroundImage:[ImageUtil imageFromColor:bkg] forState:UIControlStateNormal];
             [[btnSend layer] setCornerRadius:10];
@@ -192,17 +193,47 @@ NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
 }
 
 -(IBAction)sendMessage:(id)sender {
-    CurrentCategory = [_msg category];
-    CurrentMessage = _msg;
-
-    if ([[Data getContacts] count] == 0) {
-        if (sendMessage == nil)
-            sendMessage = [[SendMessage alloc] init];
-        [sendMessage sendMessageTo:nil from:_nav];
+    if ([_msg badge]) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
+                                                        message:@"Are you sure you want to remit this badge?"
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
+                                              otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+        [alert show];
     }
-    else
-        [_nav performSegueWithIdentifier:@"SendMessage" sender:_nav];
+    else {
+        CurrentCategory = [_msg category];
+        CurrentMessage = _msg;
+
+        if ([[Data getContacts] count] == 0) {
+            if (sendMessage == nil)
+                sendMessage = [[SendMessage alloc] init];
+            [sendMessage sendMessageTo:nil from:_nav];
+        }
+        else
+            [_nav performSegueWithIdentifier:@"SendMessage" sender:_nav];
+    }
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [SqlDb flagMessage:_msg];
+        [Data reloadData];
+        
+        NSMutableURLRequest* req = nil;
+        req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
+                                      cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                  timeoutInterval:30];
+        [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&game=%ld", AppID, -1*(long)[_msg msgId]]
+                          dataUsingEncoding:NSUTF8StringEncoding]];
+        [req setHTTPMethod:@"POST"];
+        NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                                delegate:nil
+                                                        startImmediately:YES];
+        
+    }
+}
+
 
 -(IBAction)likeMessage:(id)sender {
 #ifdef OODLES
