@@ -253,6 +253,8 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 -(void)addNotification {
     if (!NotificationOn) return;
     
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    /*
 #ifdef UNIVERSITY
     [Settings LoadSettings];
     BOOL n = (NotificationDates == nil || [NotificationDates count] == 0);
@@ -299,6 +301,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 #else
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 #endif
+     */
 }
 
 -(NSDate*)getNextNotifyDate:(NSDate*)dateOfInterest {
