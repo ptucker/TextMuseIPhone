@@ -65,8 +65,9 @@ NSString* feedbackPrompt = @"Add your message...";
                                                            cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                        timeoutInterval:30];
         [req setHTTPMethod:@"POST"];
-        NSString* postbody = [NSString stringWithFormat:@"name=%@&email=%@&feedback=%@",
-                              [[self name] text], [[self email] text], [[self feedback] text]];
+        NSString* postbody = [NSString stringWithFormat:@"name=%@&email=%@&feedback=%@&version=%ld",
+                              [[self name] text], [[self email] text], [[self feedback] text],
+                              [Skin SkinID]];
         [req setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
         
         NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req

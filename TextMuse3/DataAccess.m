@@ -604,6 +604,9 @@ const int HIDEMESSAGE = 1000;
 }
 
 -(Message*)findMessageWithID:(int)msgid {
+    if (conn != nil)
+        return nil;
+    
     Message* ret;
     for (Message* m in allMessages) {
         if ([m msgId] == msgid) {

@@ -13,6 +13,7 @@
 #import "MessagesViewController.h"
 #import "ImageDownloader.h"
 #import "FLAnimatedImage.h"
+#import <UserNotifications/UserNotifications.h>
 @interface AppDelegate ()
 
 @end
@@ -215,13 +216,12 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 
 - (void)application:(UIApplication *)application
         didReceiveLocalNotification:(UILocalNotification *)notification {
+    /*
     if (NotificationOn) {
-        /*
          NSMutableString* msgs = [[NSMutableString alloc] init];
          for (NSString* k in [userInfo keyEnumerator]) {
          [msgs appendFormat:@"\n%@: %@", k, [userInfo objectForKey:k]];
          }
-         */
         NSString* msg = [notification alertBody];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
                                                         message:msg delegate:nil
@@ -229,6 +229,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
                                               otherButtonTitles:nil, nil];
         [alert show];
     }
+     */
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -251,10 +252,15 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 }
 
 -(void)addNotification {
-    if (!NotificationOn) return;
-    
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center removeAllDeliveredNotifications];
+    [center removeAllPendingNotificationRequests];
+    
     /*
+     if (!NotificationOn) return;
+
 #ifdef UNIVERSITY
     [Settings LoadSettings];
     BOOL n = (NotificationDates == nil || [NotificationDates count] == 0);

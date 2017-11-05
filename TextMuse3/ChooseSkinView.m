@@ -157,6 +157,7 @@ qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if (skinNames == nil) {
         skinNames = [[NSMutableArray alloc] init];
 #ifdef UNIVERSITY
+        /*
         [skinNames addObject:@"Main"];
         skinIcons = [[NSMutableArray alloc] init];
         [skinIcons addObject:@"TransparentButterfly.png"];
@@ -164,6 +165,7 @@ qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
         [skinIDs addObject:@"-1"];
         skinColors = [[NSMutableArray alloc] init];
         [skinColors addObject:@"000000"];
+         */
 #endif
     }
     

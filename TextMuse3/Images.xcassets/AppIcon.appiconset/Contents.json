@@ -45,6 +45,12 @@
       "idiom" : "iphone",
       "filename" : "TextMuseIcon_3x.png",
       "scale" : "3x"
+    },
+    {
+      "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "MarketingIcon.png",
+      "scale" : "1x"
     }
   ],
   "info" : {
