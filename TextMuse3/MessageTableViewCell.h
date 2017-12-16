@@ -12,6 +12,7 @@
 #import "ImageDownloader.h"
 #import "UICaptionButton.h"
 #import "SendMessage.h"
+#import "RndMessagesViewController.h"
 
 @interface MessageTableViewCell : UITableViewCell {
     ImageDownloader* downloader;
@@ -25,7 +26,7 @@
     CGRect frmContent;
     UIView* viewParent;
     Message* _msg;
-    UINavigationController* _nav;
+    RndMessagesViewController* _nav;
     SendMessage* sendMessage;
     
     UITableView* _tableView;

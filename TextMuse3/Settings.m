@@ -39,6 +39,7 @@ NSString* SettingPreamble = @"SettingPreamble";
 NSString* SettingInquiry = @"SettingInquiry";
 NSString* SettingShowIntro = @"SettingShowIntro";
 NSString* SettingAskRegistration = @"SettingAskRegistration";
+NSString* SettingGroupMessages = @"SettingGroupMesages";
 NSString* SettingNamedGroups = @"SettingNamedGroups";
 NSString* SettingChosenCategories = @"SettingChosenCategories";
 NSString* SettingKnownCategories = @"SettingKnownCategories";
@@ -72,6 +73,7 @@ NSMutableArray* ReminderDates = nil;
 NSString* NotificationDate = nil;
 NSMutableArray* NotificationDates = nil;
 NSMutableArray* NotificationMsgs = nil;
+BOOL GroupMessages = YES;
 NSMutableDictionary* NamedGroups = nil;
 BOOL SortLastName = YES;
 NSMutableArray* ChosenCategories = nil;
@@ -228,6 +230,8 @@ NSMutableSet* SponsorFollows;
             AskRegistration = [[defs stringForKey:SettingAskRegistration] isEqualToString:@"1"];
 
         //[defs setObject:nil forKey:SettingNamedGroups];
+        if ([defs arrayForKey:SettingGroupMessages] != nil)
+            GroupMessages = [defs stringForKey:SettingGroupMessages ? @"YES" : @"NO"];
         if ([defs arrayForKey:SettingNamedGroups] != nil) {
             NSArray* grps = [defs arrayForKey:SettingNamedGroups];
             for (NSString* grp in grps) {

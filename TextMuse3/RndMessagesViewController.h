@@ -10,6 +10,7 @@
 #import "GlobalState.h"
 #import "ImageDownloader.h"
 #import "SendMessage.h"
+#import "MessageView.h"
 
 extern NSArray* colors;
 extern NSArray* colorsText;
@@ -17,8 +18,7 @@ extern NSArray* colorsTitle;
 
 extern const int maxRecentIDs;
 
-@interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,
-DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
+@interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataRefreshDelegate> {
     IBOutlet UITableView* messages;
     IBOutlet UIView* bottomMenu;
     IBOutlet UIButton* btnHome;
@@ -35,13 +35,16 @@ DataRefreshDelegate, UINavigationControllerDelegate, UIScrollViewDelegate> {
     NSArray* pinnedMessages;
     BOOL showPinned;
     BOOL showEvents;
-    SendMessage* sendMessage;
     NSString* categoryFilter;
     bool segueSettings;
+    MessageView* mv;
+    SendMessage* sendMessage;    
 }
 
 -(IBAction) showBadges:(id)sender;
 -(IBAction)addEvent:(id)sender;
 -(IBAction)settings:(id)sender;
 -(IBAction)home:(id)sender;
+-(IBAction)chooseMessage:(id)sender;
+-(void)jumpToMessage;
 @end

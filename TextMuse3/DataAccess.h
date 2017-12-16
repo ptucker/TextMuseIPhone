@@ -54,9 +54,10 @@
     BOOL versionMsg;
     BOOL following;
     NSString* sponsorID;
-    NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate,
-                *currentSponsorName, *currentSponsorLogo, *currentBadgeURL, *currentWinnerText,
-                *currentVisitWinnerText, *currentSendCount, *currentVisitCount;
+    NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc,
+        *currentEventDate, *currentSponsorName, *currentSponsorLogo,
+        *currentBadgeURL, *currentWinnerText, *currentVisitWinnerText,
+        *currentSendCount, *currentVisitCount, *currentPhoneNo, *currentTextNo;
     
     //NSString* documentdir;
     

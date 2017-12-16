@@ -19,13 +19,13 @@
 #import "ChooseSkinView.h"
 #import "UICheckButton.h"
 #import "ContactsTableViewController.h"
-#import "MessageView.h"
 
 NSArray* colors;
 NSArray* colorsText;
 NSArray* colorsTitle;
 
 const int maxRecentIDs = 10;
+NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 
 @interface RndMessagesViewController ()
 
@@ -69,6 +69,8 @@ const int maxRecentIDs = 10;
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [messages addSubview:refreshControl];
+    
+    sendMessage = [[SendMessage alloc] init];
 
 #ifdef UNIVERSITY
     UIImage* imgEvent = [UIImage imageNamed:@"calendar-plus"];
@@ -257,7 +259,7 @@ const int maxRecentIDs = 10;
             CurrentColorIndex = HighlightedMessageID % [colors count];
             HighlightedMessageID = 0;
             
-            [self performSegueWithIdentifier:@"SelectMessage" sender:self];
+            [self animateMessage];
         }
     }
 }
@@ -353,22 +355,6 @@ const int maxRecentIDs = 10;
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
-    [self becomeFirstResponder];
-}
-
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self becomeFirstResponder];
-}
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
--(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-#ifdef UNIVERSITY
-    [self performSegueWithIdentifier:@"ShakeToPlay" sender:self];
-#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -655,15 +641,14 @@ const int maxRecentIDs = 10;
     frmEnd.size.height -= top;
     CGRect frmStart = frmEnd;
     frmStart.origin.y -= frmStart.size.height;
-    MessageView* mv = [MessageView setupViewForMessage:CurrentMessage
-                                               inFrame:frmEnd
-                                            withBadges:YES
-                                            fullScreen:YES
-                                             withColor:[colors objectAtIndex:CurrentColorIndex]
-                                                 index:CurrentColorIndex];
+    mv = [MessageView setupViewForMessage:CurrentMessage
+                                  inFrame:frmEnd
+                               withBadges:YES
+                               fullScreen:YES
+                                withColor:[colors objectAtIndex:CurrentColorIndex]
+                                    index:CurrentColorIndex];
 
-    [mv setObjSendMessage:self];
-    [mv setSelSendMessage:@selector(chooseMessage:)];
+    [mv setTarget:self withSelector:@selector(chooseMessage:) andQuickSend:@selector(quickMessage:)];
     [mv setFrame: frmStart];
     [[self view] addSubview:mv];
     
@@ -673,13 +658,44 @@ const int maxRecentIDs = 10;
 }
 
 -(IBAction)chooseMessage:(id)sender {
-    if ([[Data getContacts] count] == 0) {
-        if (sendMessage == nil)
-            sendMessage = [[SendMessage alloc] init];
-        [sendMessage sendMessageTo:nil from:self];
+    if ([CurrentMessage badge]) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
+                                                        message:@"Are you sure you want to remit this badge?"
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
+                                              otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+        [alert show];
     }
-    else
-        [self performSegueWithIdentifier:@"ChooseContact" sender:self];
+    else {
+        if ([[Data getContacts] count] == 0)
+            [sendMessage sendMessageTo:nil from:self];
+        else
+            [self performSegueWithIdentifier:@"SendMessage" sender:self];
+    }
+}
+
+-(IBAction)quickMessage:(id)sender {
+    [sendMessage sendMessageTo:[NSArray arrayWithObject:[CurrentMessage phoneno]] from:self];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [SqlDb flagMessage:CurrentMessage];
+        [Data reloadData];
+        
+        NSMutableURLRequest* req = nil;
+        req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
+                                      cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                  timeoutInterval:30];
+        [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&game=%ld", AppID, -1*(long)[CurrentMessage msgId]]
+                          dataUsingEncoding:NSUTF8StringEncoding]];
+        [req setHTTPMethod:@"POST"];
+        NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                                delegate:nil
+                                                        startImmediately:YES];
+        
+        [mv close:nil];
+    }
 }
 
 
@@ -938,6 +954,9 @@ const int maxRecentIDs = 10;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView != scroller)
+        return;
+    
     CGFloat pageWidth = [scroller frame].size.width;
     float fractionalPage = [scroller contentOffset].x / pageWidth;
     NSInteger page = lround(fractionalPage);

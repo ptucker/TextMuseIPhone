@@ -15,15 +15,14 @@
 #import "SuccessParser.h"
 
 NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
-MFMessageComposeViewController* msgcontroller = nil;
+//MFMessageComposeViewController* msgcontroller = nil;
 
 @implementation SendMessage
 
 -(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController *)parent {
     _parent = parent;
-    sendcount = (int)[contactlist count];
-    if (msgcontroller == nil)
-        msgcontroller = [[MFMessageComposeViewController alloc] init];
+    contacts = (contactlist != nil) ? [NSMutableArray arrayWithCapacity:[contactlist count]] : nil;
+    sendcount = 0;
 
     if ([CurrentMessage msgId] > 0)
         [Settings AddRecentMessage:CurrentMessage];
@@ -33,70 +32,106 @@ MFMessageComposeViewController* msgcontroller = nil;
         [Settings SaveSetting:SettingRecentCategories withValue:RecentCategories];
     }
     
-    if([MFMessageComposeViewController canSendText])
-    {
-        NSMutableArray* phones = [[NSMutableArray alloc] init];
-        for (UserContact*c in contactlist) {
-            [phones addObject:[c getPhone]];
-            [Settings AddRecentContact:[c getPhone]];
-        }
-        [msgcontroller setRecipients: phones];
-        [msgcontroller setMessageComposeDelegate: self];
-        
-#ifdef OODLES
-        NSString* urlAdd = @" (http://apple.co/2pekrPf)";
-#else
-        NSString* urlAdd = ([CurrentMessage url] == nil ? @"" :
-                            [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
-#endif
-        NSString* text = ([CurrentMessage getFullMessage] == nil ? @"" : [CurrentMessage getFullMessage]);
-        NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
-
-        NSString* tagline = @"";
-        //if (arc4random() % 10 == 0)
-        message = [message stringByAppendingString:tagline];
-        if ([Preamble length] > 0)
-            message = [NSString stringWithFormat:@"%@ %@", Preamble, message];
-        if ([Inquiry length] > 0)
-            message = [NSString stringWithFormat:@"%@ (%@)", message, Inquiry];
-        if (([CurrentMessage mediaUrl] == nil || [[CurrentMessage mediaUrl] length] == 0) &&
-            [CurrentMessage img] == nil)
-            [msgcontroller setBody: message];
-        else {
-            if ([CurrentMessage isVideo])
-                message = [NSString stringWithFormat:@"%@%@%@", text, urlAdd, tagline];
-            [msgcontroller setBody:message];
-            if ([CurrentMessage assetURL] != nil) {
-                ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
-                [library assetForURL:[CurrentMessage assetURL] resultBlock:^(ALAsset* asset) {
-                    CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
-                    NSData* d = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
-                    [msgcontroller addAttachmentData:d
-                                      typeIdentifier:(NSString*)kUTTypeImage
-                                            filename:@"test.png"];
-                } failureBlock:^(NSError*err) {}];
+    if([MFMessageComposeViewController canSendText]) {
+        if (contactlist != nil) {
+            for (NSObject* o in contactlist) {
+                if ([o isKindOfClass:[UserContact class]]) {
+                    UserContact* c = (UserContact*)o;
+                    [contacts addObject:[c getPhone]];
+                    [Settings AddRecentContact:[c getPhone]];
+                }
+                else
+                    [contacts addObject:(NSString*)o];
             }
-            else if ([CurrentMessage img] != nil) {
-                NSString* type = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
-                                                    (NSString*)kUTTypeGIF : (NSString*)kUTTypeImage;
-                NSString* tmpfile = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
-                                                    @"test.gif" : @"test.png";
-                [msgcontroller addAttachmentData:[CurrentMessage img]
-                                  typeIdentifier:type
-                                        filename:tmpfile];
+        }
+        
+        NSMutableArray* phones = [[NSMutableArray alloc] init];
+        if (contacts != nil) {
+            if (GroupMessages) {
+                for (NSString*c in contacts) {
+                    [phones addObject:c];
+                }
+                [contacts removeAllObjects];
             }
             else {
-                [msgcontroller addAttachmentData:[loader inetdata]
-                                  typeIdentifier:(NSString*)kUTTypeImage
-                                        filename:@"test.png"];
+                NSString* c = [contacts objectAtIndex:0];
+                [phones addObject:c];
+                [contacts removeObjectAtIndex:0];
             }
         }
+        [self sendMessages:phones];
+    }
+}
+
+-(void)sendMessages:(NSArray*)phones {
+#ifdef OODLES
+    NSString* urlAdd = @" (http://apple.co/2pekrPf)";
+#else
+    NSString* urlAdd = ([CurrentMessage url] == nil ? @"" :
+                        [NSString stringWithFormat:@" (%@)", [CurrentMessage url]]);
+#endif
+    NSString* text = ([CurrentMessage getFullMessage] == nil ? @"" : [CurrentMessage getFullMessage]);
+    NSString* message = [NSString stringWithFormat:@"%@%@", text, urlAdd];
+    
+    NSString* tagline = @"";
+    //if (arc4random() % 10 == 0)
+    message = [message stringByAppendingString:tagline];
+    if ([Preamble length] > 0)
+        message = [NSString stringWithFormat:@"%@ %@", Preamble, message];
+    if ([Inquiry length] > 0)
+        message = [NSString stringWithFormat:@"%@ (%@)", message, Inquiry];
+    
+    if (!(([CurrentMessage mediaUrl] == nil || [[CurrentMessage mediaUrl] length] == 0) &&
+        [CurrentMessage img] == nil))
+        if ([CurrentMessage isVideo])
+            message = [NSString stringWithFormat:@"%@%@%@", text, urlAdd, tagline];
+
+    [self sendMessages:phones withMessage:message];
+}
+
+-(void)sendMessages:(NSArray*)phones withMessage:(NSString*)message {
+    if([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController* msgcontroller = [[MFMessageComposeViewController alloc] init];
         
-        [parent presentViewController:msgcontroller animated:YES completion:^{ }];
+        [msgcontroller setMessageComposeDelegate: self];
+        if (phones != nil && [phones count] > 0)
+            [msgcontroller setRecipients:phones];
+        [msgcontroller setBody:message];
+        if ([CurrentMessage assetURL] != nil) {
+            ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
+            [library assetForURL:[CurrentMessage assetURL] resultBlock:^(ALAsset* asset) {
+                CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
+                NSData* d = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
+                [msgcontroller addAttachmentData:d
+                                  typeIdentifier:(NSString*)kUTTypeImage
+                                        filename:@"test.png"];
+            } failureBlock:^(NSError*err) {}];
+        }
+        else if ([CurrentMessage img] != nil) {
+            NSString* type = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
+            (NSString*)kUTTypeGIF : (NSString*)kUTTypeImage;
+            NSString* tmpfile = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
+            @"test.gif" : @"test.png";
+            [msgcontroller addAttachmentData:[CurrentMessage img]
+                              typeIdentifier:type
+                                    filename:tmpfile];
+        }
+        /*
+        else {
+            [msgcontroller addAttachmentData:[loader inetdata]
+                              typeIdentifier:(NSString*)kUTTypeImage
+                                    filename:@"test.png"];
+        }
+        */
+     
+        [_parent presentViewController:msgcontroller animated:YES completion:nil];
     }
 }
 
 -(void)updateMessageCount:(int)msgId withCount:(unsigned int)c {
+    if (CurrentMessage == nil)
+        return;
+    
     NSURL* url = [NSURL URLWithString:urlUpdateNotes];
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
                                                        cachePolicy:NSURLRequestReloadIgnoringCacheData
@@ -141,18 +176,31 @@ MFMessageComposeViewController* msgcontroller = nil;
                                   otherButtonTitles:nil];
             [alert show];
         }
-        [msgcontroller dismissViewControllerAnimated:YES completion:nil];
+        [controller dismissViewControllerAnimated:YES completion:nil];
     }
-    else
-        [self updateMessageCount:[CurrentMessage msgId] withCount:(unsigned int)sendcount];
-        [msgcontroller dismissViewControllerAnimated:YES completion:^{
+    else {
+        sendcount++;
+        if ([contacts count] == 0) {
+            [self updateMessageCount:[CurrentMessage msgId]
+                           withCount:(unsigned int)sendcount];
+            [controller dismissViewControllerAnimated:YES completion:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_parent dismissViewControllerAnimated:YES completion:nil];
+                    [[_parent navigationController] popToRootViewControllerAnimated:YES];
+                });
+            }];
+        }
+        else {
+            NSMutableArray* phones = [[NSMutableArray alloc] init];
+            NSString* c = [contacts objectAtIndex:0];
+            [phones addObject:c];
+            [contacts removeObjectAtIndex:0];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_parent dismissViewControllerAnimated:YES completion:nil];
-                [[_parent navigationController] popToRootViewControllerAnimated:YES];
+                [controller dismissViewControllerAnimated:YES completion:nil];
+                [self sendMessages:phones];
             });
-        }];
-    
-    msgcontroller = nil;
+        }
+    }
 }
 
 

@@ -10,7 +10,8 @@
 #import "ImageDownloader.h"
 #import "Settings.h"
 #import "WalkthroughViewController.h"
-#import "MessagesViewController.h"
+//#import "MessagesViewController.h"
+#import "RndMessagesViewController.h"
 #import "ImageDownloader.h"
 #import "FLAnimatedImage.h"
 #import <UserNotifications/UserNotifications.h>
@@ -58,14 +59,19 @@
             [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
         UIApplication* app = [UIApplication sharedApplication];
         if ([app respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-            [app registerUserNotificationSettings:settings];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [app registerUserNotificationSettings:settings];
+            });
+            
         }
         
         if (userNotification)
         {
             UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-            [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+                [[UIApplication sharedApplication] registerForRemoteNotifications];
+            });
         }
         else
             //Deprecated in iOS 8
@@ -198,19 +204,8 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 -(void)jumpToMessage {
     //User tapped on a notification. Go straight to the message
     if (HighlightedMessageID != 0) {
-        Message* msg = [Data findMessageWithID:HighlightedMessageID];
-        if (msg != nil) {
-            HighlightedMessageID = 0;
-
-            CurrentMessage = msg;
-            CurrentCategory = [CurrentMessage category];
-            CurrentColorIndex = 0;
-            
-            UINavigationController* nav = (UINavigationController*) [[self window] rootViewController];
-            UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            MessagesViewController* mvc = [storyboard instantiateViewControllerWithIdentifier:@"SelectMessage"];
-            [nav pushViewController:mvc animated:YES];
-        }
+        RndMessagesViewController* nav = (RndMessagesViewController*) [[self window] rootViewController];
+        [nav jumpToMessage];
     }
 }
 

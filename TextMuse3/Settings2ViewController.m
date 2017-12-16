@@ -22,6 +22,7 @@
     [super viewDidLoad];
 
     [sortContacts setOn:SortLastName];
+    [groupMessages setOn:!GroupMessages];
     [notifications setOn:NotificationOn];
     [contacts setOn:SaveRecentContacts];
     [contactCount setEnabled:SaveRecentContacts];
@@ -173,6 +174,9 @@
         [Data sortContacts];
     }
     [Settings SaveSetting:SettingSortLastName withValue:SortLastName ? @"YES" : @"NO"];
+    
+    GroupMessages = ![groupMessages isOn];
+    [Settings SaveSetting:SettingGroupMessages withValue:GroupMessages ? @"YES" : @"NO"];
     
     NotificationOn = [notifications isOn];
     [Settings SaveSetting:SettingNotificationOn withValue:NotificationOn ? @"YES" : @"NO"];

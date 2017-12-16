@@ -21,9 +21,11 @@
 #define BUTTONSBOTTOM
 
 NSString* urlFollowSponsor = @"http://www.textmuse.com/admin/following.php";
-NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
+extern NSString* urlRemitBadge;
 
 @implementation MessageView
+
+@synthesize phones;
 
 UIImage* bubble1 = nil;
 UIImage* bubble2 = nil;
@@ -80,13 +82,18 @@ UIImage* openInNew = nil;
     [self setShowBadges:NO];
     [self setIsFullScreen:NO];
     
-    UISwipeGestureRecognizer* swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
-                                                                                action:@selector(close:)];
+    swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                      action:@selector(close:)];
     [swipe setDirection:UISwipeGestureRecognizerDirectionUp];
     [swipe setDelaysTouchesBegan:YES];
     [self addGestureRecognizer:swipe];
     
     return self;
+}
+
+-(void)setTarget:(UIViewController *)vc withSelector:(SEL)sel andQuickSend:(SEL)selQuick {
+    [btnText addTarget:vc action:sel forControlEvents:UIControlEventTouchUpInside];
+    [btnTextContact addTarget:vc action:selQuick forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)setupViewForMessage:(Message *)msg inFrame:(CGRect)frame withColor:(UIColor*)color index:(long)i {
@@ -141,6 +148,35 @@ UIImage* openInNew = nil;
 }
 */
 
+-(void)setContactsForMessage:(Message *)msg inView:(UIView *)subview {
+    [self setPhoneContactForMessage:msg inView:subview];
+    [self setTextContactForMessage:msg inView:subview];
+}
+
+-(void)setPhoneContactForMessage:(Message *)msg inView:(UIView *)subview {
+    CGRect frmView = [subview frame];
+    NSString* pno = [NSString stringWithFormat:@"p: %@", [msg phoneno]];
+    CGFloat x = ((frmView.size.width/2) + 200) / 2;
+    CGRect frmButton = CGRectMake(x, 4, 200, 32);
+    UIButton* btnPhone = [[UIButton alloc] initWithFrame:frmButton];
+    [btnPhone setTitle:pno forState:UIControlStateNormal];
+    [self setPropsForButton:btnPhone withColor:[SkinInfo Color1TextMuse]];
+    [subview addSubview:btnPhone];
+
+    [btnPhone addTarget:self action:@selector(sendContactPhone:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(void)setTextContactForMessage:(Message *)msg inView:(UIView *)subview {
+    CGRect frmView = [subview frame];
+    NSString* tno = [NSString stringWithFormat:@"t: %@", [msg textno]];
+    CGFloat x = ((frmView.size.width/2) - 200) / 2;
+    CGRect frmButton = CGRectMake(x, 4, 200, 32);
+    btnTextContact = [[UIButton alloc] initWithFrame:frmButton];
+    [btnTextContact setTitle:tno forState:UIControlStateNormal];
+    [self setPropsForButton:btnTextContact withColor:[SkinInfo Color1TextMuse]];
+    [subview addSubview:btnTextContact];
+}
+
 -(void)setDetailsForMessage:(Message *)msg inView:(UIView *)subview {
     [self setTextItButtonForMessage:msg inView:subview];
     [self setSeeItButtonForMessage:msg inView:subview];
@@ -167,8 +203,6 @@ UIImage* openInNew = nil;
         [self setPropsForButton:btnText withColor:[SkinInfo Color1TextMuse]];
         [subview addSubview:btnText];
     }
-    
-    [btnText addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)setSeeItButtonForMessage:(Message*)msg inView:(UIView *)subview {
@@ -375,9 +409,9 @@ UIImage* openInNew = nil;
     //[btnPin setImage:([message pinned] ? pinRed : pinGrey)];
 #else
     SEL selector = [self selSendMessage];
-    IMP imp = [[self objSendMessage] methodForSelector:selector];
+    IMP imp = [[self mvcSendMessage] methodForSelector:selector];
     void (*func)(id, SEL, id) = (void *)imp;
-    func([self objSendMessage], selector, sender);
+    func([self mvcSendMessage], selector, sender);
 #endif
 }
 
@@ -403,6 +437,7 @@ UIImage* openInNew = nil;
     //[btnLike setRightCaption:[message likeCount] == 0 ? @"" : [NSString stringWithFormat:@"%d", [message likeCount]]];
 }
 
+/*
 -(IBAction)sendMessage:(id)sender {
     if ([message badge]) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
@@ -416,10 +451,35 @@ UIImage* openInNew = nil;
         CurrentMessage = message;
         if ([[Data getContacts] count] == 0) {
             SendMessage* sendMessage = [[SendMessage alloc] init];
-            [sendMessage sendMessageTo:nil from:[self objSendMessage]];
+            [sendMessage sendMessageTo:nil from:[self vcSendMessage]];
         }
         else
-            [[self objSendMessage] performSegueWithIdentifier:@"SendMessage" sender:self];
+            [[self vcSendMessage] performSegueWithIdentifier:@"SendMessage" sender:self];
+    }
+}
+*/
+
+/*
+-(IBAction)sendContactMessage:(id)sender {
+    CurrentMessage = [[Message alloc] init];
+    [CurrentMessage setMsgId:0];
+    [CurrentMessage setText:@"message"];
+    NSArray* phones = [[NSArray alloc] initWithObjects:[message textno], nil];
+    SendMessage* sendMessage = [[SendMessage alloc] init];
+    
+    [sendMessage sendMessageTo:phones from:[self vcSendMessage]];
+}
+*/
+
+-(IBAction)sendContactPhone:(id)sender {
+    NSString *phoneNumber = [message phoneno];
+    NSURL *phoneUrl = [NSURL URLWithString:[@"telprompt://" stringByAppendingString:phoneNumber]];
+    NSURL *phoneFallbackUrl = [NSURL URLWithString:[@"tel://" stringByAppendingString:phoneNumber]];
+    
+    if ([UIApplication.sharedApplication canOpenURL:phoneUrl]) {
+        [UIApplication.sharedApplication openURL:phoneUrl];
+    } else if ([UIApplication.sharedApplication canOpenURL:phoneFallbackUrl]) {
+        [UIApplication.sharedApplication openURL:phoneFallbackUrl];
     }
 }
 
@@ -446,6 +506,8 @@ UIImage* openInNew = nil;
 -(IBAction)close:(id)sender {
     CGRect frmEnd = [self frame];
     frmEnd.origin.y = -frmEnd.size.height;
+    
+    [self removeGestureRecognizer:swipe];
     
     [UIView animateWithDuration:0.5
                      animations: ^{ [self setFrame: frmEnd]; }

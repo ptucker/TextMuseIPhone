@@ -103,6 +103,16 @@
     [self addSubview:lblContent];
     
     CGFloat buttonsTop = frmBubble.origin.y + frmBubble.size.height + 8;
+    if (([msg phoneno] != nil && [[msg phoneno] length] > 0) ||
+        ([msg textno] != nil && [[msg textno] length] > 0)) {
+        CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width, 40);
+        UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];
+        [self setContactsForMessage:msg inView:viewButtons];
+        
+        [self addSubview:viewButtons];
+
+        buttonsTop += frmButtons.size.height;
+    }
     CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width,
                                    [self frame].size.height - buttonsTop);
     UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];

@@ -11,6 +11,7 @@
 #import "SendMessage.h"
 #import "UICaptionButton.h"
 #import "FLAnimatedImage.h"
+//#import "MessagesViewController.h"
 
 @interface MessageView : UIView<UITextViewDelegate> {
     UIImageView* imgLeftQuote;
@@ -24,16 +25,21 @@
     UIButton* btnDetails;
     UIButton* btnText;
     UIButton* btnFollow;
+    UIButton* btnTextContact;
+    
+    UISwipeGestureRecognizer* swipe;
     
     Message* message;
+    
+    NSArray* phones;
 }
 
-@property (readwrite) id objSendMessage;
-@property (readwrite) SEL selSendMessage;
 @property (readwrite) bool showBadges;
 @property (readwrite) bool isFullScreen;
+@property (readonly) NSArray* phones;
 
 -(void)setupViewForMessage:(Message *)msg inFrame:(CGRect)frame withColor:(UIColor*)color index:(long)i;
+-(void)setTarget:(UIViewController*)vc withSelector:(SEL) sel andQuickSend:(SEL)selQuick;
 
 //-(void)setLikeButtonForMessage:(Message*)msg inView:(UIView*)subview;
 //-(void)setPinButtonForMessage:(Message*)msg inView:(UIView*)subview;
@@ -42,7 +48,9 @@
 -(void)setFollowButtonForMessage:(Message*)msg inView:(UIView*)subview;
 -(void)setDetailsTextForMessage:(Message*)msg inView:(UIView*)subview;
 -(void)setDetailsForMessage:(Message*)msg inView:(UIView*)subview;
-
+-(void)setPhoneContactForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setTextContactForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setContactsForMessage:(Message*)msg inView:(UIView*)subview;
 -(IBAction)close:(id)sender;
 
 +(MessageView*)setupViewForMessage:(Message*)msg

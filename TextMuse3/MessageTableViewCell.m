@@ -193,26 +193,10 @@ extern NSString* urlRemitBadge;
 }
 
 -(IBAction)sendMessage:(id)sender {
-    if ([_msg badge]) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
-                                                        message:@"Are you sure you want to remit this badge?"
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
-                                              otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
-        [alert show];
-    }
-    else {
-        CurrentCategory = [_msg category];
-        CurrentMessage = _msg;
+    CurrentCategory = [_msg category];
+    CurrentMessage = _msg;
 
-        if ([[Data getContacts] count] == 0) {
-            if (sendMessage == nil)
-                sendMessage = [[SendMessage alloc] init];
-            [sendMessage sendMessageTo:nil from:_nav];
-        }
-        else
-            [_nav performSegueWithIdentifier:@"SendMessage" sender:_nav];
-    }
+    [_nav chooseMessage:sender];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

@@ -235,8 +235,9 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
                                                     withBadges:NO
                                                     fullScreen:NO
                                                      withColor:[colors objectAtIndex:i] index:CurrentColorIndex];
-            [mv setObjSendMessage:self];
-            [mv setSelSendMessage:@selector(chooseMessage:)];
+            //[mv setVcSendMessage:self];
+            //[mv setSelSendMessage:@selector(chooseMessage:)];
+            [mv setTarget:self withSelector:@selector(chooseMessage:) andQuickSend:@selector(chooseMessage:)];
             
             [scrollview addSubview:mv];
             [msgviews insertObject:mv atIndex:i-start];

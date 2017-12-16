@@ -44,6 +44,8 @@
     NSString* sponsorLogo;
     NSString* sponsorID;
     BOOL following;
+    NSString* phoneno;
+    NSString* textno;
     
     UIActivityIndicatorView* activityView;
     UIWebView* web;
@@ -67,7 +69,7 @@
 @property (nonatomic, readwrite, copy) NSString* msgUrl;
 @property (nonatomic, readonly, copy) NSString* category;
 
-@property (nonatomic, readonly, copy) NSString* text;
+@property (nonatomic, readwrite, copy) NSString* text;
 @property (nonatomic, readonly, copy) NSString* mediaUrl;
 @property (nonatomic, readonly, copy) NSString* url;
 @property (nonatomic, readwrite, copy) NSString* eventLocation;
@@ -84,6 +86,8 @@
 @property (nonatomic, readwrite, copy) NSString* winnerText;
 @property (nonatomic, readwrite, copy) NSString* visitWinnerText;
 @property (nonatomic, readwrite, copy) NSString* badgeURL;
+@property (nonatomic, readwrite, copy) NSString* phoneno;
+@property (nonatomic, readwrite, copy) NSString* textno;
 
 -(id)initWithId:(int)i text:(NSString *)t mediaUrl:(NSString*)murl url:(NSString*)u
     forCategory:(NSString*)c isNew:(BOOL)n;

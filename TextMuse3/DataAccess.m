@@ -935,6 +935,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentBadgeURL = nil;
         currentWinnerText = nil;
         currentVisitWinnerText = nil;
+        currentTextNo = nil;
+        currentPhoneNo = nil;
     }
     else if ([elementName isEqualToString:@"t"])
         xmldata = [[NSMutableString alloc] init];
@@ -942,25 +944,40 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         xmldata = [[NSMutableString alloc] init];
     else if ([elementName isEqualToString:@"i"])
         xmldata = [[NSMutableString alloc] init];
-    else if ([elementName isEqualToString:@"text"] || [elementName isEqualToString:@"media"] ||
-             [elementName isEqualToString:@"url"] || [elementName isEqualToString:@"sp_name"] ||
-             [elementName isEqualToString:@"sp_logo"] || [elementName isEqualToString:@"send"] ||
-             [elementName isEqualToString:@"visit"] || [elementName isEqualToString:@"winner"] ||
-             [elementName isEqualToString:@"visitwinner"] || [elementName isEqualToString:@"badge"])
+    else if ([elementName isEqualToString:@"text"] ||
+             [elementName isEqualToString:@"media"] ||
+             [elementName isEqualToString:@"url"] ||
+             [elementName isEqualToString:@"sp_name"] ||
+             [elementName isEqualToString:@"sp_logo"] ||
+             [elementName isEqualToString:@"send"] ||
+             [elementName isEqualToString:@"visit"] ||
+             [elementName isEqualToString:@"winner"] ||
+             [elementName isEqualToString:@"visitwinner"] ||
+             [elementName isEqualToString:@"badge"] ||
+             [elementName isEqualToString:@"phoneno"] ||
+             [elementName isEqualToString:@"textno"])
         partsdata = [[NSMutableString alloc] init];
 }
 
 -(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    if ([currentElement isEqualToString:@"n"] || [currentElement isEqualToString:@"t"]
-         || [currentElement isEqualToString:@"p"] || [currentElement isEqualToString:@"i"])
+    if ([currentElement isEqualToString:@"n"] ||
+        [currentElement isEqualToString:@"t"] ||
+        [currentElement isEqualToString:@"p"] ||
+        [currentElement isEqualToString:@"i"])
         [xmldata appendString:string];
-    else if ([currentElement isEqualToString:@"text"] || [currentElement isEqualToString:@"media"] ||
+    else if ([currentElement isEqualToString:@"text"] ||
+             [currentElement isEqualToString:@"media"] ||
              [currentElement isEqualToString:@"url"])
          [partsdata appendString:string];
-    else if ([currentElement isEqualToString:@"sp_name"] || [currentElement isEqualToString:@"sp_logo"] ||
-             [currentElement isEqualToString:@"send"]  || [currentElement isEqualToString:@"visit"] ||
-             [currentElement isEqualToString:@"winner"] || [currentElement isEqualToString:@"badge"] ||
-             [currentElement isEqualToString:@"visitwinner"])
+    else if ([currentElement isEqualToString:@"sp_name"] ||
+             [currentElement isEqualToString:@"sp_logo"] ||
+             [currentElement isEqualToString:@"send"]  ||
+             [currentElement isEqualToString:@"visit"] ||
+             [currentElement isEqualToString:@"winner"] ||
+             [currentElement isEqualToString:@"badge"] ||
+             [currentElement isEqualToString:@"visitwinner"] ||
+             [currentElement isEqualToString:@"phoneno"] ||
+             [currentElement isEqualToString:@"textno"])
         [partsdata appendString:string];
 }
 
@@ -996,6 +1013,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [msg setBadgeURL:currentBadgeURL];
             [msg setWinnerText:currentWinnerText];
             [msg setVisitWinnerText:currentVisitWinnerText];
+            [msg setPhoneno:currentPhoneNo];
+            [msg setTextno:currentTextNo];
             [msg setFollowing:following];
             if (following)
                 [SponsorFollows addObject:[NSString stringWithFormat:@"spon%@", sponsorID]];
@@ -1067,6 +1086,10 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentVisitWinnerText = partsdata;
     else if ([elementName isEqualToString:@"badge"] && [partsdata length] > 0)
         currentBadgeURL = partsdata;
+    else if ([elementName isEqualToString:@"phoneno"] && [partsdata length] > 0)
+        currentPhoneNo = partsdata;
+    else if ([elementName isEqualToString:@"textno"] && [partsdata length] > 0)
+        currentTextNo = partsdata;
 }
 
 -(BOOL)isPinned:(Message*)msg {

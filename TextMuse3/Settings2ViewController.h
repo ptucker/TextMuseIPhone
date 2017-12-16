@@ -13,6 +13,7 @@
     
     IBOutlet UITableView* chosenCategories;
     IBOutlet UISwitch* sortContacts;
+    IBOutlet UISwitch* groupMessages;
     IBOutlet UISwitch* notifications;
     IBOutlet UISwitch* contacts;
     IBOutlet UISlider* contactCount;
