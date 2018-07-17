@@ -42,6 +42,9 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 #ifdef HUMANIX
     [[self navigationItem] setTitle:@"Hire Me Northwest"];
 #endif
+#ifdef YOUTHREACH
+    [[self navigationItem] setTitle:@"YouthREACH"];
+#endif
 #ifdef OODLES
     [[self navigationItem] setTitle:@"Oodles"];
     [bottomMenu setHidden:YES];
@@ -93,6 +96,9 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     }
     
 #ifdef HUMANIX
+    ShowIntro = NO;
+#endif
+#ifdef YOUTHREACH
     ShowIntro = NO;
 #endif
 #ifdef NRCC
@@ -147,6 +153,25 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [Skin setHomeURL:@"http://www.humanix.com"];
     [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
     [Skin setMainWindowTitle:@"Hire Me NW"];
+    [Skin setIconButtonURL:@""];
+    
+    [Settings SaveSkinData];
+    
+    [self updateSkin];
+#endif
+#ifdef YOUTHREACH
+    Skin = [[SkinInfo alloc] init];
+    
+    [Skin setSkinID:171];
+    [Skin setSkinName:@"Categories"];
+    [Skin setMasterName:@"YouthREACH"];
+    [Skin setMasterBadgeURL:@""];
+    [Skin setColor1:@"000000"];
+    [Skin setColor2:@"be1009"];
+    [Skin setColor3:@"00009a"];
+    [Skin setHomeURL:@"http://youthreachspokane.weebly.com/"];
+    [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
+    [Skin setMainWindowTitle:@"YouthREACH"];
     [Skin setIconButtonURL:@""];
     
     [Settings SaveSkinData];
@@ -428,6 +453,9 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 #ifdef HUMANIX
         title = @"Hire Me Northwest";
 #endif
+#ifdef YOUTHREACH
+        title = @"YouthREACH";
+#endif
 #ifdef OODLES
         title = @"Oodles";
 #endif
@@ -483,49 +511,57 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 }
 
 -(void) setupCategoryButton {
-    CGRect frmCategoryListBtn = CGRectMake(0, 65, [[self view] frame].size.width, 30);
-    if (btnCategoryList != nil)
-        [btnCategoryList removeFromSuperview];
-
-    UIFont* fntTitle = [UIFont fontWithName:@"Lato-Medium" size:20];
-    btnCategoryList = [[UIButton alloc] initWithFrame:frmCategoryListBtn];
-    [btnCategoryList setBackgroundColor:[UIColor lightGrayColor]];
-    CGRect frmTitle;
-    if (Skin != nil && [Skin SkinName] != nil) {
-        CGSize sizeLabel = [TextUtil GetContentSizeForText:[Skin SkinName]
-                                                    inSize:frmCategoryListBtn.size
-                                                   forFont:fntTitle];
-        frmTitle = CGRectMake((frmCategoryListBtn.size.width - sizeLabel.width) / 2, 3,
-                                     sizeLabel.width, sizeLabel.height);
-        UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-        [lblTitle setText:[Skin SkinName]];
-        [btnCategoryList addSubview:lblTitle];
-        
-        UIImageView* img = [[UIImageView alloc] initWithFrame:CGRectMake(frmTitle.origin.x - 32,
-                                                                         3, 24, 24)];
-        [btnCategoryList addSubview:img];
-        ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
-                                                            forImgView:img];
-        [loader load];
+    if (scrollerCategories != nil)
+        [scrollerCategories removeFromSuperview];
+    
+    scrollerCategories = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 65, [[self view] frame].size.width, 30)];
+    NSArray* categories = [Data getCategories];
+    CGFloat widthBtn = 250, heightBtn = 30;
+    CGFloat widthTotal = 10, margin = 20;
+    UIButton* btn = [self makeCategoryButton:@"all"
+                                   withFrame:CGRectMake(0, 0, widthBtn, heightBtn)];
+    widthTotal += [btn frame].size.width + margin;
+    [scrollerCategories addSubview:btn];
+    [btn setSelected:true];
+    for (int i=0; i<[categories count]; i++) {
+        btn = [self makeCategoryButton:[categories objectAtIndex:i]
+                             withFrame:CGRectMake(widthTotal, 0, widthBtn, heightBtn)];
+        widthTotal += [btn frame].size.width + margin;
+        [scrollerCategories addSubview:btn];
     }
-    else {
-        CGSize sizeLabel = [TextUtil GetContentSizeForText:@"Categories"
-                                                    inSize:frmCategoryListBtn.size
-                                                   forFont:fntTitle];
-        frmTitle = CGRectMake((frmCategoryListBtn.size.width - sizeLabel.width) / 2, 3,
-                                     sizeLabel.width, sizeLabel.height);
-        UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-        [lblTitle setText:@"Categories"];
-        [btnCategoryList addSubview:lblTitle];
-    }
-    UIImageView* imgDown = [[UIImageView alloc] initWithFrame:CGRectMake(frmTitle.origin.x + frmTitle.size.width + 4, 3, 24, 24)];
-    [imgDown setImage:[UIImage imageNamed:@"ic_details"]];
-    [btnCategoryList setBackgroundColor:[UIColor lightGrayColor]];
-    [btnCategoryList addTarget:self action:@selector(showCategoryList:)
-              forControlEvents:UIControlEventTouchUpInside];
-    [btnCategoryList addSubview:imgDown];
+    
+    [scrollerCategories setContentSize:CGSizeMake(widthTotal, 30)];
+    
+    [[self view] addSubview:scrollerCategories];
+}
 
-    [[self view] addSubview:btnCategoryList];
+- (UIButton*) makeCategoryButton:(NSString*)category withFrame:(CGRect)frame {
+    UIButton* btn = [[UIButton alloc] initWithFrame:frame];
+    [btn setTitle:category forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [[btn titleLabel] sizeToFit];
+    [btn sizeToFit];
+    [btn addTarget:self action:@selector(chooseCategory:) forControlEvents:UIControlEventTouchUpInside];
+
+    return btn;
+}
+
+-(void)chooseCategory:(id)sender {
+    UIButton* btn = (UIButton*)sender;
+    for (int i=0; i < [[scrollerCategories subviews] count]; i++) {
+        UIView* v = [[scrollerCategories subviews] objectAtIndex:i];
+        if ([v isKindOfClass:[UIButton class]]) {
+            UIButton* b = (UIButton*) v;
+            [b setSelected:false];
+        }
+    }
+    [btn setSelected:true];
+    CurrentCategory = [[btn titleLabel] text];
+    categoryFilter = [[btn titleLabel] text];
+    CurrentMessage = nil;
+    
+    [messages reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -675,7 +711,12 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 }
 
 -(IBAction)quickMessage:(id)sender {
-    [sendMessage sendMessageTo:[NSArray arrayWithObject:[CurrentMessage phoneno]] from:self];
+    Message* m = CurrentMessage;
+    CurrentMessage = [[Message alloc] init];
+    [CurrentMessage setText:@""];
+    [CurrentMessage setQuicksend:YES];
+    [sendMessage sendMessageTo:[NSArray arrayWithObject:[m textno]] from:self];
+    CurrentMessage = m;
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -890,6 +931,10 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     };
 #endif
 #ifdef HUMANIX
+    NSString* images[] = {};
+    NSString* txts[] = {};
+#endif
+#ifdef YOUTHREACH
     NSString* images[] = {};
     NSString* txts[] = {};
 #endif

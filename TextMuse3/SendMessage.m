@@ -15,6 +15,7 @@
 #import "SuccessParser.h"
 
 NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
+NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
 //MFMessageComposeViewController* msgcontroller = nil;
 
 @implementation SendMessage
@@ -132,14 +133,17 @@ NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
     if (CurrentMessage == nil)
         return;
     
-    NSURL* url = [NSURL URLWithString:urlUpdateNotes];
+    NSURL* url = ([CurrentMessage quicksend]) ? [NSURL URLWithString:urlUpdateQuickNotes] :
+                                                [NSURL URLWithString:urlUpdateNotes];
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
                                                        cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                    timeoutInterval:30];
     inetdata = [[NSMutableData alloc] init];
     [req setHTTPMethod:@"POST"];
-    [req setHTTPBody:[[NSString stringWithFormat:@"id=%d&app=%@&cnt=%d", msgId, AppID, c]
-                      dataUsingEncoding:NSUTF8StringEncoding]];
+    NSString* post = ([CurrentMessage quicksend]) ?
+            [NSString stringWithFormat:@"id=%d&app=%@&cnt=%d&phone=0", msgId, AppID, c] :
+            [NSString stringWithFormat:@"id=%d&app=%@&cnt=%d", msgId, AppID, c];
+    [req setHTTPBody:[post dataUsingEncoding:NSUTF8StringEncoding]];
     
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
                                                             delegate:self

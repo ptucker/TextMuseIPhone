@@ -136,6 +136,9 @@ const int HIDEMESSAGE = 1000;
 #ifdef NRCC
     initialXMLFile = @"nrccdata";
 #endif
+#ifdef YOUTHREACH
+    initialXMLFile = @"youthreach";
+#endif
     NSString *filePath = [[NSBundle mainBundle] pathForResource:initialXMLFile ofType:@"xml"];
     NSString* initialXML = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
@@ -174,6 +177,9 @@ const int HIDEMESSAGE = 1000;
 #endif
 #ifdef NRCC
     sponsor = @"&sponsor=115";
+#endif
+#ifdef YOUTHREACH
+    sponsor = @"&sponsor=171";
 #endif
     NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@",
                       urlNotes, lastDownload, appid, notif, sponsor];

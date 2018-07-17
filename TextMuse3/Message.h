@@ -62,6 +62,7 @@
 @property (readwrite) int sharePoints;
 @property (readwrite) int goPoints;
 @property (readwrite) BOOL version;
+@property (readwrite) BOOL quicksend;
 @property (readonly) ImageDownloader* loader;
 @property (nonatomic, readwrite, copy) NSData* img;
 @property (nonatomic, readonly, retain) NSURL* assetURL;

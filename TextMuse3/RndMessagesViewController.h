@@ -31,6 +31,7 @@ extern const int maxRecentIDs;
     UIView* walkthroughView;
     UIPageControl* pages;
     UIScrollView* scroller;
+    UIScrollView* scrollerCategories;
     NSTimer* timerReminder;
     NSArray* pinnedMessages;
     BOOL showPinned;

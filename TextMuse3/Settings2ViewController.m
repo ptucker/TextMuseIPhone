@@ -34,6 +34,9 @@
 #ifdef HUMANIX
     [btnVersions setHidden:true];
 #endif
+#ifdef YOUTHREACH
+    [btnVersions setHidden:true];
+#endif
 #ifdef OODLES
     [btnVersions setHidden:true];
 #endif

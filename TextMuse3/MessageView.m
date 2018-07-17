@@ -21,6 +21,7 @@
 #define BUTTONSBOTTOM
 
 NSString* urlFollowSponsor = @"http://www.textmuse.com/admin/following.php";
+extern NSString* urlUpdateQuickNotes;
 extern NSString* urlRemitBadge;
 
 @implementation MessageView
@@ -149,15 +150,18 @@ UIImage* openInNew = nil;
 */
 
 -(void)setContactsForMessage:(Message *)msg inView:(UIView *)subview {
-    [self setPhoneContactForMessage:msg inView:subview];
-    [self setTextContactForMessage:msg inView:subview];
+    if ([msg phoneno] != nil && [[msg phoneno] length] > 0)
+        [self setPhoneContactForMessage:msg inView:subview];
+    if ([msg textno] != nil && [[msg textno] length] > 0)
+        [self setTextContactForMessage:msg inView:subview];
 }
 
 -(void)setPhoneContactForMessage:(Message *)msg inView:(UIView *)subview {
     CGRect frmView = [subview frame];
     NSString* pno = [NSString stringWithFormat:@"p: %@", [msg phoneno]];
-    CGFloat x = ((frmView.size.width/2) + 200) / 2;
-    CGRect frmButton = CGRectMake(x, 4, 200, 32);
+    CGFloat x = (frmView.size.width/2) + 10;
+    CGFloat w = (frmView.size.width/2) - 20;
+    CGRect frmButton = CGRectMake(x, 4, w, 32);
     UIButton* btnPhone = [[UIButton alloc] initWithFrame:frmButton];
     [btnPhone setTitle:pno forState:UIControlStateNormal];
     [self setPropsForButton:btnPhone withColor:[SkinInfo Color1TextMuse]];
@@ -169,8 +173,9 @@ UIImage* openInNew = nil;
 -(void)setTextContactForMessage:(Message *)msg inView:(UIView *)subview {
     CGRect frmView = [subview frame];
     NSString* tno = [NSString stringWithFormat:@"t: %@", [msg textno]];
-    CGFloat x = ((frmView.size.width/2) - 200) / 2;
-    CGRect frmButton = CGRectMake(x, 4, 200, 32);
+    CGFloat x = 10;
+    CGFloat w = (frmView.size.width/2) - 20;
+    CGRect frmButton = CGRectMake(x, 4, w, 32);
     btnTextContact = [[UIButton alloc] initWithFrame:frmButton];
     [btnTextContact setTitle:tno forState:UIControlStateNormal];
     [self setPropsForButton:btnTextContact withColor:[SkinInfo Color1TextMuse]];
@@ -195,11 +200,9 @@ UIImage* openInNew = nil;
         CGFloat buttonWidth = frmView.size.width / 4;
         CGRect frmButton = CGRectMake(10, 10, buttonWidth, 32);
 #endif
+        NSString* title = [msg badge] ? @"Remit It" : @"Text It";
         btnText = [[UIButton alloc] initWithFrame:frmButton];
-        if ([msg badge])
-            [btnText setTitle:@"Remit It" forState:UIControlStateNormal];
-        else
-            [btnText setTitle:@"Text It" forState:UIControlStateNormal];
+        [btnText setTitle:title forState:UIControlStateNormal];
         [self setPropsForButton:btnText withColor:[SkinInfo Color1TextMuse]];
         [subview addSubview:btnText];
     }
@@ -257,8 +260,11 @@ UIImage* openInNew = nil;
 
 -(void) setPropsForButton:(UIButton*)btn withColor:(NSString*)color {
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [[btn titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
+    CGFloat sz = 16;
+    UIFont* fnt = [UIFont fontWithName:@"Lato-Regular" size:sz];
+    [[btn titleLabel] setFont:fnt];
     [[btn titleLabel] setNumberOfLines:1];
+    [[btn titleLabel] sizeToFit];
 
     UIColor* bkg = [SkinInfo createColor:color];
     [btn setBackgroundImage:[ImageUtil imageFromColor:bkg] forState:UIControlStateNormal];
@@ -475,7 +481,20 @@ UIImage* openInNew = nil;
     NSString *phoneNumber = [message phoneno];
     NSURL *phoneUrl = [NSURL URLWithString:[@"telprompt://" stringByAppendingString:phoneNumber]];
     NSURL *phoneFallbackUrl = [NSURL URLWithString:[@"tel://" stringByAppendingString:phoneNumber]];
+
+    NSURL* url = [NSURL URLWithString:urlUpdateQuickNotes];
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
+                                                       cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                   timeoutInterval:30];
+    [req setHTTPMethod:@"POST"];
+    NSString* post = [NSString stringWithFormat:@"id=%d&app=%@&cnt=%d&phone=1",
+                      [message msgId], AppID, 1];
+    [req setHTTPBody:[post dataUsingEncoding:NSUTF8StringEncoding]];
     
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:nil
+                                                    startImmediately:YES];
+
     if ([UIApplication.sharedApplication canOpenURL:phoneUrl]) {
         [UIApplication.sharedApplication openURL:phoneUrl];
     } else if ([UIApplication.sharedApplication canOpenURL:phoneFallbackUrl]) {

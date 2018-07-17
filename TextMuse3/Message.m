@@ -25,6 +25,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     newMsg = n;
     category = c;
     imgLock = [[NSObject alloc] init];
+    [self setQuicksend:NO];
     
     NSArray* parts = [Message FindUrlInString:m];
     if (parts != nil) {
@@ -48,7 +49,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     newMsg = n;
     category = c;
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+
     if (mediaUrl != nil) {
         loader = [[ImageDownloader alloc] initWithUrl:mediaUrl forMessage:self];
     }
@@ -74,7 +76,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         text = stored;
     }
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+
     return self;
 }
 
@@ -86,7 +89,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     mediaUrl = @"userphoto://";
     assetURL = [a valueForProperty:ALAssetPropertyAssetURL];
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+
     return self;
 }
 
@@ -99,7 +103,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     mediaUrl = @"usertext://";
     text = msg;
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+
     return self;
 }
 

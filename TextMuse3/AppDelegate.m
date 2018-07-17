@@ -116,6 +116,10 @@
     Skin = nil;
     colorTint = [SkinInfo createColor:[SkinInfo Color1TextMuse]];
 #endif
+#ifdef YOUTHREACH
+    Skin = nil;
+    colorTint = [UIColor colorWithRed:0.0/256 green:0.0/256 blue:154.0/256 alpha:1.0];
+#endif
     if (Skin != nil)
         colorTint = [Skin createColor1];
 
