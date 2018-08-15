@@ -51,6 +51,7 @@
 -(void)setPhoneContactForMessage:(Message*)msg inView:(UIView*)subview;
 -(void)setTextContactForMessage:(Message*)msg inView:(UIView*)subview;
 -(void)setContactsForMessage:(Message*)msg inView:(UIView*)subview;
+-(void)setHeaderForMessage:(Message*)msg inView:(UIView*)subview;
 -(IBAction)close:(id)sender;
 
 +(MessageView*)setupViewForMessage:(Message*)msg

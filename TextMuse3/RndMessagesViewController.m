@@ -39,6 +39,25 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [self defaultSkin];
     
     int messagesHeight = [[self view] frame].size.height - 95;
+    [[self navigationItem] setTitle:@""];
+    UIView* viewTitle = [[UIView alloc] init];
+    UIImageView* imgTitle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo-02-color_32"]];
+    CGRect rctImage = CGRectMake(0,0,32,32);
+    [imgTitle setFrame:rctImage];
+    [imgTitle setContentMode:UIViewContentModeScaleAspectFit];
+    [viewTitle addSubview:imgTitle];
+    UILabel* lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, 75, 44)];
+    [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+    [lblTitle setTextColor:[UIColor whiteColor]];
+    [lblTitle setText:@"TextMuse"];
+    [lblTitle sizeToFit];
+    [viewTitle addSubview:lblTitle];
+    CGRect frmNavBar = [[[self navigationController] navigationBar] frame];
+    [viewTitle sizeToFit];
+    CGFloat widthTitle = 32 + [lblTitle frame].size.width;
+    [viewTitle setFrame:CGRectMake(frmNavBar.size.width/2 - widthTitle/2, 6, widthTitle, 38)];
+    [[self navigationItem] setTitleView:viewTitle];
+
 #ifdef HUMANIX
     [[self navigationItem] setTitle:@"Hire Me Northwest"];
 #endif
@@ -92,7 +111,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         UIColor* colorTint = [colorsText objectAtIndex:0];
         UIColor* colorBkgd = [colors objectAtIndex:2];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
-        [[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
+        //[[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
+        [[[self navigationController] navigationBar] setBarTintColor:[UIColor blackColor]];
     }
     
 #ifdef HUMANIX
@@ -236,7 +256,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 
     if (Skin != nil) {
         colors = [NSArray arrayWithObjects:[Skin createColor1], [Skin createColor2], [Skin createColor3], nil];
-        colorsText = [NSArray arrayWithObjects:[Skin createTextColor1], [Skin createTextColor2], [Skin createTextColor3], nil];
+        colorsText = [NSArray arrayWithObjects:[Skin createTextColor1],
+                      [Skin createTextColor2], [Skin createTextColor3], nil];
         colorsTitle = [NSArray arrayWithArray:colors];
     }
     
@@ -432,7 +453,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         UIColor* colorTint = [colorsText objectAtIndex:0];
         UIColor* colorBkgd = [colors objectAtIndex:2];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
-        [[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
+        //[[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
         UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
@@ -447,32 +468,6 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
         [btnGroup setTitleColor:colorTint forState:UIControlStateNormal];
-        
-        //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
-        NSString* title = nil;
-#ifdef HUMANIX
-        title = @"Hire Me Northwest";
-#endif
-#ifdef YOUTHREACH
-        title = @"YouthREACH";
-#endif
-#ifdef OODLES
-        title = @"Oodles";
-#endif
-#ifdef NRCC
-        title = @"NRCC";
-#endif
-        if (title == nil)
-            title = @"TextMuse";// [NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]];
-        [[self navigationItem] setTitle:title];
-        
-        /*
-        ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
-                                               forNavigationItemLeftButton:[self navigationItem]
-                                                                withTarget:self
-                                                              withSelector:@selector(showCategoryList:)];
-        [downloader load];
-         */
     }
     else {
         [self setColors];
@@ -514,9 +509,11 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     if (scrollerCategories != nil)
         [scrollerCategories removeFromSuperview];
     
-    scrollerCategories = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 65, [[self view] frame].size.width, 30)];
+    CGFloat scrollerHeight = 30;
+    CGRect rctButton = CGRectMake(0, 65, [[self view] frame].size.width, scrollerHeight);
+    scrollerCategories = [[UIScrollView alloc] initWithFrame:rctButton];
     NSArray* categories = [Data getCategories];
-    CGFloat widthBtn = 250, heightBtn = 30;
+    CGFloat widthBtn = 250, heightBtn = scrollerHeight - 5;
     CGFloat widthTotal = 10, margin = 20;
     UIButton* btn = [self makeCategoryButton:@"all"
                                    withFrame:CGRectMake(0, 0, widthBtn, heightBtn)];
@@ -530,7 +527,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [scrollerCategories addSubview:btn];
     }
     
-    [scrollerCategories setContentSize:CGSizeMake(widthTotal, 30)];
+    [scrollerCategories setContentSize:CGSizeMake(widthTotal, scrollerHeight)];
     
     [[self view] addSubview:scrollerCategories];
 }
@@ -538,8 +535,10 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 - (UIButton*) makeCategoryButton:(NSString*)category withFrame:(CGRect)frame {
     UIButton* btn = [[UIButton alloc] initWithFrame:frame];
     [btn setTitle:category forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [[btn titleLabel] setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
+    [btn setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [[btn titleLabel] sizeToFit];
     [btn sizeToFit];
     [btn addTarget:self action:@selector(chooseCategory:) forControlEvents:UIControlEventTouchUpInside];

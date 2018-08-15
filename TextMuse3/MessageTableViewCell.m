@@ -141,9 +141,11 @@ extern NSString* urlRemitBadge;
     }
     [btnSend setFrame:frmSend];
     
-    NSString* titletext = [msg category];
+    NSString* titletext = ([[msg sponsorName] length] > 0) ? [msg sponsorName] : [msg category];
+    /*
     if ([[msg sponsorName] length] > 0)
         titletext = [NSString stringWithFormat:@"%@/%@", [msg category], [msg sponsorName]];
+     */
     [lblTitle setText:titletext];
     [lblTitle setTextColor:[UIColor darkGrayColor]];
     [lblContent setTextColor:[UIColor darkGrayColor]];

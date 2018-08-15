@@ -57,6 +57,7 @@
     UIFont* fontText = [UIFont fontWithName:@"Lato-Medium" size:fontSize];
     CGSize sizeText = CGSizeMake(frame.size.width-88, frame.size.height - 80);
     sizeText = [TextUtil GetContentSizeForText:[msg text] inSize:sizeText forFont:fontText];
+    CGRect frmHeader = CGRectMake(10, 10, frame.size.width-20, 40);
     CGRect frmImage = [self setupImageForMessage:msg inFrame:frame];
     
     CGFloat textTop = frmImage.origin.y + frmImage.size.height + 8;
@@ -128,8 +129,17 @@
         
         buttonsTop += frmButtons.size.height;
     }
+    
+    UIView* viewHeader = [[UIView alloc] initWithFrame:frmHeader];
+    [self setHeaderForMessage:msg inView:viewHeader];
+    [self addSubview:viewHeader];
+
+    /*
     CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width,
                                    [self frame].size.height - buttonsTop);
+     */
+    CGRect frmButtons = CGRectMake(0, [self frame].size.height - 48,
+                                   [self frame].size.width, 40);
     UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];
     [self setDetailsForMessage:msg inView:viewButtons];
     
@@ -137,7 +147,7 @@
 }
 
 -(CGRect)setupImageForMessage:(Message*)msg inFrame:(CGRect)frame {
-    CGRect frmImgContent = CGRectMake(14, 14, frame.size.width-28, frame.size.height / 2);
+    CGRect frmImgContent = CGRectMake(14, 84, frame.size.width-28, frame.size.height / 2);
     BOOL gif = [[msg imgType] isEqualToString:@"image/gif"];
     
     CGRect frmImg = CGRectMake(0, 0, frmImgContent.size.width, frmImgContent.size.height);

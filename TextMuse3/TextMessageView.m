@@ -61,9 +61,11 @@
     sizeBubble = [ImageUtil GetContentSizeForImage:bubble1 inSize:sizeBubble forCell:NO];
     
     CGFloat quoteTop = frame.size.height/6;
+    CGRect frmHeader = CGRectMake(10, 10, frame.size.width-20, 40);
     CGRect frmLeftQuote = CGRectMake(14, quoteTop, 44, 44);
     CGRect frmRightQuote = CGRectMake(frame.size.width - 58, quoteTop, 44, 44);
-    CGRect frmBubble = CGRectMake(frame.size.width/8, 0, sizeBubble.width, sizeBubble.height);
+    CGRect frmBubble = CGRectMake(frame.size.width/8, 70,
+                                  sizeBubble.width, sizeBubble.height);
     CGRect frmLblContent = CGRectMake(66, quoteTop, sizeContent.width, sizeContent.height);
     imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
     switch (i) {
@@ -113,8 +115,17 @@
 
         buttonsTop += frmButtons.size.height;
     }
+    
+    UIView* viewHeader = [[UIView alloc] initWithFrame:frmHeader];
+    [self setHeaderForMessage:msg inView:viewHeader];
+    [self addSubview:viewHeader];
+    
+    /*
     CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width,
                                    [self frame].size.height - buttonsTop);
+     */
+    CGRect frmButtons = CGRectMake(0, [self frame].size.height - 48,
+                                   [self frame].size.width, 40);
     UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];
     [self setDetailsForMessage:msg inView:viewButtons];
     

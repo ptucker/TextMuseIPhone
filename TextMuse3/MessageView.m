@@ -149,6 +149,14 @@ UIImage* openInNew = nil;
 }
 */
 
+-(void)setHeaderForMessage:(Message*)msg inView:(UIView*)subview {
+    UILabel* header = [[UILabel alloc] initWithFrame:[subview frame]];
+    [header setText:[[msg sponsorName] length] > 0 ? [msg sponsorName] : [msg category]];
+    [header setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+    [header setTextColor:[UIColor darkGrayColor]];
+    [subview addSubview:header];
+}
+
 -(void)setContactsForMessage:(Message *)msg inView:(UIView *)subview {
     if ([msg phoneno] != nil && [[msg phoneno] length] > 0)
         [self setPhoneContactForMessage:msg inView:subview];
@@ -200,7 +208,7 @@ UIImage* openInNew = nil;
         CGFloat buttonWidth = frmView.size.width / 4;
         CGRect frmButton = CGRectMake(10, 10, buttonWidth, 32);
 #endif
-        NSString* title = [msg badge] ? @"Remit It" : @"Text It";
+        NSString* title = [msg badge] ? @"REMIT IT" : @"TEXT IT";
         btnText = [[UIButton alloc] initWithFrame:frmButton];
         [btnText setTitle:title forState:UIControlStateNormal];
         [self setPropsForButton:btnText withColor:[SkinInfo Color1TextMuse]];
@@ -221,7 +229,7 @@ UIImage* openInNew = nil;
         CGRect frmButton = CGRectMake(x, 10, buttonWidth, 32);
 #endif
         btnDetails = [[UIButton alloc] initWithFrame:frmButton];
-        [btnDetails setTitle:@"Details" forState:UIControlStateNormal];
+        [btnDetails setTitle:@"WEBSITE" forState:UIControlStateNormal];
         [self setPropsForButton:btnDetails withColor:[SkinInfo Color2TextMuse]];
         [btnDetails setHidden:[msg url] == nil || [[msg url] length] == 0];
         [subview addSubview:btnDetails];
@@ -238,7 +246,7 @@ UIImage* openInNew = nil;
     CGRect frmView = [subview frame];
 #ifndef OODLES
     if (btnFollow == nil && [[msg sponsorName] length] > 0) {
-        NSString* followText = [NSString stringWithFormat:@"%@ollow", [msg following] ? @"Unf" : @"F"];
+        NSString* followText = [NSString stringWithFormat:@"%@OLLOW", [msg following] ? @"UNF" : @"F"];
 #ifdef BUTTONSSIDE
         CGRect frmButton = CGRectMake(frmView.size.width - 120, 90, 112, 32);
 #endif
@@ -259,17 +267,23 @@ UIImage* openInNew = nil;
 }
 
 -(void) setPropsForButton:(UIButton*)btn withColor:(NSString*)color {
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    CGFloat sz = 16;
-    UIFont* fnt = [UIFont fontWithName:@"Lato-Regular" size:sz];
+    CGSize szView = [self frame].size;
+    CGFloat sz = szView.width < 321 ? 16 : 20;
+    UIFont* fnt = [UIFont fontWithName:@"Lato-Medium" size:sz];
     [[btn titleLabel] setFont:fnt];
     [[btn titleLabel] setNumberOfLines:1];
     [[btn titleLabel] sizeToFit];
+    
+    [btn setTitleColor:[SkinInfo createColor:color] forState:UIControlStateNormal];
+
+    /*
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
     UIColor* bkg = [SkinInfo createColor:color];
     [btn setBackgroundImage:[ImageUtil imageFromColor:bkg] forState:UIControlStateNormal];
     [[btn layer] setCornerRadius:10];
     [[btn layer] setMasksToBounds:YES];
+     */
 }
 
 -(void)setDetailsTextForMessage:(Message*)msg inView:(UIView*)subview {

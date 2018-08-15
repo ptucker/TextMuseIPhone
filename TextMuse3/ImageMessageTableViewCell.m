@@ -28,8 +28,8 @@ UIImage* imgLoading;
         img = [UIImage imageWithData:[msg img]];
     else {
         if (imgLoading == nil) {
-            imgLoading = [UIImage imageNamed:@"TransparentButterfly"];
-            imgLoading = [ImageUtil applyAlpha:0.70 toImage:imgLoading];
+            imgLoading = [UIImage imageNamed:@"logo-02-bw"];
+            //imgLoading = [ImageUtil applyAlpha:0.70 toImage:imgLoading];
         }
         img = imgLoading;
         [[msg loader] addImageView:imgContent];
