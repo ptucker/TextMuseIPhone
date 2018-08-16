@@ -513,10 +513,10 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     CGRect rctButton = CGRectMake(0, 65, [[self view] frame].size.width, scrollerHeight);
     scrollerCategories = [[UIScrollView alloc] initWithFrame:rctButton];
     NSArray* categories = [Data getCategories];
-    CGFloat widthBtn = 250, heightBtn = scrollerHeight - 5;
+    CGFloat widthBtn = 250, heightBtn = scrollerHeight;
     CGFloat widthTotal = 10, margin = 20;
     UIButton* btn = [self makeCategoryButton:@"all"
-                                   withFrame:CGRectMake(0, 0, widthBtn, heightBtn)];
+                                   withFrame:CGRectMake(widthTotal, 0, widthBtn, heightBtn)];
     widthTotal += [btn frame].size.width + margin;
     [scrollerCategories addSubview:btn];
     [btn setSelected:true];

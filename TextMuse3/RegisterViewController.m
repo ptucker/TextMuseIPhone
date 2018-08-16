@@ -89,7 +89,7 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
 
 -(IBAction)btnPrivacy:(id)sender {
     [[UIApplication sharedApplication]
-     openURL:[NSURL URLWithString:@"http://www.textmuse.com/privacy-policy"]];
+     openURL:[NSURL URLWithString:@"http://www.textmuse.com/privacy.html"]];
 }
 
 -(IBAction)registerUser:(id)sender {
