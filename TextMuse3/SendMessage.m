@@ -52,12 +52,10 @@ NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
                 for (NSString*c in contacts) {
                     [phones addObject:c];
                 }
-                [contacts removeAllObjects];
             }
             else {
                 NSString* c = [contacts objectAtIndex:0];
                 [phones addObject:c];
-                [contacts removeObjectAtIndex:0];
             }
         }
         [self sendMessages:phones];
@@ -183,27 +181,15 @@ NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
         [controller dismissViewControllerAnimated:YES completion:nil];
     }
     else {
-        sendcount++;
-        if ([contacts count] == 0) {
-            [self updateMessageCount:[CurrentMessage msgId]
-                           withCount:(unsigned int)sendcount];
-            [controller dismissViewControllerAnimated:YES completion:^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_parent dismissViewControllerAnimated:YES completion:nil];
-                    [[_parent navigationController] popToRootViewControllerAnimated:YES];
-                });
-            }];
-        }
-        else {
-            NSMutableArray* phones = [[NSMutableArray alloc] init];
-            NSString* c = [contacts objectAtIndex:0];
-            [phones addObject:c];
-            [contacts removeObjectAtIndex:0];
+        [self updateMessageCount:[CurrentMessage msgId]
+                       withCount:[contacts count] == 0 ? 1 : (unsigned int)[contacts count]];
+        [contacts removeAllObjects];
+        [controller dismissViewControllerAnimated:YES completion:^{
             dispatch_async(dispatch_get_main_queue(), ^{
-                [controller dismissViewControllerAnimated:YES completion:nil];
-                [self sendMessages:phones];
+                [self->_parent dismissViewControllerAnimated:YES completion:nil];
+                [[self->_parent navigationController] popToRootViewControllerAnimated:YES];
             });
-        }
+        }];
     }
 }
 

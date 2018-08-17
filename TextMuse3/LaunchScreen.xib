@@ -21,18 +21,12 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-02-color.png" translatesAutoresizingMaskIntoConstraints="NO" id="u2d-gi-hju">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-02-color-1024.png" translatesAutoresizingMaskIntoConstraints="NO" id="u2d-gi-hju">
                     <rect key="frame" x="37" y="161" width="301" height="301"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="u2d-gi-hju" secondAttribute="height" multiplier="1:1" id="OUf-Pd-bOc"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TextMuse" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFg-tA-wdO">
-                    <rect key="frame" x="37" y="439" width="301" height="41"/>
-                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="34"/>
-                    <color key="textColor" red="0.92941176470588238" green="0.41176470588235292" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 3.0.0.282" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hhK-7i-FBB">
                     <rect key="frame" x="37" y="488" width="301" height="21"/>
                     <constraints>
@@ -47,12 +41,9 @@
             <constraints>
                 <constraint firstItem="hhK-7i-FBB" firstAttribute="trailing" secondItem="u2d-gi-hju" secondAttribute="trailing" id="4EE-go-ChN"/>
                 <constraint firstAttribute="trailing" secondItem="u2d-gi-hju" secondAttribute="trailing" constant="37" id="6Hn-lG-2ag"/>
-                <constraint firstItem="hhK-7i-FBB" firstAttribute="leading" secondItem="kFg-tA-wdO" secondAttribute="leading" id="GFg-6e-Dsa"/>
                 <constraint firstItem="u2d-gi-hju" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="37" id="MD7-5i-FlB"/>
-                <constraint firstItem="hhK-7i-FBB" firstAttribute="trailing" secondItem="kFg-tA-wdO" secondAttribute="trailing" id="PKG-Ct-GMd"/>
                 <constraint firstItem="u2d-gi-hju" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="161" id="btl-jZ-VSi"/>
                 <constraint firstItem="hhK-7i-FBB" firstAttribute="leading" secondItem="u2d-gi-hju" secondAttribute="leading" id="gZz-S5-oA1"/>
-                <constraint firstItem="hhK-7i-FBB" firstAttribute="top" secondItem="kFg-tA-wdO" secondAttribute="bottom" constant="8" symbolic="YES" id="qtG-Yh-bD8"/>
                 <constraint firstItem="hhK-7i-FBB" firstAttribute="top" secondItem="u2d-gi-hju" secondAttribute="bottom" constant="26" id="tjC-Z3-n3t"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
@@ -60,6 +51,6 @@
         </view>
     </objects>
     <resources>
-        <image name="logo-02-color.png" width="1732" height="1491"/>
+        <image name="logo-02-color-1024.png" width="1024" height="1024"/>
     </resources>
 </document>

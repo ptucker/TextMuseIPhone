@@ -671,11 +671,20 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 
 -(void) animateMessage {
     CGFloat top = 60;
+    /*
+     //Slide from top
     CGRect frmEnd = [[self view] frame];
     frmEnd.origin.y += top;
     frmEnd.size.height -= top;
     CGRect frmStart = frmEnd;
     frmStart.origin.y -= frmStart.size.height;
+     */
+    // Slide from left
+    CGRect frmEnd = [[self view] frame];
+    frmEnd.origin.y += top;
+    frmEnd.size.height -= top;
+    CGRect frmStart = frmEnd;
+    frmStart.origin.x -= frmStart.size.width;
     mv = [MessageView setupViewForMessage:CurrentMessage
                                   inFrame:frmEnd
                                withBadges:YES

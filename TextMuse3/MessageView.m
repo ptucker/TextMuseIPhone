@@ -55,8 +55,7 @@ UIImage* openInNew = nil;
         
         CGRect frmExit = CGRectMake(frame.size.width-32, 32, 32, 32);
         UIButton* btnExit = [[UIButton alloc] initWithFrame:frmExit];
-        [btnExit setBackgroundColor:[UIColor lightGrayColor]];
-        [btnExit setTitle:@"X" forState:UIControlStateNormal];
+        [btnExit setImage:[UIImage imageNamed:@"arrow-collapse-left"] forState:UIControlStateNormal];
         [[btnExit titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
         [btnExit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btnExit addTarget:mv action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
@@ -85,7 +84,7 @@ UIImage* openInNew = nil;
     
     swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self
                                                       action:@selector(close:)];
-    [swipe setDirection:UISwipeGestureRecognizerDirectionUp];
+    [swipe setDirection:UISwipeGestureRecognizerDirectionLeft];
     [swipe setDelaysTouchesBegan:YES];
     [self addGestureRecognizer:swipe];
     
@@ -287,20 +286,22 @@ UIImage* openInNew = nil;
 }
 
 -(void)setDetailsTextForMessage:(Message*)msg inView:(UIView*)subview {
+    if ([msg sendcount] == 0 && [msg visitcount] == 0)
+        return;
+    
 #ifdef BUTTONSSIDE
     CGFloat textTop = 10;
     int start = (([subview frame].size.width - 140) / 2) - 83;
 #endif
 #ifdef BUTTONSBOTTOM
-    CGFloat textTop = 50;
+    CGFloat textTop = 10;
     int start = ([subview frame].size.width / 2) - 83;
 #endif
     CGFloat imgSize = ([subview frame].size.height < 250) ? 32 : 48;
 
     if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
         for (int i=0; i<3; i++) {
-            UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake(start + (i*60), textTop,
-                                                                                  imgSize, imgSize)];
+            UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake(start + (i*60), textTop, imgSize, imgSize)];
             [subview addSubview:imgBadge];
             ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[msg badgeURL]
                                                                 forImgView:imgBadge];
@@ -314,7 +315,7 @@ UIImage* openInNew = nil;
     NSString* threetier = [msg visitcount] != 0 ?
         [NSString stringWithFormat:@"Visit with %d badges: %@", [msg visitcount], [msg visitWinnerText]] : @"";
     
-    uint fontsize = ([subview frame].size.height < 250) ? 14 : 18;
+    uint fontsize = 18;
     UIFont* fontDetails = [UIFont fontWithName:@"Lato-Light" size:fontsize];
     
 #ifdef BUTTONSSIDE
@@ -348,6 +349,24 @@ UIImage* openInNew = nil;
     [lblThree setTextColor:[UIColor blackColor]];
     [lblThree setTextAlignment:NSTextAlignmentCenter];
     [subview addSubview:lblThree];
+    
+    CGFloat detailHeight = [lblThree frame].origin.y + [lblThree frame].size.height;
+    NSArray* btns = [NSArray arrayWithObjects:btnText, btnFollow, btnDetails, nil];
+    for (UIButton* b in btns) {
+        CGRect frm = [b frame];
+        frm.origin.y = detailHeight + 10;
+        [b setFrame:frm];
+    }
+    
+    CGFloat reqHeight = [btnText frame].origin.y + [btnText frame].size.height;
+    
+    //Need to make sure the view can hold this information
+    CGRect frm = [subview frame];
+    if (frm.size.height < reqHeight) {
+        frm.origin.y -= (reqHeight - frm.size.height);
+        frm.size.height = reqHeight;
+        [subview setFrame:frm];
+    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -538,8 +557,12 @@ UIImage* openInNew = nil;
 
 -(IBAction)close:(id)sender {
     CGRect frmEnd = [self frame];
+    /*
+    //Slide up
     frmEnd.origin.y = -frmEnd.size.height;
-    
+    */
+    //Slide left
+    frmEnd.origin.x = -frmEnd.size.width;
     [self removeGestureRecognizer:swipe];
     
     [UIView animateWithDuration:0.5
