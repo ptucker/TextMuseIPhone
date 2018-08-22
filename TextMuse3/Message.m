@@ -10,6 +10,7 @@
 #import "Settings.h"
 #import "YTPlayerView.h"
 #import "SuccessParser.h"
+#import "TextUtil.h"
 
 YTPlayerView* globalYTPlayer = nil;
 NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
@@ -231,7 +232,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         if ([self text] != nil && [[self text] length] > 0) {
             CGRect frmTitle = CGRectMake(20, 20, frmView.size.width - 60, 30);
             UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-            [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+            [lblTitle setFont:[TextUtil GetDefaultFontForSize:18.0]];
             [lblTitle setTextColor:[UIColor blackColor]];
             [lblTitle setText:[self text]];
             [viewWeb addSubview:lblTitle];
@@ -240,7 +241,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         CGRect frmButton = CGRectMake(frmView.size.width - 40, 20, 30, 30);
         UIButton* btnClose = [[UIButton alloc] initWithFrame:frmButton];
         [btnClose setTitle:@"X" forState:UIControlStateNormal];
-        [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:36]];
+        [[btnClose titleLabel] setFont:[TextUtil GetDefaultFontForSize:36.0]];
         [btnClose setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btnClose addTarget:self action:@selector(closeWeb:) forControlEvents:UIControlEventTouchUpInside];
         [viewWeb addSubview:btnClose];

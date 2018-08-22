@@ -9,29 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TextMuse3/SendMessage.m"
-            timestampString = "556230457.12503"
+            filePath = "TextMuse3/RndMessagesViewController.m"
+            timestampString = "556659287.571618"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "-updateMessageCount:withCount:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TextMuse3/SendMessage.m"
-            timestampString = "556230687.588367"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "-sendMessageTo:from:"
+            startingLineNumber = "1076"
+            endingLineNumber = "1076"
+            landmarkName = "-closeSkin"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

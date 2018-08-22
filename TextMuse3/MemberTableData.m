@@ -7,7 +7,7 @@
 //
 
 #import "MemberTableData.h"
-
+#import "TextUtil.h"
 @implementation MemberTableData
 
 -(id)init {
@@ -83,7 +83,7 @@
     if (lblName == nil) {
         lblName = [[UILabel alloc] initWithFrame:CGRectMake(36, 2, [cell frame].size.width - 44, 28)];
         [lblName setTag:101];
-        [lblName setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+        [lblName setFont:[TextUtil GetDefaultFontForSize:16.0]];
         [cell addSubview:lblName];
     }
     [lblName setText:[uc description]];

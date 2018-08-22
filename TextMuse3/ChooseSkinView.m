@@ -13,6 +13,8 @@
 #import "GlobalState.h"
 #import "Settings.h"
 #import "AppDelegate.h"
+#import "TextUtil.h"
+#import "GuidedTourStepView.h"
 
 @implementation ChooseSkinView
 
@@ -26,7 +28,7 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     CGRect frmTitle = CGRectMake(10, frame.origin.y, frame.size.width-20, 32);
     UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
     [lblTitle setText:@"Choose Version"];
-    [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
+    [lblTitle setFont:[TextUtil GetDefaultFontForSize:20.0]];
     [lblTitle setTextColor:[UIColor blackColor]];
     [self addSubview:lblTitle];
     
@@ -62,16 +64,18 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [activityView setHidesWhenStopped:YES];
     [activityView startAnimating];
     [self addSubview:activityView];
+    
+    if (Tour != nil) {
+        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getFirstStep] forFrame:[self frame]];
+        [self addSubview:gv];
+        [self bringSubviewToFront:gv];
+    }
 
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
                                                             delegate:self
                                                     startImmediately:YES];
 
     return self;
-}
-
--(IBAction)close:(id)sender {
-    [self removeFromSuperview];
 }
 
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
@@ -121,7 +125,7 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [cell addSubview:img];
     
     UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(70, 4, [self frame].size.width-74, 40)];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:24.0]];
+    [lbl setFont:[TextUtil GetDefaultFontForSize:24]];
     [lbl setText:[skinNames objectAtIndex:[indexPath row]]];
     [lbl setTextColor:[SkinInfo createColor:[skinColors objectAtIndex:[indexPath row]]]];
     [cell addSubview:lbl];
@@ -143,27 +147,27 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [Data reloadData];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate registerRemoteNotificationWithAzure];
-    
-    [self close:nil];
+
+    [self removeFromSuperview];
 }
 
 
 -(void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-    
+    NSLog(@"Error parsing skins");
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI
 qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if (skinNames == nil) {
         skinNames = [[NSMutableArray alloc] init];
+        skinIcons = [[NSMutableArray alloc] init];
+        skinIDs = [[NSMutableArray alloc] init];
+        skinColors = [[NSMutableArray alloc] init];
 #ifdef UNIVERSITY
         /*
         [skinNames addObject:@"Main"];
-        skinIcons = [[NSMutableArray alloc] init];
         [skinIcons addObject:@"TransparentButterfly.png"];
-        skinIDs = [[NSMutableArray alloc] init];
         [skinIDs addObject:@"-1"];
-        skinColors = [[NSMutableArray alloc] init];
         [skinColors addObject:@"000000"];
          */
 #endif

@@ -174,7 +174,7 @@
     
     if (SortLastName != [sortContacts isOn]) {
         SortLastName = [sortContacts isOn];
-        [Data sortContacts];
+        //[Data sortContacts];
     }
     [Settings SaveSetting:SettingSortLastName withValue:SortLastName ? @"YES" : @"NO"];
     

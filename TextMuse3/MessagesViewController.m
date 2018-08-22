@@ -14,6 +14,7 @@
 #import "DataAccess.h"
 #import "SqlData.h"
 #import "SuccessParser.h"
+#import "TextUtil.h"
 
 NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
 NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
@@ -32,7 +33,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
     NSDictionary* txtAttrs =[NSDictionary dictionaryWithObjectsAndKeys:
-                             [UIFont fontWithName:@"Lato-Medium" size:18.0], NSFontAttributeName, nil];
+                             [TextUtil GetBoldFontForSize:18.0], NSFontAttributeName, nil];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:txtAttrs forState:UIControlStateNormal];
     
     MessageCategory* mc = [Data getCategory:CurrentCategory];
@@ -86,7 +87,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     UILabel* lbl = [[UILabel alloc] initWithFrame:frmSelect];
     [lbl setText:@"Share. Go. Win."];
     [lbl setTextAlignment:NSTextAlignmentCenter];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+    [lbl setFont:[TextUtil GetDefaultFontForSize:22.0]];
     [lowerView addSubview:lbl];
 #endif
     [scrollview setDelegate:self];

@@ -8,6 +8,7 @@
 
 #import "RndMessagesViewController.h"
 #import "WalkthroughViewController.h"
+#import "GuidedTourStepView.h"
 #import "ImageMessageTableViewCell.h"
 #import "TextMessageTableViewCell.h"
 #import "Settings2ViewController.h"
@@ -47,7 +48,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [imgTitle setContentMode:UIViewContentModeScaleAspectFit];
     [viewTitle addSubview:imgTitle];
     UILabel* lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, 75, 44)];
-    [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+    [lblTitle setFont:[TextUtil GetDefaultFontForSize:24.0]];
     [lblTitle setTextColor:[UIColor whiteColor]];
     [lblTitle setText:@"TextMuse"];
     [lblTitle sizeToFit];
@@ -76,8 +77,6 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 #endif
     
     categoryFilter = @"all";
-    
-    [self setupCategoryButton];
     
     CGRect frmMessages = CGRectMake(0, 95, [[self view] frame].size.width, messagesHeight);
     messages = [[UITableView alloc] initWithFrame:frmMessages];
@@ -115,6 +114,11 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [[[self navigationController] navigationBar] setBarTintColor:[UIColor blackColor]];
     }
     
+    CGFloat scrollerHeight = 30;
+    CGRect rctButton = CGRectMake(0, 65, [[self view] frame].size.width, scrollerHeight);
+    scrollerCategories = [[UIScrollView alloc] initWithFrame:rctButton];
+    [[self view] addSubview:scrollerCategories];
+
 #ifdef HUMANIX
     ShowIntro = NO;
 #endif
@@ -126,7 +130,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 #endif
     
     if (ShowIntro) {
-        [self showWalkthrough];
+        if (Tour == nil)
+            Tour = [[GuidedTour alloc] init];
         
         [self showChooseSkin];
     }
@@ -153,6 +158,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [[btnGroup imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [btnBadges setTitle:@"badges" forState:UIControlStateNormal];
     [btnBadges setTitle:@"all" forState:UIControlStateSelected];
+    
+    contactStore = [[CNContactStore alloc] init];
     
 #ifndef UNIVERSITY
     [btnBadges setHidden:YES];
@@ -247,6 +254,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     }
     else if ([viewController isKindOfClass:[Settings2ViewController class]])
         segueSettings = YES;
+
+    [self setupCategoryButton];
 }
 
 -(void)setColors {
@@ -346,7 +355,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     CGRect frmTitle = CGRectMake(80, frm.size.height - 100, frm.size.width - 160, 44);
     UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
     [title setTextAlignment:NSTextAlignmentCenter];
-    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:28]];
+    [title setFont:[TextUtil GetBoldFontForSize:28.0]];
     [title setTextColor:[Skin createColor1]];
     //[title setText:[NSString stringWithFormat:@"%@ %@", [Skin SkinName], bundleName]];
     [title setText:[NSString stringWithFormat:@"%@", bundleName]];
@@ -376,7 +385,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     CGRect frmTitle = CGRectMake(10, y + frmLogo.size.height + 10, frm.size.width - 20, 44);
     UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
     [title setTextAlignment:NSTextAlignmentCenter];
-    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:44]];
+    [title setFont:[TextUtil GetBoldFontForSize:44.0]];
     [title setTextColor:[UIColor whiteColor]];
     [title setText:bundleName];
     [splash addSubview:title];
@@ -387,7 +396,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     
     UILabel* version = [[UILabel alloc] initWithFrame:frmVersion];
     [version setTextAlignment:NSTextAlignmentCenter];
-    [version setFont:[UIFont fontWithName:@"Lato-Light" size:30]];
+    [version setFont:[TextUtil GetLightFontForSize:30.0]];
     [version setTextColor:[UIColor whiteColor]];
     [version setText:[NSString stringWithFormat:@"%@.%@", ver, build]];
     [splash addSubview:version];
@@ -506,13 +515,14 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 }
 
 -(void) setupCategoryButton {
-    if (scrollerCategories != nil)
-        [scrollerCategories removeFromSuperview];
+    //Clear out the old buttons
+    while ([[scrollerCategories subviews] count] != 0) {
+        UIView* v = [[scrollerCategories subviews] objectAtIndex:0];
+        [v removeFromSuperview];
+    }
     
-    CGFloat scrollerHeight = 30;
-    CGRect rctButton = CGRectMake(0, 65, [[self view] frame].size.width, scrollerHeight);
-    scrollerCategories = [[UIScrollView alloc] initWithFrame:rctButton];
     NSArray* categories = [Data getCategories];
+    CGFloat scrollerHeight = [scrollerCategories frame].size.height;
     CGFloat widthBtn = 250, heightBtn = scrollerHeight;
     CGFloat widthTotal = 10, margin = 20;
     UIButton* btn = [self makeCategoryButton:@"all"
@@ -528,8 +538,6 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     }
     
     [scrollerCategories setContentSize:CGSizeMake(widthTotal, scrollerHeight)];
-    
-    [[self view] addSubview:scrollerCategories];
 }
 
 - (UIButton*) makeCategoryButton:(NSString*)category withFrame:(CGRect)frame {
@@ -537,7 +545,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [btn setTitle:category forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [[btn titleLabel] setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
+    [[btn titleLabel] setFont:[TextUtil GetBoldFontForSize:20.0]];
     [btn setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [[btn titleLabel] sizeToFit];
     [btn sizeToFit];
@@ -697,7 +705,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [[self view] addSubview:mv];
     
     [UIView animateWithDuration:0.5
-                     animations: ^{ [mv setFrame: frmEnd]; }
+                     animations: ^{ [self->mv setFrame: frmEnd]; }
                      completion: nil];
 }
 
@@ -711,11 +719,54 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [alert show];
     }
     else {
-        if ([[Data getContacts] count] == 0)
-            [sendMessage sendMessageTo:nil from:self];
+        if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusNotDetermined) {
+            [contactStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError* err) {
+                if (granted) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        CNContactPickerViewController* cvc = [[CNContactPickerViewController alloc] init];
+                        [cvc setDelegate:self];
+                        [self presentViewController:cvc animated:YES completion:nil];
+                    });
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self->sendMessage sendMessageTo:nil from:self];
+                    });
+                    
+                }
+            }
+             ];
+        }
+        else if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized) {
+            CNContactPickerViewController* cvc = [[CNContactPickerViewController alloc] init];
+            [cvc setDelegate:self];
+            [self presentViewController:cvc animated:YES completion:nil];
+        }
         else
-            [self performSegueWithIdentifier:@"SendMessage" sender:self];
+            [sendMessage sendMessageTo:nil from:self];
     }
+}
+
+-(void)contactPicker:(CNContactPickerViewController *)picker didSelectContact:(CNContact *)contact {
+    NSArray<CNContact*>* cs = [NSArray arrayWithObject:contact];
+    [self contactPicker:picker didSelectContacts:cs];
+}
+
+-(void)contactPicker:(CNContactPickerViewController *)picker didSelectContacts:(NSArray<CNContact *> *)contacts {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    NSMutableArray* usercontacts = [[NSMutableArray alloc] init];
+    for (CNContact* c in contacts) {
+        NSMutableArray* phones = [[NSMutableArray alloc] init];
+        for (CNPhoneNumber* p in [c phoneNumbers]) {
+            UserPhone* up = [[UserPhone alloc] initWithNumber:[[p valueForKey:@"value"] valueForKey:@"digits"]
+                                                        Label:[p valueForKey:@"label"]];
+            [phones addObject:up];
+        }
+        UserContact* uc = [[UserContact alloc] initWithFName:[c givenName] LName:[c familyName] Phones:phones Photo:[c imageData]];
+        [usercontacts addObject:uc];
+    }
+    
+    [sendMessage sendMessageTo:usercontacts from:self];
 }
 
 -(IBAction)quickMessage:(id)sender {
@@ -755,9 +806,9 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     NSString* categoryName = (iCategory == 0) ? @"all" : [[Data getCategories] objectAtIndex:iCategory-1];
     [[cell textLabel] setText:categoryName];
     if (categoryName == categoryFilter)
-        [[cell textLabel] setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
+        [[cell textLabel] setFont:[TextUtil GetBoldFontForSize:20.0]];
     else
-        [[cell textLabel] setFont:[UIFont fontWithName:@"Lato-Light" size:20]];
+        [[cell textLabel] setFont:[TextUtil GetLightFontForSize:20.0]];
     
     return cell;
 }
@@ -863,14 +914,23 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     CGRect frmNext = [categoryTable frame];
     frmNext.size.height = 0;
     [UIView animateWithDuration:0.5
-                     animations:^{[categoryTable setFrame:frmNext];}
+                     animations:^{[self->categoryTable setFrame:frmNext];}
                      completion:^(BOOL finished){
-                         [categoryTable removeFromSuperview];
-                         categoryTable = nil;
+                         [self->categoryTable removeFromSuperview];
+                         self->categoryTable = nil;
                      }];
 }
 
+-(void)showGuidedTour {
+    GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getNextStep] forFrame:[[self view] frame]];
+    [[self view] addSubview:gv];
+}
+
 -(void)showWalkthrough {
+    [self showGuidedTour];
+    return;
+    
+    
     CGRect frmView = [messages frame];// [[self view] frame];
     //frmView.origin.y += 60;
     //frmView.size.height -= 60;
@@ -883,7 +943,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [btnClose setTitle:@"Done" forState:UIControlStateNormal];
-    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:15]];
+    [[btnClose titleLabel] setFont:[TextUtil GetDefaultFontForSize:15.0]];
     [btnClose addTarget:self action:@selector(closeWalkthrough:)
        forControlEvents:UIControlEventTouchUpInside];
     [walkthroughView addSubview:btnClose];
@@ -968,7 +1028,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 #ifdef OODLES
             [hdr setText:@"Welcome to Oodles!"];
 #endif
-            [hdr setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+            [hdr setFont:[TextUtil GetDefaultFontForSize:24.0]];
             [hdr setTextColor:[UIColor blackColor]];
             [hdr setTextAlignment:NSTextAlignmentCenter];
             [scroller addSubview:hdr];
@@ -983,7 +1043,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         //[lbl sizeToFit];
         [lbl setText:txts[i]];
         CGFloat fntSize = frmText.size.width > 330 ? 18 : 14;
-        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:fntSize]];
+        [lbl setFont:[TextUtil GetDefaultFontForSize:fntSize]];
         [lbl setTextColor:[UIColor blackColor]];
         [lbl setTextAlignment:NSTextAlignmentCenter];
         [lbl setNumberOfLines:0];
@@ -1004,6 +1064,10 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     
     ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
     [[self view] addSubview:skinview];
+}
+
+-(void)closeSkin {
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

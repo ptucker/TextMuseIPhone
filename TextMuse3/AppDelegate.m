@@ -14,7 +14,9 @@
 #import "RndMessagesViewController.h"
 #import "ImageDownloader.h"
 #import "FLAnimatedImage.h"
+#import "TextUtil.h"
 #import <UserNotifications/UserNotifications.h>
+
 @interface AppDelegate ()
 
 @end
@@ -97,7 +99,7 @@
     [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];
     NSDictionary* txtAttrs =[NSDictionary dictionaryWithObjectsAndKeys:
                              [UIColor whiteColor], NSForegroundColorAttributeName,
-                             [UIFont fontWithName:@"Lato-Regular" size:21.0], NSFontAttributeName, nil];
+                             [TextUtil GetDefaultFontForSize:21.0], NSFontAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:txtAttrs];
     
     UIColor* colorTint = nil;

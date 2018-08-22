@@ -61,13 +61,13 @@ extern NSString* urlRemitBadge;
     
     if (lblTitle == nil) {
         lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-        [lblTitle setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
+        [lblTitle setFont:[TextUtil GetBoldFontForSize:20.0]];
         [self addSubview:lblTitle];
     }
     [lblTitle setFrame:frmTitle];
     if (lblContent == nil) {
         lblContent = [[UILabel alloc] initWithFrame:frmContent];
-        [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+        [lblContent setFont:[TextUtil GetDefaultFontForSize:18.0]];
         [viewParent addSubview:lblContent];
     }
     [lblContent setFrame:frmContent];

@@ -13,6 +13,7 @@
 #import "MessageCategory.h"
 #import "Message.h"
 #import "UserContact.h"
+#import "TextUtil.h"
 
 @interface ShakeToPlayViewController ()
 
@@ -55,7 +56,7 @@
         
         UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(44, frmContactPicker.origin.y - 30,
                                                                  [[self view] frame].size.width - 40, 20)];
-        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
+        [lbl setFont:[TextUtil GetDefaultFontForSize:16.0]];
         [lbl setText:@"recent contacts"];
         [[self view] addSubview:lbl];
     }
@@ -140,7 +141,7 @@
         UserContact* uc = [self getContactAt:row];
         UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [pickerView frame].size.width, 40)];
         [lbl setText:[NSString stringWithFormat:@"%@ %@", [uc firstName], [uc lastName]]];
-        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+        [lbl setFont:[TextUtil GetDefaultFontForSize:22.0]];
         ret = lbl;
     }
     else {
@@ -159,7 +160,7 @@
         }
         [lbl setNumberOfLines:0];
         [lbl setText:[msg text]];
-        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+        [lbl setFont:[TextUtil GetDefaultFontForSize:22.0]];
         
         [ret addSubview:lbl];
     }

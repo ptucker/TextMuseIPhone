@@ -8,6 +8,7 @@
 
 #import "BadgeTreeTableViewCell.h"
 #import "Settings.h"
+#import "TextUtil.h"
 
 @implementation BadgeTreeTableViewCell
 @synthesize descLabel;
@@ -59,12 +60,12 @@
                                                            frame.size.width - frame.size.height,
                                                            frame.size.height-8)];
     [titleLabel setText:title];
-    [titleLabel setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+    [titleLabel setFont:[TextUtil GetDefaultFontForSize:22.0]];
     descLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.height, frame.size.height,
                                                           frame.size.width-frame.size.height, 140)];
     [descLabel setNumberOfLines:0];
     [descLabel setText:desc];
-    [descLabel setFont:[UIFont fontWithName:@"Lato-Regular" size:16]];
+    [descLabel setFont:[TextUtil GetDefaultFontForSize:16.0]];
     [descLabel sizeToFit];
     [self addSubview:badgeView];
     [self addSubview:titleLabel];

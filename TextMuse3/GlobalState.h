@@ -10,6 +10,7 @@
 #import "DataAccess.h"
 #import "SqlData.h"
 #import "Message.h"
+#import "GuidedTour.h"
 
 @interface GlobalState : NSObject
 
@@ -20,6 +21,7 @@ extern Message* CurrentMessage;
 extern int HighlightedMessageID;
 extern NSString* CurrentGroup;
 extern SqlData* SqlDb;
+extern GuidedTour* Tour;
 
 +(void)init;
 

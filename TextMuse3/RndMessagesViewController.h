@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Contacts/Contacts.h>
+#import <ContactsUI/ContactsUI.h>
 #import "GlobalState.h"
 #import "ImageDownloader.h"
 #import "SendMessage.h"
@@ -18,7 +20,7 @@ extern NSArray* colorsTitle;
 
 extern const int maxRecentIDs;
 
-@interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataRefreshDelegate> {
+@interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataRefreshDelegate, CNContactPickerDelegate> {
     IBOutlet UITableView* messages;
     IBOutlet UIView* bottomMenu;
     IBOutlet UIButton* btnHome;
@@ -39,7 +41,8 @@ extern const int maxRecentIDs;
     NSString* categoryFilter;
     bool segueSettings;
     MessageView* mv;
-    SendMessage* sendMessage;    
+    SendMessage* sendMessage;
+    CNContactStore* contactStore;
 }
 
 -(IBAction) showBadges:(id)sender;

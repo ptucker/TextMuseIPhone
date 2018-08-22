@@ -11,6 +11,10 @@
 
 @interface TextUtil : NSObject
 
++(UIFont*) GetDefaultFont;
++(UIFont*) GetDefaultFontForSize:(CGFloat)size;
++(UIFont*) GetLightFontForSize:(CGFloat)size;
++(UIFont*) GetBoldFontForSize:(CGFloat)size;
 +(CGSize) GetContentSizeForText:(NSString*)text inSize:(CGSize)sizeParent;
 +(CGSize) GetContentSizeForText:(NSString*)text inSize:(CGSize)sizeParent forFont:(UIFont*)font;
 

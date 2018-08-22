@@ -79,7 +79,7 @@ UIImage* imgLoading;
     }
     
     [lblContent setFrame:frmContentLabel];
-    [lblContent setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+    [lblContent setFont:[TextUtil GetDefaultFontForSize:18.0]];
 
     [viewParent bringSubviewToFront:imgLogo];
 }

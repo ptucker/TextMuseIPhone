@@ -54,7 +54,7 @@
     CGFloat fontSize = 18.0;
     if (frame.size.height < 350)
         fontSize -= 6;
-    UIFont* fontText = [UIFont fontWithName:@"Lato-Medium" size:fontSize];
+    UIFont* fontText = [TextUtil GetBoldFontForSize:fontSize];
     CGSize sizeText = CGSizeMake(frame.size.width-88, frame.size.height - 80);
     sizeText = [TextUtil GetContentSizeForText:[msg text] inSize:sizeText forFont:fontText];
     CGRect frmHeader = CGRectMake(10, 10, frame.size.width-20, 40);
@@ -92,7 +92,7 @@
             tvContent.text = @"Add your message...";
             tvContent.textColor = [UIColor lightGrayColor]; //optional
         }
-        [tvContent setFont:[UIFont fontWithName:@"Lato-Regular" size:fontSize]];
+        [tvContent setFont:[TextUtil GetDefaultFontForSize:fontSize]];
         [tvContent setTextColor:[UIColor blackColor]];
         [self addSubview:imgLeftQuote];
         [self addSubview:imgRightQuote];

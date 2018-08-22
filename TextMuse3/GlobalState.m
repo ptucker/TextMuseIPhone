@@ -15,6 +15,7 @@ Message* CurrentMessage;
 int HighlightedMessageID;
 NSString* CurrentGroup;
 SqlData* SqlDb;
+GuidedTour* Tour;
 
 @implementation GlobalState
 

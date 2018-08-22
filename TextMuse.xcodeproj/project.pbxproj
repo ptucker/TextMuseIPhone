@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		2D01F4031ED8D0D400DD9D91 /* textmusedata.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2D01F4021ED8D0D400DD9D91 /* textmusedata.xml */; };
 		2D01F4051ED8D0EE00DD9D91 /* oodlesdata.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2D01F4041ED8D0EE00DD9D91 /* oodlesdata.xml */; };
+		2D0B95EA212C8700006023EB /* banner2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B95E9212C8700006023EB /* banner2.png */; };
+		2D0B95ED212DDCB8006023EB /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D0B95EB212DDCB7006023EB /* Contacts.framework */; };
+		2D0B95EE212DDCB8006023EB /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D0B95EC212DDCB7006023EB /* ContactsUI.framework */; };
 		2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */; };
 		2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0C2CFA1B07F134001D6E9B /* RegisterViewController.m */; };
 		2D1EC0C51DEB688F006F2B2A /* EmailValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D1EC0C41DEB688F006F2B2A /* EmailValidator.m */; };
@@ -30,6 +33,9 @@
 		2D4EAB7D1EE75E660043DB5E /* ic_details.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4EAB7C1EE75E660043DB5E /* ic_details.png */; };
 		2DB49B131F19743C0058C1BB /* bandcamp.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DB49B121F19743C0058C1BB /* bandcamp.png */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
+		2DBE6C4B212B4DF8003A7B7A /* GuidedTour.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE6C4A212B4DF8003A7B7A /* GuidedTour.m */; };
+		2DBE6C4E212B4E48003A7B7A /* GuidedTourStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE6C4D212B4E48003A7B7A /* GuidedTourStep.m */; };
+		2DBE6C51212B5AA9003A7B7A /* GuidedTourStepView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE6C50212B5AA9003A7B7A /* GuidedTourStepView.m */; };
 		2DC1A3D9212615FA0036EEEC /* logo-02-color-launch-port.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC1A3D7212615FA0036EEEC /* logo-02-color-launch-port.png */; };
 		2DC1A3DA212615FA0036EEEC /* logo-02-color-launch-land.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC1A3D8212615FA0036EEEC /* logo-02-color-launch-land.png */; };
 		2DC1A3DC2126171E0036EEEC /* logo-02-color-launch-port-1242.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DC1A3DB2126171E0036EEEC /* logo-02-color-launch-port-1242.png */; };
@@ -126,6 +132,9 @@
 /* Begin PBXFileReference section */
 		2D01F4021ED8D0D400DD9D91 /* textmusedata.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = textmusedata.xml; sourceTree = "<group>"; };
 		2D01F4041ED8D0EE00DD9D91 /* oodlesdata.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = oodlesdata.xml; sourceTree = "<group>"; };
+		2D0B95E9212C8700006023EB /* banner2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = banner2.png; sourceTree = "<group>"; };
+		2D0B95EB212DDCB7006023EB /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
+		2D0B95EC212DDCB7006023EB /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
 		2D0C2CF31B07E2F8001D6E9B /* ContactUsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactUsViewController.h; sourceTree = "<group>"; };
 		2D0C2CF41B07E2F8001D6E9B /* ContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUsViewController.m; sourceTree = "<group>"; };
 		2D0C2CF91B07F134001D6E9B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
@@ -161,6 +170,12 @@
 		2DB49B121F19743C0058C1BB /* bandcamp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bandcamp.png; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
+		2DBE6C49212B4DF8003A7B7A /* GuidedTour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuidedTour.h; sourceTree = "<group>"; };
+		2DBE6C4A212B4DF8003A7B7A /* GuidedTour.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuidedTour.m; sourceTree = "<group>"; };
+		2DBE6C4C212B4E48003A7B7A /* GuidedTourStep.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuidedTourStep.h; sourceTree = "<group>"; };
+		2DBE6C4D212B4E48003A7B7A /* GuidedTourStep.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuidedTourStep.m; sourceTree = "<group>"; };
+		2DBE6C4F212B5AA9003A7B7A /* GuidedTourStepView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuidedTourStepView.h; sourceTree = "<group>"; };
+		2DBE6C50212B5AA9003A7B7A /* GuidedTourStepView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuidedTourStepView.m; sourceTree = "<group>"; };
 		2DC1A3D7212615FA0036EEEC /* logo-02-color-launch-port.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo-02-color-launch-port.png"; path = "../../../../../logo-02-color-launch-port.png"; sourceTree = "<group>"; };
 		2DC1A3D8212615FA0036EEEC /* logo-02-color-launch-land.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo-02-color-launch-land.png"; path = "../../../../../logo-02-color-launch-land.png"; sourceTree = "<group>"; };
 		2DC1A3DB2126171E0036EEEC /* logo-02-color-launch-port-1242.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-02-color-launch-port-1242.png"; sourceTree = "<group>"; };
@@ -290,6 +305,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D0B95ED212DDCB8006023EB /* Contacts.framework in Frameworks */,
+				2D0B95EE212DDCB8006023EB /* ContactsUI.framework in Frameworks */,
 				2D2E7D0C1C3C4601002C3886 /* libsqlite3.0.tbd in Frameworks */,
 				2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */,
 				2DCA58F11B6E8F670011FCDB /* UIKit.framework in Frameworks */,
@@ -345,6 +362,8 @@
 		2D761FF21EAAA49D004C7659 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2D0B95EB212DDCB7006023EB /* Contacts.framework */,
+				2D0B95EC212DDCB7006023EB /* ContactsUI.framework */,
 				2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */,
 				2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */,
 				2DCA58F01B6E8F670011FCDB /* UIKit.framework */,
@@ -388,6 +407,12 @@
 				2DE627EE1C3B15A200F3BE36 /* UICaptionButton.m */,
 				2DC7B1F71EE1FE8D00D1BA17 /* TextUtil.h */,
 				2DC7B1F81EE1FE8D00D1BA17 /* TextUtil.m */,
+				2DBE6C49212B4DF8003A7B7A /* GuidedTour.h */,
+				2DBE6C4A212B4DF8003A7B7A /* GuidedTour.m */,
+				2DBE6C4C212B4E48003A7B7A /* GuidedTourStep.h */,
+				2DBE6C4D212B4E48003A7B7A /* GuidedTourStep.m */,
+				2DBE6C4F212B5AA9003A7B7A /* GuidedTourStepView.h */,
+				2DBE6C50212B5AA9003A7B7A /* GuidedTourStepView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -498,6 +523,7 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D0B95E9212C8700006023EB /* banner2.png */,
 				2DC1A3E921261D7A0036EEEC /* arrow-collapse-left.png */,
 				2DC1A3E5212618D50036EEEC /* logo-02-color-launch-port-480.png */,
 				2DC1A3E2212618710036EEEC /* logo-02-color-launch-port-960.png */,
@@ -776,6 +802,7 @@
 				2DF080B51AE625FC0003A277 /* Lato-Regular.ttf in Resources */,
 				2DF279402124C02800DE09A6 /* logo-02-color-60.png in Resources */,
 				2DEEED0F1D5BCC9400BA459A /* v4-1_Explorer.png in Resources */,
+				2D0B95EA212C8700006023EB /* banner2.png in Resources */,
 				2DEEED111D5BCC9400BA459A /* v4-1_TextMuse.png in Resources */,
 				2DCA58F71B6EA54D0011FCDB /* Assets in Resources */,
 				2DF2794C2124C25300DE09A6 /* logo-02-color-1024.png in Resources */,
@@ -804,6 +831,7 @@
 				2DF080BA1AE625FC0003A277 /* Reachability.m in Sources */,
 				2DF080B91AE625FC0003A277 /* MessageView.m in Sources */,
 				2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */,
+				2DBE6C4E212B4E48003A7B7A /* GuidedTourStep.m in Sources */,
 				2DF080A41AE625FC0003A277 /* AppDelegate.m in Sources */,
 				2D0C2CFB1B07F134001D6E9B /* RegisterViewController.m in Sources */,
 				2DC697481B829022001ACC24 /* SkinInfo.m in Sources */,
@@ -818,12 +846,14 @@
 				2DF127271C44D6A500DBB3DE /* FLAnimatedImage.m in Sources */,
 				2D0C2CF51B07E2F8001D6E9B /* ContactUsViewController.m in Sources */,
 				2DF0804E1AE625410003A277 /* main.m in Sources */,
+				2DBE6C51212B5AA9003A7B7A /* GuidedTourStepView.m in Sources */,
 				2D2E7D0F1C3C469B002C3886 /* SqlData.m in Sources */,
 				2DF080AA1AE625FC0003A277 /* ContactsTableViewController.m in Sources */,
 				2DC7B1F91EE1FE8D00D1BA17 /* TextUtil.m in Sources */,
 				2DF080AD1AE625FC0003A277 /* GlobalState.m in Sources */,
 				2DC612031AF2E300000896EA /* AddMemberView.m in Sources */,
 				2DF080BB1AE625FC0003A277 /* Settings.m in Sources */,
+				2DBE6C4B212B4DF8003A7B7A /* GuidedTour.m in Sources */,
 				2D36EDA61D4AAC070062C45E /* UserInfo.m in Sources */,
 				2DF080AB1AE625FC0003A277 /* DataAccess.m in Sources */,
 				2D3240851C2FB06F00E4E59B /* MessageTableViewCell.m in Sources */,

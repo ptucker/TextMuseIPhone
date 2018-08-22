@@ -10,6 +10,7 @@
 #import "DataAccess.h"
 #import "SkinInfo.h"
 #import "UserInfo.h"
+#import "GuidedTour.h"
 #import <Foundation/Foundation.h>
 
 @interface Settings : NSObject

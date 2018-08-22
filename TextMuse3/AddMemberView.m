@@ -9,6 +9,7 @@
 #import "AddMemberView.h"
 #import "GlobalState.h"
 #import "MemberTableData.h"
+#import "TextUtil.h"
 
 @implementation AddMemberView
 
@@ -32,7 +33,7 @@
     UILabel* lbl = [[UILabel alloc] initWithFrame:frmLbl];
     [lbl setText:@"Edit membership"];
     [lbl setTextAlignment:NSTextAlignmentCenter];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+    [lbl setFont:[TextUtil GetDefaultFontForSize:22.0]];
     [self addSubview:lbl];
     
     CGRect frmClose = frmLbl;
@@ -40,7 +41,7 @@
     frmClose.size.width = 22;
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitle:@"X" forState:UIControlStateNormal];
-    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+    [[btnClose titleLabel] setFont:[TextUtil GetDefaultFontForSize:18.0]];
     [btnClose setTitleColor:[UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0]
                    forState:UIControlStateNormal];
     [btnClose addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
@@ -51,7 +52,7 @@
     frmDone.size.width = 60;
     UIButton* btnDone = [[UIButton alloc] initWithFrame:frmDone];
     [btnDone setTitle:@"Save" forState:UIControlStateNormal];
-    [[btnDone titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+    [[btnDone titleLabel] setFont:[TextUtil GetDefaultFontForSize:16.0]];
     [btnDone setTitleColor:[UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0]
                   forState:UIControlStateNormal];
     [btnDone addTarget:self action:@selector(saveData:) forControlEvents:UIControlEventTouchUpInside];

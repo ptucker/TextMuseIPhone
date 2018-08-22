@@ -54,7 +54,7 @@
     CGFloat fontSize = 20.0;
     if (frame.size.height < 350)
         fontSize -= 4;
-    UIFont* fontText = [UIFont fontWithName:@"Lato-Medium" size:fontSize];
+    UIFont* fontText = [TextUtil GetBoldFontForSize:fontSize];
     CGSize sizeContent = CGSizeMake(frame.size.width-132, frame.size.height/2);
     sizeContent = [TextUtil GetContentSizeForText:[msg text] inSize:sizeContent forFont:fontText];
     CGSize sizeBubble = CGSizeMake(7*frame.size.width/8, frame.size.height/2);

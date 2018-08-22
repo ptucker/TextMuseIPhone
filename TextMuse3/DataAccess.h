@@ -69,14 +69,14 @@
 -(id)init;
 -(void)reloadData;
 -(void)reloadNotifications;
--(void)initContacts;
+//-(BOOL)initContacts;
 -(void)addListener:(id)listener;
 -(NSArray*)getCategories;
 -(NSArray*)getRequiredCategories;
 -(MessageCategory*)getCategory:(NSString*)c;
 -(SponsorInfo*)getSponsorForCategory:(NSString*)category;
 -(NSArray*)getContacts;
--(void)sortContacts;
+//-(void)sortContacts;
 -(NSArray*)getContactHeadings;
 -(NSArray*)getContactsForHeading: (NSString*)h;
 -(int)getIndexForContact:(UserContact*)uc;

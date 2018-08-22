@@ -54,7 +54,7 @@ const int HIDEMESSAGE = 1000;
     pinnedMsgs = [SqlDb getPinnedMessages];
     [self initCategories];
     
-    [self initContacts];
+    //[self initContacts];
 }
 
 -(void)reloadNotifications {
@@ -295,17 +295,17 @@ const int HIDEMESSAGE = 1000;
         [self parseMessageData];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (!notificationOnly) {
-                categories = tmpCategories;
+            if (!self->notificationOnly) {
+                self->categories = self->tmpCategories;
                 [self mergeMessages];
             }
 
             NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
             [[NSFileManager defaultManager] createFileAtPath:file
-                                                    contents:inetdata
+                                                    contents:self->inetdata
                                                   attributes:nil];
             
-            for (NSObject* l in listeners) {
+            for (NSObject* l in self->listeners) {
                 if ([l respondsToSelector:@selector(dataRefresh)])
                     [l performSelector:@selector(dataRefresh)];
             }
@@ -328,25 +328,31 @@ const int HIDEMESSAGE = 1000;
     [parser parse];
 }
 
--(void)initContacts {
+/*
+-(BOOL)initContacts {
     loadingContacts = YES;
     CFErrorRef* error = NULL;
     DataAccess* __weak weakSelf = self;
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, error);
 
-    //if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf loadContacts:addressBook];
-            });
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf loadContacts:addressBook];
+                });
+            }
         });
-    //}
-    //else { // we're on iOS 5 or older
-    //    [self loadContacts:addressBook];
-    //}
+    }
+    else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized && [contacts count] == 0)
+        [self loadContacts:addressBook];
+    
     loadingContacts = NO;
+    
+    return (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized && [contacts count] != 0);
 }
-
+*/
+/*
 -(void)loadContacts:(ABAddressBookRef)addressBook {
     NSMutableArray* _contacts = [[NSMutableArray alloc] init];
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);
@@ -394,12 +400,13 @@ const int HIDEMESSAGE = 1000;
 -(void)sortContacts {
     contacts = [contacts sortedArrayUsingSelector:@selector(compareName:)];
 }
+*/
 
 -(NSArray*) sortCategories {
     NSComparisonResult (^categoryCmp)(id, id);
     categoryCmp = ^NSComparisonResult(id c1, id c2) {
-        MessageCategory* cat1 = [categories objectForKey:c1];
-        MessageCategory* cat2 = [categories objectForKey:c2];
+        MessageCategory* cat1 = [self->categories objectForKey:c1];
+        MessageCategory* cat2 = [self->categories objectForKey:c2];
         if ([cat1 required] != [cat2 required]) {
             return ([cat1 required]) ? NSOrderedAscending : NSOrderedDescending;
         }

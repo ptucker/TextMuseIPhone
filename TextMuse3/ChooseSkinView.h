@@ -21,4 +21,6 @@
     UITableView* skins;
 }
 
+@property (nonatomic) SEL done;
+
 @end

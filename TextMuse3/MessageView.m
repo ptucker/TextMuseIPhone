@@ -56,7 +56,7 @@ UIImage* openInNew = nil;
         CGRect frmExit = CGRectMake(frame.size.width-32, 32, 32, 32);
         UIButton* btnExit = [[UIButton alloc] initWithFrame:frmExit];
         [btnExit setImage:[UIImage imageNamed:@"arrow-collapse-left"] forState:UIControlStateNormal];
-        [[btnExit titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
+        [[btnExit titleLabel] setFont:[TextUtil GetDefaultFontForSize:20.0]];
         [btnExit setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btnExit addTarget:mv action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
         [mv addSubview:btnExit];
@@ -151,7 +151,7 @@ UIImage* openInNew = nil;
 -(void)setHeaderForMessage:(Message*)msg inView:(UIView*)subview {
     UILabel* header = [[UILabel alloc] initWithFrame:[subview frame]];
     [header setText:[[msg sponsorName] length] > 0 ? [msg sponsorName] : [msg category]];
-    [header setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+    [header setFont:[TextUtil GetDefaultFontForSize:24.0]];
     [header setTextColor:[UIColor darkGrayColor]];
     [subview addSubview:header];
 }
@@ -268,7 +268,7 @@ UIImage* openInNew = nil;
 -(void) setPropsForButton:(UIButton*)btn withColor:(NSString*)color {
     CGSize szView = [self frame].size;
     CGFloat sz = szView.width < 321 ? 16 : 20;
-    UIFont* fnt = [UIFont fontWithName:@"Lato-Medium" size:sz];
+    UIFont* fnt = [TextUtil GetBoldFontForSize:sz];
     [[btn titleLabel] setFont:fnt];
     [[btn titleLabel] setNumberOfLines:1];
     [[btn titleLabel] sizeToFit];
@@ -316,7 +316,7 @@ UIImage* openInNew = nil;
         [NSString stringWithFormat:@"Visit with %d badges: %@", [msg visitcount], [msg visitWinnerText]] : @"";
     
     uint fontsize = 18;
-    UIFont* fontDetails = [UIFont fontWithName:@"Lato-Light" size:fontsize];
+    UIFont* fontDetails = [TextUtil GetLightFontForSize:fontsize];
     
 #ifdef BUTTONSSIDE
     CGSize frameText = CGSizeMake([subview frame].size.width - 140, [subview frame].size.height);
@@ -488,6 +488,9 @@ UIImage* openInNew = nil;
     }
     else {
         CurrentMessage = message;
+        if ([[Data getContacts] count] == 0)
+            [Data initContacts];
+
         if ([[Data getContacts] count] == 0) {
             SendMessage* sendMessage = [[SendMessage alloc] init];
             [sendMessage sendMessageTo:nil from:[self vcSendMessage]];

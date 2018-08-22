@@ -8,6 +8,8 @@
 
 #import "ChoosePhoneView.h"
 #import "UserPhone.h"
+#import "TextUtil.h"
+
 @implementation ChoosePhoneView
 
 -(id)initWithFrame:(CGRect)frame {
@@ -31,14 +33,14 @@
     
     [lbl setTextAlignment:NSTextAlignmentCenter];
     [lbl setText:@"Choose phone"];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+    [lbl setFont:[TextUtil GetDefaultFontForSize:18.0]];
     
     CGRect frmClose = CGRectMake(8, 0, 28, 28); // frmLbl;
     //frmClose.origin.x = 8;
     //frmClose.size.width = 22;
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitle:@"X" forState:UIControlStateNormal];
-    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+    [[btnClose titleLabel] setFont:[TextUtil GetDefaultFontForSize:24.0]];
     [btnClose setTitleColor:[UIColor colorWithRed:22.0/256 green:194.0/256 blue:223./256 alpha:1.0]
                    forState:UIControlStateNormal];
     [btnClose addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
@@ -98,8 +100,8 @@
                        [p number]];
     [lblName setText:phone];
     [lblName setFont:[chosen isEqualToString:[p number]] ?
-     [UIFont fontWithName:@"Lato-Regular" size:18] :
-     [UIFont fontWithName:@"Lato-Light" size:18]];
+     [TextUtil GetDefaultFontForSize:18.0] :
+     [TextUtil GetLightFontForSize:18.0]];
     
     return cell;
 }
