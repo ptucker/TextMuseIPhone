@@ -53,8 +53,6 @@
 	</dict>
 	<key>NSContactsUsageDescription</key>
 	<string>Share great TextMuse content with your current contacts</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

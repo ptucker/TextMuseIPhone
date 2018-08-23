@@ -82,10 +82,10 @@
         [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                            title:@"Remove"
                                          handler:^(UITableViewRowAction* action, NSIndexPath* indexPath) {
-                                             NSString* grp = [groups objectAtIndex:[indexPath row]];
-                                             [groups removeObject:grp];
+                                             NSString* grp = [self->groups objectAtIndex:[indexPath row]];
+                                             [self->groups removeObject:grp];
                                              [Settings RemoveGroup:grp];
-                                             [tableview reloadData];
+                                             [self->tableview reloadData];
                                           }];
     UITableViewRowAction* actRename =
     [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
@@ -98,7 +98,7 @@
                                                           cancelButtonTitle:@"Cancel"
                                                           otherButtonTitles:@"Save", nil];
                                          alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-                                         CurrentGroup = [groups objectAtIndex:[indexPath row]];
+                                         CurrentGroup = [self->groups objectAtIndex:[indexPath row]];
                                          [alert setTag:2];
                                          [alert show];
                                      }];

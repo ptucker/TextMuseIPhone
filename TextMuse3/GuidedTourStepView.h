@@ -10,8 +10,11 @@
 #import "GuidedTour.h"
 #import "GuidedTourStep.h"
 
-@interface GuidedTourStepView : UIView
+@interface GuidedTourStepView : UIView {
+    void (^completion)(void);
+}
 
 -(UIView*) initWithStep:(GuidedTourStep*)step forFrame:(CGRect)frame;
+-(UIView*) initWithStep:(GuidedTourStep*)step forFrame:(CGRect)frame completionHandler:(void(^)(void)) completionHandler;
 
 @end

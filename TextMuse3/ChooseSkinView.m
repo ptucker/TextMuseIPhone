@@ -32,12 +32,14 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [lblTitle setTextColor:[UIColor blackColor]];
     [self addSubview:lblTitle];
     
+    /*
     CGRect frmClose = CGRectMake(frame.size.width-32, frame.origin.y, 32, 32);
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitle:@"X" forState:UIControlStateNormal];
     [btnClose setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btnClose addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:btnClose];
+    */
     
     CGRect frmTable = frame;
     frmTable.origin.y += 32;
@@ -66,7 +68,7 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [self addSubview:activityView];
     
     if (Tour != nil) {
-        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getFirstStep] forFrame:[self frame]];
+        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour Intro]] forFrame:[self frame]];
         [self addSubview:gv];
         [self bringSubviewToFront:gv];
     }
@@ -147,6 +149,12 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [Data reloadData];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate registerRemoteNotificationWithAzure];
+
+    if (Tour != nil) {
+        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour ChooseContent]] forFrame:[self frame]];
+        [[self superview] addSubview:gv];
+        [[self superview] bringSubviewToFront:gv];
+    }
 
     [self removeFromSuperview];
 }

@@ -13,12 +13,23 @@
 #import "Settings.h"
 #import "ChoosePhoneView.h"
 #import "SuccessParser.h"
+#import "GuidedTourStepView.h"
 
 NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
+NSString* urlFirstTimeSender = @"http://www.textmuse.com/admin/firsttimesender.php";
 //MFMessageComposeViewController* msgcontroller = nil;
 
 @implementation SendMessage
+@synthesize msgcontroller;
+
+-(id)init {
+    if([MFMessageComposeViewController canSendText]) {
+        [self setMsgcontroller:[[MFMessageComposeViewController alloc] init]];
+    }
+    
+    return self;
+}
 
 -(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController *)parent {
     _parent = parent;
@@ -90,8 +101,6 @@ NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
 
 -(void)sendMessages:(NSArray*)phones withMessage:(NSString*)message {
     if([MFMessageComposeViewController canSendText]) {
-        MFMessageComposeViewController* msgcontroller = [[MFMessageComposeViewController alloc] init];
-        
         [msgcontroller setMessageComposeDelegate: self];
         if (phones != nil && [phones count] > 0)
             [msgcontroller setRecipients:phones];
@@ -101,7 +110,7 @@ NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
             [library assetForURL:[CurrentMessage assetURL] resultBlock:^(ALAsset* asset) {
                 CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
                 NSData* d = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
-                [msgcontroller addAttachmentData:d
+                [self->msgcontroller addAttachmentData:d
                                   typeIdentifier:(NSString*)kUTTypeImage
                                         filename:@"test.png"];
             } failureBlock:^(NSError*err) {}];
@@ -148,6 +157,24 @@ NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
                                                     startImmediately:YES];
 }
 
+-(void)firstTimeSender:(int)msgId {
+    if (CurrentMessage == nil)
+        return;
+    
+    NSURL* url = [NSURL URLWithString:urlFirstTimeSender];
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
+                                                       cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                   timeoutInterval:30];
+    inetdata = [[NSMutableData alloc] init];
+    [req setHTTPMethod:@"POST"];
+    NSString* post = [NSString stringWithFormat:@"id=%d&app=%@&version=%ld", msgId, AppID, [Skin SkinID]];
+    [req setHTTPBody:[post dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:self
+                                                    startImmediately:YES];
+}
+
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
     //Append the newly arrived data to whatever we’ve seen so far
     [inetdata appendData:data];
@@ -181,6 +208,14 @@ NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
         [controller dismissViewControllerAnimated:YES completion:nil];
     }
     else {
+        if (Tour != nil) {
+            GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour Done]] forFrame:[[_parent view] frame]];
+            [[_parent view] addSubview:gv];
+            [[_parent view] bringSubviewToFront:gv];
+            
+            [self firstTimeSender:[CurrentMessage msgId]];
+        }
+
         [self updateMessageCount:[CurrentMessage msgId]
                        withCount:[contacts count] == 0 ? 1 : (unsigned int)[contacts count]];
         [contacts removeAllObjects];

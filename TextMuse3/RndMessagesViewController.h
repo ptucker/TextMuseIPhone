@@ -20,7 +20,7 @@ extern NSArray* colorsTitle;
 
 extern const int maxRecentIDs;
 
-@interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataRefreshDelegate, CNContactPickerDelegate> {
+@interface RndMessagesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, DataRefreshDelegate, CNContactPickerDelegate, UINavigationControllerDelegate> {
     IBOutlet UITableView* messages;
     IBOutlet UIView* bottomMenu;
     IBOutlet UIButton* btnHome;

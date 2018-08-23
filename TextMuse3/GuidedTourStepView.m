@@ -13,14 +13,19 @@
 @implementation GuidedTourStepView
 
 -(UIView*) initWithStep:(GuidedTourStep*)step forFrame:(CGRect)frame {
+    return [self initWithStep:step forFrame:frame completionHandler:nil];
+}
+
+-(UIView*) initWithStep:(GuidedTourStep*)step forFrame:(CGRect)frame completionHandler:(void (^)(void))completionHandler {
     self = [super initWithFrame:frame];
+    completion = completionHandler;
     [self setBackgroundColor:[UIColor whiteColor]];
     
-    UIImageView* logo = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 32, 32)];
+    UIImageView* logo = [[UIImageView alloc] initWithFrame:CGRectMake(5, 65, 32, 32)];
     [logo setImage:[UIImage imageNamed:@"logo-02-color"]];
     [self addSubview:logo];
     
-    CGFloat textTop = 65;
+    CGFloat textTop = 110;
     if ([step image] != nil) {
         UIImageView* img = [[UIImageView alloc] initWithFrame:CGRectMake(10, textTop, frame.size.width-10, 80)];
         [img setImage:[step image]];
@@ -30,9 +35,21 @@
         textTop += 100;
     }
     
+    CGSize szTitle = CGSizeMake(frame.size.width-20, 40);
+    UIFont* titleFont = [TextUtil GetBoldFontForSize:32.0];
+    szTitle = [TextUtil GetContentSizeForText:@"TextMuse Tour" inSize:szTitle forFont:titleFont];
+    UILabel* lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, textTop, frame.size.width-20, szTitle.height)];
+    [lblTitle setText:@"TextMuse Tour"];
+    [lblTitle setFont:titleFont];
+    [lblTitle setTextAlignment:NSTextAlignmentCenter];
+    [lblTitle setTextColor:[UIColor darkGrayColor]];
+    [self addSubview:lblTitle];
+    textTop += szTitle.height + 8;
+    
     CGSize szText = CGSizeMake(frame.size.width-20, frame.size.height - textTop - 10);
-    UIFont* messageFont = [TextUtil GetBoldFontForSize:24.0];
+    UIFont* messageFont = [TextUtil GetDefaultFontForSize:18.0];
     szText = [TextUtil GetContentSizeForText:[step message] inSize:szText forFont:messageFont];
+    szText.height += 8;
     
     UILabel* lblMessage = [[UILabel alloc] initWithFrame:CGRectMake(20, textTop, frame.size.width-40, szText.height)];
     [lblMessage setFont:messageFont];
@@ -67,6 +84,8 @@
 
 -(void)dismiss:(id)obj {
     [self removeFromSuperview];
+    if (completion)
+        completion();
 }
 
 @end

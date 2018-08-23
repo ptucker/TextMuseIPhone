@@ -108,7 +108,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [[self navigationController] setDelegate:self];
     if ([colorsText count] > 0) {
         UIColor* colorTint = [colorsText objectAtIndex:0];
-        UIColor* colorBkgd = [colors objectAtIndex:2];
+        //UIColor* colorBkgd = [colors objectAtIndex:2];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
         //[[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
         [[[self navigationController] navigationBar] setBarTintColor:[UIColor blackColor]];
@@ -132,6 +132,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     if (ShowIntro) {
         if (Tour == nil)
             Tour = [[GuidedTour alloc] init];
+        
+        [Settings SaveSetting:SettingShowIntro withValue:@"0"];
         
         [self showChooseSkin];
     }
@@ -460,7 +462,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         colorsTitle = [NSArray arrayWithArray:colors];
         
         UIColor* colorTint = [colorsText objectAtIndex:0];
-        UIColor* colorBkgd = [colors objectAtIndex:2];
+        //UIColor* colorBkgd = [colors objectAtIndex:2];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
         //[[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
         UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -674,6 +676,12 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         //[self performSegueWithIdentifier:@"SelectMessage" sender:self];
         
         [self animateMessage];
+
+        if (Tour != nil) {
+            GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour TextIt]] forFrame:[[self view] frame]];
+            [[self view] addSubview:gv];
+            [[self view] bringSubviewToFront:gv];
+        }
     }
 }
 
@@ -710,6 +718,19 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 }
 
 -(IBAction)chooseMessage:(id)sender {
+    if (Tour != nil) {
+        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour ChooseContact]]
+                                                                 forFrame:[[self view] frame]
+                                                        completionHandler:^(void){[self choseMessage];}
+                                  ];
+        [[self view] addSubview:gv];
+        [[self view] bringSubviewToFront:gv];
+    }
+    else
+        [self choseMessage];
+}
+
+-(void)choseMessage {
     if ([CurrentMessage badge]) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
                                                         message:@"Are you sure you want to remit this badge?"
@@ -719,28 +740,29 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [alert show];
     }
     else {
+        //Block for showing the ContactPickerViewController
+        void (^showCVC)(void) = ^{
+            CNContactPickerViewController* cvc = [[CNContactPickerViewController alloc] init];
+            [cvc setPredicateForEnablingContact:[NSPredicate predicateWithFormat:@"phoneNumbers.@count > 0"]];
+            [cvc setDelegate:self];
+            [self presentViewController:cvc animated:YES completion:nil];
+        };
+
         if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusNotDetermined) {
             [contactStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError* err) {
                 if (granted) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        CNContactPickerViewController* cvc = [[CNContactPickerViewController alloc] init];
-                        [cvc setDelegate:self];
-                        [self presentViewController:cvc animated:YES completion:nil];
-                    });
+                    dispatch_async(dispatch_get_main_queue(), showCVC);
                 }
                 else {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self->sendMessage sendMessageTo:nil from:self];
                     });
-                    
                 }
             }
              ];
         }
         else if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized) {
-            CNContactPickerViewController* cvc = [[CNContactPickerViewController alloc] init];
-            [cvc setDelegate:self];
-            [self presentViewController:cvc animated:YES completion:nil];
+            showCVC();
         }
         else
             [sendMessage sendMessageTo:nil from:self];
@@ -903,7 +925,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [categoryTable setBackgroundColor:[UIColor lightGrayColor]];
         
         [parent addSubview:categoryTable];
-        [UIView animateWithDuration:0.5 animations:^{[categoryTable setFrame:frmNext];}];
+        [UIView animateWithDuration:0.5 animations:^{[self->categoryTable setFrame:frmNext];}];
     }
     else {
         [self hideCategoryList];
@@ -922,7 +944,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 }
 
 -(void)showGuidedTour {
-    GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getNextStep] forFrame:[[self view] frame]];
+    GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour Intro]] forFrame:[[self view] frame]];
     [[self view] addSubview:gv];
 }
 

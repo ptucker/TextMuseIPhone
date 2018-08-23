@@ -132,7 +132,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
     [library assetForURL:assetURL resultBlock:^(ALAsset* asset) {
         CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
-        img = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
+        self->img = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
     } failureBlock:^(NSError*err) { }];
 }
 
@@ -313,8 +313,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         [v setFrame:endFrame];
     } completion: ^(BOOL f) {
         if (f) {
-            [web removeFromSuperview];
-            [web loadHTMLString:@"" baseURL:nil];
+            [self->web removeFromSuperview];
+            [self->web loadHTMLString:@"" baseURL:nil];
             [v removeFromSuperview];
         }
     }];

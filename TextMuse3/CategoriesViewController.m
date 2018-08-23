@@ -435,7 +435,7 @@
         [categoryTable setBackgroundColor:[UIColor blackColor]];
     
         [parent addSubview:categoryTable];
-        [UIView animateWithDuration:0.5 animations:^{[categoryTable setFrame:frmNext];}];
+        [UIView animateWithDuration:0.5 animations:^{[self->categoryTable setFrame:frmNext];}];
     }
     else {
         [self hideCategoryList];
@@ -446,10 +446,10 @@
     CGRect frmNext = [categoryTable frame];
     frmNext.origin.x = -frmNext.size.width;
     [UIView animateWithDuration:0.5
-                     animations:^{[categoryTable setFrame:frmNext];}
+                     animations:^{[self->categoryTable setFrame:frmNext];}
                      completion:^(BOOL finished){
-                         [categoryTable removeFromSuperview];
-                         categoryTable = nil;
+                         [self->categoryTable removeFromSuperview];
+                         self->categoryTable = nil;
                      }];
 }
 
@@ -547,7 +547,7 @@
     [UIView animateWithDuration:1.5
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{ [randomMessages scrollRectToVisible:frmNext animated:NO]; }
+                     animations:^{ [self->randomMessages scrollRectToVisible:frmNext animated:NO]; }
                      completion:NULL];
     //[randomMessages scrollRectToVisible:frmNext animated:YES];
 }
