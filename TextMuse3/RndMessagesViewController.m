@@ -682,6 +682,36 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
             [[self view] addSubview:gv];
             [[self view] bringSubviewToFront:gv];
         }
+        else if ([CurrentMessage sponsorID] > 0 && ShowSponsor) {
+            GuidedTour* tour = [[GuidedTour alloc] init];
+            NSArray* params = [NSArray arrayWithObjects:[CurrentMessage sponsorName],
+                                [CurrentMessage sponsorName],
+                                nil];
+            GuidedTourStepView* gv =
+            [[GuidedTourStepView alloc] initWithStep:[tour getStepForKey:[tour Sponsor]]
+                                            forFrame:[[self view] frame]
+                                          withParams:params];
+            [[self view] addSubview:gv];
+            [[self view] bringSubviewToFront:gv];
+            ShowSponsor = false;
+            [Settings SaveSetting:SettingShowSponsor withValue:@"0"];
+        }
+        else if ([CurrentMessage sendcount] > 0 && ShowBadge) {
+            GuidedTour* tour = [[GuidedTour alloc] init];
+            NSArray* params = [NSArray arrayWithObjects:
+                               [CurrentMessage sponsorName],
+                               [NSString stringWithFormat:@"%d", [CurrentMessage sendcount]],
+                               [CurrentMessage sponsorName],
+                               nil];
+            GuidedTourStepView* gv = [[GuidedTourStepView alloc]
+                                      initWithStep:[tour getStepForKey:[tour Badge]]
+                                      forFrame:[[self view] frame]
+                                      withParams:params];
+            [[self view] addSubview:gv];
+            [[self view] bringSubviewToFront:gv];
+            ShowBadge = false;
+            [Settings SaveSetting:SettingShowBadge withValue:@"0"];
+        }
     }
 }
 
@@ -943,16 +973,17 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
                      }];
 }
 
+/*
 -(void)showGuidedTour {
     GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour Intro]] forFrame:[[self view] frame]];
     [[self view] addSubview:gv];
 }
-
+*/
+/*
 -(void)showWalkthrough {
     [self showGuidedTour];
     return;
-    
-    
+ 
     CGRect frmView = [messages frame];// [[self view] frame];
     //frmView.origin.y += 60;
     //frmView.size.height -= 60;
@@ -1077,6 +1108,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     
     [[[self navigationItem] rightBarButtonItem] setEnabled:NO];
 }
+*/
 
 -(void)showChooseSkin {
     CGRect frm = [[self view] frame];
@@ -1084,7 +1116,9 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     frm.origin.y = topmargin; // + frm.size.height;
     frm.size.height -= topmargin;
     
-    ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
+    ChooseSkinView* skinview =
+        [[ChooseSkinView alloc] initWithFrame:frm
+                                     complete:^{ [self performRegistration]; }];
     [[self view] addSubview:skinview];
 }
 

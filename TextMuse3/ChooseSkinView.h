@@ -19,7 +19,11 @@
     
     UIActivityIndicatorView* activityView;
     UITableView* skins;
+    
+    void (^completion)(void);
 }
+
+-(id) initWithFrame:(CGRect)frame complete:(void (^)(void))completionHandler;
 
 @property (nonatomic) SEL done;
 

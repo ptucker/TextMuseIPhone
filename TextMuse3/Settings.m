@@ -16,6 +16,8 @@ NSString* InitialCategory = @"Trending";
 BOOL SaveRecentContacts = true;
 BOOL SaveRecentMessages = false;
 BOOL ShowIntro = true;
+BOOL ShowSponsor = true;
+BOOL ShowBadge = true;
 BOOL AskRegistration = true;
 
 NSString* SettingInitialCategory = @"SettingInitialCategory";
@@ -38,6 +40,8 @@ NSString* SettingNotificationMsgs = @"SettingNotificationMsgs";
 NSString* SettingPreamble = @"SettingPreamble";
 NSString* SettingInquiry = @"SettingInquiry";
 NSString* SettingShowIntro = @"SettingShowIntro";
+NSString* SettingShowSponsor = @"SettingSponsor";
+NSString* SettingShowBadge = @"SettingBadge";
 NSString* SettingAskRegistration = @"SettingAskRegistration";
 NSString* SettingGroupMessages = @"SettingGroupMesages";
 NSString* SettingNamedGroups = @"SettingNamedGroups";
@@ -225,6 +229,12 @@ NSMutableSet* SponsorFollows;
         if ([defs stringForKey:SettingShowIntro] != nil &&
             [[defs stringForKey:SettingShowIntro] length] == 1)
             ShowIntro = [[defs stringForKey:SettingShowIntro] isEqualToString:@"1"];
+        if ([defs stringForKey:SettingShowSponsor] != nil &&
+            [[defs stringForKey:SettingShowSponsor] length] == 1)
+            ShowSponsor = [[defs stringForKey:SettingShowSponsor] isEqualToString:@"1"];
+        if ([defs stringForKey:SettingShowBadge] != nil &&
+            [[defs stringForKey:SettingShowBadge] length] == 1)
+            ShowBadge = [[defs stringForKey:SettingShowBadge] isEqualToString:@"1"];
         if ([defs stringForKey:SettingAskRegistration] != nil &&
             [[defs stringForKey:SettingAskRegistration] length] == 1)
             AskRegistration = [[defs stringForKey:SettingAskRegistration] isEqualToString:@"1"];

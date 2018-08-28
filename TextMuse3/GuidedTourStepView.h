@@ -15,6 +15,16 @@
 }
 
 -(UIView*) initWithStep:(GuidedTourStep*)step forFrame:(CGRect)frame;
--(UIView*) initWithStep:(GuidedTourStep*)step forFrame:(CGRect)frame completionHandler:(void(^)(void)) completionHandler;
+-(UIView*) initWithStep:(GuidedTourStep*)step
+               forFrame:(CGRect)frame
+      completionHandler:(void(^)(void)) completionHandler;
+-(UIView*) initWithStep:(GuidedTourStep*)step
+               forFrame:(CGRect)frame
+             withParams:(NSArray*)params;
+
+-(UIView*) initWithStep:(GuidedTourStep*)step
+               forFrame:(CGRect)frame
+             withParams:(NSArray*)params
+      completionHandler:(void(^)(void)) completionHandler;
 
 @end

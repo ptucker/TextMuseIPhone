@@ -18,6 +18,8 @@
 @property (readonly) NSString* TextIt;
 @property (readonly) NSString* ChooseContact;
 @property (readonly) NSString* Done;
+@property (readonly) NSString* Sponsor;
+@property (readonly) NSString* Badge;
 
 -(GuidedTourStep*)getStepForKey:(NSString*)step;
 @end

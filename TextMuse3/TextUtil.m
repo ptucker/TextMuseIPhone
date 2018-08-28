@@ -34,7 +34,8 @@
         [text boundingRectWithSize:ret
                            options:NSStringDrawingUsesLineFragmentOrigin
                         attributes:@{
-                                     NSFontAttributeName : font
+                                     NSFontAttributeName : font,
+                                     NSParagraphStyleAttributeName : [NSParagraphStyle defaultParagraphStyle]
                                      }
                            context:nil];
         ret.height = ceil(labelRect.size.height);

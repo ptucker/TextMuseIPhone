@@ -20,9 +20,10 @@
 
 NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
 
--(id) initWithFrame:(CGRect)frame {
+-(id) initWithFrame:(CGRect)frame complete:(void (^)(void))completionHandler {
     self = [super initWithFrame:frame];
     
+    completion = completionHandler;
     [self setBackgroundColor:[UIColor whiteColor]];
     
     CGRect frmTitle = CGRectMake(10, frame.origin.y, frame.size.width-20, 32);
@@ -157,6 +158,8 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     }
 
     [self removeFromSuperview];
+    if (completion)
+        completion();
 }
 
 
