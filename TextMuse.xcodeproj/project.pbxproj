@@ -905,7 +905,7 @@
 					"/Users/petertucker/Documents/Consulting/FacebookSDKs-iOS-4.22.0",
 				);
 				INFOPLIST_FILE = TextMuse3/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuse;
@@ -933,7 +933,7 @@
 					"/Users/petertucker/Documents/Consulting/FacebookSDKs-iOS-4.22.0",
 				);
 				INFOPLIST_FILE = TextMuse3/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.laloosh.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TextMuse;

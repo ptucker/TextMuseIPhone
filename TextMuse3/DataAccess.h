@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <Contacts/Contacts.h>
 #import "UserContact.h"
 #import "UserPhone.h"
 #import "SponsorInfo.h"
@@ -69,14 +70,14 @@
 -(id)init;
 -(void)reloadData;
 -(void)reloadNotifications;
-//-(BOOL)initContacts;
+-(BOOL)initContacts;
 -(void)addListener:(id)listener;
 -(NSArray*)getCategories;
 -(NSArray*)getRequiredCategories;
 -(MessageCategory*)getCategory:(NSString*)c;
 -(SponsorInfo*)getSponsorForCategory:(NSString*)category;
 -(NSArray*)getContacts;
-//-(void)sortContacts;
+-(void)sortContacts;
 -(NSArray*)getContactHeadings;
 -(NSArray*)getContactsForHeading: (NSString*)h;
 -(int)getIndexForContact:(UserContact*)uc;

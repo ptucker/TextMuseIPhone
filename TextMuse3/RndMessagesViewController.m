@@ -19,7 +19,6 @@
 #import "Settings.h"
 #import "ChooseSkinView.h"
 #import "UICheckButton.h"
-#import "ContactsTableViewController.h"
 
 NSArray* colors;
 NSArray* colorsText;
@@ -39,7 +38,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     
     [self defaultSkin];
     
-    int messagesHeight = [[self view] frame].size.height - 95;
+    int messagesHeight = [[self view] frame].size.height;
     [[self navigationItem] setTitle:@""];
     UIView* viewTitle = [[UIView alloc] init];
     UIImageView* imgTitle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo-02-color_32"]];
@@ -78,7 +77,17 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     
     categoryFilter = @"all";
     
-    CGRect frmMessages = CGRectMake(0, 95, [[self view] frame].size.width, messagesHeight);
+    CGFloat scrollerHeight = 30;
+    CGFloat scrollerTop = [[self navigationController] navigationBar].frame.origin.y +
+    [[self navigationController] navigationBar].frame.size.height;
+    CGRect rctButton = CGRectMake(0, scrollerTop, [[self view] frame].size.width, scrollerHeight);
+    scrollerCategories = [[UIScrollView alloc] initWithFrame:rctButton];
+    [scrollerCategories setBackgroundColor:[[[self navigationController] navigationBar] backgroundColor]];
+    [[self view] addSubview:scrollerCategories];
+    
+    messagesHeight -= (scrollerHeight + scrollerTop);
+    CGRect frmMessages = CGRectMake(0, scrollerTop + scrollerHeight,
+                                    [[self view] frame].size.width, messagesHeight);
     messages = [[UITableView alloc] initWithFrame:frmMessages];
     [[self view] addSubview:messages];
     showPinned = false;
@@ -114,11 +123,6 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [[[self navigationController] navigationBar] setBarTintColor:[UIColor blackColor]];
     }
     
-    CGFloat scrollerHeight = 30;
-    CGRect rctButton = CGRectMake(0, 65, [[self view] frame].size.width, scrollerHeight);
-    scrollerCategories = [[UIScrollView alloc] initWithFrame:rctButton];
-    [[self view] addSubview:scrollerCategories];
-
 #ifdef HUMANIX
     ShowIntro = NO;
 #endif
@@ -446,6 +450,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 #endif
 }
 
+/*
 -(void)prepareForSegue:(UIStoryboardSegue*)segue sender:(nullable id)sender {
     if ([[segue identifier] isEqualToString:@"SendMessage"])
     {
@@ -453,6 +458,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
         [cvc setGroupName:@""];
     }
 }
+ */
 
 -(void)updateSkin {
     if (Skin != nil && [Skin SkinName] != nil) {
@@ -600,7 +606,10 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
             msg = [[Data getMessagesForCategory:categoryFilter] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
-        return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
+        CGFloat ret = [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
+        if (ret <= 0 || ret >= [[self view] frame].size.height)
+            ret = 120;  //just guess
+        return ret;
     }
 }
 
@@ -772,10 +781,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     else {
         //Block for showing the ContactPickerViewController
         void (^showCVC)(void) = ^{
-            CNContactPickerViewController* cvc = [[CNContactPickerViewController alloc] init];
-            [cvc setPredicateForEnablingContact:[NSPredicate predicateWithFormat:@"phoneNumbers.@count > 0"]];
-            [cvc setDelegate:self];
-            [self presentViewController:cvc animated:YES completion:nil];
+            [Data initContacts];
+            [self performSegueWithIdentifier:@"SendMessage" sender:self];
         };
 
         if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusNotDetermined) {
@@ -805,20 +812,25 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 }
 
 -(void)contactPicker:(CNContactPickerViewController *)picker didSelectContacts:(NSArray<CNContact *> *)contacts {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    NSMutableArray* usercontacts = [[NSMutableArray alloc] init];
-    for (CNContact* c in contacts) {
-        NSMutableArray* phones = [[NSMutableArray alloc] init];
-        for (CNPhoneNumber* p in [c phoneNumbers]) {
-            UserPhone* up = [[UserPhone alloc] initWithNumber:[[p valueForKey:@"value"] valueForKey:@"digits"]
-                                                        Label:[p valueForKey:@"label"]];
-            [phones addObject:up];
-        }
-        UserContact* uc = [[UserContact alloc] initWithFName:[c givenName] LName:[c familyName] Phones:phones Photo:[c imageData]];
-        [usercontacts addObject:uc];
-    }
+    void(^showSendMsg)(void) = ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableArray* usercontacts = [[NSMutableArray alloc] init];
+            for (CNContact* c in contacts) {
+                NSMutableArray* phones = [[NSMutableArray alloc] init];
+                for (CNPhoneNumber* p in [c phoneNumbers]) {
+                    UserPhone* up = [[UserPhone alloc] initWithNumber:[[p valueForKey:@"value"] valueForKey:@"digits"]
+                                                                Label:[p valueForKey:@"label"]];
+                    [phones addObject:up];
+                }
+                UserContact* uc = [[UserContact alloc] initWithFName:[c givenName] LName:[c familyName] Phones:phones Photo:[c imageData]];
+                [usercontacts addObject:uc];
+            }
+            
+            [self->sendMessage sendMessageTo:usercontacts from:self];
+        });
+    };
     
-    [sendMessage sendMessageTo:usercontacts from:self];
+    [self dismissViewControllerAnimated:YES completion:showSendMsg];
 }
 
 -(IBAction)quickMessage:(id)sender {

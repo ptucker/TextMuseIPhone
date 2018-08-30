@@ -18,18 +18,8 @@
 NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
 NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
 NSString* urlFirstTimeSender = @"http://www.textmuse.com/admin/firsttimesender.php";
-//MFMessageComposeViewController* msgcontroller = nil;
 
 @implementation SendMessage
-@synthesize msgcontroller;
-
--(id)init {
-    if([MFMessageComposeViewController canSendText]) {
-        [self setMsgcontroller:[[MFMessageComposeViewController alloc] init]];
-    }
-    
-    return self;
-}
 
 -(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController *)parent {
     _parent = parent;
@@ -101,6 +91,7 @@ NSString* urlFirstTimeSender = @"http://www.textmuse.com/admin/firsttimesender.p
 
 -(void)sendMessages:(NSArray*)phones withMessage:(NSString*)message {
     if([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController* msgcontroller = [[MFMessageComposeViewController alloc] init];
         [msgcontroller setMessageComposeDelegate: self];
         if (phones != nil && [phones count] > 0)
             [msgcontroller setRecipients:phones];
@@ -110,16 +101,15 @@ NSString* urlFirstTimeSender = @"http://www.textmuse.com/admin/firsttimesender.p
             [library assetForURL:[CurrentMessage assetURL] resultBlock:^(ALAsset* asset) {
                 CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
                 NSData* d = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
-                [self->msgcontroller addAttachmentData:d
+                [msgcontroller addAttachmentData:d
                                   typeIdentifier:(NSString*)kUTTypeImage
                                         filename:@"test.png"];
             } failureBlock:^(NSError*err) {}];
         }
         else if ([CurrentMessage img] != nil) {
-            NSString* type = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
-            (NSString*)kUTTypeGIF : (NSString*)kUTTypeImage;
-            NSString* tmpfile = [[CurrentMessage imgType] isEqualToString: @"image/gif"] ?
-            @"test.gif" : @"test.png";
+            BOOL gif = [[CurrentMessage imgType] isEqualToString: @"image/gif"];
+            NSString* type = gif ? (NSString*)kUTTypeGIF : (NSString*)kUTTypeImage;
+            NSString* tmpfile = gif ? @"test.gif" : @"test.png";
             [msgcontroller addAttachmentData:[CurrentMessage img]
                               typeIdentifier:type
                                     filename:tmpfile];
@@ -195,19 +185,9 @@ NSString* urlFirstTimeSender = @"http://www.textmuse.com/admin/firsttimesender.p
 }
 
 -(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-    if (result != MessageComposeResultSent) {
-        if (result == MessageComposeResultFailed) {
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:NSLocalizedString(@"Send Failed Title", nil)
-                                  message:NSLocalizedString(@"Send Failed Text", nil)
-                                  delegate:nil
-                                  cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
-                                  otherButtonTitles:nil];
-            [alert show];
-        }
-        [controller dismissViewControllerAnimated:YES completion:nil];
-    }
-    else {
+    [_parent dismissViewControllerAnimated:YES completion:nil];
+    
+    if (result == MessageComposeResultSent) {
         if (Tour != nil) {
             GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour Done]] forFrame:[[_parent view] frame]];
             [[_parent view] addSubview:gv];
@@ -219,12 +199,6 @@ NSString* urlFirstTimeSender = @"http://www.textmuse.com/admin/firsttimesender.p
         [self updateMessageCount:[CurrentMessage msgId]
                        withCount:[contacts count] == 0 ? 1 : (unsigned int)[contacts count]];
         [contacts removeAllObjects];
-        [controller dismissViewControllerAnimated:YES completion:^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self->_parent dismissViewControllerAnimated:YES completion:nil];
-                [[self->_parent navigationController] popToRootViewControllerAnimated:YES];
-            });
-        }];
     }
 }
 

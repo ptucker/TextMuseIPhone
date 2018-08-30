@@ -47,6 +47,8 @@ extern NSString* urlRemitBadge;
     //CGRect frmBorder = CGRectMake(1, 1, size.width-2, bottomY + 36);
     
     if (viewParent == nil) {
+        if (isnan(frmParent.origin.x) || isnan(frmParent.origin.y) || isnan(frmParent.size.width) || isnan(frmParent.size.height))
+            NSLog(@"this sucks");
         viewParent = [[UIView alloc] initWithFrame:frmParent];
         [self addSubview:viewParent];
     }
@@ -268,19 +270,23 @@ extern NSString* urlRemitBadge;
 
 +(CGFloat)GetCellHeightForMessage:(Message *)msg inSize:(CGSize)size {
     CGFloat height = 225.0;
+    CGSize sizeContent;
+    CGSize sizeText;
     if (![msg isImgNull]) {
         UIImage* img = [UIImage imageWithData:[msg img]];
-        CGSize sizeContent = [ImageUtil GetContentSizeForImage:img inSize:size];
+        sizeContent = [ImageUtil GetContentSizeForImage:img inSize:size];
         height = 92.0 + sizeContent.height;
         
     }
     
     if ([msg mediaUrl] != nil) {
         if ([[msg text] length] > 0) {
-            CGSize sizeText = [TextUtil GetContentSizeForText:[msg text] inSize:size];
+            sizeText = [TextUtil GetContentSizeForText:[msg text] inSize:size];
             height += sizeText.height + 4;
         }
     }
+    if (isnan(height))
+        NSLog(@"this sucks");
     return height;
 }
 

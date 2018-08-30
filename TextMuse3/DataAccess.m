@@ -328,30 +328,53 @@ const int HIDEMESSAGE = 1000;
     [parser parse];
 }
 
-/*
 -(BOOL)initContacts {
-    loadingContacts = YES;
-    CFErrorRef* error = NULL;
-    DataAccess* __weak weakSelf = self;
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, error);
+    if ([contacts count] == 0)
+        [self loadContacts];
 
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-            if (granted) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf loadContacts:addressBook];
-                });
-            }
-        });
-    }
-    else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized && [contacts count] == 0)
-        [self loadContacts:addressBook];
-    
-    loadingContacts = NO;
-    
-    return (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized && [contacts count] != 0);
+    return YES;
 }
-*/
+
+-(void)loadContacts {
+    if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized) {
+        CNContactStore* store = [[CNContactStore alloc] init];
+        NSMutableArray* _contacts = [[NSMutableArray alloc] init];
+
+        NSArray *keys = @[CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey];
+        NSArray* containers = [store containersMatchingPredicate:nil error:nil];
+        for (CNContainer* container in containers) {
+            NSString *containerId = [container identifier];
+            NSPredicate *predicate = [CNContact predicateForContactsInContainerWithIdentifier:containerId];
+            NSError *error;
+            NSArray *cnContacts = [store unifiedContactsMatchingPredicate:predicate keysToFetch:keys error:&error];
+            if (error) {
+                NSLog(@"error fetching contacts %@", error);
+            } else {
+                for (CNContact *contact in cnContacts) {
+                    
+                    NSMutableArray* phones = [[NSMutableArray alloc] init];
+                    for (CNLabeledValue *label in contact.phoneNumbers) {
+                        NSString *phone = [label.value stringValue];
+                        if ([phone length] > 0) {
+                            [phones addObject:[[UserPhone alloc] initWithNumber:phone Label:label.label]];
+                        }
+                    }
+
+                    if ([[contact givenName] length] > 0 && [[contact familyName] length] > 0 && [phones count] > 0) {
+                        UserContact* c = [[UserContact alloc] initWithFName:[contact givenName]
+                                                                      LName:[contact familyName]
+                                                                     Phones:phones
+                                                                      Photo:[contact imageData]];
+                        if (c != nil)
+                            [_contacts addObject:c];
+                    }
+                }
+            }
+        }
+        contacts = [_contacts sortedArrayUsingSelector:@selector(compareName:)];
+    }
+}
+
 /*
 -(void)loadContacts:(ABAddressBookRef)addressBook {
     NSMutableArray* _contacts = [[NSMutableArray alloc] init];
@@ -396,11 +419,11 @@ const int HIDEMESSAGE = 1000;
     
     contacts = [_contacts sortedArrayUsingSelector:@selector(compareName:)];
 }
+*/
 
 -(void)sortContacts {
     contacts = [contacts sortedArrayUsingSelector:@selector(compareName:)];
 }
-*/
 
 -(NSArray*) sortCategories {
     NSComparisonResult (^categoryCmp)(id, id);

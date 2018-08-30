@@ -60,16 +60,26 @@
     CGFloat heightParent = sizeParent.height;// 133;
     CGFloat widthParent = sizeParent.width;
     CGSize size = [img size];
-    CGFloat ratio = size.height / size.width;
-    if (size.height > heightParent && size.width <= widthParent)
-        heightParent = size.height;
-    else
-        heightParent = ratio * widthParent;
+    if (size.width != 0) {
+        CGFloat ratio = size.height / size.width;
+        if (size.height > heightParent && size.width <= widthParent)
+            heightParent = size.height;
+        else
+            heightParent = ratio * widthParent;
 
-    if (cell && heightParent > (sizeParent.height / 2.5)) {
-        heightParent = (sizeParent.height / 2.5);
-        widthParent = (1/ratio) * heightParent;
+        if (cell && heightParent > (sizeParent.height / 2.5)) {
+            heightParent = (sizeParent.height / 2.5);
+            widthParent = (1/ratio) * heightParent;
+        }
     }
+    else {
+        //Just guess
+        heightParent = 133;
+        widthParent = sizeParent.width;
+    }
+    
+    if (isnan(widthParent) || isnan(heightParent))
+        NSLog(@"this sucks");
     
     return CGSizeMake(widthParent, heightParent);
 }
