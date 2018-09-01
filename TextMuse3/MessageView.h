@@ -27,6 +27,8 @@
     UIButton* btnFollow;
     UIButton* btnTextContact;
     
+    CGFloat bottom;
+    
     UISwipeGestureRecognizer* swipe;
     
     Message* message;
@@ -40,6 +42,8 @@
 
 -(void)setupViewForMessage:(Message *)msg inFrame:(CGRect)frame withColor:(UIColor*)color index:(long)i;
 -(void)setTarget:(UIViewController*)vc withSelector:(SEL) sel andQuickSend:(SEL)selQuick;
+
+-(int)getHeightForMessageDetails:(Message*) msg inFrame:(CGRect)frame;
 
 //-(void)setLikeButtonForMessage:(Message*)msg inView:(UIView*)subview;
 //-(void)setPinButtonForMessage:(Message*)msg inView:(UIView*)subview;

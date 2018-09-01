@@ -49,26 +49,34 @@
     
     message = msg;
     
+    CGFloat heightDetails = [self getHeightForMessageDetails:msg inFrame:frame];
+    
     //[self setFrame:frame];
     [self setBackgroundColor:[UIColor clearColor]];
     CGFloat fontSize = 18.0;
     if (frame.size.height < 350)
         fontSize -= 6;
+    NSString* txt = [msg getFullMessage];
     UIFont* fontText = [TextUtil GetBoldFontForSize:fontSize];
     CGSize sizeText = CGSizeMake(frame.size.width-88, frame.size.height - 80);
-    sizeText = [TextUtil GetContentSizeForText:[msg text] inSize:sizeText forFont:fontText];
-    CGRect frmHeader = CGRectMake(10, 10, frame.size.width-20, 40);
-    CGRect frmImage = [self setupImageForMessage:msg inFrame:frame];
+    sizeText.height = [TextUtil GetContentSizeForText:txt inSize:sizeText forFont:fontText].height;
+
+    CGFloat textTop = frame.size.height - heightDetails - 24 - sizeText.height;
     
-    CGFloat textTop = frmImage.origin.y + frmImage.size.height + 8;
+    CGRect frmHeader = CGRectMake(10, 10, frame.size.width-20, 40);
+    CGRect frmImg = frame;
+    frmImg.origin.y = frmHeader.origin.y + frmHeader.size.height + 12;
+    frmImg.size.height -= (frmImg.origin.y + heightDetails + sizeText.height);
+    if (frmImg.size.height > frame.size.height * 0.6)
+        frmImg.size.height = frame.size.height * 0.6;
+    frmImg = [self setupImageForMessage:msg inFrame:frmImg];
+
+    //Now that the image is set, let's move the text to right below the image
+    textTop = frmImg.origin.y + frmImg.size.height + 8;
     CGRect frmLeftQuote = CGRectMake(14, textTop, 24, 24);
     CGRect frmRightQuote = CGRectMake(frame.size.width - 42, textTop, 24, 24);
-    CGRect frmLblContent = CGRectMake(44, textTop, sizeText.width, sizeText.height);
-    
-    if (frame.size.height < 350)
-        fontSize -= 4;
-    
-    NSString* txt = [msg getFullMessage];
+    CGRect frmLblContent = CGRectMake(44, textTop, frmRightQuote.origin.x - 64, sizeText.height);
+
     if ([[msg mediaUrl] isEqualToString:@"usertext://"]) {
         imgLeftQuote = [[UIImageView alloc] initWithFrame:frmLeftQuote];
         [imgLeftQuote setImage:leftQuote];
@@ -108,26 +116,13 @@
         [lblContent setText:txt];
         [lblContent setFont:fontText];
         [lblContent setTextColor:[UIColor blackColor]];
+        [lblContent setTextAlignment:NSTextAlignmentCenter];
         [lblContent setNumberOfLines:0];
         [lblContent sizeToFit];
         
         [self addSubview:imgLeftQuote];
         [self addSubview:imgRightQuote];
         [self addSubview:lblContent];
-    }
-    
-    //[self setLikeButtonForMessage:msg inFrame:frmLike];
-    //[self setPinButtonForMessage:msg inFrame:frmPin];
-    CGFloat buttonsTop = frmLblContent.origin.y + frmLblContent.size.height + 8;
-    if (([msg phoneno] != nil && [[msg phoneno] length] > 0) ||
-        ([msg textno] != nil && [[msg textno] length] > 0)) {
-        CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width, 40);
-        UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];
-        [self setContactsForMessage:msg inView:viewButtons];
-        
-        [self addSubview:viewButtons];
-        
-        buttonsTop += frmButtons.size.height;
     }
     
     UIView* viewHeader = [[UIView alloc] initWithFrame:frmHeader];
@@ -138,8 +133,8 @@
     CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width,
                                    [self frame].size.height - buttonsTop);
      */
-    CGRect frmButtons = CGRectMake(0, [self frame].size.height - 48,
-                                   [self frame].size.width, 40);
+    CGRect frmButtons = CGRectMake(0, [self frame].size.height - heightDetails - 12,
+                                   [self frame].size.width, heightDetails);
     UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];
     [self setDetailsForMessage:msg inView:viewButtons];
     
@@ -147,19 +142,21 @@
 }
 
 -(CGRect)setupImageForMessage:(Message*)msg inFrame:(CGRect)frame {
-    CGRect frmImgContent = CGRectMake(14, 84, frame.size.width-28, frame.size.height / 2);
     BOOL gif = [[msg imgType] isEqualToString:@"image/gif"];
     
-    CGRect frmImg = CGRectMake(0, 0, frmImgContent.size.width, frmImgContent.size.height);
-    UIImageView* iview = [[UIImageView alloc] initWithFrame:frmImg];
+    CGRect frmImg = CGRectMake(5, 5, frame.size.width-10, frame.size.height-10);
+    UIImageView* iview = [[UIImageView alloc] init];
     if (!gif) {
         UIImage* img = [UIImage imageWithData:[msg img]];
+        frmImg.size.height = [ImageUtil GetContentSizeForImage:img inSize:frmImg.size forCell:NO].height;
+        [iview setFrame:frmImg];
         [iview setImage:img];
     }
     else {
         FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
-        [imageView setFrame:frmImg];
         FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[msg img]];
+        frmImg.size.height = [ImageUtil GetContentSizeForImage:(UIImage*)image inSize:frmImg.size forCell:NO].height;
+        [imageView setFrame:frmImg];
         [imageView setAnimatedImage: image];
         BOOL running = [imageView isAnimating];
         if (!running) {
@@ -169,14 +166,16 @@
     }
     [iview setContentMode:UIViewContentModeScaleAspectFit];
     
-    imgContent = [[UIButton alloc] initWithFrame:frmImgContent];
+    CGRect frmButton = frmImg;
+    frmButton.origin = frame.origin;
+    imgContent = [[UIButton alloc] initWithFrame:frmButton];
     [imgContent addSubview:iview];
     [imgContent setBackgroundColor:[UIColor clearColor]];
     [self addSubview:imgContent];
     
     [imgContent addTarget:msg action:@selector(action:) forControlEvents:UIControlEventTouchUpInside];
     
-    return frmImgContent;
+    return frmButton;
 }
 
 @end

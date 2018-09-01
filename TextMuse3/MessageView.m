@@ -156,6 +156,111 @@ UIImage* openInNew = nil;
     [subview addSubview:header];
 }
 
+-(int)getHeightForMessageDetails:(Message*) msg inFrame:(CGRect)frame {
+    int ret = [self getHeightForContacts:msg inFrame:frame];
+    
+    return ret;
+}
+
+-(int)getHeightForContacts:(Message*)msg inFrame:(CGRect)frame {
+    int ret = 0;
+    if ([msg phoneno] != nil && [[msg phoneno] length] > 0)
+        ret = [self getHeightForPhoneContactForMessage:msg inFrame:frame];
+    else if ([msg textno] != nil && [[msg textno] length] > 0)
+        [self getHeightForTextContactForMessage:msg inFrame:frame];
+    ret += [self getHeightForTextItButtonForMessage:msg inFrame:frame];
+    ret += [self getHeightForTextDetailsForMessage:msg inFrame:frame];
+    
+    return ret;
+}
+
+-(NSString*)getPhoneContactTextForMessage:(Message*)msg {
+    return [NSString stringWithFormat:@"p: %@", [msg phoneno]];
+}
+
+-(NSString*)getTextContactTextForMessage:(Message*)msg {
+    return [NSString stringWithFormat:@"y: %@", [msg textno]];
+}
+
+-(NSString*)getTextItTextForMessage:(Message*)msg {
+    return [msg badge] ? @"REMIT IT" : @"TEXT IT";
+}
+
+-(NSString*)getTwoTierTextForMessage:(Message*)msg {
+    return [msg sendcount] != 0 ? [NSString stringWithFormat:@"Text to %d: %@", [msg sendcount], [msg winnerText]] : @"";
+}
+
+-(NSString*)getThreeTierTextForMessage:(Message*)msg {
+    return [msg visitcount] != 0 ? [NSString stringWithFormat:@"Visit with %d badges: %@", [msg visitcount], [msg visitWinnerText]] : @"";}
+
+-(int)getHeightForPhoneContactForMessage:(Message*)msg inFrame:(CGRect)frame {
+    /*
+    NSString* pno = [self getPhoneContactTextForMessage:msg];
+    return [TextUtil GetContentSizeForText:pno inSize:frame.size forFont:[self getFontForButton]].height;
+     */
+    return 32;
+}
+
+-(int)getHeightForTextContactForMessage:(Message*)msg inFrame:(CGRect)frame {
+    NSString* tno = [self getTextContactTextForMessage:msg];
+    return [TextUtil GetContentSizeForText:tno inSize:frame.size forFont:[self getFontForButton]].height;
+}
+
+-(int)getHeightForTextItButtonForMessage:(Message*)msg inFrame:(CGRect)frame {
+    /*
+    NSString* title = [self getTextItTextForMessage:msg];
+    return [TextUtil GetContentSizeForText:title inSize:frame.size forFont:[self getFontForButton]].height;
+     */
+    return 32;
+}
+
+-(UIFont*)getFontForButton{
+    CGFloat fontsize = [self frame].size.width < 321 ? 16 : 20;
+    return [TextUtil GetBoldFontForSize:fontsize];
+}
+
+-(UIFont*)getFontForTextDetails {
+    CGFloat fontsize = [self frame].size.width < 321 ? 14 : 18;
+    return [TextUtil GetLightFontForSize:fontsize];
+}
+
+-(int)getHeightForTextDetailsForMessage:(Message*)msg inFrame:(CGRect)frame {
+    int ret = 0;
+    
+    if ([msg sendcount] == 0 && [msg visitcount] == 0)
+        return ret;
+    
+    ret += 10;
+    CGFloat imgSize = (frame.size.height < 250) ? 32 : 48;
+    
+    if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
+        ret += imgSize;
+    }
+    
+    NSString* twotier = [self getTwoTierTextForMessage:msg];
+    NSString* threetier =[self getThreeTierTextForMessage:msg];
+    UIFont* fontDetails = [self getFontForTextDetails];
+    CGSize szTwo = [TextUtil GetContentSizeForText:twotier inSize:frame.size forFont:fontDetails];
+    CGSize szThree = [TextUtil GetContentSizeForText:threetier inSize:frame.size forFont:fontDetails];
+    ret += szTwo.height + szThree.height;
+
+    return ret;
+}
+
+-(void)setDetailsForMessage:(Message *)msg inView:(UIView *)subview {
+    //add these from the bottom up.
+    bottom = [subview frame].size.height;
+    [self setTextItButtonForMessage:msg inView:subview];
+    [self setSeeItButtonForMessage:msg inView:subview];
+    [self setFollowButtonForMessage:msg inView:subview];
+    bottom -= ([self getHeightForTextItButtonForMessage:msg inFrame:[subview frame]] + 8);
+    
+    [self setContactsForMessage:msg inView:subview];
+    bottom -= ([self getHeightForPhoneContactForMessage:msg inFrame:[subview frame]] + 8);
+
+    [self setDetailsTextForMessage:msg inView:subview];
+}
+
 -(void)setContactsForMessage:(Message *)msg inView:(UIView *)subview {
     if ([msg phoneno] != nil && [[msg phoneno] length] > 0)
         [self setPhoneContactForMessage:msg inView:subview];
@@ -165,10 +270,11 @@ UIImage* openInNew = nil;
 
 -(void)setPhoneContactForMessage:(Message *)msg inView:(UIView *)subview {
     CGRect frmView = [subview frame];
-    NSString* pno = [NSString stringWithFormat:@"p: %@", [msg phoneno]];
+    NSString* pno = [self getPhoneContactTextForMessage:msg];
     CGFloat x = (frmView.size.width/2) + 10;
     CGFloat w = (frmView.size.width/2) - 20;
-    CGRect frmButton = CGRectMake(x, 4, w, 32);
+    CGFloat height = [self getHeightForPhoneContactForMessage:msg inFrame:frmView];
+    CGRect frmButton = CGRectMake(x, bottom - height, w, height);
     UIButton* btnPhone = [[UIButton alloc] initWithFrame:frmButton];
     [btnPhone setTitle:pno forState:UIControlStateNormal];
     [self setPropsForButton:btnPhone withColor:[SkinInfo Color1TextMuse]];
@@ -179,35 +285,25 @@ UIImage* openInNew = nil;
 
 -(void)setTextContactForMessage:(Message *)msg inView:(UIView *)subview {
     CGRect frmView = [subview frame];
-    NSString* tno = [NSString stringWithFormat:@"t: %@", [msg textno]];
+    NSString* tno = [self getTextContactTextForMessage:msg];
     CGFloat x = 10;
     CGFloat w = (frmView.size.width/2) - 20;
-    CGRect frmButton = CGRectMake(x, 4, w, 32);
+    CGFloat height = [self getHeightForPhoneContactForMessage:msg inFrame:frmView];
+    CGRect frmButton = CGRectMake(x, bottom - height, w, height);
     btnTextContact = [[UIButton alloc] initWithFrame:frmButton];
     [btnTextContact setTitle:tno forState:UIControlStateNormal];
     [self setPropsForButton:btnTextContact withColor:[SkinInfo Color1TextMuse]];
     [subview addSubview:btnTextContact];
 }
 
--(void)setDetailsForMessage:(Message *)msg inView:(UIView *)subview {
-    [self setTextItButtonForMessage:msg inView:subview];
-    [self setSeeItButtonForMessage:msg inView:subview];
-    [self setFollowButtonForMessage:msg inView:subview];
-
-    [self setDetailsTextForMessage:msg inView:subview];
-}
-
 -(void)setTextItButtonForMessage:(Message*)msg inView:(UIView *)subview {
     CGRect frmView = [subview frame];
     if (btnText == nil) {
-#ifdef BUTTONSSIDE
-        CGRect frmButton = CGRectMake(frmView.size.width - 120, 10, 112, 32);
-#endif
-#ifdef BUTTONSBOTTOM
         CGFloat buttonWidth = frmView.size.width / 4;
-        CGRect frmButton = CGRectMake(10, 10, buttonWidth, 32);
-#endif
-        NSString* title = [msg badge] ? @"REMIT IT" : @"TEXT IT";
+        CGFloat height = [self getHeightForTextItButtonForMessage:msg inFrame:frmView];
+        CGRect frmButton = CGRectMake(10, bottom - height, buttonWidth, height);
+
+        NSString* title = [self getTextItTextForMessage:msg];
         btnText = [[UIButton alloc] initWithFrame:frmButton];
         [btnText setTitle:title forState:UIControlStateNormal];
         [self setPropsForButton:btnText withColor:[SkinInfo Color1TextMuse]];
@@ -219,14 +315,10 @@ UIImage* openInNew = nil;
     CGRect frmView = [subview frame];
 #ifndef OODLES
     if (btnDetails == nil) {
-#ifdef BUTTONSSIDE
-        CGRect frmButton = CGRectMake(frmView.size.width - 120, 50, 112, 32);
-#endif
-#ifdef BUTTONSBOTTOM
         CGFloat buttonWidth = frmView.size.width / 4;
         CGFloat x = (frmView.size.width / 2) - (buttonWidth / 2);
-        CGRect frmButton = CGRectMake(x, 10, buttonWidth, 32);
-#endif
+        CGRect frmButton = CGRectMake(x, bottom - 32, buttonWidth, 32);
+
         btnDetails = [[UIButton alloc] initWithFrame:frmButton];
         [btnDetails setTitle:@"WEBSITE" forState:UIControlStateNormal];
         [self setPropsForButton:btnDetails withColor:[SkinInfo Color2TextMuse]];
@@ -246,14 +338,9 @@ UIImage* openInNew = nil;
 #ifndef OODLES
     if (btnFollow == nil && [[msg sponsorName] length] > 0) {
         NSString* followText = [NSString stringWithFormat:@"%@OLLOW", [msg following] ? @"UNF" : @"F"];
-#ifdef BUTTONSSIDE
-        CGRect frmButton = CGRectMake(frmView.size.width - 120, 90, 112, 32);
-#endif
-#ifdef BUTTONSBOTTOM
         CGFloat buttonWidth = frmView.size.width / 4;
-        CGRect frmButton = CGRectMake(frmView.size.width - 10 - buttonWidth,
-                                      10, buttonWidth, 32);
-#endif
+        CGRect frmButton = CGRectMake(frmView.size.width - 10 - buttonWidth, bottom-32, buttonWidth, 32);
+
         btnFollow = [[UIButton alloc] initWithFrame:frmButton];
         [self setPropsForButton:btnFollow withColor:[SkinInfo Color3TextMuse]];
         [[btnFollow titleLabel] setNumberOfLines:2];
@@ -266,9 +353,7 @@ UIImage* openInNew = nil;
 }
 
 -(void) setPropsForButton:(UIButton*)btn withColor:(NSString*)color {
-    CGSize szView = [self frame].size;
-    CGFloat sz = szView.width < 321 ? 16 : 20;
-    UIFont* fnt = [TextUtil GetBoldFontForSize:sz];
+    UIFont* fnt = [self getFontForButton];
     [[btn titleLabel] setFont:fnt];
     [[btn titleLabel] setNumberOfLines:1];
     [[btn titleLabel] sizeToFit];
@@ -289,51 +374,34 @@ UIImage* openInNew = nil;
     if ([msg sendcount] == 0 && [msg visitcount] == 0)
         return;
     
-#ifdef BUTTONSSIDE
-    CGFloat textTop = 10;
-    int start = (([subview frame].size.width - 140) / 2) - 83;
-#endif
-#ifdef BUTTONSBOTTOM
-    CGFloat textTop = 10;
-    int start = ([subview frame].size.width / 2) - 83;
-#endif
-    CGFloat imgSize = ([subview frame].size.height < 250) ? 32 : 48;
-
-    if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
-        for (int i=0; i<3; i++) {
-            UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake(start + (i*60), textTop, imgSize, imgSize)];
-            [subview addSubview:imgBadge];
-            ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[msg badgeURL]
-                                                                forImgView:imgBadge];
-            [loader load];
-        }
-        textTop += imgSize;
-    }
-
-    NSString* twotier = [msg sendcount] != 0 ?
-        [NSString stringWithFormat:@"Text to %d: %@", [msg sendcount], [msg winnerText]] : @"";
-    NSString* threetier = [msg visitcount] != 0 ?
-        [NSString stringWithFormat:@"Visit with %d badges: %@", [msg visitcount], [msg visitWinnerText]] : @"";
+    NSString* twotier = [self getTwoTierTextForMessage:msg];
+    NSString* threetier = [self getThreeTierTextForMessage:msg];
+    UIFont* fontDetails = [self getFontForTextDetails];
     
-    uint fontsize = 18;
-    UIFont* fontDetails = [TextUtil GetLightFontForSize:fontsize];
-    
-#ifdef BUTTONSSIDE
-    CGSize frameText = CGSizeMake([subview frame].size.width - 140, [subview frame].size.height);
-    CGSize szTwo = [TextUtil GetContentSizeForText:twotier inSize:frameText forFont:fontDetails];
-    CGSize szThree = [TextUtil GetContentSizeForText:threetier inSize:frameText forFont:fontDetails];
-    CGFloat lblx2 = 10;
-    CGFloat lblx3 = 10;
-#endif
-#ifdef BUTTONSBOTTOM
     CGSize frameText = CGSizeMake([subview frame].size.width - 20, [subview frame].size.height);
     CGSize szTwo = [TextUtil GetContentSizeForText:twotier inSize:frameText forFont:fontDetails];
     CGSize szThree = [TextUtil GetContentSizeForText:threetier inSize:frameText forFont:fontDetails];
     CGFloat lblx2 = ([subview frame].size.width - szTwo.width) / 2;
     CGFloat lblx3 = ([subview frame].size.width - szThree.width) / 2;
-#endif
-    
-    UILabel* lblTwo = [[UILabel alloc] initWithFrame:CGRectMake(lblx2, textTop, szTwo.width, szTwo.height)];
+    CGRect frmLblx3 = CGRectMake(lblx3, bottom - szThree.height, szThree.width, szThree.height);
+    bottom -= (szThree.height + 8);
+    CGRect frmLblx2 = CGRectMake(lblx2, bottom - szTwo.height, szTwo.width, szTwo.height);
+
+    CGFloat imgSize = ([subview frame].size.height < 250) ? 32 : 48;
+    CGFloat topImage = frmLblx2.origin.y - imgSize - 8;
+    int start = ([subview frame].size.width / 2) - 83;
+
+    if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
+        for (int i=0; i<3; i++) {
+            UIImageView* imgBadge = [[UIImageView alloc] initWithFrame:CGRectMake(start + (i*60), topImage, imgSize, imgSize)];
+            [subview addSubview:imgBadge];
+            ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:[msg badgeURL]
+                                                                forImgView:imgBadge];
+            [loader load];
+        }
+    }
+
+    UILabel* lblTwo = [[UILabel alloc] initWithFrame:frmLblx2];
     [lblTwo setText:twotier];
     [lblTwo setNumberOfLines:0];
     [lblTwo setFont:fontDetails];
@@ -341,32 +409,13 @@ UIImage* openInNew = nil;
     [lblTwo setTextAlignment:NSTextAlignmentCenter];
     [subview addSubview:lblTwo];
 
-    UILabel* lblThree = [[UILabel alloc] initWithFrame:CGRectMake(lblx3, szTwo.height + textTop + 8,
-                                                                  szThree.width, szThree.height)];
+    UILabel* lblThree = [[UILabel alloc] initWithFrame:frmLblx3];
     [lblThree setText:threetier];
     [lblThree setNumberOfLines:0];
     [lblThree setFont:fontDetails];
     [lblThree setTextColor:[UIColor blackColor]];
     [lblThree setTextAlignment:NSTextAlignmentCenter];
     [subview addSubview:lblThree];
-    
-    CGFloat detailHeight = [lblThree frame].origin.y + [lblThree frame].size.height;
-    NSArray* btns = [NSArray arrayWithObjects:btnText, btnFollow, btnDetails, nil];
-    for (UIButton* b in btns) {
-        CGRect frm = [b frame];
-        frm.origin.y = detailHeight + 10;
-        [b setFrame:frm];
-    }
-    
-    CGFloat reqHeight = [btnText frame].origin.y + [btnText frame].size.height;
-    
-    //Need to make sure the view can hold this information
-    CGRect frm = [subview frame];
-    if (frm.size.height < reqHeight) {
-        frm.origin.y -= (reqHeight - frm.size.height);
-        frm.size.height = reqHeight;
-        [subview setFrame:frm];
-    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

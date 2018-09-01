@@ -66,7 +66,7 @@
     CGRect frmRightQuote = CGRectMake(frame.size.width - 58, quoteTop, 44, 44);
     CGRect frmBubble = CGRectMake(frame.size.width/8, 70,
                                   sizeBubble.width, sizeBubble.height);
-    CGRect frmLblContent = CGRectMake(66, quoteTop, sizeContent.width, sizeContent.height);
+    CGRect frmLblContent = CGRectMake(66, quoteTop, frmRightQuote.origin.x - 66, sizeContent.height);
     imgBubble = [[UIImageView alloc] initWithFrame:frmBubble];
     switch (i) {
         case 0:
@@ -95,6 +95,7 @@
     
     lblContent = [[UILabel alloc] initWithFrame:frmLblContent];
     [lblContent setText:txt];
+    [lblContent setTextAlignment:NSTextAlignmentCenter];
     [lblContent setFont:fontText];
     [lblContent setTextColor:[UIColor blackColor]];
     [lblContent setNumberOfLines:0];
@@ -104,28 +105,13 @@
     [self addSubview:imgRightQuote];
     [self addSubview:lblContent];
     
-    CGFloat buttonsTop = frmBubble.origin.y + frmBubble.size.height + 8;
-    if (([msg phoneno] != nil && [[msg phoneno] length] > 0) ||
-        ([msg textno] != nil && [[msg textno] length] > 0)) {
-        CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width, 40);
-        UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];
-        [self setContactsForMessage:msg inView:viewButtons];
-        
-        [self addSubview:viewButtons];
-
-        buttonsTop += frmButtons.size.height;
-    }
-    
     UIView* viewHeader = [[UIView alloc] initWithFrame:frmHeader];
     [self setHeaderForMessage:msg inView:viewHeader];
     [self addSubview:viewHeader];
     
-    /*
-    CGRect frmButtons = CGRectMake(0, buttonsTop, [self frame].size.width,
-                                   [self frame].size.height - buttonsTop);
-     */
-    CGRect frmButtons = CGRectMake(0, [self frame].size.height - 48,
-                                   [self frame].size.width, 40);
+    CGFloat heightDetails = [self getHeightForMessageDetails:msg inFrame:frame];
+    CGRect frmButtons = CGRectMake(0, [self frame].size.height - heightDetails - 12,
+                                   [self frame].size.width, heightDetails);
     UIView* viewButtons = [[UIView alloc] initWithFrame:frmButtons];
     [self setDetailsForMessage:msg inView:viewButtons];
     

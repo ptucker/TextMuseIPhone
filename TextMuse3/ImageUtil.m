@@ -57,31 +57,34 @@
 }
 
 +(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent forCell:(bool)cell {
-    CGFloat heightParent = sizeParent.height;// 133;
-    CGFloat widthParent = sizeParent.width;
-    CGSize size = [img size];
-    if (size.width != 0) {
-        CGFloat ratio = size.height / size.width;
-        if (size.height > heightParent && size.width <= widthParent)
-            heightParent = size.height;
-        else
-            heightParent = ratio * widthParent;
-
-        if (cell && heightParent > (sizeParent.height / 2.5)) {
-            heightParent = (sizeParent.height / 2.5);
-            widthParent = (1/ratio) * heightParent;
+    CGSize sizeView = sizeParent;
+    if (cell && sizeView.height > sizeParent.height/2.5)
+        sizeView.height = sizeParent.height/2.5;
+    CGSize sizeImage = [img size];
+    if (sizeImage.width != 0) {
+        CGFloat ratioImage = sizeImage.height / sizeImage.width;
+        CGFloat ratioView = sizeView.height / sizeView.width;
+        if (ratioImage > ratioView) {
+            if (sizeImage.height > sizeView.height) {
+                sizeView.width = sizeView.height / ratioImage;
+            }
+        }
+        else {
+            if (sizeImage.width > sizeView.width) {
+                sizeView.height = sizeView.width * ratioImage;
+            }
         }
     }
     else {
         //Just guess
-        heightParent = 133;
-        widthParent = sizeParent.width;
+        sizeView.height = 133;
+        sizeView.width = sizeParent.width;
     }
     
-    if (isnan(widthParent) || isnan(heightParent))
+    if (isnan(sizeView.height) || isnan(sizeView.width))
         NSLog(@"this sucks");
     
-    return CGSizeMake(widthParent, heightParent);
+    return sizeView;
 }
 
 + (UIImage *) imageFromColor:(UIColor *)color {
