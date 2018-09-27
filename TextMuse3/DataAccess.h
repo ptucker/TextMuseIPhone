@@ -58,7 +58,7 @@
     NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc,
         *currentEventDate, *currentSponsorName, *currentSponsorLogo,
         *currentBadgeURL, *currentWinnerText, *currentVisitWinnerText,
-        *currentSendCount, *currentVisitCount, *currentPhoneNo, *currentTextNo;
+        *currentSendCount, *currentVisitCount, *currentPhoneNo, *currentAddress, *currentTextNo;
     
     //NSString* documentdir;
     

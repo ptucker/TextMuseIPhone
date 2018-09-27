@@ -181,7 +181,8 @@ const int HIDEMESSAGE = 1000;
 #ifdef YOUTHREACH
     sponsor = @"&sponsor=171";
 #endif
-    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@",
+    //24 Sept 2018 -- added "address" to conditionally bring addresses in XML.
+    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@&address=1",
                       urlNotes, lastDownload, appid, notif, sponsor];
     
     if (!notificationOnly)
@@ -973,6 +974,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentVisitWinnerText = nil;
         currentTextNo = nil;
         currentPhoneNo = nil;
+        currentAddress = nil;
     }
     else if ([elementName isEqualToString:@"t"])
         xmldata = [[NSMutableString alloc] init];
@@ -991,6 +993,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
              [elementName isEqualToString:@"visitwinner"] ||
              [elementName isEqualToString:@"badge"] ||
              [elementName isEqualToString:@"phoneno"] ||
+             [elementName isEqualToString:@"address"] ||
              [elementName isEqualToString:@"textno"])
         partsdata = [[NSMutableString alloc] init];
 }
@@ -1013,6 +1016,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
              [currentElement isEqualToString:@"badge"] ||
              [currentElement isEqualToString:@"visitwinner"] ||
              [currentElement isEqualToString:@"phoneno"] ||
+             [currentElement isEqualToString:@"address"] ||
              [currentElement isEqualToString:@"textno"])
         [partsdata appendString:string];
 }
@@ -1050,6 +1054,7 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [msg setWinnerText:currentWinnerText];
             [msg setVisitWinnerText:currentVisitWinnerText];
             [msg setPhoneno:currentPhoneNo];
+            [msg setAddress:currentAddress];
             [msg setTextno:currentTextNo];
             [msg setFollowing:following];
             if (following)
@@ -1124,6 +1129,8 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentBadgeURL = partsdata;
     else if ([elementName isEqualToString:@"phoneno"] && [partsdata length] > 0)
         currentPhoneNo = partsdata;
+    else if ([elementName isEqualToString:@"address"] && [partsdata length] > 0)
+        currentAddress = partsdata;
     else if ([elementName isEqualToString:@"textno"] && [partsdata length] > 0)
         currentTextNo = partsdata;
 }

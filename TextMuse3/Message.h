@@ -46,6 +46,7 @@
     BOOL following;
     NSString* phoneno;
     NSString* textno;
+    NSString* address;
     
     UIActivityIndicatorView* activityView;
     UIWebView* web;
@@ -88,6 +89,7 @@
 @property (nonatomic, readwrite, copy) NSString* visitWinnerText;
 @property (nonatomic, readwrite, copy) NSString* badgeURL;
 @property (nonatomic, readwrite, copy) NSString* phoneno;
+@property (nonatomic, readwrite, copy) NSString* address;
 @property (nonatomic, readwrite, copy) NSString* textno;
 
 -(id)initWithId:(int)i text:(NSString *)t mediaUrl:(NSString*)murl url:(NSString*)u
@@ -109,6 +111,7 @@
 
 -(void)action:(id)sender;
 -(void)follow:(id)sender;
+-(void)showMap:(id)sender;
 -(void)updateText:(id)sender;
 
 -(NSString*)description;

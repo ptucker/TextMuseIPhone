@@ -27,9 +27,10 @@
 }
 
 +(CGSize) GetContentSizeForText:(NSString*)text inSize:(CGSize)sizeParent forFont:(UIFont *)font {
-    CGSize ret = CGSizeMake(sizeParent.width, sizeParent.height);
+    CGSize ret = CGSizeMake(0, 0);
     
     if ([text length] > 0) {
+        ret = CGSizeMake(sizeParent.width, sizeParent.height);
         CGRect labelRect =
         [text boundingRectWithSize:ret
                            options:NSStringDrawingUsesLineFragmentOrigin

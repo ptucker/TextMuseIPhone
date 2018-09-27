@@ -157,7 +157,8 @@ UIImage* openInNew = nil;
 }
 
 -(int)getHeightForMessageDetails:(Message*) msg inFrame:(CGRect)frame {
-    int ret = [self getHeightForContacts:msg inFrame:frame];
+    int margin = 48;
+    int ret = [self getHeightForContacts:msg inFrame:frame] + margin;
     
     return ret;
 }
@@ -215,12 +216,12 @@ UIImage* openInNew = nil;
 }
 
 -(UIFont*)getFontForButton{
-    CGFloat fontsize = [self frame].size.width < 321 ? 16 : 20;
+    CGFloat fontsize = [self frame].size.width < 321 ? 14 : 18;
     return [TextUtil GetBoldFontForSize:fontsize];
 }
 
 -(UIFont*)getFontForTextDetails {
-    CGFloat fontsize = [self frame].size.width < 321 ? 14 : 18;
+    CGFloat fontsize = [self frame].size.width < 321 ? 12 : 16;
     return [TextUtil GetLightFontForSize:fontsize];
 }
 
@@ -234,15 +235,15 @@ UIImage* openInNew = nil;
     CGFloat imgSize = (frame.size.height < 250) ? 32 : 48;
     
     if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
-        ret += imgSize;
+        ret += imgSize + 8;
     }
     
     NSString* twotier = [self getTwoTierTextForMessage:msg];
-    NSString* threetier =[self getThreeTierTextForMessage:msg];
+    NSString* threetier = [self getThreeTierTextForMessage:msg];
     UIFont* fontDetails = [self getFontForTextDetails];
     CGSize szTwo = [TextUtil GetContentSizeForText:twotier inSize:frame.size forFont:fontDetails];
     CGSize szThree = [TextUtil GetContentSizeForText:threetier inSize:frame.size forFont:fontDetails];
-    ret += szTwo.height + szThree.height;
+    ret += szTwo.height + 8 + szThree.height + 8;
 
     return ret;
 }
@@ -264,35 +265,58 @@ UIImage* openInNew = nil;
 -(void)setContactsForMessage:(Message *)msg inView:(UIView *)subview {
     if ([msg phoneno] != nil && [[msg phoneno] length] > 0)
         [self setPhoneContactForMessage:msg inView:subview];
+    if ([msg address] != nil && [[msg address] length] > 0)
+        [self setMapForMessage:msg inView:subview];
     if ([msg textno] != nil && [[msg textno] length] > 0)
         [self setTextContactForMessage:msg inView:subview];
 }
 
 -(void)setPhoneContactForMessage:(Message *)msg inView:(UIView *)subview {
     CGRect frmView = [subview frame];
-    NSString* pno = [self getPhoneContactTextForMessage:msg];
-    CGFloat x = (frmView.size.width/2) + 10;
-    CGFloat w = (frmView.size.width/2) - 20;
+    //NSString* pno = [self getPhoneContactTextForMessage:msg];
     CGFloat height = [self getHeightForPhoneContactForMessage:msg inFrame:frmView];
+    CGFloat w = height;
+    CGFloat x = (3*(frmView.size.width/4)) - (w/2);
     CGRect frmButton = CGRectMake(x, bottom - height, w, height);
     UIButton* btnPhone = [[UIButton alloc] initWithFrame:frmButton];
-    [btnPhone setTitle:pno forState:UIControlStateNormal];
-    [self setPropsForButton:btnPhone withColor:[SkinInfo Color1TextMuse]];
+    //[btnPhone setTitle:pno forState:UIControlStateNormal];
+    [btnPhone setImage:[UIImage imageNamed:@"phone-outgoing"] forState:UIControlStateNormal];
+    //[self setPropsForButton:btnPhone withColor:[SkinInfo Color1TextMuse]];
+    //[self tintImageForButton:btnPhone withColor:[SkinInfo Color1TextMuse] inFrame:frmButton];
     [subview addSubview:btnPhone];
 
     [btnPhone addTarget:self action:@selector(sendContactPhone:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+-(void)setMapForMessage:(Message *)msg inView:(UIView *)subview {
+    CGRect frmView = [subview frame];
+    //NSString* pno = [self getPhoneContactTextForMessage:msg];
+    CGFloat height = [self getHeightForPhoneContactForMessage:msg inFrame:frmView];
+    CGFloat w = height;
+    CGFloat x = (frmView.size.width/2) - (w/2);
+    CGRect frmButton = CGRectMake(x, bottom - height, w, height);
+    UIButton* btnMap = [[UIButton alloc] initWithFrame:frmButton];
+    //[btnMap setTitle:pno forState:UIControlStateNormal];
+    [btnMap setImage:[UIImage imageNamed:@"map-marker"] forState:UIControlStateNormal];
+    [self setPropsForButton:btnMap withColor:[SkinInfo Color1TextMuse]];
+    //[self tintImageForButton:btnMap withColor:[SkinInfo Color1TextMuse] inFrame:frmButton];
+    [subview addSubview:btnMap];
+    
+    [btnMap addTarget:self action:@selector(showMap:) forControlEvents:UIControlEventTouchUpInside];
+}
+
 -(void)setTextContactForMessage:(Message *)msg inView:(UIView *)subview {
     CGRect frmView = [subview frame];
-    NSString* tno = [self getTextContactTextForMessage:msg];
-    CGFloat x = 10;
-    CGFloat w = (frmView.size.width/2) - 20;
+    //NSString* tno = [self getTextContactTextForMessage:msg];
     CGFloat height = [self getHeightForPhoneContactForMessage:msg inFrame:frmView];
+    CGFloat w = height;
+    CGFloat x = (frmView.size.width/4) - (w/2);
     CGRect frmButton = CGRectMake(x, bottom - height, w, height);
     btnTextContact = [[UIButton alloc] initWithFrame:frmButton];
-    [btnTextContact setTitle:tno forState:UIControlStateNormal];
-    [self setPropsForButton:btnTextContact withColor:[SkinInfo Color1TextMuse]];
+    //[btnTextContact setTitle:tno forState:UIControlStateNormal];
+    [btnText setImage:[UIImage imageNamed:@"message-test"] forState:UIControlStateNormal];
+    //[self setPropsForButton:btnTextContact withColor:[SkinInfo Color1TextMuse]];
+    //[self tintImageForButton:btnTextContact withColor:[SkinInfo Color1TextMuse] inFrame:frmButton];
     [subview addSubview:btnTextContact];
 }
 
@@ -343,7 +367,6 @@ UIImage* openInNew = nil;
 
         btnFollow = [[UIButton alloc] initWithFrame:frmButton];
         [self setPropsForButton:btnFollow withColor:[SkinInfo Color3TextMuse]];
-        [[btnFollow titleLabel] setNumberOfLines:2];
         [btnFollow setTitle:followText forState:UIControlStateNormal];
         [btnFollow addTarget:self action:@selector(followSponsor:)
             forControlEvents:UIControlEventTouchUpInside];
@@ -370,6 +393,18 @@ UIImage* openInNew = nil;
      */
 }
 
+-(void)tintImageForButton:(UIButton*)btn withColor:(NSString*)color inFrame:(CGRect)frame {
+    UIView* cover = [[UIView alloc] initWithFrame:frame];
+   
+    [cover setBackgroundColor:[SkinInfo createColor:color]];
+    [[cover layer] setOpacity:0.75];
+    
+    UIImageView* imageView = [btn imageView];
+    imageView.image = [[[btn imageView] image] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+    
+    [imageView addSubview:cover];
+}
+
 -(void)setDetailsTextForMessage:(Message*)msg inView:(UIView*)subview {
     if ([msg sendcount] == 0 && [msg visitcount] == 0)
         return;
@@ -386,9 +421,10 @@ UIImage* openInNew = nil;
     CGRect frmLblx3 = CGRectMake(lblx3, bottom - szThree.height, szThree.width, szThree.height);
     bottom -= (szThree.height + 8);
     CGRect frmLblx2 = CGRectMake(lblx2, bottom - szTwo.height, szTwo.width, szTwo.height);
+    bottom -= (szTwo.height + 8);
 
     CGFloat imgSize = ([subview frame].size.height < 250) ? 32 : 48;
-    CGFloat topImage = frmLblx2.origin.y - imgSize - 8;
+    CGFloat topImage = bottom - imgSize;
     int start = ([subview frame].size.width / 2) - 83;
 
     if ([msg sendcount] != 0 && [msg badgeURL] != nil && [[msg badgeURL] length] > 0) {
@@ -463,13 +499,15 @@ UIImage* openInNew = nil;
                                 cachePolicy:NSURLRequestReloadIgnoringCacheData
                                 timeoutInterval:30];
     
-    NSString* followText = [NSString stringWithFormat:@"%@ollow%@", [message following] ? @"Unf" : @"F",
+    NSString* followText = [NSString stringWithFormat:@"%@OLLOW%@", [message following] ? @"UNF" : @"F",
                             [message sponsorLogo] == nil ?
                             [NSString stringWithFormat:@"\n%@", [message sponsorName]] : @""];
     if ([sender isKindOfClass:[UICaptionButton class]])
         [(UICaptionButton*)sender setCaption:followText];
-    else
+    else {
         [(UIButton*)sender setTitle:followText forState:UIControlStateNormal];
+        [(UIButton*)sender sizeToFit];
+    }
 
     
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
@@ -563,9 +601,9 @@ UIImage* openInNew = nil;
 */
 
 -(IBAction)sendContactPhone:(id)sender {
-    NSString *phoneNumber = [message phoneno];
-    NSURL *phoneUrl = [NSURL URLWithString:[@"telprompt://" stringByAppendingString:phoneNumber]];
-    NSURL *phoneFallbackUrl = [NSURL URLWithString:[@"tel://" stringByAppendingString:phoneNumber]];
+    NSString *phoneNumber = [[message phoneno] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSURL *phoneUrl = [NSURL URLWithString:[@"telprompt:" stringByAppendingString:phoneNumber]];
+    NSURL *phoneFallbackUrl = [NSURL URLWithString:[@"tel:" stringByAppendingString:phoneNumber]];
 
     NSURL* url = [NSURL URLWithString:urlUpdateQuickNotes];
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
@@ -585,6 +623,10 @@ UIImage* openInNew = nil;
     } else if ([UIApplication.sharedApplication canOpenURL:phoneFallbackUrl]) {
         [UIApplication.sharedApplication openURL:phoneFallbackUrl];
     }
+}
+
+-(IBAction)showMap:(id)sender {
+    [message showMap:sender];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

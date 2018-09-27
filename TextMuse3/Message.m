@@ -16,7 +16,7 @@ YTPlayerView* globalYTPlayer = nil;
 NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 
 @implementation Message
-@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, sponsorID, sponsorName, sponsorLogo, following, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints, phoneno, textno;
+@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, sponsorID, sponsorName, sponsorLogo, following, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints, phoneno, address, textno;
 
 -(id)initWithId:(int)i message:(NSString *)m forCategory:(NSString*)c isNew:(BOOL)n {
     self = [super init];
@@ -51,6 +51,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     category = c;
     imgLock = [[NSObject alloc] init];
     [self setQuicksend:NO];
+    [self setAddress:@"11605 N. Ashley Lane, Spokane, WA 99218"];
 
     if (mediaUrl != nil) {
         loader = [[ImageDownloader alloc] initWithUrl:mediaUrl forMessage:self];
@@ -218,7 +219,22 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         UIView* parent = [btn superview];
         while ([parent superview] != nil)
             parent = [parent superview];
+
+        [self showWebViewInParent:parent withUrl:url withAnimation:YES];
+    }
+}
+
+-(void)showMap:(id)sender {
+    if ([self address] != nil && [[self address] length] > 0) {
+        UIButton* btn = (UIButton*)sender;
+        UIView* parent = [btn superview];
+        while ([parent superview] != nil)
+            parent = [parent superview];
         
+        //https://developers.google.com/maps/documentation/urls/guide
+        //https://www.google.com/maps/search/?api=1&parameters
+        NSString* url = [NSString stringWithFormat:@"https://www.google.com/maps/search/?api=1&query=%@",
+                         [[self address] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
         [self showWebViewInParent:parent withUrl:url withAnimation:YES];
     }
 }

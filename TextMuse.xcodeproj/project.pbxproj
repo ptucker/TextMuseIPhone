@@ -30,7 +30,6 @@
 		2D3240851C2FB06F00E4E59B /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3240841C2FB06F00E4E59B /* MessageTableViewCell.m */; };
 		2D36EDA61D4AAC070062C45E /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D36EDA51D4AAC070062C45E /* UserInfo.m */; };
 		2D36EDA91D4AB15F0062C45E /* SuccessParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D36EDA81D4AB15F0062C45E /* SuccessParser.m */; };
-		2D4789C021348A2E002DD376 /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D4789BF21348A2E002DD376 /* follow.png */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
 		2DBE6C4B212B4DF8003A7B7A /* GuidedTour.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE6C4A212B4DF8003A7B7A /* GuidedTour.m */; };
 		2DBE6C4E212B4E48003A7B7A /* GuidedTourStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE6C4D212B4E48003A7B7A /* GuidedTourStep.m */; };
@@ -52,6 +51,9 @@
 		2DCA59061B6ECB260011FCDB /* UISuggestionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCA59051B6ECB260011FCDB /* UISuggestionButton.m */; };
 		2DCA7A061B58530000698E97 /* text.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2DCA7A051B58530000698E97 /* text.xml */; };
 		2DCDFC4B1AEC98EB002DA914 /* UICheckButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */; };
+		2DDAD11221594D940030D23E /* phone-outgoing.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DDAD10F21594D940030D23E /* phone-outgoing.png */; };
+		2DDAD11321594D940030D23E /* map-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DDAD11021594D940030D23E /* map-marker.png */; };
+		2DDAD11421594D940030D23E /* message-text.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DDAD11121594D940030D23E /* message-text.png */; };
 		2DE001EC1F34E31000FBB7FC /* Settings2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE001EB1F34E31000FBB7FC /* Settings2ViewController.m */; };
 		2DE191D71BAE6B1D004489C9 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */; };
 		2DE191D91BAE6C09004489C9 /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE191D81BAE6C09004489C9 /* WindowsAzureMessaging.framework */; };
@@ -135,7 +137,6 @@
 		2D36EDA51D4AAC070062C45E /* UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
 		2D36EDA71D4AB15F0062C45E /* SuccessParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessParser.h; sourceTree = "<group>"; };
 		2D36EDA81D4AB15F0062C45E /* SuccessParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuccessParser.m; sourceTree = "<group>"; };
-		2D4789BF21348A2E002DD376 /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow.png; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
 		2DBE6C49212B4DF8003A7B7A /* GuidedTour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuidedTour.h; sourceTree = "<group>"; };
@@ -175,6 +176,9 @@
 		2DCA7A051B58530000698E97 /* text.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = text.xml; path = ../../../../../Dropbox/text.xml; sourceTree = "<group>"; };
 		2DCDFC491AEC98EB002DA914 /* UICheckButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICheckButton.h; sourceTree = "<group>"; };
 		2DCDFC4A1AEC98EB002DA914 /* UICheckButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICheckButton.m; sourceTree = "<group>"; };
+		2DDAD10F21594D940030D23E /* phone-outgoing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone-outgoing.png"; sourceTree = "<group>"; };
+		2DDAD11021594D940030D23E /* map-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-marker.png"; sourceTree = "<group>"; };
+		2DDAD11121594D940030D23E /* message-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message-text.png"; sourceTree = "<group>"; };
 		2DE001EA1F34E31000FBB7FC /* Settings2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings2ViewController.h; sourceTree = "<group>"; };
 		2DE001EB1F34E31000FBB7FC /* Settings2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings2ViewController.m; sourceTree = "<group>"; };
 		2DE191D61BAE6B1D004489C9 /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WindowsAzureMobileServices.framework; path = ../../../WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
@@ -460,7 +464,9 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				2D4789BF21348A2E002DD376 /* follow.png */,
+				2DDAD11021594D940030D23E /* map-marker.png */,
+				2DDAD11121594D940030D23E /* message-text.png */,
+				2DDAD10F21594D940030D23E /* phone-outgoing.png */,
 				2DF2AFA32135E42500D97A84 /* follow.png */,
 				2D0B95F5212E63D6006023EB /* students.png */,
 				2D0B95F0212E62C4006023EB /* choosecontent.png */,
@@ -669,12 +675,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DDAD11221594D940030D23E /* phone-outgoing.png in Resources */,
 				2D01F4031ED8D0D400DD9D91 /* textmusedata.xml in Resources */,
+				2DDAD11421594D940030D23E /* message-text.png in Resources */,
 				2DF080591AE625410003A277 /* Images.xcassets in Resources */,
 				2DF080B41AE625FC0003A277 /* Lato-Medium.ttf in Resources */,
 				2D3240791C2F51F800E4E59B /* TextMessageTableViewCell.xib in Resources */,
 				2DF080B31AE625FC0003A277 /* Lato-Light.ttf in Resources */,
 				2D0B95F2212E62C5006023EB /* textit.png in Resources */,
+				2DDAD11321594D940030D23E /* map-marker.png in Resources */,
 				2D01F4051ED8D0EE00DD9D91 /* oodlesdata.xml in Resources */,
 				2D32407E1C2F520F00E4E59B /* ImageMessageTableViewCell.xib in Resources */,
 				2DF080A81AE625FC0003A277 /* CategoriesTableViewCell.xib in Resources */,
@@ -682,7 +691,6 @@
 				2DF080741AE6257D0003A277 /* Localizable.strings in Resources */,
 				2DCA7A061B58530000698E97 /* text.xml in Resources */,
 				2DF080B51AE625FC0003A277 /* Lato-Regular.ttf in Resources */,
-				2D4789C021348A2E002DD376 /* follow.png in Resources */,
 				2DCA58F71B6EA54D0011FCDB /* Assets in Resources */,
 				2D0B95F3212E62C5006023EB /* choosecontent.png in Resources */,
 				2DF2AFA42135E42500D97A84 /* follow.png in Resources */,
