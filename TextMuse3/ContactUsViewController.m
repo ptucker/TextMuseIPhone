@@ -15,7 +15,7 @@
 
 @implementation ContactUsViewController
 
-NSString* urlFeedback = @"http://www.textmuse.com/admin/postfeedback.php";
+NSString* urlFeedback = @"https://www.textmuse.com/admin/postfeedback.php";
 NSString* feedbackPrompt = @"Add your message...";
 - (void)viewDidLoad {
     [super viewDidLoad];

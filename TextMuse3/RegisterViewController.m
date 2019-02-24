@@ -17,7 +17,7 @@
 @implementation RegisterViewController
 @synthesize singleTapRecognizer = _singleTapRecognizer;
 
-NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
+NSString* urlRegistration = @"https://www.textmuse.com/admin/adduser.php";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -89,7 +89,7 @@ NSString* urlRegistration = @"http://www.textmuse.com/admin/adduser.php";
 
 -(IBAction)btnPrivacy:(id)sender {
     [[UIApplication sharedApplication]
-     openURL:[NSURL URLWithString:@"http://www.textmuse.com/privacy.html"]];
+     openURL:[NSURL URLWithString:@"https://www.textmuse.com/privacy.html"]];
 }
 
 -(IBAction)registerUser:(id)sender {

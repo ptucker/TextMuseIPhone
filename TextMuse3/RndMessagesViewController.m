@@ -24,8 +24,11 @@ NSArray* colors;
 NSArray* colorsText;
 NSArray* colorsTitle;
 
+NSString* btnAddEvent = @"calendar-plus";
+NSString* btnAddPrayer = @"prayer-icon";
+
 const int maxRecentIDs = 10;
-NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
+NSString* urlRemitBadge = @"https://www.textmuse.com/admin/remitbadge.php";
 
 @interface RndMessagesViewController ()
 
@@ -102,17 +105,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     
     sendMessage = [[SendMessage alloc] init];
 
-#ifdef UNIVERSITY
-    UIImage* imgEvent = [UIImage imageNamed:@"calendar-plus"];
-    UIImage *scaledEvent = [UIImage imageWithCGImage:[imgEvent CGImage]
-                                                  scale:48.0/30
-                                            orientation:(imgEvent.imageOrientation)];
-    UIBarButtonItem *eventButton = [[UIBarButtonItem alloc] initWithImage:scaledEvent
-                                                                    style:UIBarButtonItemStylePlain
-                                                                   target:self
-                                                                   action:@selector(addEvent:)];
-    [[self navigationItem] setRightBarButtonItem: eventButton];
-#endif
+    [self setupToolbarButton:btnAddEvent];
     
     [[self navigationController] setDelegate:self];
     if ([colorsText count] > 0) {
@@ -172,6 +165,23 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 #endif
 }
 
+-(void)setupToolbarButton:(NSString*)buttonIcon {
+#ifdef UNIVERSITY
+    UIImage* imgEvent = [UIImage imageNamed:buttonIcon];
+    if (imgEvent == nil)
+        imgEvent = [UIImage imageNamed:btnAddEvent];
+    UIImage *scaledEvent = [UIImage imageWithCGImage:[imgEvent CGImage]
+                                               scale:48.0/30
+                                         orientation:(imgEvent.imageOrientation)];
+    UIBarButtonItem *eventButton = [[UIBarButtonItem alloc] initWithImage:scaledEvent
+                                                                    style:UIBarButtonItemStylePlain
+                                                                   target:self
+                                                                   action:@selector(addEvent:)];
+    [eventButton setTag:([buttonIcon isEqualToString:btnAddPrayer] ? AddPrayer : AddEvent)];
+    [[self navigationItem] setRightBarButtonItem: eventButton];
+#endif
+}
+
 -(void)defaultSkin {
 #ifdef HUMANIX
     Skin = [[SkinInfo alloc] init];
@@ -221,7 +231,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [Skin setColor1:@"73bedc"];
     [Skin setColor2:@"000000"];
     [Skin setColor3:@"ffffff"];
-    [Skin setHomeURL:@"http://www.textmuse.com"];
+    [Skin setHomeURL:@"https://www.textmuse.com"];
     [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
     [Skin setMainWindowTitle:@"Oodles"];
     [Skin setIconButtonURL:@""];
@@ -240,7 +250,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     [Skin setColor1:@"eb181f"];
     [Skin setColor2:@"2b388a"];
     [Skin setColor3:@"ffffff"];
-    [Skin setHomeURL:@"http://www.textmuse.com"];
+    [Skin setHomeURL:@"https://www.textmuse.com"];
     [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
     [Skin setMainWindowTitle:@"NRCC"];
     [Skin setIconButtonURL:@""];
@@ -576,6 +586,9 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
     categoryFilter = [[btn titleLabel] text];
     CurrentMessage = nil;
     
+    NSString* btnToolbar = [[categoryFilter lowercaseString] containsString:@"prayer"] ? btnAddPrayer : btnAddEvent;
+    [self setupToolbarButton:btnToolbar];
+    
     [messages reloadData];
 }
 
@@ -778,6 +791,8 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
                                               otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
         [alert show];
     }
+    else if ([CurrentMessage isPrayer])
+        [CurrentMessage submitPrayFor];
     else {
         //Block for showing the ContactPickerViewController
         void (^showCVC)(void) = ^{
@@ -907,6 +922,7 @@ NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
 }
 
 -(IBAction)addEvent:(id)sender {
+    AddContent = [[[self navigationItem] rightBarButtonItem] tag];
     [self performSegueWithIdentifier:@"AddEvent" sender:self];
     
 }

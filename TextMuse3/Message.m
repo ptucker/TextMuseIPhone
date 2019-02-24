@@ -13,7 +13,8 @@
 #import "TextUtil.h"
 
 YTPlayerView* globalYTPlayer = nil;
-NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
+NSString* urlNoteSeeIt = @"https://www.textmuse.com/admin/noteseeit.php";
+NSString* urlPrayFor = @"https://www.textmuse.com/admin/praying.php";
 
 @implementation Message
 @synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, sponsorID, sponsorName, sponsorLogo, following, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints, phoneno, address, textno;
@@ -154,6 +155,10 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     return [ImageDownloader GetYoutubeId:mediaUrl] != nil;
 }
 
+-(BOOL)isPrayer {
+    return [[[self category] lowercaseString] containsString:@"prayer"];
+}
+
 -(NSString*)getFullMessage {
     NSString* txt = [self text];
     if ([[self eventDate] length] > 0)
@@ -206,14 +211,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 
 -(void)follow:(id)sender {
     if (url != nil) {
-        if ([[url lowercaseString] hasPrefix:@"http://www.textmuse.com"] && [url containsString:@"%appid%"])
+        if ([[url lowercaseString] hasPrefix:@"https://www.textmuse.com"] && [url containsString:@"%appid%"])
             url = [url stringByReplacingOccurrencesOfString:@"%appid%" withString:AppID];
-        /*
-        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]])
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-        else
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-         */
         
         UIButton* btn = (UIButton*)sender;
         UIView* parent = [btn superview];
@@ -301,13 +300,34 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
                                                     startImmediately:YES];
 }
 
+-(void)submitPrayFor {
+    NSString* url = [NSString stringWithFormat:@"%@?app=%@&prayer=%d", urlPrayFor, AppID, [self msgId]];
+    
+    NSMutableURLRequest* req = [NSMutableURLRequest
+                                requestWithURL:[NSURL URLWithString:url]
+                                cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                timeoutInterval:30];
+    
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:nil
+                                                    startImmediately:YES];
+    
+    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Prayed for"
+                                                    message:@"Thank you for your prayer"
+                                                   delegate:self
+                                          cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
     //Append the newly arrived data to whatever we’ve seen so far
     [inetdata appendData:data];
 }
 
 -(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
-    //NSLog([error localizedDescription]);
+    NSLog([error localizedDescription]);
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
@@ -316,8 +336,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     [CurrentUser setExplorerPoints:[sp ExplorerPoints]];
     [CurrentUser setSharerPoints:[sp SharerPoints]];
     [CurrentUser setMusePoints:[sp MusePoints]];
-    //NSString* data = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
-    //NSLog(data);
+    NSString* data = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
+    NSLog(data);
 }
 
 -(void)closeWeb:(id)sender {

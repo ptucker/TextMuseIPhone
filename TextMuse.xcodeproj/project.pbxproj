@@ -30,6 +30,7 @@
 		2D3240851C2FB06F00E4E59B /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3240841C2FB06F00E4E59B /* MessageTableViewCell.m */; };
 		2D36EDA61D4AAC070062C45E /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D36EDA51D4AAC070062C45E /* UserInfo.m */; };
 		2D36EDA91D4AB15F0062C45E /* SuccessParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D36EDA81D4AB15F0062C45E /* SuccessParser.m */; };
+		2D3C60AE21DFCEE8007D3C58 /* prayer-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D3C60AD21DFCEE8007D3C58 /* prayer-icon.png */; };
 		2DB99F531AF744C400CE8E04 /* ChoosePhoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */; };
 		2DBE6C4B212B4DF8003A7B7A /* GuidedTour.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE6C4A212B4DF8003A7B7A /* GuidedTour.m */; };
 		2DBE6C4E212B4E48003A7B7A /* GuidedTourStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBE6C4D212B4E48003A7B7A /* GuidedTourStep.m */; };
@@ -137,6 +138,7 @@
 		2D36EDA51D4AAC070062C45E /* UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
 		2D36EDA71D4AB15F0062C45E /* SuccessParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessParser.h; sourceTree = "<group>"; };
 		2D36EDA81D4AB15F0062C45E /* SuccessParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuccessParser.m; sourceTree = "<group>"; };
+		2D3C60AD21DFCEE8007D3C58 /* prayer-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "prayer-icon.png"; sourceTree = "<group>"; };
 		2DB99F511AF744C400CE8E04 /* ChoosePhoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePhoneView.h; sourceTree = "<group>"; };
 		2DB99F521AF744C400CE8E04 /* ChoosePhoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePhoneView.m; sourceTree = "<group>"; };
 		2DBE6C49212B4DF8003A7B7A /* GuidedTour.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuidedTour.h; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 		2DF080C31AE626050003A277 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2D3C60AD21DFCEE8007D3C58 /* prayer-icon.png */,
 				2DDAD11021594D940030D23E /* map-marker.png */,
 				2DDAD11121594D940030D23E /* message-text.png */,
 				2DDAD10F21594D940030D23E /* phone-outgoing.png */,
@@ -681,6 +684,7 @@
 				2DF080591AE625410003A277 /* Images.xcassets in Resources */,
 				2DF080B41AE625FC0003A277 /* Lato-Medium.ttf in Resources */,
 				2D3240791C2F51F800E4E59B /* TextMessageTableViewCell.xib in Resources */,
+				2D3C60AE21DFCEE8007D3C58 /* prayer-icon.png in Resources */,
 				2DF080B31AE625FC0003A277 /* Lato-Light.ttf in Resources */,
 				2D0B95F2212E62C5006023EB /* textit.png in Resources */,
 				2DDAD11321594D940030D23E /* map-marker.png in Resources */,

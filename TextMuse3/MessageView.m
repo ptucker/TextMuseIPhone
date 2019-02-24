@@ -20,7 +20,7 @@
 //#define BUTTONSSIDE
 #define BUTTONSBOTTOM
 
-NSString* urlFollowSponsor = @"http://www.textmuse.com/admin/following.php";
+NSString* urlFollowSponsor = @"https://www.textmuse.com/admin/following.php";
 extern NSString* urlUpdateQuickNotes;
 extern NSString* urlRemitBadge;
 
@@ -184,7 +184,12 @@ UIImage* openInNew = nil;
 }
 
 -(NSString*)getTextItTextForMessage:(Message*)msg {
-    return [msg badge] ? @"REMIT IT" : @"TEXT IT";
+    NSString* ret = @"TEXT IT";
+    if ([msg badge])
+        ret = @"REMIT IT";
+    else if ([msg isPrayer])
+        ret = @"PRAY FOR";
+    return ret;
 }
 
 -(NSString*)getTwoTierTextForMessage:(Message*)msg {
@@ -546,7 +551,7 @@ UIImage* openInNew = nil;
     [message setLikeCount:[message likeCount] + ([message liked] ? 1 : -1)];
     
     NSMutableURLRequest* req = [NSMutableURLRequest
-                                requestWithURL:[NSURL URLWithString:@"http://www.textmuse.com/admin/notelike.php"]
+                                requestWithURL:[NSURL URLWithString:@"https://www.textmuse.com/admin/notelike.php"]
                                 cachePolicy:NSURLRequestReloadIgnoringCacheData
                                 timeoutInterval:30];
     [req setHTTPMethod:@"POST"];

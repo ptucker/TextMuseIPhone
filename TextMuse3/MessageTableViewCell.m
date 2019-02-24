@@ -13,7 +13,7 @@
 #import "ImageUtil.h"
 #import "TextUtil.h"
 
-NSString* urlLikeNote = @"http://www.textmuse.com/admin/notelike.php";
+NSString* urlLikeNote = @"https://www.textmuse.com/admin/notelike.php";
 extern NSString* urlRemitBadge;
 
 @implementation MessageTableViewCell
@@ -123,7 +123,11 @@ extern NSString* urlRemitBadge;
         NSString* rightText2 = @"Share";
 #else
         NSString* imgSend = @"TextMuseButton";
-        NSString* rightText2 = [msg badge] ? @"remit it" : @"text it";
+        NSString* rightText2 = @"text it";
+        if ([msg badge])
+            rightText2 = @"remit it";
+        else if ([msg isPrayer])
+            rightText2 = @"pray for";
 #endif
         bool send = true;
 #ifdef OODLES
@@ -197,10 +201,15 @@ extern NSString* urlRemitBadge;
 }
 
 -(IBAction)sendMessage:(id)sender {
-    CurrentCategory = [_msg category];
-    CurrentMessage = _msg;
+    if ([_msg isPrayer]) {
+        [_msg submitPrayFor];
+    }
+    else {
+        CurrentCategory = [_msg category];
+        CurrentMessage = _msg;
 
-    [_nav chooseMessage:sender];
+        [_nav chooseMessage:sender];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

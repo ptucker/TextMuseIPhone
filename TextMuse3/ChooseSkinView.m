@@ -18,7 +18,7 @@
 
 @implementation ChooseSkinView
 
-NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
+NSString* urlGetSkins = @"https://www.textmuse.com/admin/getskins.php";
 
 -(id) initWithFrame:(CGRect)frame complete:(void (^)(void))completionHandler {
     self = [super initWithFrame:frame];

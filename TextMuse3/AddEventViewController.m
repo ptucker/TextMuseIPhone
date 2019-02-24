@@ -17,18 +17,28 @@
 @end
 
 NSString* placeholderText = @"Description *";
-NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
+NSString* urlAddEvent = @"https://www.textmuse.com/admin/addevent.php";
+NSString* urlAddPrayer = @"https://www.textmuse.com/admin/addprayer.php";
+NSString* eventLabel = @"Add an event so others around you can know what's going on.";
+NSString* eventSubmit = @"Submit event";
+NSString* prayerLabel = @"Submit a prayer request so others can pray for you.";
+NSString* prayerSubmit = @"Submit prayer";
 
 @implementation AddEventViewController
 @synthesize singleTapRecognizer = _singleTapRecognizer;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [txtLocation setHidden:(AddContent == AddPrayer)];
 
     [[self view] addGestureRecognizer:[self singleTapRecognizer]];
     [tvDesc setText:placeholderText];
     [tvDesc setTextColor:[UIColor darkGrayColor]];
     [tvDesc setDelegate:self];
+    
+    [lbl setText:(AddContent == AddPrayer) ? prayerLabel : eventLabel];
+    [btnSubmit setTitle:(AddContent == AddPrayer) ? prayerSubmit : eventSubmit forState:UIControlStateNormal];
     
     if ([[CurrentUser UserEmail] length] > 0)
         [txtEmail setText:[CurrentUser UserEmail]];
@@ -131,7 +141,7 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
         [alert show];
     }
     else {
-        NSURL* url = [NSURL URLWithString:urlAddEvent];
+        NSURL* url = (AddContent == AddPrayer ? [NSURL URLWithString:urlAddPrayer] : [NSURL URLWithString:urlAddEvent]);
         NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                        timeoutInterval:30];
@@ -172,9 +182,9 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
     NSString* msg = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
     NSString* title = @"Failed";
     if ([msg containsString:@"<blocked/>"])
-        msg = @"Please refrain from foul language in your events";
+        msg = @"Please refrain from foul language in your content";
     else if ([msg containsString:@"<success"]) {
-        msg = @"Your event has been uploaded";
+        msg = @"Your content has been uploaded";
         title = @"Complete";
         
         [Data reloadData];
@@ -196,7 +206,7 @@ NSString* urlAddEvent = @"http://www.textmuse.com/admin/addevent.php";
             msg = @"An unknown error occurred";
     }
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Event Submission %@",
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Content Submission %@",
                                                              title]
                                                     message:msg
                                                    delegate:nil

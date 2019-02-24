@@ -16,11 +16,11 @@
 #import "SuccessParser.h"
 #import "TextUtil.h"
 
-NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
-NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
-NSString* urlRemitBadgeX = @"http://www.textmuse.com/admin/remitbadge.php";
-NSString* urlViewCategory = @"http://www.textmuse.com/admin/viewcategory.php";
-NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
+NSString* urlHighlightNote = @"https://www.textmuse.com/admin/notelike.php";
+NSString* urlFlagNote = @"https://www.textmuse.com/admin/flagmessage.php";
+NSString* urlRemitBadgeX = @"https://www.textmuse.com/admin/remitbadge.php";
+NSString* urlViewCategory = @"https://www.textmuse.com/admin/viewcategory.php";
+NSString* urlRemitDeal = @"https://www.textmuse.com/admin/remitdeal.php";
 
 @interface MessagesViewController ()
 
@@ -364,14 +364,19 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     NSArray* ms = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
                                         [Data getMessagesForCategory:CurrentCategory];
     CurrentMessage = [ms objectAtIndex:p];
-
-    if ([[Data getContacts] count] == 0) {
-        if (sendMessage == nil)
-            sendMessage = [[SendMessage alloc] init];
-        [sendMessage sendMessageTo:nil from:self];
+    
+    if ([CurrentMessage isPrayer]) {
+        [CurrentMessage submitPrayFor];
     }
-    else
-        [self performSegueWithIdentifier:@"ChooseContact" sender:self];
+    else {
+        if ([[Data getContacts] count] == 0) {
+            if (sendMessage == nil)
+                sendMessage = [[SendMessage alloc] init];
+            [sendMessage sendMessageTo:nil from:self];
+        }
+        else
+            [self performSegueWithIdentifier:@"ChooseContact" sender:self];
+    }
 }
 
 -(IBAction)highlightMessage:(id)sender {

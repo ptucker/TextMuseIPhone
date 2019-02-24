@@ -22,6 +22,9 @@ extern int HighlightedMessageID;
 extern NSString* CurrentGroup;
 extern SqlData* SqlDb;
 extern GuidedTour* Tour;
+extern long AddEvent;
+extern long AddPrayer;
+extern long AddContent;
 
 +(void)init;
 

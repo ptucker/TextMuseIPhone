@@ -106,6 +106,7 @@
 -(BOOL)containsImage;
 -(BOOL)containsVideo;
 -(BOOL)isVideo;
+-(BOOL)isPrayer;
 
 -(NSString*)getFullMessage;
 
@@ -113,9 +114,11 @@
 -(void)follow:(id)sender;
 -(void)showMap:(id)sender;
 -(void)updateText:(id)sender;
+-(void)submitPrayFor;
 
 -(NSString*)description;
 
 +(NSArray*)FindUrlInString:(NSString*)str;
 +(BOOL)ContainsImage:(NSString*)str;
+
 @end

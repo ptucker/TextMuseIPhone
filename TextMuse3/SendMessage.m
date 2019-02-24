@@ -15,9 +15,9 @@
 #import "SuccessParser.h"
 #import "GuidedTourStepView.h"
 
-NSString* urlUpdateNotes = @"http://www.textmuse.com/admin/notesend.php";
-NSString* urlUpdateQuickNotes = @"http://www.textmuse.com/admin/quicksend.php";
-NSString* urlFirstTimeSender = @"http://www.textmuse.com/admin/firsttimesender.php";
+NSString* urlUpdateNotes = @"https://www.textmuse.com/admin/notesend.php";
+NSString* urlUpdateQuickNotes = @"https://www.textmuse.com/admin/quicksend.php";
+NSString* urlFirstTimeSender = @"https://www.textmuse.com/admin/firsttimesender.php";
 
 @implementation SendMessage
 

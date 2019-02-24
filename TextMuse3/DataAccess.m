@@ -21,7 +21,7 @@
 #import "AppDelegate.h"
 #import <AddressBook/AddressBook.h>
 
-NSString* urlNotes = @"http://www.textmuse.com/admin/notes.php";
+NSString* urlNotes = @"https://www.textmuse.com/admin/notes.php";
 NSString* localNotes = @"notes.xml";
 const int HIDEMESSAGE = 1000;
 
@@ -165,7 +165,9 @@ const int HIDEMESSAGE = 1000;
     NSString* appid = (AppID != nil) ? [NSString stringWithFormat:@"&app=%@", AppID] : @"";
     NSString* notif = (notificationOnly) ? @"&notifyonly=1" : @"";
     NSString* sponsor = @"";
+    NSString* prayer = @"";
 #ifdef UNIVERSITY
+    prayer = @"&prayer=1";
     if (Skin != nil)
         sponsor = [NSString stringWithFormat:@"&sponsor=%ld", [Skin SkinID]];
 #endif
@@ -182,8 +184,8 @@ const int HIDEMESSAGE = 1000;
     sponsor = @"&sponsor=171";
 #endif
     //24 Sept 2018 -- added "address" to conditionally bring addresses in XML.
-    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@&address=1",
-                      urlNotes, lastDownload, appid, notif, sponsor];
+    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@&address=1%@",
+                      urlNotes, lastDownload, appid, notif, sponsor, prayer];
     
     if (!notificationOnly)
         LastNoteDownload = [dateformat stringFromDate:[NSDate date]];
