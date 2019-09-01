@@ -44,6 +44,9 @@
     NSString* sponsorLogo;
     NSString* sponsorID;
     BOOL following;
+    NSString* phoneno;
+    NSString* textno;
+    NSString* address;
     
     UIActivityIndicatorView* activityView;
     UIWebView* web;
@@ -60,6 +63,7 @@
 @property (readwrite) int sharePoints;
 @property (readwrite) int goPoints;
 @property (readwrite) BOOL version;
+@property (readwrite) BOOL quicksend;
 @property (readonly) ImageDownloader* loader;
 @property (nonatomic, readwrite, copy) NSData* img;
 @property (nonatomic, readonly, retain) NSURL* assetURL;
@@ -67,7 +71,7 @@
 @property (nonatomic, readwrite, copy) NSString* msgUrl;
 @property (nonatomic, readonly, copy) NSString* category;
 
-@property (nonatomic, readonly, copy) NSString* text;
+@property (nonatomic, readwrite, copy) NSString* text;
 @property (nonatomic, readonly, copy) NSString* mediaUrl;
 @property (nonatomic, readonly, copy) NSString* url;
 @property (nonatomic, readwrite, copy) NSString* eventLocation;
@@ -79,6 +83,14 @@
 @property (nonatomic, readwrite) BOOL following;
 @property (nonatomic, readonly, copy) NSString* sponsorUrl;
 @property (nonatomic, readonly, copy) NSString* sponsorIcon;
+@property (nonatomic, readwrite) int sendcount;
+@property (nonatomic, readwrite) int visitcount;
+@property (nonatomic, readwrite, copy) NSString* winnerText;
+@property (nonatomic, readwrite, copy) NSString* visitWinnerText;
+@property (nonatomic, readwrite, copy) NSString* badgeURL;
+@property (nonatomic, readwrite, copy) NSString* phoneno;
+@property (nonatomic, readwrite, copy) NSString* address;
+@property (nonatomic, readwrite, copy) NSString* textno;
 
 -(id)initWithId:(int)i text:(NSString *)t mediaUrl:(NSString*)murl url:(NSString*)u
     forCategory:(NSString*)c isNew:(BOOL)n;
@@ -94,15 +106,19 @@
 -(BOOL)containsImage;
 -(BOOL)containsVideo;
 -(BOOL)isVideo;
+-(BOOL)isPrayer;
 
 -(NSString*)getFullMessage;
 
 -(void)action:(id)sender;
 -(void)follow:(id)sender;
+-(void)showMap:(id)sender;
 -(void)updateText:(id)sender;
+-(void)submitPrayFor;
 
 -(NSString*)description;
 
 +(NSArray*)FindUrlInString:(NSString*)str;
 +(BOOL)ContainsImage:(NSString*)str;
+
 @end

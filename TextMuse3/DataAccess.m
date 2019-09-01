@@ -21,7 +21,7 @@
 #import "AppDelegate.h"
 #import <AddressBook/AddressBook.h>
 
-NSString* urlNotes = @"http://www.textmuse.com/admin/notes.php";
+NSString* urlNotes = @"https://www.textmuse.com/admin/notes.php";
 NSString* localNotes = @"notes.xml";
 const int HIDEMESSAGE = 1000;
 
@@ -54,7 +54,7 @@ const int HIDEMESSAGE = 1000;
     pinnedMsgs = [SqlDb getPinnedMessages];
     [self initCategories];
     
-    [self initContacts];
+    //[self initContacts];
 }
 
 -(void)reloadNotifications {
@@ -133,6 +133,12 @@ const int HIDEMESSAGE = 1000;
 #ifdef OODLES
     initialXMLFile = @"oodlesdata";
 #endif
+#ifdef NRCC
+    initialXMLFile = @"nrccdata";
+#endif
+#ifdef YOUTHREACH
+    initialXMLFile = @"youthreach";
+#endif
     NSString *filePath = [[NSBundle mainBundle] pathForResource:initialXMLFile ofType:@"xml"];
     NSString* initialXML = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
@@ -159,7 +165,9 @@ const int HIDEMESSAGE = 1000;
     NSString* appid = (AppID != nil) ? [NSString stringWithFormat:@"&app=%@", AppID] : @"";
     NSString* notif = (notificationOnly) ? @"&notifyonly=1" : @"";
     NSString* sponsor = @"";
+    NSString* prayer = @"";
 #ifdef UNIVERSITY
+    prayer = @"&prayer=1";
     if (Skin != nil)
         sponsor = [NSString stringWithFormat:@"&sponsor=%ld", [Skin SkinID]];
 #endif
@@ -169,8 +177,15 @@ const int HIDEMESSAGE = 1000;
 #ifdef OODLES
     sponsor = @"&sponsor=91";
 #endif
-    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@",
-                      urlNotes, lastDownload, appid, notif, sponsor];
+#ifdef NRCC
+    sponsor = @"&sponsor=115";
+#endif
+#ifdef YOUTHREACH
+    sponsor = @"&sponsor=171";
+#endif
+    //24 Sept 2018 -- added "address" to conditionally bring addresses in XML.
+    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@&address=1%@",
+                      urlNotes, lastDownload, appid, notif, sponsor, prayer];
     
     if (!notificationOnly)
         LastNoteDownload = [dateformat stringFromDate:[NSDate date]];
@@ -204,6 +219,7 @@ const int HIDEMESSAGE = 1000;
 }
 
 -(void)loadLocalImages {
+    /*
     NSMutableArray* dates = [[NSMutableArray alloc] init];
     localImages = [[NSMutableArray alloc] init];
     ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
@@ -248,6 +264,7 @@ const int HIDEMESSAGE = 1000;
     } failureBlock:^(NSError *error) {
         NSLog(@"error enumerating AssetLibrary groups %@\n", error);
     }];
+     */
 }
 
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
@@ -281,17 +298,17 @@ const int HIDEMESSAGE = 1000;
         [self parseMessageData];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (!notificationOnly) {
-                categories = tmpCategories;
+            if (!self->notificationOnly) {
+                self->categories = self->tmpCategories;
                 [self mergeMessages];
             }
 
             NSString* file = [NSTemporaryDirectory() stringByAppendingPathComponent:localNotes];
             [[NSFileManager defaultManager] createFileAtPath:file
-                                                    contents:inetdata
+                                                    contents:self->inetdata
                                                   attributes:nil];
             
-            for (NSObject* l in listeners) {
+            for (NSObject* l in self->listeners) {
                 if ([l respondsToSelector:@selector(dataRefresh)])
                     [l performSelector:@selector(dataRefresh)];
             }
@@ -314,25 +331,54 @@ const int HIDEMESSAGE = 1000;
     [parser parse];
 }
 
--(void)initContacts {
-    loadingContacts = YES;
-    CFErrorRef* error = NULL;
-    DataAccess* __weak weakSelf = self;
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, error);
+-(BOOL)initContacts {
+    if ([contacts count] == 0)
+        [self loadContacts];
 
-    //if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
-        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf loadContacts:addressBook];
-            });
-        });
-    //}
-    //else { // we're on iOS 5 or older
-    //    [self loadContacts:addressBook];
-    //}
-    loadingContacts = NO;
+    return YES;
 }
 
+-(void)loadContacts {
+    if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized) {
+        CNContactStore* store = [[CNContactStore alloc] init];
+        NSMutableArray* _contacts = [[NSMutableArray alloc] init];
+
+        NSArray *keys = @[CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey];
+        NSArray* containers = [store containersMatchingPredicate:nil error:nil];
+        for (CNContainer* container in containers) {
+            NSString *containerId = [container identifier];
+            NSPredicate *predicate = [CNContact predicateForContactsInContainerWithIdentifier:containerId];
+            NSError *error;
+            NSArray *cnContacts = [store unifiedContactsMatchingPredicate:predicate keysToFetch:keys error:&error];
+            if (error) {
+                NSLog(@"error fetching contacts %@", error);
+            } else {
+                for (CNContact *contact in cnContacts) {
+                    
+                    NSMutableArray* phones = [[NSMutableArray alloc] init];
+                    for (CNLabeledValue *label in contact.phoneNumbers) {
+                        NSString *phone = [label.value stringValue];
+                        if ([phone length] > 0) {
+                            [phones addObject:[[UserPhone alloc] initWithNumber:phone Label:label.label]];
+                        }
+                    }
+
+                    if ([[contact givenName] length] > 0 && [[contact familyName] length] > 0 && [phones count] > 0) {
+                        UserContact* c = [[UserContact alloc] initWithFName:[contact givenName]
+                                                                      LName:[contact familyName]
+                                                                     Phones:phones
+                                                                      Photo:[contact imageData]];
+                        if (c != nil)
+                            [_contacts addObject:c];
+                    }
+                }
+            }
+        }
+        contacts = [_contacts sortedArrayUsingSelector:@selector(compareName:)];
+    }
+}
+
+/*
 -(void)loadContacts:(ABAddressBookRef)addressBook {
     NSMutableArray* _contacts = [[NSMutableArray alloc] init];
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);
@@ -376,6 +422,7 @@ const int HIDEMESSAGE = 1000;
     
     contacts = [_contacts sortedArrayUsingSelector:@selector(compareName:)];
 }
+*/
 
 -(void)sortContacts {
     contacts = [contacts sortedArrayUsingSelector:@selector(compareName:)];
@@ -384,8 +431,8 @@ const int HIDEMESSAGE = 1000;
 -(NSArray*) sortCategories {
     NSComparisonResult (^categoryCmp)(id, id);
     categoryCmp = ^NSComparisonResult(id c1, id c2) {
-        MessageCategory* cat1 = [categories objectForKey:c1];
-        MessageCategory* cat2 = [categories objectForKey:c2];
+        MessageCategory* cat1 = [self->categories objectForKey:c1];
+        MessageCategory* cat2 = [self->categories objectForKey:c2];
         if ([cat1 required] != [cat2 required]) {
             return ([cat1 required]) ? NSOrderedAscending : NSOrderedDescending;
         }
@@ -420,11 +467,13 @@ const int HIDEMESSAGE = 1000;
         [cs addObject:m];
 
 #ifdef UNIVERSITY
+    /*
     if (localImages != nil && [localImages count] > 0)
         [cs addObject:NSLocalizedString(@"Your Photos Title", nil)];
     [cs addObject:NSLocalizedString(@"Your Messages Title", nil)];
     if (SaveRecentMessages && [RecentMessages count] > 0)
         [cs addObject:NSLocalizedString(@"Recent Messages Title", nil)];
+     */
 #endif
     
     return cs;
@@ -549,13 +598,14 @@ const int HIDEMESSAGE = 1000;
     if (bs == nil)
         allMessages = [[NSMutableArray alloc] init];
     else
-        allMessages = [NSMutableArray arrayWithArray:[self getMessagesForCategory:@"Badges"]];
-    while (v < [tmpVersionMessages count] || r < [tmpRegMessages count]) {
+        allMessages = [NSMutableArray arrayWithArray:bs];
+    while (v < [tmpVersionMessages count]) {
         if (v < [tmpVersionMessages count]){
             [allMessages addObject:[tmpVersionMessages objectAtIndex:v]];
             v++;
         }
-        if (r < [tmpRegMessages count]) {
+        int s = arc4random() % 3; //Only show regular messages 1 out of 4 times
+        if (r < [tmpRegMessages count] && s == 0) {
             [allMessages addObject:[tmpRegMessages objectAtIndex:r]];
             r++;
         }
@@ -593,6 +643,9 @@ const int HIDEMESSAGE = 1000;
 }
 
 -(Message*)findMessageWithID:(int)msgid {
+    if (conn != nil)
+        return nil;
+    
     Message* ret;
     for (Message* m in allMessages) {
         if ([m msgId] == msgid) {
@@ -801,9 +854,14 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         [Skin setSkinName:[attributeDict objectForKey:@"name"]];
         [Skin setMasterName:[attributeDict objectForKey:@"master"]];
         [Skin setMasterBadgeURL:[attributeDict objectForKey:@"masterurl"]];
+        /*
         [Skin setColor1:[attributeDict objectForKey:@"c1"]];
         [Skin setColor2:[attributeDict objectForKey:@"c2"]];
         [Skin setColor3:[attributeDict objectForKey:@"c3"]];
+         */
+        [Skin setColor1:[SkinInfo Color1TextMuse]];
+        [Skin setColor2:[SkinInfo Color2TextMuse]];
+        [Skin setColor3:[SkinInfo Color3TextMuse]];
         [Skin setHomeURL:[attributeDict objectForKey:@"home"]];
         [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
         [Skin setMainWindowTitle:[attributeDict objectForKey:@"title"]];
@@ -911,6 +969,14 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         currentUrl = nil;
         currentSponsorName = nil;
         currentSponsorLogo = nil;
+        currentSendCount = nil;
+        currentVisitCount = nil;
+        currentBadgeURL = nil;
+        currentWinnerText = nil;
+        currentVisitWinnerText = nil;
+        currentTextNo = nil;
+        currentPhoneNo = nil;
+        currentAddress = nil;
     }
     else if ([elementName isEqualToString:@"t"])
         xmldata = [[NSMutableString alloc] init];
@@ -918,20 +984,42 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         xmldata = [[NSMutableString alloc] init];
     else if ([elementName isEqualToString:@"i"])
         xmldata = [[NSMutableString alloc] init];
-    else if ([elementName isEqualToString:@"text"] || [elementName isEqualToString:@"media"] ||
-             [elementName isEqualToString:@"url"] || [elementName isEqualToString:@"sp_name"] ||
-             [elementName isEqualToString:@"sp_logo"])
+    else if ([elementName isEqualToString:@"text"] ||
+             [elementName isEqualToString:@"media"] ||
+             [elementName isEqualToString:@"url"] ||
+             [elementName isEqualToString:@"sp_name"] ||
+             [elementName isEqualToString:@"sp_logo"] ||
+             [elementName isEqualToString:@"send"] ||
+             [elementName isEqualToString:@"visit"] ||
+             [elementName isEqualToString:@"winner"] ||
+             [elementName isEqualToString:@"visitwinner"] ||
+             [elementName isEqualToString:@"badge"] ||
+             [elementName isEqualToString:@"phoneno"] ||
+             [elementName isEqualToString:@"address"] ||
+             [elementName isEqualToString:@"textno"])
         partsdata = [[NSMutableString alloc] init];
 }
 
 -(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    if ([currentElement isEqualToString:@"n"] || [currentElement isEqualToString:@"t"]
-         || [currentElement isEqualToString:@"p"] || [currentElement isEqualToString:@"i"])
+    if ([currentElement isEqualToString:@"n"] ||
+        [currentElement isEqualToString:@"t"] ||
+        [currentElement isEqualToString:@"p"] ||
+        [currentElement isEqualToString:@"i"])
         [xmldata appendString:string];
-    else if ([currentElement isEqualToString:@"text"] || [currentElement isEqualToString:@"media"] ||
+    else if ([currentElement isEqualToString:@"text"] ||
+             [currentElement isEqualToString:@"media"] ||
              [currentElement isEqualToString:@"url"])
          [partsdata appendString:string];
-    else if ([currentElement isEqualToString:@"sp_name"] || [currentElement isEqualToString:@"sp_logo"])
+    else if ([currentElement isEqualToString:@"sp_name"] ||
+             [currentElement isEqualToString:@"sp_logo"] ||
+             [currentElement isEqualToString:@"send"]  ||
+             [currentElement isEqualToString:@"visit"] ||
+             [currentElement isEqualToString:@"winner"] ||
+             [currentElement isEqualToString:@"badge"] ||
+             [currentElement isEqualToString:@"visitwinner"] ||
+             [currentElement isEqualToString:@"phoneno"] ||
+             [currentElement isEqualToString:@"address"] ||
+             [currentElement isEqualToString:@"textno"])
         [partsdata appendString:string];
 }
 
@@ -960,6 +1048,16 @@ Message* recentMsgs[RECENTWATCHCOUNT];
             [msg setSponsorID:sponsorID];
             [msg setSponsorName:currentSponsorName];
             [msg setSponsorLogo:currentSponsorLogo];
+            if (currentSendCount != nil)
+                [msg setSendcount:[currentSendCount intValue]];
+            if (currentVisitCount != nil)
+                [msg setVisitcount:[currentVisitCount intValue]];
+            [msg setBadgeURL:currentBadgeURL];
+            [msg setWinnerText:currentWinnerText];
+            [msg setVisitWinnerText:currentVisitWinnerText];
+            [msg setPhoneno:currentPhoneNo];
+            [msg setAddress:currentAddress];
+            [msg setTextno:currentTextNo];
             [msg setFollowing:following];
             if (following)
                 [SponsorFollows addObject:[NSString stringWithFormat:@"spon%@", sponsorID]];
@@ -975,6 +1073,9 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         NSString* m = xmldata;
 #ifdef OODLES
         m = [xmldata stringByReplacingOccurrencesOfString:@"TextMuse" withString:@"Oodles"];
+#endif
+#ifdef NRCC
+        m = [xmldata stringByReplacingOccurrencesOfString:@"TextMuse" withString:@"NRCC"];
 #endif
         [NotificationMsgs addObject:m];
     }
@@ -1018,6 +1119,22 @@ Message* recentMsgs[RECENTWATCHCOUNT];
         ImageDownloader* loader = [[ImageDownloader alloc] initWithUrl:currentSponsorLogo];
         [loader load];
     }
+    else if ([elementName isEqualToString:@"send"] && [partsdata length] > 0)
+        currentSendCount = partsdata;
+    else if ([elementName isEqualToString:@"visit"] && [partsdata length] > 0)
+        currentVisitCount = partsdata;
+    else if ([elementName isEqualToString:@"winner"] && [partsdata length] > 0)
+        currentWinnerText = partsdata;
+    else if ([elementName isEqualToString:@"visitwinner"] && [partsdata length] > 0)
+        currentVisitWinnerText = partsdata;
+    else if ([elementName isEqualToString:@"badge"] && [partsdata length] > 0)
+        currentBadgeURL = partsdata;
+    else if ([elementName isEqualToString:@"phoneno"] && [partsdata length] > 0)
+        currentPhoneNo = partsdata;
+    else if ([elementName isEqualToString:@"address"] && [partsdata length] > 0)
+        currentAddress = partsdata;
+    else if ([elementName isEqualToString:@"textno"] && [partsdata length] > 0)
+        currentTextNo = partsdata;
 }
 
 -(BOOL)isPinned:(Message*)msg {

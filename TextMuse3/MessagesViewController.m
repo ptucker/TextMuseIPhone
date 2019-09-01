@@ -14,12 +14,13 @@
 #import "DataAccess.h"
 #import "SqlData.h"
 #import "SuccessParser.h"
+#import "TextUtil.h"
 
-NSString* urlHighlightNote = @"http://www.textmuse.com/admin/notelike.php";
-NSString* urlFlagNote = @"http://www.textmuse.com/admin/flagmessage.php";
-NSString* urlRemitBadge = @"http://www.textmuse.com/admin/remitbadge.php";
-NSString* urlViewCategory = @"http://www.textmuse.com/admin/viewcategory.php";
-NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
+NSString* urlHighlightNote = @"https://www.textmuse.com/admin/notelike.php";
+NSString* urlFlagNote = @"https://www.textmuse.com/admin/flagmessage.php";
+NSString* urlRemitBadgeX = @"https://www.textmuse.com/admin/remitbadge.php";
+NSString* urlViewCategory = @"https://www.textmuse.com/admin/viewcategory.php";
+NSString* urlRemitDeal = @"https://www.textmuse.com/admin/remitdeal.php";
 
 @interface MessagesViewController ()
 
@@ -32,7 +33,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
 
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
     NSDictionary* txtAttrs =[NSDictionary dictionaryWithObjectsAndKeys:
-                             [UIFont fontWithName:@"Lato-Medium" size:18.0], NSFontAttributeName, nil];
+                             [TextUtil GetBoldFontForSize:18.0], NSFontAttributeName, nil];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:txtAttrs forState:UIControlStateNormal];
     
     MessageCategory* mc = [Data getCategory:CurrentCategory];
@@ -86,7 +87,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     UILabel* lbl = [[UILabel alloc] initWithFrame:frmSelect];
     [lbl setText:@"Share. Go. Win."];
     [lbl setTextAlignment:NSTextAlignmentCenter];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:22]];
+    [lbl setFont:[TextUtil GetDefaultFontForSize:22.0]];
     [lowerView addSubview:lbl];
 #endif
     [scrollview setDelegate:self];
@@ -222,14 +223,22 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
         if (frame.origin.x < minx || frame.origin.x > maxx) {
             //CGRect first = msgviews[1].frame;
             Message* msg = [msgs objectAtIndex:i];
+            /*
             MessageView* mv = [[MessageView alloc] initWithFrame:frame];
             
             [mv setupViewForMessage:msg
                             inFrame:frame
                           withColor:[colors objectAtIndex:CurrentColorIndex]
                               index:CurrentColorIndex];
-            [mv setObjSendMessage:self];
-            [mv setSelSendMessage:@selector(chooseMessage:)];
+             */
+            MessageView* mv = [MessageView setupViewForMessage:msg
+                                                       inFrame:frame
+                                                    withBadges:NO
+                                                    fullScreen:NO
+                                                     withColor:[colors objectAtIndex:i] index:CurrentColorIndex];
+            //[mv setVcSendMessage:self];
+            //[mv setSelSendMessage:@selector(chooseMessage:)];
+            [mv setTarget:self withSelector:@selector(chooseMessage:) andQuickSend:@selector(chooseMessage:)];
             
             [scrollview addSubview:mv];
             [msgviews insertObject:mv atIndex:i-start];
@@ -319,7 +328,7 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
             
         }
         else if ([alertView tag] == 101) {
-            req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
+            req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadgeX]
                                           cachePolicy:NSURLRequestReloadIgnoringCacheData
                                       timeoutInterval:30];
             [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&game=%ld", AppID, -1*(long)[msg msgId]]
@@ -352,17 +361,22 @@ NSString* urlRemitDeal = @"http://www.textmuse.com/admin/remitdeal.php";
     //long p = [pages currentPage];
     CGFloat pageWidth = [scrollview frame].size.width;
     int p = floor(([scrollview contentOffset].x - pageWidth / 2) / pageWidth) + 1;
-    NSArray* msgs = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
+    NSArray* ms = [CurrentCategory isEqualToString:@"PinnedMessages"] ? [Data getPinnedMessages] :
                                         [Data getMessagesForCategory:CurrentCategory];
-    CurrentMessage = [msgs objectAtIndex:p];
-
-    if ([[Data getContacts] count] == 0) {
-        if (sendMessage == nil)
-            sendMessage = [[SendMessage alloc] init];
-        [sendMessage sendMessageTo:nil from:self];
+    CurrentMessage = [ms objectAtIndex:p];
+    
+    if ([CurrentMessage isPrayer]) {
+        [CurrentMessage submitPrayFor];
     }
-    else
-        [self performSegueWithIdentifier:@"ChooseContact" sender:self];
+    else {
+        if ([[Data getContacts] count] == 0) {
+            if (sendMessage == nil)
+                sendMessage = [[SendMessage alloc] init];
+            [sendMessage sendMessageTo:nil from:self];
+        }
+        else
+            [self performSegueWithIdentifier:@"ChooseContact" sender:self];
+    }
 }
 
 -(IBAction)highlightMessage:(id)sender {

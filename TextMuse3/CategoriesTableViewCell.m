@@ -8,6 +8,7 @@
 
 #import "CategoriesTableViewCell.h"
 #import "GlobalState.h"
+#import "TextUtil.h"
 
 @implementation CategoriesTableViewCell
 @synthesize lblTitle, lblContent, btnSeeAll, lblNew, imgRightQuote, imgLeftQuote, imgContent;
@@ -54,7 +55,7 @@
         [self addSubview:[self lblTitle]];
     }
     [[self lblTitle] setFrame:frmTitle];
-    [[self lblTitle] setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
+    [[self lblTitle] setFont:[TextUtil GetDefaultFontForSize:20.0]];
     [[self lblTitle] setBackgroundColor:[UIColor whiteColor]];
     CGFloat r, g, b, a;
     [colorTitle getRed:&r green:&g blue:&b alpha:&a];
@@ -68,7 +69,7 @@
     CGFloat fntSize = 20;
     while (frmTitle.size.width > (width-134)) {
         fntSize-=1;
-        [[self lblTitle] setFont:[UIFont fontWithName:@"Lato-Regular" size:fntSize]];
+        [[self lblTitle] setFont:[TextUtil GetDefaultFontForSize:fntSize]];
         [[self lblTitle] sizeToFit];
         frmTitle = [[self lblTitle] frame];
     }
@@ -80,7 +81,7 @@
     }
     [[self lblNew] setFrame:frmLblNew];
     [[self lblNew] setBackgroundColor:colorTitle];
-    [[self lblNew] setFont:[UIFont fontWithName:@"Lato-Light" size:14]];
+    [[self lblNew] setFont:[TextUtil GetLightFontForSize:14.0]];
     if (((r + g + b) / 3) > 0.5)
         [[self lblNew] setTextColor:[UIColor blackColor]];
     else
@@ -154,7 +155,7 @@
     [[self lblContent] setAlpha:(fImage ? 0.70 : 1.0)];
     [[self lblContent] setNumberOfLines:fImage ? 1 : 0];
     CGFloat fontSize = fImage ? 14 : 16;
-    [[self lblContent] setFont:[UIFont fontWithName:@"Lato-Regular" size:fontSize]];
+    [[self lblContent] setFont:[TextUtil GetDefaultFontForSize:fontSize]];
     [[self lblContent] setTextColor:colorText];
     [[self lblContent] setTextAlignment:NSTextAlignmentCenter];
     if (msg != nil && [msg text] != nil && [[msg text] length] > 0) {

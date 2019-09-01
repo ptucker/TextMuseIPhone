@@ -10,12 +10,14 @@
 #import "Settings.h"
 #import "YTPlayerView.h"
 #import "SuccessParser.h"
+#import "TextUtil.h"
 
 YTPlayerView* globalYTPlayer = nil;
-NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
+NSString* urlNoteSeeIt = @"https://www.textmuse.com/admin/noteseeit.php";
+NSString* urlPrayFor = @"https://www.textmuse.com/admin/praying.php";
 
 @implementation Message
-@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, sponsorID, sponsorName, sponsorLogo, following, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints;
+@synthesize msgId, order, newMsg, version, loader, assetURL, img, imgType, msgUrl, category, text, mediaUrl, url, eventLocation, eventDate, eventToggle, sponsorID, sponsorName, sponsorLogo, following, liked, likeCount, pinned, badge, discoverPoints, sharePoints, goPoints, phoneno, address, textno;
 
 -(id)initWithId:(int)i message:(NSString *)m forCategory:(NSString*)c isNew:(BOOL)n {
     self = [super init];
@@ -25,6 +27,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     newMsg = n;
     category = c;
     imgLock = [[NSObject alloc] init];
+    [self setQuicksend:NO];
     
     NSArray* parts = [Message FindUrlInString:m];
     if (parts != nil) {
@@ -48,7 +51,9 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     newMsg = n;
     category = c;
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+    [self setAddress:@"11605 N. Ashley Lane, Spokane, WA 99218"];
+
     if (mediaUrl != nil) {
         loader = [[ImageDownloader alloc] initWithUrl:mediaUrl forMessage:self];
     }
@@ -74,7 +79,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         text = stored;
     }
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+
     return self;
 }
 
@@ -86,7 +92,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     mediaUrl = @"userphoto://";
     assetURL = [a valueForProperty:ALAssetPropertyAssetURL];
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+
     return self;
 }
 
@@ -99,7 +106,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     mediaUrl = @"usertext://";
     text = msg;
     imgLock = [[NSObject alloc] init];
-    
+    [self setQuicksend:NO];
+
     return self;
 }
 
@@ -126,7 +134,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
     [library assetForURL:assetURL resultBlock:^(ALAsset* asset) {
         CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
-        img = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
+        self->img = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
     } failureBlock:^(NSError*err) { }];
 }
 
@@ -145,6 +153,10 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 
 -(BOOL)isVideo {
     return [ImageDownloader GetYoutubeId:mediaUrl] != nil;
+}
+
+-(BOOL)isPrayer {
+    return [[[self category] lowercaseString] containsString:@"prayer"];
 }
 
 -(NSString*)getFullMessage {
@@ -181,73 +193,6 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
                                          };
             [globalYTPlayer loadWithVideoId:ytid playerVars:playerVars];
         }
-        else {
-            //pop up the image within this app, rather than in safari
-            UIButton* btn = (UIButton*)sender;
-            UIView* parent = [btn superview];
-            while ([parent superview] != nil)
-                parent = [parent superview];
-            CGRect endFrame = [parent frame];
-            CGRect endImgFrame = CGRectMake(0, 0, endFrame.size.width, endFrame.size.height);
-            CGRect bfrm = [parent frame];
-            int x = bfrm.origin.x + bfrm.size.width/2;
-            int y = bfrm.origin.y + bfrm.size.height/2;
-            
-            BOOL gif = [[self imgType] isEqualToString:@"image/gif"];
-            
-            CGRect frmImg = CGRectMake(0, 0, 0, 0);
-            UIImageView* iview = [[UIImageView alloc] initWithFrame:frmImg];
-            if (!gif) {
-                UIImage* imgBtn = [UIImage imageWithData:[self img]];
-                [iview setImage:imgBtn];
-            }
-            else {
-                FLAnimatedImageView *imageView = [[FLAnimatedImageView alloc] init];
-                [imageView setFrame:frmImg];
-                FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[self img]];
-                [imageView setAnimatedImage: image];
-                BOOL running = [imageView isAnimating];
-                if (!running) {
-                    [imageView startAnimating];
-                }
-                iview = imageView;
-            }
-            [iview setContentMode:UIViewContentModeScaleAspectFit];
-            [iview setTag:100];
-            
-            UIButton* btnImg = [[UIButton alloc] initWithFrame:CGRectMake(x, y, 0, 0)];
-            [btnImg setBackgroundColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.8]];
-            [btnImg addSubview:iview];
-
-            [btnImg addTarget:self
-                        action:@selector(closeImage:)
-              forControlEvents:UIControlEventTouchUpInside];
-            [parent addSubview:btnImg];
-            if (assetURL == nil) {
-                //ImageDownloader* ldr = [[ImageDownloader alloc] initWithUrl:mediaUrl forButton:btnImg];
-                //[ldr load];
-                [UIView animateWithDuration:0.5 animations:^{
-                    [btnImg setFrame:endFrame];
-                    [iview setFrame:endImgFrame];
-                } completion: ^(BOOL f) {
-                }];
-            }
-            else {
-                //[imgview setImage:[UIImage imageWithData:img] forState:UIControlStateNormal];
-                ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
-                [library assetForURL:assetURL resultBlock:^(ALAsset* asset) {
-                    CGImageRef ir = [[asset defaultRepresentation] fullScreenImage];
-                    NSData* d = UIImagePNGRepresentation([UIImage imageWithCGImage:ir]);
-                    [btnImg setImage:[UIImage imageWithData:d] forState:UIControlStateNormal];
-                    [UIView animateWithDuration:0.5 animations:^{
-                        [btnImg setFrame:endFrame];
-                    } completion: ^(BOOL f) {
-                    }];
-                } failureBlock:^(NSError*err) {
-                    [btnImg setImage:[UIImage imageWithData:img] forState:UIControlStateNormal];
-                }];
-            }
-        }
     }
 }
 
@@ -266,20 +211,29 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
 
 -(void)follow:(id)sender {
     if (url != nil) {
-        if ([[url lowercaseString] hasPrefix:@"http://www.textmuse.com"] && [url containsString:@"%appid%"])
+        if ([[url lowercaseString] hasPrefix:@"https://www.textmuse.com"] && [url containsString:@"%appid%"])
             url = [url stringByReplacingOccurrencesOfString:@"%appid%" withString:AppID];
-        /*
-        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]])
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-        else
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-         */
         
         UIButton* btn = (UIButton*)sender;
         UIView* parent = [btn superview];
         while ([parent superview] != nil)
             parent = [parent superview];
+
+        [self showWebViewInParent:parent withUrl:url withAnimation:YES];
+    }
+}
+
+-(void)showMap:(id)sender {
+    if ([self address] != nil && [[self address] length] > 0) {
+        UIButton* btn = (UIButton*)sender;
+        UIView* parent = [btn superview];
+        while ([parent superview] != nil)
+            parent = [parent superview];
         
+        //https://developers.google.com/maps/documentation/urls/guide
+        //https://www.google.com/maps/search/?api=1&parameters
+        NSString* url = [NSString stringWithFormat:@"https://www.google.com/maps/search/?api=1&query=%@",
+                         [[self address] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
         [self showWebViewInParent:parent withUrl:url withAnimation:YES];
     }
 }
@@ -293,7 +247,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         if ([self text] != nil && [[self text] length] > 0) {
             CGRect frmTitle = CGRectMake(20, 20, frmView.size.width - 60, 30);
             UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
-            [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:18]];
+            [lblTitle setFont:[TextUtil GetDefaultFontForSize:18.0]];
             [lblTitle setTextColor:[UIColor blackColor]];
             [lblTitle setText:[self text]];
             [viewWeb addSubview:lblTitle];
@@ -302,7 +256,7 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         CGRect frmButton = CGRectMake(frmView.size.width - 40, 20, 30, 30);
         UIButton* btnClose = [[UIButton alloc] initWithFrame:frmButton];
         [btnClose setTitle:@"X" forState:UIControlStateNormal];
-        [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:36]];
+        [[btnClose titleLabel] setFont:[TextUtil GetDefaultFontForSize:36.0]];
         [btnClose setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btnClose addTarget:self action:@selector(closeWeb:) forControlEvents:UIControlEventTouchUpInside];
         [viewWeb addSubview:btnClose];
@@ -346,13 +300,34 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
                                                     startImmediately:YES];
 }
 
+-(void)submitPrayFor {
+    NSString* url = [NSString stringWithFormat:@"%@?app=%@&prayer=%d", urlPrayFor, AppID, [self msgId]];
+    
+    NSMutableURLRequest* req = [NSMutableURLRequest
+                                requestWithURL:[NSURL URLWithString:url]
+                                cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                timeoutInterval:30];
+    
+    NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                            delegate:nil
+                                                    startImmediately:YES];
+    
+    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Prayed for"
+                                                    message:@"Thank you for your prayer"
+                                                   delegate:self
+                                          cancelButtonTitle:NSLocalizedString(@"OK Button", nil)
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
     //Append the newly arrived data to whatever we’ve seen so far
     [inetdata appendData:data];
 }
 
 -(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
-    //NSLog([error localizedDescription]);
+    NSLog([error localizedDescription]);
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)_connection{
@@ -361,8 +336,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
     [CurrentUser setExplorerPoints:[sp ExplorerPoints]];
     [CurrentUser setSharerPoints:[sp SharerPoints]];
     [CurrentUser setMusePoints:[sp MusePoints]];
-    //NSString* data = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
-    //NSLog(data);
+    NSString* data = [[NSString alloc] initWithData:inetdata encoding:NSUTF8StringEncoding];
+    NSLog(data);
 }
 
 -(void)closeWeb:(id)sender {
@@ -374,8 +349,8 @@ NSString* urlNoteSeeIt = @"http://www.textmuse.com/admin/noteseeit.php";
         [v setFrame:endFrame];
     } completion: ^(BOOL f) {
         if (f) {
-            [web removeFromSuperview];
-            [web loadHTMLString:@"" baseURL:nil];
+            [self->web removeFromSuperview];
+            [self->web loadHTMLString:@"" baseURL:nil];
             [v removeFromSuperview];
         }
     }];

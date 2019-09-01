@@ -22,7 +22,6 @@
     IBOutlet UISlider* notesCount;
     IBOutlet UIView* viewBottomContainer;
     IBOutlet UIButton* btnVersions;
-    IBOutlet UILabel* lblFacebook;
 }
 
 -(IBAction)switchContacts:(id)sender;

@@ -10,6 +10,7 @@
 #import "DataAccess.h"
 #import "SqlData.h"
 #import "Message.h"
+#import "GuidedTour.h"
 
 @interface GlobalState : NSObject
 
@@ -18,8 +19,13 @@ extern NSString* CurrentCategory;
 extern long CurrentColorIndex;
 extern Message* CurrentMessage;
 extern int HighlightedMessageID;
+extern int HighlightedCategoryID;
 extern NSString* CurrentGroup;
 extern SqlData* SqlDb;
+extern GuidedTour* Tour;
+extern long AddEvent;
+extern long AddPrayer;
+extern long AddContent;
 
 +(void)init;
 

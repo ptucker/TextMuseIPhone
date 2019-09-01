@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <Contacts/Contacts.h>
 #import "UserContact.h"
 #import "UserPhone.h"
 #import "SponsorInfo.h"
@@ -54,8 +55,10 @@
     BOOL versionMsg;
     BOOL following;
     NSString* sponsorID;
-    NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc, *currentEventDate,
-                *currentSponsorName, *currentSponsorLogo;
+    NSString* currentText, *currentMediaUrl, *currentUrl, *currentEventLoc,
+        *currentEventDate, *currentSponsorName, *currentSponsorLogo,
+        *currentBadgeURL, *currentWinnerText, *currentVisitWinnerText,
+        *currentSendCount, *currentVisitCount, *currentPhoneNo, *currentAddress, *currentTextNo;
     
     //NSString* documentdir;
     
@@ -67,7 +70,7 @@
 -(id)init;
 -(void)reloadData;
 -(void)reloadNotifications;
--(void)initContacts;
+-(BOOL)initContacts;
 -(void)addListener:(id)listener;
 -(NSArray*)getCategories;
 -(NSArray*)getRequiredCategories;

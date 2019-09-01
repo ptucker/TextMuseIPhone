@@ -29,7 +29,7 @@
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-    if ([elementName isEqualToString:@"success"]) {
+    if ([elementName isEqualToString:@"success"] && [attributeDict objectForKey:@"ep"] != nil) {
         _ExplorerPoints = [[attributeDict objectForKey:@"ep"] intValue];
         _SharerPoints = [[attributeDict objectForKey:@"sp"] intValue];
         _MusePoints = [[attributeDict objectForKey:@"mp"] intValue];

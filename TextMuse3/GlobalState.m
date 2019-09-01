@@ -13,8 +13,13 @@ NSString* CurrentCategory;
 long CurrentColorIndex;
 Message* CurrentMessage;
 int HighlightedMessageID;
+int HighlightedCategoryID = -1;
 NSString* CurrentGroup;
 SqlData* SqlDb;
+GuidedTour* Tour;
+long AddEvent = 1;
+long AddPrayer = 2;
+long AddContent;
 
 @implementation GlobalState
 
@@ -24,6 +29,7 @@ SqlData* SqlDb;
     CurrentCategory = @"Trending";
     CurrentColorIndex = 0;
     HighlightedMessageID = 0;
+    AddContent = AddPrayer;
 }
 
 @end

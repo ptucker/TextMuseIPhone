@@ -10,9 +10,13 @@
 #import "ImageDownloader.h"
 #import "Settings.h"
 #import "WalkthroughViewController.h"
-#import "MessagesViewController.h"
+//#import "MessagesViewController.h"
+#import "RndMessagesViewController.h"
 #import "ImageDownloader.h"
 #import "FLAnimatedImage.h"
+#import "TextUtil.h"
+#import <UserNotifications/UserNotifications.h>
+
 @interface AppDelegate ()
 
 @end
@@ -57,14 +61,19 @@
             [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
         UIApplication* app = [UIApplication sharedApplication];
         if ([app respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-            [app registerUserNotificationSettings:settings];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [app registerUserNotificationSettings:settings];
+            });
+            
         }
         
         if (userNotification)
         {
             UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-            [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+                [[UIApplication sharedApplication] registerForRemoteNotifications];
+            });
         }
         else
             //Deprecated in iOS 8
@@ -90,7 +99,7 @@
     [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];
     NSDictionary* txtAttrs =[NSDictionary dictionaryWithObjectsAndKeys:
                              [UIColor whiteColor], NSForegroundColorAttributeName,
-                             [UIFont fontWithName:@"Lato-Regular" size:21.0], NSFontAttributeName, nil];
+                             [TextUtil GetDefaultFontForSize:21.0], NSFontAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:txtAttrs];
     
     UIColor* colorTint = nil;
@@ -104,6 +113,14 @@
     Skin = nil;
     //73bedc
     colorTint = [UIColor colorWithRed:115.0/256 green:190/256 blue:236.0/256 alpha:1.0];
+#endif
+#ifdef NRCC
+    Skin = nil;
+    colorTint = [SkinInfo createColor:[SkinInfo Color1TextMuse]];
+#endif
+#ifdef YOUTHREACH
+    Skin = nil;
+    colorTint = [UIColor colorWithRed:0.0/256 green:0.0/256 blue:154.0/256 alpha:1.0];
 #endif
     if (Skin != nil)
         colorTint = [Skin createColor1];
@@ -173,6 +190,11 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
             NSString* highlight = [aps objectForKey:@"highlight"];
             if (highlight != nil)
                 HighlightedMessageID = [highlight intValue];
+            NSString* cathighlight = [aps objectForKey:@"cathighlight"];
+            if (cathighlight != nil)
+                HighlightedCategoryID = [cathighlight intValue];
+            else
+                HighlightedCategoryID = -1;
             if (state == UIApplicationStateActive) {
                 NSString* msg = [aps objectForKey:@"alert"];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
@@ -193,31 +215,19 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 -(void)jumpToMessage {
     //User tapped on a notification. Go straight to the message
     if (HighlightedMessageID != 0) {
-        Message* msg = [Data findMessageWithID:HighlightedMessageID];
-        if (msg != nil) {
-            HighlightedMessageID = 0;
-
-            CurrentMessage = msg;
-            CurrentCategory = [CurrentMessage category];
-            CurrentColorIndex = 0;
-            
-            UINavigationController* nav = (UINavigationController*) [[self window] rootViewController];
-            UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            MessagesViewController* mvc = [storyboard instantiateViewControllerWithIdentifier:@"SelectMessage"];
-            [nav pushViewController:mvc animated:YES];
-        }
+        RndMessagesViewController* nav = (RndMessagesViewController*) [[self window] rootViewController];
+        [nav jumpToMessage];
     }
 }
 
 - (void)application:(UIApplication *)application
         didReceiveLocalNotification:(UILocalNotification *)notification {
+    /*
     if (NotificationOn) {
-        /*
          NSMutableString* msgs = [[NSMutableString alloc] init];
          for (NSString* k in [userInfo keyEnumerator]) {
          [msgs appendFormat:@"\n%@: %@", k, [userInfo objectForKey:k]];
          }
-         */
         NSString* msg = [notification alertBody];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Notification Title", nil)
                                                         message:msg delegate:nil
@@ -225,6 +235,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
                                               otherButtonTitles:nil, nil];
         [alert show];
     }
+     */
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -247,8 +258,15 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 }
 
 -(void)addNotification {
-    if (!NotificationOn) return;
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center removeAllDeliveredNotifications];
+    [center removeAllPendingNotificationRequests];
+    
+    /*
+     if (!NotificationOn) return;
+
 #ifdef UNIVERSITY
     [Settings LoadSettings];
     BOOL n = (NotificationDates == nil || [NotificationDates count] == 0);
@@ -295,6 +313,7 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 #else
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 #endif
+     */
 }
 
 -(NSDate*)getNextNotifyDate:(NSDate*)dateOfInterest {

@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 LaLoosh. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "ImageUtil.h"
 
 @implementation ImageUtil
@@ -53,5 +52,50 @@
     return grayScaleImage;
 }
 
++(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent {
+    return [self GetContentSizeForImage:img inSize:sizeParent forCell:YES];
+}
+
++(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent forCell:(bool)cell {
+    CGSize sizeView = sizeParent;
+    if (cell && sizeView.height > sizeParent.height/2.5)
+        sizeView.height = sizeParent.height/2.5;
+    CGSize sizeImage = [img size];
+    if (sizeImage.width != 0) {
+        CGFloat ratioImage = sizeImage.height / sizeImage.width;
+        CGFloat ratioView = sizeView.height / sizeView.width;
+        if (ratioImage > ratioView) {
+            if (sizeImage.height > sizeView.height) {
+                sizeView.width = sizeView.height / ratioImage;
+            }
+        }
+        else {
+            if (sizeImage.width > sizeView.width) {
+                sizeView.height = sizeView.width * ratioImage;
+            }
+        }
+    }
+    else {
+        //Just guess
+        sizeView.height = 133;
+        sizeView.width = sizeParent.width;
+    }
+    
+    if (isnan(sizeView.height) || isnan(sizeView.width))
+        NSLog(@"this sucks");
+    
+    return sizeView;
+}
+
++ (UIImage *) imageFromColor:(UIColor *)color {
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
 
 @end

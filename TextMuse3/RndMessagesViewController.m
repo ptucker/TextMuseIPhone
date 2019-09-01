@@ -8,21 +8,28 @@
 
 #import "RndMessagesViewController.h"
 #import "WalkthroughViewController.h"
+#import "GuidedTourStepView.h"
 #import "ImageMessageTableViewCell.h"
 #import "TextMessageTableViewCell.h"
+#import "Settings2ViewController.h"
 #import "MessageCategory.h"
 #import "Message.h"
+#import "TextUtil.h"
 #import "ImageDownloader.h"
 #import "Settings.h"
 #import "ChooseSkinView.h"
 #import "UICheckButton.h"
-#import "ContactsTableViewController.h"
 
 NSArray* colors;
 NSArray* colorsText;
 NSArray* colorsTitle;
 
+NSString* btnAddEvent = @"calendar-plus";
+NSString* btnAddPrayer = @"prayer-icon";
+
 const int maxRecentIDs = 10;
+NSString* urlRemitBadge = @"https://www.textmuse.com/admin/remitbadge.php";
+const NSString* allFilter = @"All";
 
 @interface RndMessagesViewController ()
 
@@ -35,17 +42,56 @@ const int maxRecentIDs = 10;
     
     [self defaultSkin];
     
-    int messagesHeight = [[self view] frame].size.height - 65 - 40;
+    int messagesHeight = [[self view] frame].size.height;
+    [[self navigationItem] setTitle:@""];
+    UIView* viewTitle = [[UIView alloc] init];
+    UIImageView* imgTitle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo-02-color_32"]];
+    CGRect rctImage = CGRectMake(0,0,32,32);
+    [imgTitle setFrame:rctImage];
+    [imgTitle setContentMode:UIViewContentModeScaleAspectFit];
+    [viewTitle addSubview:imgTitle];
+    UILabel* lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, 75, 44)];
+    [lblTitle setFont:[TextUtil GetDefaultFontForSize:24.0]];
+    [lblTitle setTextColor:[UIColor whiteColor]];
+    [lblTitle setText:@"TextMuse"];
+    [lblTitle sizeToFit];
+    [viewTitle addSubview:lblTitle];
+    CGRect frmNavBar = [[[self navigationController] navigationBar] frame];
+    [viewTitle sizeToFit];
+    CGFloat widthTitle = 32 + [lblTitle frame].size.width;
+    [viewTitle setFrame:CGRectMake(frmNavBar.size.width/2 - widthTitle/2, 6, widthTitle, 38)];
+    [[self navigationItem] setTitleView:viewTitle];
+
 #ifdef HUMANIX
     [[self navigationItem] setTitle:@"Hire Me Northwest"];
+#endif
+#ifdef YOUTHREACH
+    [[self navigationItem] setTitle:@"YouthREACH"];
 #endif
 #ifdef OODLES
     [[self navigationItem] setTitle:@"Oodles"];
     [bottomMenu setHidden:YES];
     messagesHeight += 40;
 #endif
+#ifdef NRCC
+    [[self navigationItem] setTitle:@"NRCC"];
+    [bottomMenu setHidden:YES];
+    messagesHeight += 40;
+#endif
     
-    CGRect frmMessages = CGRectMake(0, 65, [[self view] frame].size.width, messagesHeight);
+    categoryFilter = allFilter;
+    
+    CGFloat scrollerHeight = 30;
+    CGFloat scrollerTop = [[self navigationController] navigationBar].frame.origin.y +
+    [[self navigationController] navigationBar].frame.size.height;
+    CGRect rctButton = CGRectMake(0, scrollerTop, [[self view] frame].size.width, scrollerHeight);
+    scrollerCategories = [[UIScrollView alloc] initWithFrame:rctButton];
+    [scrollerCategories setBackgroundColor:[[[self navigationController] navigationBar] backgroundColor]];
+    [[self view] addSubview:scrollerCategories];
+    
+    messagesHeight -= (scrollerHeight + scrollerTop);
+    CGRect frmMessages = CGRectMake(0, scrollerTop + scrollerHeight,
+                                    [[self view] frame].size.width, messagesHeight);
     messages = [[UITableView alloc] initWithFrame:frmMessages];
     [[self view] addSubview:messages];
     showPinned = false;
@@ -57,29 +103,38 @@ const int maxRecentIDs = 10;
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [messages addSubview:refreshControl];
+    
+    sendMessage = [[SendMessage alloc] init];
 
-#ifdef UNIVERSITY
-    UIImage* imgEvent = [UIImage imageNamed:@"calendar-plus"];
-    UIImage *scaledSettings = [UIImage imageWithCGImage:[imgEvent CGImage]
-                                                  scale:48.0/30
-                                            orientation:(imgEvent.imageOrientation)];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithImage:scaledSettings
-                                                                    style:UIBarButtonItemStylePlain
-                                                                   target:self
-                                                                   action:@selector(addEvent:)];
-    [[self navigationItem] setRightBarButtonItem: rightButton];
-#endif
+    [self setupToolbarButton:btnAddEvent];
     
     [[self navigationController] setDelegate:self];
-    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlack];
+    if ([colorsText count] > 0) {
+        UIColor* colorTint = [colorsText objectAtIndex:0];
+        //UIColor* colorBkgd = [colors objectAtIndex:2];
+        [[[self navigationController] navigationBar] setTintColor:colorTint];
+        //[[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
+        [[[self navigationController] navigationBar] setBarTintColor:[UIColor blackColor]];
+    }
     
-#ifndef HUMANIX
+#ifdef HUMANIX
+    ShowIntro = NO;
+#endif
+#ifdef YOUTHREACH
+    ShowIntro = NO;
+#endif
+#ifdef NRCC
+    ShowIntro = NO;
+#endif
+    
     if (ShowIntro) {
-        [self showWalkthrough];
+        if (Tour == nil)
+            Tour = [[GuidedTour alloc] init];
+        
+        [Settings SaveSetting:SettingShowIntro withValue:@"0"];
         
         [self showChooseSkin];
     }
-#endif
     
     [Data addListener:self];
     
@@ -88,24 +143,43 @@ const int maxRecentIDs = 10;
     
     [messages setBackgroundColor:[UIColor whiteColor]];
     
-    UIImage* o = [UIImage imageNamed:@"menu"];
+    UIImage* o = [UIImage imageNamed:@"gear"];
     UIImage *scaledO = [UIImage imageWithCGImage:[o CGImage]
-                                           scale:48.0/30
+                                           scale:73.0/30
                                      orientation:(o.imageOrientation)];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithImage:scaledO
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(showCategoryList:)];
-    [[self navigationItem] setLeftBarButtonItem:leftButton];
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:scaledO
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(settings:)];
+    [[self navigationItem] setLeftBarButtonItem:settingsButton];
     
     [[btnHome imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [[btnBadges imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [[btnGroup imageView] setContentMode:UIViewContentModeScaleAspectFit];
     [btnBadges setTitle:@"badges" forState:UIControlStateNormal];
-    [btnBadges setTitle:@"all" forState:UIControlStateSelected];
+    [btnBadges setTitle:allFilter forState:UIControlStateSelected];
+    
+    contactStore = [[CNContactStore alloc] init];
     
 #ifndef UNIVERSITY
     [btnBadges setHidden:YES];
+#endif
+}
+
+-(void)setupToolbarButton:(NSString*)buttonIcon {
+#ifdef UNIVERSITY
+    UIImage* imgEvent = [UIImage imageNamed:buttonIcon];
+    if (imgEvent == nil)
+        imgEvent = [UIImage imageNamed:btnAddEvent];
+    UIImage *scaledEvent = [UIImage imageWithCGImage:[imgEvent CGImage]
+                                               scale:48.0/30
+                                         orientation:(imgEvent.imageOrientation)];
+    UIBarButtonItem *eventButton = [[UIBarButtonItem alloc] initWithImage:scaledEvent
+                                                                    style:UIBarButtonItemStylePlain
+                                                                   target:self
+                                                                   action:@selector(addEvent:)];
+    [eventButton setTag:([buttonIcon isEqualToString:btnAddPrayer] ? AddPrayer : AddEvent)];
+    [[self navigationItem] setRightBarButtonItem: eventButton];
 #endif
 }
 
@@ -129,6 +203,25 @@ const int maxRecentIDs = 10;
     
     [self updateSkin];
 #endif
+#ifdef YOUTHREACH
+    Skin = [[SkinInfo alloc] init];
+    
+    [Skin setSkinID:171];
+    [Skin setSkinName:@"Categories"];
+    [Skin setMasterName:@"YouthREACH"];
+    [Skin setMasterBadgeURL:@""];
+    [Skin setColor1:@"000000"];
+    [Skin setColor2:@"be1009"];
+    [Skin setColor3:@"00009a"];
+    [Skin setHomeURL:@"http://youthreachspokane.weebly.com/"];
+    [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
+    [Skin setMainWindowTitle:@"YouthREACH"];
+    [Skin setIconButtonURL:@""];
+    
+    [Settings SaveSkinData];
+    
+    [self updateSkin];
+#endif
 #ifdef OODLES
     Skin = [[SkinInfo alloc] init];
     
@@ -139,9 +232,28 @@ const int maxRecentIDs = 10;
     [Skin setColor1:@"73bedc"];
     [Skin setColor2:@"000000"];
     [Skin setColor3:@"ffffff"];
-    [Skin setHomeURL:@"http://www.textmuse.com"];
+    [Skin setHomeURL:@"https://www.textmuse.com"];
     [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
     [Skin setMainWindowTitle:@"Oodles"];
+    [Skin setIconButtonURL:@""];
+    
+    [Settings SaveSkinData];
+    
+    [self updateSkin];
+#endif
+#ifdef NRCC
+    Skin = [[SkinInfo alloc] init];
+    
+    [Skin setSkinID:115];
+    [Skin setSkinName:@"NRCC"];
+    [Skin setMasterName:@"NRCC"];
+    [Skin setMasterBadgeURL:@""];
+    [Skin setColor1:@"eb181f"];
+    [Skin setColor2:@"2b388a"];
+    [Skin setColor3:@"ffffff"];
+    [Skin setHomeURL:@"https://www.textmuse.com"];
+    [Skin setLaunchImageURL:[[NSMutableArray alloc] init]];
+    [Skin setMainWindowTitle:@"NRCC"];
     [Skin setIconButtonURL:@""];
     
     [Settings SaveSkinData];
@@ -153,8 +265,14 @@ const int maxRecentIDs = 10;
 -(void)navigationController:(UINavigationController *)navigationController
      willShowViewController:(UIViewController *)viewController
                    animated:(BOOL)animated {
-    if (viewController == self)
-        [messages reloadData];
+    if (viewController == self) {
+        segueSettings ? [Data reloadData] : [messages reloadData];
+        segueSettings = NO;
+    }
+    else if ([viewController isKindOfClass:[Settings2ViewController class]])
+        segueSettings = YES;
+
+    [self setupCategoryButton];
 }
 
 -(void)setColors {
@@ -164,13 +282,17 @@ const int maxRecentIDs = 10;
 
     if (Skin != nil) {
         colors = [NSArray arrayWithObjects:[Skin createColor1], [Skin createColor2], [Skin createColor3], nil];
-        colorsText = [NSArray arrayWithObjects:[Skin createTextColor1], [Skin createTextColor2], [Skin createTextColor3], nil];
+        colorsText = [NSArray arrayWithObjects:[Skin createTextColor1],
+                      [Skin createTextColor2], [Skin createTextColor3], nil];
         colorsTitle = [NSArray arrayWithArray:colors];
     }
     
     if (colors == nil)
         //Green, Orange, Blue
-        colors = [NSArray arrayWithObjects: [UIColor colorWithRed:0/255.0 green:172/255.0 blue:101/255.0 alpha:1.0], [UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0], [UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0], nil];
+        colors = [NSArray arrayWithObjects: [SkinInfo createColor:[SkinInfo Color1TextMuse]],
+                  [SkinInfo createColor:[SkinInfo Color2TextMuse]],
+                  [SkinInfo createColor:[SkinInfo Color3TextMuse]],
+                  nil];
     if (colorsTitle == nil)
         colorsTitle = [NSArray arrayWithObjects:[colors objectAtIndex:0], [colors objectAtIndex:1],
                        [colors objectAtIndex:2], nil];
@@ -179,6 +301,7 @@ const int maxRecentIDs = 10;
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    /*
     //Show splash screen for 2 seconds
 #ifdef UNIVERSITY
     if (splash == nil) {
@@ -195,6 +318,7 @@ const int maxRecentIDs = 10;
                                         repeats:NO];
     }
 #endif
+     */
     
     [self jumpToMessage];
 }
@@ -207,7 +331,7 @@ const int maxRecentIDs = 10;
             CurrentColorIndex = HighlightedMessageID % [colors count];
             HighlightedMessageID = 0;
             
-            [self performSegueWithIdentifier:@"SelectMessage" sender:self];
+            [self animateMessage];
         }
     }
 }
@@ -248,7 +372,7 @@ const int maxRecentIDs = 10;
     CGRect frmTitle = CGRectMake(80, frm.size.height - 100, frm.size.width - 160, 44);
     UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
     [title setTextAlignment:NSTextAlignmentCenter];
-    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:28]];
+    [title setFont:[TextUtil GetBoldFontForSize:28.0]];
     [title setTextColor:[Skin createColor1]];
     //[title setText:[NSString stringWithFormat:@"%@ %@", [Skin SkinName], bundleName]];
     [title setText:[NSString stringWithFormat:@"%@", bundleName]];
@@ -278,7 +402,7 @@ const int maxRecentIDs = 10;
     CGRect frmTitle = CGRectMake(10, y + frmLogo.size.height + 10, frm.size.width - 20, 44);
     UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
     [title setTextAlignment:NSTextAlignmentCenter];
-    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:44]];
+    [title setFont:[TextUtil GetBoldFontForSize:44.0]];
     [title setTextColor:[UIColor whiteColor]];
     [title setText:bundleName];
     [splash addSubview:title];
@@ -289,7 +413,7 @@ const int maxRecentIDs = 10;
     
     UILabel* version = [[UILabel alloc] initWithFrame:frmVersion];
     [version setTextAlignment:NSTextAlignmentCenter];
-    [version setFont:[UIFont fontWithName:@"Lato-Light" size:30]];
+    [version setFont:[TextUtil GetLightFontForSize:30.0]];
     [version setTextColor:[UIColor whiteColor]];
     [version setText:[NSString stringWithFormat:@"%@.%@", ver, build]];
     [splash addSubview:version];
@@ -303,22 +427,6 @@ const int maxRecentIDs = 10;
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[[self navigationItem] backBarButtonItem] setTitle:@"Back"];
-    [self becomeFirstResponder];
-}
-
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self becomeFirstResponder];
-}
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
--(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-#ifdef UNIVERSITY
-    [self performSegueWithIdentifier:@"ShakeToPlay" sender:self];
-#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -328,6 +436,28 @@ const int maxRecentIDs = 10;
 
 -(void)dataRefresh {
     [self updateSkin];
+    
+    //If there's a highlighted category, filter on that category.
+    // It came from a notification, so we should only have this set once.
+    if (HighlightedCategoryID != -1) {
+        HighlightedCategoryID = -1;
+        
+        for (MessageCategory* mc in [Data getCategories]) {
+            if ([mc catid] == HighlightedCategoryID) {
+                categoryFilter = [mc name];
+                break;
+            }
+        }
+
+        //Mark this category as selected
+        for (int i=0; i < [[scrollerCategories subviews] count]; i++) {
+            UIView* v = [[scrollerCategories subviews] objectAtIndex:i];
+            if ([v isKindOfClass:[UIButton class]]) {
+                UIButton* b = (UIButton*) v;
+                [b setSelected:[categoryFilter isEqualToString:[[b titleLabel] text]]];
+            }
+        }
+    }
     
     [messages reloadData];
     
@@ -353,6 +483,7 @@ const int maxRecentIDs = 10;
 #endif
 }
 
+/*
 -(void)prepareForSegue:(UIStoryboardSegue*)segue sender:(nullable id)sender {
     if ([[segue identifier] isEqualToString:@"SendMessage"])
     {
@@ -360,6 +491,7 @@ const int maxRecentIDs = 10;
         [cvc setGroupName:@""];
     }
 }
+ */
 
 -(void)updateSkin {
     if (Skin != nil && [Skin SkinName] != nil) {
@@ -368,8 +500,10 @@ const int maxRecentIDs = 10;
                       [Skin createTextColor3], nil];
         colorsTitle = [NSArray arrayWithArray:colors];
         
-        UIColor* colorTint = [Skin createColor1];
+        UIColor* colorTint = [colorsText objectAtIndex:0];
+        //UIColor* colorBkgd = [colors objectAtIndex:2];
         [[[self navigationController] navigationBar] setTintColor:colorTint];
+        //[[[self navigationController] navigationBar] setBarTintColor:colorBkgd];
         UIImage* imgHome = [[UIImage imageNamed:@"home"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [btnHome setImage:imgHome forState:UIControlStateNormal];
         [btnHome setTintColor:colorTint];
@@ -384,26 +518,6 @@ const int maxRecentIDs = 10;
         [btnGroup setImage:imgGroup forState:UIControlStateNormal];
         [btnGroup setTintColor:colorTint];
         [btnGroup setTitleColor:colorTint forState:UIControlStateNormal];
-        
-        //[[self navigationItem] setTitle:[Skin MainWindowTitle]];
-        NSString* title = nil;
-#ifdef HUMANIX
-        title = @"Hire Me Northwest";
-#endif
-#ifdef OODLES
-        title = @"Oodles";
-#endif
-        if (title == nil)
-            title = [NSString stringWithFormat:@"%@ TextMuse", [Skin SkinName]];
-        [[self navigationItem] setTitle:title];
-        
-        /*
-        ImageDownloader* downloader = [[ImageDownloader alloc] initWithUrl:[Skin IconButtonURL]
-                                               forNavigationItemLeftButton:[self navigationItem]
-                                                                withTarget:self
-                                                              withSelector:@selector(showCategoryList:)];
-        [downloader load];
-         */
     }
     else {
         [self setColors];
@@ -437,19 +551,79 @@ const int maxRecentIDs = 10;
         [[self navigationItem] setLeftBarButtonItem:leftButton];
          */
     }
+    
+    [self setupCategoryButton];
+}
+
+-(void) setupCategoryButton {
+    //Clear out the old buttons
+    while ([[scrollerCategories subviews] count] != 0) {
+        UIView* v = [[scrollerCategories subviews] objectAtIndex:0];
+        [v removeFromSuperview];
+    }
+    
+    NSArray* categories = [Data getCategories];
+    CGFloat scrollerHeight = [scrollerCategories frame].size.height;
+    CGFloat widthBtn = 250, heightBtn = scrollerHeight;
+    CGFloat widthTotal = 10, margin = 20;
+    UIButton* btn = [self makeCategoryButton:allFilter
+                                   withFrame:CGRectMake(widthTotal, 0, widthBtn, heightBtn)];
+    widthTotal += [btn frame].size.width + margin;
+    [scrollerCategories addSubview:btn];
+    [btn setSelected:true];
+    for (int i=0; i<[categories count]; i++) {
+        btn = [self makeCategoryButton:[categories objectAtIndex:i]
+                             withFrame:CGRectMake(widthTotal, 0, widthBtn, heightBtn)];
+        widthTotal += [btn frame].size.width + margin;
+        [scrollerCategories addSubview:btn];
+    }
+    
+    [scrollerCategories setContentSize:CGSizeMake(widthTotal, scrollerHeight)];
+}
+
+- (UIButton*) makeCategoryButton:(NSString*)category withFrame:(CGRect)frame {
+    UIButton* btn = [[UIButton alloc] initWithFrame:frame];
+    [btn setTitle:category forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [[btn titleLabel] setFont:[TextUtil GetBoldFontForSize:20.0]];
+    [btn setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
+    [[btn titleLabel] sizeToFit];
+    [btn sizeToFit];
+    [btn addTarget:self action:@selector(chooseCategory:) forControlEvents:UIControlEventTouchUpInside];
+
+    return btn;
+}
+
+-(void)chooseCategory:(id)sender {
+    UIButton* btn = (UIButton*)sender;
+    for (int i=0; i < [[scrollerCategories subviews] count]; i++) {
+        UIView* v = [[scrollerCategories subviews] objectAtIndex:i];
+        if ([v isKindOfClass:[UIButton class]]) {
+            UIButton* b = (UIButton*) v;
+            [b setSelected:false];
+        }
+    }
+    [btn setSelected:true];
+    CurrentCategory = [[btn titleLabel] text];
+    categoryFilter = [[btn titleLabel] text];
+    CurrentMessage = nil;
+    
+    NSString* btnToolbar = [[categoryFilter lowercaseString] containsString:@"prayer"] ? btnAddPrayer : btnAddEvent;
+    [self setupToolbarButton:btnToolbar];
+    
+    [messages reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    BOOL supportPinned = YES;
-#ifdef OODLES
-    supportPinned = NO;
-#endif
     if (tableView == categoryTable)
-        return [[Data getCategories] count] + (supportPinned ? 2 : 1); //add one for pinned category and one for settings
+        return [[Data getCategories] count] + 1;
     else if (showPinned)
         return [pinnedMessages count];
     else if (showEvents)
         return [[Data getEventMessages] count];// [[Data getMessagesForCategory:@"Events"] count];
+    else if (![categoryFilter isEqualToString:allFilter])
+        return [[Data getMessagesForCategory:categoryFilter] count];
     else
         return [[Data getAllMessages] count];
 }
@@ -464,15 +638,20 @@ const int maxRecentIDs = 10;
         else if (showEvents)
             //[[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
             msg = [[Data getEventMessages] objectAtIndex:[indexPath row]];
+        else if (![categoryFilter isEqualToString:allFilter])
+            msg = [[Data getMessagesForCategory:categoryFilter] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
-        return [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
+        CGFloat ret = [MessageTableViewCell GetCellHeightForMessage:msg inSize:[[self view] frame].size];
+        if (ret <= 0 || ret >= [[self view] frame].size.height)
+            ret = 120;  //just guess
+        return ret;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
-        return [self createCategoryCell:[indexPath row] forWidth:[tableView frame].size.width];
+        return [self createCategoryCell:[indexPath row] forWidth:([[self view] frame].size.width / 2)];
     }
     else {
         static NSString *TextCellIdentifier = @"txtmessages";
@@ -483,6 +662,8 @@ const int maxRecentIDs = 10;
         else if (showEvents)
              //[[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
             msg = [[Data getEventMessages] objectAtIndex:[indexPath row]];
+        else if (![categoryFilter isEqualToString:allFilter])
+            msg = [[Data getMessagesForCategory:categoryFilter] objectAtIndex:[indexPath row]];
         else
             msg = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         
@@ -497,7 +678,7 @@ const int maxRecentIDs = 10;
         }
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell showForSize:[[self view] frame].size
+        [cell showForSize:[tableView frame].size
               usingParent:self
                  withColor:[colors objectAtIndex:[indexPath row]%[colors count]]
                  textColor:[colorsText objectAtIndex:[indexPath row]%[colors count]]
@@ -512,25 +693,16 @@ const int maxRecentIDs = 10;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == categoryTable) {
-        BOOL supportPinned = YES;
-#ifdef OODLES
-        supportPinned = NO;
-#endif
-        if ([indexPath row] == 0) {
-            [self settings:nil];
-            [self hideCategoryList];
-            return;
-        }
-        else if ([indexPath row] == 1 && supportPinned) {
-            [self showPinned:nil];
-            [self hideCategoryList];
-            return;
-        }
-        else {
-            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-            CurrentCategory = [[cell textLabel] text];
-            CurrentMessage = nil;
-        }
+        UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+        CurrentCategory = [[cell textLabel] text];
+        categoryFilter = [[cell textLabel] text];
+        CurrentMessage = nil;
+
+        CurrentColorIndex = [indexPath row] % [colors count];
+        
+        [self hideCategoryList];
+        
+        [messages reloadData];
     }
     else {
         if (showPinned)
@@ -538,72 +710,209 @@ const int maxRecentIDs = 10;
         else if (showEvents)
             // [[Data getMessagesForCategory:@"Events"] objectAtIndex:[indexPath row]];
             CurrentMessage = [[Data getEventMessages] objectAtIndex:[indexPath row]];
+        else if (![categoryFilter isEqualToString:allFilter])
+            CurrentMessage = [[Data getMessagesForCategory:categoryFilter] objectAtIndex:[indexPath row]];
         else
             CurrentMessage = [[Data getAllMessages] objectAtIndex:[indexPath row]];
         CurrentCategory = showPinned ? @"PinnedMessages" : [CurrentMessage category];
+
+        [self hideCategoryList];
+
+        //[self performSegueWithIdentifier:@"SelectMessage" sender:self];
+        
+        [self animateMessage];
+
+        if (Tour != nil) {
+            GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour TextIt]] forFrame:[[self view] frame]];
+            [[self view] addSubview:gv];
+            [[self view] bringSubviewToFront:gv];
+        }
+        else if ([CurrentMessage sponsorID] > 0 && ShowSponsor) {
+            GuidedTour* tour = [[GuidedTour alloc] init];
+            NSArray* params = [NSArray arrayWithObjects:[CurrentMessage sponsorName],
+                                [CurrentMessage sponsorName],
+                                nil];
+            GuidedTourStepView* gv =
+            [[GuidedTourStepView alloc] initWithStep:[tour getStepForKey:[tour Sponsor]]
+                                            forFrame:[[self view] frame]
+                                          withParams:params];
+            [[self view] addSubview:gv];
+            [[self view] bringSubviewToFront:gv];
+            ShowSponsor = false;
+            [Settings SaveSetting:SettingShowSponsor withValue:@"0"];
+        }
+        else if ([CurrentMessage sendcount] > 0 && ShowBadge) {
+            GuidedTour* tour = [[GuidedTour alloc] init];
+            NSArray* params = [NSArray arrayWithObjects:
+                               [CurrentMessage sponsorName],
+                               [NSString stringWithFormat:@"%d", [CurrentMessage sendcount]],
+                               [CurrentMessage sponsorName],
+                               nil];
+            GuidedTourStepView* gv = [[GuidedTourStepView alloc]
+                                      initWithStep:[tour getStepForKey:[tour Badge]]
+                                      forFrame:[[self view] frame]
+                                      withParams:params];
+            [[self view] addSubview:gv];
+            [[self view] bringSubviewToFront:gv];
+            ShowBadge = false;
+            [Settings SaveSetting:SettingShowBadge withValue:@"0"];
+        }
     }
-    
-    CurrentColorIndex = [indexPath row] % [colors count];
-    
-    [self hideCategoryList];
-    
-    [self performSegueWithIdentifier:@"SelectMessage" sender:self];
 }
+
+-(void) animateMessage {
+    CGFloat top = 60;
+    /*
+     //Slide from top
+    CGRect frmEnd = [[self view] frame];
+    frmEnd.origin.y += top;
+    frmEnd.size.height -= top;
+    CGRect frmStart = frmEnd;
+    frmStart.origin.y -= frmStart.size.height;
+     */
+    // Slide from left
+    CGRect frmEnd = [[self view] frame];
+    frmEnd.origin.y += top;
+    frmEnd.size.height -= top;
+    CGRect frmStart = frmEnd;
+    frmStart.origin.x -= frmStart.size.width;
+    mv = [MessageView setupViewForMessage:CurrentMessage
+                                  inFrame:frmEnd
+                               withBadges:YES
+                               fullScreen:YES
+                                withColor:[colors objectAtIndex:CurrentColorIndex]
+                                    index:CurrentColorIndex];
+
+    [mv setTarget:self withSelector:@selector(chooseMessage:) andQuickSend:@selector(quickMessage:)];
+    [mv setFrame: frmStart];
+    [[self view] addSubview:mv];
+    
+    [UIView animateWithDuration:0.5
+                     animations: ^{ [self->mv setFrame: frmEnd]; }
+                     completion: nil];
+}
+
+-(IBAction)chooseMessage:(id)sender {
+    if (Tour != nil) {
+        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour ChooseContact]]
+                                                                 forFrame:[[self view] frame]
+                                                        completionHandler:^(void){[self choseMessage];}
+                                  ];
+        [[self view] addSubview:gv];
+        [[self view] bringSubviewToFront:gv];
+    }
+    else
+        [self choseMessage];
+}
+
+-(void)choseMessage {
+    if ([CurrentMessage badge]) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remit badge?"
+                                                        message:@"Are you sure you want to remit this badge?"
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"Yes Button", nil)
+                                              otherButtonTitles:NSLocalizedString(@"No Button", nil), nil];
+        [alert show];
+    }
+    else if ([CurrentMessage isPrayer])
+        [CurrentMessage submitPrayFor];
+    else {
+        //Block for showing the ContactPickerViewController
+        void (^showCVC)(void) = ^{
+            [Data initContacts];
+            [self performSegueWithIdentifier:@"SendMessage" sender:self];
+        };
+
+        if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusNotDetermined) {
+            [contactStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError* err) {
+                if (granted) {
+                    dispatch_async(dispatch_get_main_queue(), showCVC);
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self->sendMessage sendMessageTo:nil from:self];
+                    });
+                }
+            }
+             ];
+        }
+        else if ([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized) {
+            showCVC();
+        }
+        else
+            [sendMessage sendMessageTo:nil from:self];
+    }
+}
+
+-(void)contactPicker:(CNContactPickerViewController *)picker didSelectContact:(CNContact *)contact {
+    NSArray<CNContact*>* cs = [NSArray arrayWithObject:contact];
+    [self contactPicker:picker didSelectContacts:cs];
+}
+
+-(void)contactPicker:(CNContactPickerViewController *)picker didSelectContacts:(NSArray<CNContact *> *)contacts {
+    void(^showSendMsg)(void) = ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableArray* usercontacts = [[NSMutableArray alloc] init];
+            for (CNContact* c in contacts) {
+                NSMutableArray* phones = [[NSMutableArray alloc] init];
+                for (CNPhoneNumber* p in [c phoneNumbers]) {
+                    UserPhone* up = [[UserPhone alloc] initWithNumber:[[p valueForKey:@"value"] valueForKey:@"digits"]
+                                                                Label:[p valueForKey:@"label"]];
+                    [phones addObject:up];
+                }
+                UserContact* uc = [[UserContact alloc] initWithFName:[c givenName] LName:[c familyName] Phones:phones Photo:[c imageData]];
+                [usercontacts addObject:uc];
+            }
+            
+            [self->sendMessage sendMessageTo:usercontacts from:self];
+        });
+    };
+    
+    [self dismissViewControllerAnimated:YES completion:showSendMsg];
+}
+
+-(IBAction)quickMessage:(id)sender {
+    Message* m = CurrentMessage;
+    CurrentMessage = [[Message alloc] init];
+    [CurrentMessage setText:@""];
+    [CurrentMessage setQuicksend:YES];
+    [sendMessage sendMessageTo:[NSArray arrayWithObject:[m textno]] from:self];
+    CurrentMessage = m;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [SqlDb flagMessage:CurrentMessage];
+        [Data reloadData];
+        
+        NSMutableURLRequest* req = nil;
+        req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlRemitBadge]
+                                      cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                  timeoutInterval:30];
+        [req setHTTPBody:[[NSString stringWithFormat:@"app=%@&game=%ld", AppID, -1*(long)[CurrentMessage msgId]]
+                          dataUsingEncoding:NSUTF8StringEncoding]];
+        [req setHTTPMethod:@"POST"];
+        NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
+                                                                delegate:nil
+                                                        startImmediately:YES];
+        
+        [mv close:nil];
+    }
+}
+
 
 -(UITableViewCell*)createCategoryCell:(long)iCategory forWidth:(CGFloat)width {
-    BOOL supportPinned = YES;
-#ifdef OODLES
-    supportPinned = NO;
-#endif
     UITableViewCell* cell = [[UITableViewCell alloc] init];
-    [cell setBackgroundColor:[UIColor blackColor]];
-    [[cell textLabel] setTextColor:[UIColor whiteColor]];
-    NSString* categoryName = nil;
-    if (iCategory == 0)
-        categoryName = @"Settings";
-    else if (iCategory == 1 && supportPinned)
-        categoryName = @"Pinned";
-    else
-        categoryName = [[Data getCategories] objectAtIndex:iCategory- (supportPinned ? 2 : 1)];
+    [cell setBackgroundColor:[UIColor lightGrayColor]];
+    [[cell textLabel] setTextColor:[UIColor blackColor]];
+    NSString* categoryName = (iCategory == 0) ? allFilter : [[Data getCategories] objectAtIndex:iCategory-1];
     [[cell textLabel] setText:categoryName];
-    
-    if (!(iCategory == 0 || iCategory == 1 || [[Data getRequiredCategories] containsObject:categoryName])) {
-        CGRect frmCheck = CGRectMake(width-46, 2, 42, 42);
-        UICheckButton* chk = [[UICheckButton alloc] initWithFrame:frmCheck];
-        [chk setExtra:categoryName];
-        [chk addTarget:self action:@selector(chooseCategory:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [cell addSubview:chk];
-        if ([CategoryList objectForKey:categoryName] == nil)
-            [CategoryList setObject:@"1" forKey:categoryName];
-        BOOL selected = ![[CategoryList objectForKey:categoryName] isEqualToString: @"0"];
-        [chk setSelected:selected];
-    }
+    if (categoryName == categoryFilter)
+        [[cell textLabel] setFont:[TextUtil GetBoldFontForSize:20.0]];
+    else
+        [[cell textLabel] setFont:[TextUtil GetLightFontForSize:20.0]];
     
     return cell;
-}
-
--(IBAction)chooseCategory:(id)sender {
-    UICheckButton* chk = (UICheckButton*)sender;
-    [chk setSelected:![chk isSelected]];
-    
-    if ([[CategoryList objectForKey:[chk extra]] isEqualToString:@"0"]) {
-        [CategoryList setObject:@"1" forKey:[chk extra]];
-        [SqlDb addChosenCategory:[chk extra]];
-    }
-    else {
-        [CategoryList setObject:@"0" forKey:[chk extra]];
-        [SqlDb removeChosenCategory:[chk extra]];
-    }
-
-    //[Settings SaveSetting:SettingCategoryList withValue:CategoryList];
-    for (NSString*c in [Data getCategories]) {
-        MessageCategory*mc = [Data getCategory:c];
-        [mc setChosen:![[CategoryList objectForKey:c] isEqualToString:@"0"]];
-    }
-    
-    [Data resortMessages];
-    [self dataRefresh];
 }
 
 -(IBAction)home:(id)sender {
@@ -636,7 +945,9 @@ const int maxRecentIDs = 10;
 }
 
 -(IBAction)addEvent:(id)sender {
+    AddContent = [[[self navigationItem] rightBarButtonItem] tag];
     [self performSegueWithIdentifier:@"AddEvent" sender:self];
+    
 }
 
 -(IBAction)gotoBadgeCategory:(id)sender {
@@ -683,16 +994,19 @@ const int maxRecentIDs = 10;
     if (categoryTable == nil) {
         UIView* parent = [messages superview];
         CGRect frmTable = [messages frame];
-        frmTable.size.width = frmTable.size.width * 0.8;
+        frmTable.size.width = 2*[messages frame].size.width / 3;
+        frmTable.origin.x = [messages frame].size.width / 6;
+        //frmTable.size.height = 2*[messages frame].size.height / 3;
+        frmTable.size.height = MIN(46*([[Data getCategories] count]+1), [messages frame].size.height-50);
         CGRect frmNext = frmTable;
-        frmTable.origin.x = -frmTable.size.width;
+        frmTable.size.height = 0;
         categoryTable = [[UITableView alloc] initWithFrame:frmTable];
         [categoryTable setDelegate:self];
         [categoryTable setDataSource:self];
-        [categoryTable setBackgroundColor:[UIColor blackColor]];
+        [categoryTable setBackgroundColor:[UIColor lightGrayColor]];
         
         [parent addSubview:categoryTable];
-        [UIView animateWithDuration:0.5 animations:^{[categoryTable setFrame:frmNext];}];
+        [UIView animateWithDuration:0.5 animations:^{[self->categoryTable setFrame:frmNext];}];
     }
     else {
         [self hideCategoryList];
@@ -701,19 +1015,29 @@ const int maxRecentIDs = 10;
 
 -(void)hideCategoryList {
     CGRect frmNext = [categoryTable frame];
-    frmNext.origin.x = -frmNext.size.width;
+    frmNext.size.height = 0;
     [UIView animateWithDuration:0.5
-                     animations:^{[categoryTable setFrame:frmNext];}
+                     animations:^{[self->categoryTable setFrame:frmNext];}
                      completion:^(BOOL finished){
-                         [categoryTable removeFromSuperview];
-                         categoryTable = nil;
+                         [self->categoryTable removeFromSuperview];
+                         self->categoryTable = nil;
                      }];
 }
 
+/*
+-(void)showGuidedTour {
+    GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour Intro]] forFrame:[[self view] frame]];
+    [[self view] addSubview:gv];
+}
+*/
+/*
 -(void)showWalkthrough {
-    CGRect frmView = [[self view] frame];
-    frmView.origin.y += 60;
-    frmView.size.height -= 60;
+    [self showGuidedTour];
+    return;
+ 
+    CGRect frmView = [messages frame];// [[self view] frame];
+    //frmView.origin.y += 60;
+    //frmView.size.height -= 60;
     walkthroughView = [[UIView alloc] initWithFrame:frmView];
     [walkthroughView setBackgroundColor:[UIColor whiteColor]];
     [[self view] addSubview:walkthroughView];
@@ -723,7 +1047,7 @@ const int maxRecentIDs = 10;
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [btnClose setTitle:@"Done" forState:UIControlStateNormal];
-    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:15]];
+    [[btnClose titleLabel] setFont:[TextUtil GetDefaultFontForSize:15.0]];
     [btnClose addTarget:self action:@selector(closeWalkthrough:)
        forControlEvents:UIControlEventTouchUpInside];
     [walkthroughView addSubview:btnClose];
@@ -750,13 +1074,17 @@ const int maxRecentIDs = 10;
     [pages setNumberOfPages:pagecount];
     int x = 0;
 #ifdef UNIVERSITY
+    // mdpi: 166 X 288
+    // hdpi: 252 X 437
+    // xhdpi: 333 X 577
+    // xxhdpi: 504 X 874
     NSString* images[] = {
-        @"walk_one", @"walk_two", @"walk_three", @"walk_four", @"walk_five"
+        @"walkthru_one", @"walkthru_two", @"walkthru_three", @"walkthru_four", @"walkthru_five"
     };
     NSString* txts[] = {
         @"Every day, you’ll find great local deals, great events, university news and other fun stuff.",
-        @"Choose a text to see more, save it for later or share it with someone.",
-        @"Choose a friend or group. If they have more than one number, swipe left and select the best number.",
+        @"Choose a text to share it with friends, see more, or follow the sponsor.",
+        @"Choose a friend or group. If they have more than one number, swipe left and select the best number ...",
         @"... and before you send it, edit it to give it that personal touch.",
         @"Touch the cog to personalize TextMuse – choose which categories you want to see and send us feedback."
     };
@@ -778,6 +1106,14 @@ const int maxRecentIDs = 10;
     NSString* images[] = {};
     NSString* txts[] = {};
 #endif
+#ifdef YOUTHREACH
+    NSString* images[] = {};
+    NSString* txts[] = {};
+#endif
+#ifdef NRCC
+    NSString* images[] = {};
+    NSString* txts[] = {};
+#endif
     CGFloat txtHeight = 80;
     frmScroll.size.height -= frmScroll.origin.y;
     for (int i=0; i<pagecount; i++) {
@@ -796,7 +1132,7 @@ const int maxRecentIDs = 10;
 #ifdef OODLES
             [hdr setText:@"Welcome to Oodles!"];
 #endif
-            [hdr setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+            [hdr setFont:[TextUtil GetDefaultFontForSize:24.0]];
             [hdr setTextColor:[UIColor blackColor]];
             [hdr setTextAlignment:NSTextAlignmentCenter];
             [scroller addSubview:hdr];
@@ -811,7 +1147,7 @@ const int maxRecentIDs = 10;
         //[lbl sizeToFit];
         [lbl setText:txts[i]];
         CGFloat fntSize = frmText.size.width > 330 ? 18 : 14;
-        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:fntSize]];
+        [lbl setFont:[TextUtil GetDefaultFontForSize:fntSize]];
         [lbl setTextColor:[UIColor blackColor]];
         [lbl setTextAlignment:NSTextAlignmentCenter];
         [lbl setNumberOfLines:0];
@@ -823,6 +1159,7 @@ const int maxRecentIDs = 10;
     
     [[[self navigationItem] rightBarButtonItem] setEnabled:NO];
 }
+*/
 
 -(void)showChooseSkin {
     CGRect frm = [[self view] frame];
@@ -830,11 +1167,20 @@ const int maxRecentIDs = 10;
     frm.origin.y = topmargin; // + frm.size.height;
     frm.size.height -= topmargin;
     
-    ChooseSkinView* skinview = [[ChooseSkinView alloc] initWithFrame:frm];
+    ChooseSkinView* skinview =
+        [[ChooseSkinView alloc] initWithFrame:frm
+                                     complete:^{ [self performRegistration]; }];
     [[self view] addSubview:skinview];
 }
 
+-(void)closeSkin {
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView != scroller)
+        return;
+    
     CGFloat pageWidth = [scroller frame].size.width;
     float fractionalPage = [scroller contentOffset].x / pageWidth;
     NSInteger page = lround(fractionalPage);
@@ -862,7 +1208,7 @@ const int maxRecentIDs = 10;
 
 -(void)performRegistration {
     [[[self navigationItem] rightBarButtonItem] setEnabled:YES];
-    [[[self  navigationItem] backBarButtonItem] setTitle:@"Skip"];
+    [[[self navigationItem] backBarButtonItem] setTitle:@"Skip"];
     ShowIntro = NO;
     [self performSegueWithIdentifier:@"registerInitial" sender:self];
 }

@@ -6,15 +6,31 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TextMuse3/DataAccess.m"
-            timestampString = "517526404.56944"
+            filePath = "../../TextMuse3IPhone/TextMuse3/TextMuse3/ImageDownloader.m"
+            timestampString = "578287837.9145809"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
+            landmarkName = "-connection:didFailWithError:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../TextMuse3IPhone/TextMuse3/TextMuse3/DataAccess.m"
+            timestampString = "578287886.762954"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
             landmarkName = "-loadFromInternet"
             landmarkType = "7">
          </BreakpointContent>
@@ -25,13 +41,30 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TextMuse3/MessagesViewController.m"
-            timestampString = "514507563.527131"
+            filePath = "TextMuse3/Message.m"
+            timestampString = "578288889.504979"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "421"
+            endingLineNumber = "421"
+            landmarkName = "+ContainsImage:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            condition = "[[msg text] containsString:@&quot;Lavender&quot;]"
+            continueAfterRunningActions = "No"
+            filePath = "TextMuse3/ImageMessageTableViewCell.m"
+            timestampString = "578290320.262507"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "-setMsgImage:forFrame:withDefault:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -40,14 +73,15 @@
          <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
+            condition = "[[_msg text] containsString:@&quot;Lavender&quot;]"
             continueAfterRunningActions = "No"
-            filePath = "TextMuse3/DataAccess.m"
-            timestampString = "517526229.588596"
+            filePath = "TextMuse3/MessageTableViewCell.m"
+            timestampString = "578289844.26987"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "-loadFromFile"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "-showForSize:usingParent:withColor:textColor:titleColor:title:sponsor:message:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

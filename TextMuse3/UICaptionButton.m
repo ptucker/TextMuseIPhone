@@ -8,6 +8,7 @@
 
 #import "UICaptionButton.h"
 #import "ImageUtil.h"
+#import "TextUtil.h"
 
 @implementation UICaptionButton
 
@@ -102,13 +103,13 @@
     [_caption setText:_text];
     [_caption setFrame:frmBottomText];
     CGFloat fontsize = (_fontsize == 0) ? frmBottomText.size.height : _fontsize;
-    UIFont* fnt = [UIFont fontWithName:@"Lato-Medium" size:fontsize];
+    UIFont* fnt = [TextUtil GetBoldFontForSize:fontsize];
     [_caption setFont:fnt];
     
     [_rcaption setText:_rtext];
     [_rcaption setFrame:frmRightText];
     fontsize = 0.75 * frmRightText.size.height;
-    fnt = [UIFont fontWithName:@"Lato-Medium" size:fontsize];
+    fnt = [TextUtil GetBoldFontForSize:fontsize];
     [_rcaption setFont:fnt];
 }
 
@@ -132,7 +133,7 @@
 }
 
 -(void)setCaptionFontSize:(CGFloat)size {
-    [_caption setFont:[UIFont fontWithName:@"Lato-Medium" size:size]];
+    [_caption setFont:[TextUtil GetBoldFontForSize:size]];
 }
 
 -(void)setImage:(UIImage*)img {

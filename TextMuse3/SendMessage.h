@@ -11,16 +11,17 @@
 #import <MessageUI/MessageUI.h>
 #import "ImageDownloader.h"
 
-extern MFMessageComposeViewController* msgcontroller;
+//extern MFMessageComposeViewController* msgcontroller;
 
 @interface SendMessage : NSObject<MFMessageComposeViewControllerDelegate> {
     UIViewController* _parent;
-    ImageDownloader* loader;
+    //ImageDownloader* loader;
     NSMutableData* inetdata;
+    NSMutableArray* contacts;
     int sendcount;
 }
 
--(void) sendMessageTo:(NSArray*) contactlist from:(UIViewController*)parent;
+-(void)sendMessageTo:(NSArray*) contactlist from:(UIViewController*)parent;
 -(void)updateMessageCount:(int)msgId withCount:(unsigned int)c;
 -(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result;
 

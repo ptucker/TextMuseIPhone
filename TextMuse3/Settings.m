@@ -16,6 +16,8 @@ NSString* InitialCategory = @"Trending";
 BOOL SaveRecentContacts = true;
 BOOL SaveRecentMessages = false;
 BOOL ShowIntro = true;
+BOOL ShowSponsor = true;
+BOOL ShowBadge = true;
 BOOL AskRegistration = true;
 
 NSString* SettingInitialCategory = @"SettingInitialCategory";
@@ -38,7 +40,10 @@ NSString* SettingNotificationMsgs = @"SettingNotificationMsgs";
 NSString* SettingPreamble = @"SettingPreamble";
 NSString* SettingInquiry = @"SettingInquiry";
 NSString* SettingShowIntro = @"SettingShowIntro";
+NSString* SettingShowSponsor = @"SettingSponsor";
+NSString* SettingShowBadge = @"SettingBadge";
 NSString* SettingAskRegistration = @"SettingAskRegistration";
+NSString* SettingGroupMessages = @"SettingGroupMesages";
 NSString* SettingNamedGroups = @"SettingNamedGroups";
 NSString* SettingChosenCategories = @"SettingChosenCategories";
 NSString* SettingKnownCategories = @"SettingKnownCategories";
@@ -72,6 +77,7 @@ NSMutableArray* ReminderDates = nil;
 NSString* NotificationDate = nil;
 NSMutableArray* NotificationDates = nil;
 NSMutableArray* NotificationMsgs = nil;
+BOOL GroupMessages = YES;
 NSMutableDictionary* NamedGroups = nil;
 BOOL SortLastName = YES;
 NSMutableArray* ChosenCategories = nil;
@@ -141,6 +147,7 @@ NSMutableSet* SponsorFollows;
     RecentMessages = [[NSMutableArray alloc] init];
     SortLastName = NO;
     NotificationOn = YES;
+    GroupMessages = YES;
     YourMessages = [[NSMutableArray alloc] init];
     for (int i=0; i<10; i++)
         [YourMessages addObject:[[Message alloc] initFromUserText:@"" atIndex:i]];
@@ -210,9 +217,8 @@ NSMutableSet* SponsorFollows;
             NotificationDates = [[NSMutableArray alloc] initWithObjects:NotificationDate, nil];
         }
 
-        if ([defs stringForKey:SettingNotificationOn] != nil &&
-            [[defs stringForKey:SettingNotificationOn] length] == 1)
-            NotificationOn = [[defs stringForKey:SettingNotificationOn] isEqualToString:@"1"];
+        if ([defs stringForKey:SettingNotificationOn] != nil)
+            NotificationOn = [[defs stringForKey:SettingNotificationOn] isEqualToString:@"YES"];
         if ([defs arrayForKey:SettingNotificationMsgs] != nil)
             NotificationMsgs = [NSMutableArray arrayWithArray: [defs arrayForKey:SettingNotificationMsgs]];
         if ([defs stringForKey:SettingPreamble] != nil)
@@ -223,11 +229,18 @@ NSMutableSet* SponsorFollows;
         if ([defs stringForKey:SettingShowIntro] != nil &&
             [[defs stringForKey:SettingShowIntro] length] == 1)
             ShowIntro = [[defs stringForKey:SettingShowIntro] isEqualToString:@"1"];
+        if ([defs stringForKey:SettingShowSponsor] != nil &&
+            [[defs stringForKey:SettingShowSponsor] length] == 1)
+            ShowSponsor = [[defs stringForKey:SettingShowSponsor] isEqualToString:@"1"];
+        if ([defs stringForKey:SettingShowBadge] != nil &&
+            [[defs stringForKey:SettingShowBadge] length] == 1)
+            ShowBadge = [[defs stringForKey:SettingShowBadge] isEqualToString:@"1"];
         if ([defs stringForKey:SettingAskRegistration] != nil &&
             [[defs stringForKey:SettingAskRegistration] length] == 1)
             AskRegistration = [[defs stringForKey:SettingAskRegistration] isEqualToString:@"1"];
 
-        //[defs setObject:nil forKey:SettingNamedGroups];
+        if ([defs stringForKey:SettingGroupMessages] != nil)
+            GroupMessages = [[defs stringForKey:SettingGroupMessages] isEqualToString: @"YES"];
         if ([defs arrayForKey:SettingNamedGroups] != nil) {
             NSArray* grps = [defs arrayForKey:SettingNamedGroups];
             for (NSString* grp in grps) {

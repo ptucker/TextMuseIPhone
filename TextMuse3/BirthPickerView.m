@@ -8,6 +8,7 @@
 
 #import "BirthPickerView.h"
 #import "Settings.h"
+#import "TextUtil.h"
 
 // Identifiers of components
 #define MONTH ( 0 )
@@ -193,7 +194,7 @@ const NSInteger numberOfComponents = 2;
     [label setTextAlignment:NSTextAlignmentCenter];
     [label setBackgroundColor: [UIColor clearColor]];
     [label setTextColor: selected ? [UIColor blueColor] : [UIColor blackColor]];
-    [label setFont: [UIFont fontWithName:@"Lato-Regular" size:16.0]];
+    [label setFont: [TextUtil GetDefaultFontForSize:16.0]];
     [label setUserInteractionEnabled: NO];
     
     [label setTag: LABEL_TAG];

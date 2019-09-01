@@ -13,6 +13,7 @@
 #import "Settings.h"
 #import "ChoosePhoneView.h"
 #import "SendMessage.h"
+#import "TextUtil.h"
 
 @interface ContactsTableViewController ()
 
@@ -50,8 +51,8 @@ NSMutableArray* searchContacts;
     [contacts setDelegate:self];
     [contacts setDataSource:self];
     
-    fontBold = [UIFont fontWithName:@"Lato-Regular" size:18];
-    fontLight = [UIFont fontWithName:@"Lato-Light" size:18];
+    fontBold = [TextUtil GetDefaultFontForSize:18.0];
+    fontLight = [TextUtil GetLightFontForSize:18.0];
     
     [self fixCancelButton:searchbar];
     
@@ -146,7 +147,7 @@ NSMutableArray* searchContacts;
                                                              [tableView frame].size.width-100, 34.0)];
 
     [lbl setText:[self tableView:tableView titleForHeaderInSection:section]];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:15.0]];
+    [lbl setFont:[TextUtil GetDefaultFontForSize:15.0]];
     [lbl setTextColor:[UIColor blackColor]];
     [customView addSubview:lbl];
     

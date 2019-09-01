@@ -299,6 +299,7 @@ NSObject* lockDownloading;
 }
 
 -(void)connection:(NSURLConnection *)_connection didFailWithError:(NSError *)error {
+    NSLog([NSString stringWithFormat:@"download %@ failed: %@", _url, [error localizedDescription]]);
     if (retryCount < MAXRETRY) {
         retryCount++;
         
@@ -311,7 +312,7 @@ NSObject* lockDownloading;
             if (downloading == 0)
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
         }
-        //NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
+        NSLog([NSString stringWithFormat:@"download failed: %@", [error localizedDescription]]);
     }
 }
 

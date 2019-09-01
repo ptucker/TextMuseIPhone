@@ -15,6 +15,7 @@
 #import "Settings.h"
 #import "ChooseSkinView.h"
 #import "RndMessagesViewController.h"
+#import "TextUtil.h"
 
 @interface CategoriesViewController ()
 
@@ -160,7 +161,7 @@
     CGRect frmTitle = CGRectMake(80, frm.size.height - 100, frm.size.width - 160, 44);
     UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
     [title setTextAlignment:NSTextAlignmentCenter];
-    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:28]];
+    [title setFont:[TextUtil GetBoldFontForSize:28.0]];
     [title setTextColor:[Skin createColor1]];
     //[title setText:[NSString stringWithFormat:@"%@ %@", [Skin SkinName], bundleName]];
     [title setText:[NSString stringWithFormat:@"%@", bundleName]];
@@ -190,7 +191,7 @@
     CGRect frmTitle = CGRectMake(10, y + frmLogo.size.height + 10, frm.size.width - 20, 44);
     UILabel* title = [[UILabel alloc] initWithFrame:frmTitle];
     [title setTextAlignment:NSTextAlignmentCenter];
-    [title setFont:[UIFont fontWithName:@"Lato-Medium" size:44]];
+    [title setFont:[TextUtil GetBoldFontForSize:44]];
     [title setTextColor:[UIColor whiteColor]];
     [title setText:bundleName];
     [splash addSubview:title];
@@ -201,7 +202,7 @@
     
     UILabel* version = [[UILabel alloc] initWithFrame:frmVersion];
     [version setTextAlignment:NSTextAlignmentCenter];
-    [version setFont:[UIFont fontWithName:@"Lato-Light" size:30]];
+    [version setFont:[TextUtil GetLightFontForSize:30.0]];
     [version setTextColor:[UIColor whiteColor]];
     [version setText:[NSString stringWithFormat:@"%@.%@", ver, build]];
     [splash addSubview:version];
@@ -434,7 +435,7 @@
         [categoryTable setBackgroundColor:[UIColor blackColor]];
     
         [parent addSubview:categoryTable];
-        [UIView animateWithDuration:0.5 animations:^{[categoryTable setFrame:frmNext];}];
+        [UIView animateWithDuration:0.5 animations:^{[self->categoryTable setFrame:frmNext];}];
     }
     else {
         [self hideCategoryList];
@@ -445,10 +446,10 @@
     CGRect frmNext = [categoryTable frame];
     frmNext.origin.x = -frmNext.size.width;
     [UIView animateWithDuration:0.5
-                     animations:^{[categoryTable setFrame:frmNext];}
+                     animations:^{[self->categoryTable setFrame:frmNext];}
                      completion:^(BOOL finished){
-                         [categoryTable removeFromSuperview];
-                         categoryTable = nil;
+                         [self->categoryTable removeFromSuperview];
+                         self->categoryTable = nil;
                      }];
 }
 
@@ -462,7 +463,7 @@
     CGRect frmLabel = CGRectMake(0, 0, frmButton.size.width, frmButton.size.height);
     
     UILabel* lblSuggestion = [[UILabel alloc] initWithFrame:frmLabel];
-    [lblSuggestion setFont:[UIFont fontWithName:@"Lato-Medium" size:20]];
+    [lblSuggestion setFont:[TextUtil GetBoldFontForSize:20.0]];
     [lblSuggestion setTextAlignment:NSTextAlignmentCenter];
     [lblSuggestion setNumberOfLines:0];
     [lblSuggestion setTextColor:[UIColor whiteColor]];
@@ -546,7 +547,7 @@
     [UIView animateWithDuration:1.5
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{ [randomMessages scrollRectToVisible:frmNext animated:NO]; }
+                     animations:^{ [self->randomMessages scrollRectToVisible:frmNext animated:NO]; }
                      completion:NULL];
     //[randomMessages scrollRectToVisible:frmNext animated:YES];
 }
@@ -564,7 +565,7 @@
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [btnClose setTitle:@"Done" forState:UIControlStateNormal];
-    [[btnClose titleLabel] setFont:[UIFont fontWithName:@"Lato-Regular" size:15]];
+    [[btnClose titleLabel] setFont:[TextUtil GetDefaultFontForSize:15.0]];
     [btnClose addTarget:self action:@selector(closeWalkthrough:)
        forControlEvents:UIControlEventTouchUpInside];
     [walkthroughView addSubview:btnClose];
@@ -610,7 +611,7 @@
             
             UILabel* hdr = [[UILabel alloc] initWithFrame:frmHeader];
             [hdr setText:@"Welcome to TextMuse!"];
-            [hdr setFont:[UIFont fontWithName:@"Lato-Regular" size:24]];
+            [hdr setFont:[TextUtil GetDefaultFontForSize:24.0]];
             [hdr setTextColor:[UIColor blackColor]];
             [hdr setTextAlignment:NSTextAlignmentCenter];
             [scroller addSubview:hdr];
@@ -625,7 +626,7 @@
         //[lbl sizeToFit];
         [lbl setText:txts[i]];
         CGFloat fntSize = frmText.size.width > 330 ? 18 : 14;
-        [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:fntSize]];
+        [lbl setFont:[TextUtil GetDefaultFontForSize:fntSize]];
         [lbl setTextColor:[UIColor blackColor]];
         [lbl setTextAlignment:NSTextAlignmentCenter];
         [lbl setNumberOfLines:0];

@@ -13,29 +13,34 @@
 #import "GlobalState.h"
 #import "Settings.h"
 #import "AppDelegate.h"
+#import "TextUtil.h"
+#import "GuidedTourStepView.h"
 
 @implementation ChooseSkinView
 
-NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
+NSString* urlGetSkins = @"https://www.textmuse.com/admin/getskins.php";
 
--(id) initWithFrame:(CGRect)frame {
+-(id) initWithFrame:(CGRect)frame complete:(void (^)(void))completionHandler {
     self = [super initWithFrame:frame];
     
+    completion = completionHandler;
     [self setBackgroundColor:[UIColor whiteColor]];
     
     CGRect frmTitle = CGRectMake(10, frame.origin.y, frame.size.width-20, 32);
     UILabel* lblTitle = [[UILabel alloc] initWithFrame:frmTitle];
     [lblTitle setText:@"Choose Version"];
-    [lblTitle setFont:[UIFont fontWithName:@"Lato-Regular" size:20]];
+    [lblTitle setFont:[TextUtil GetDefaultFontForSize:20.0]];
     [lblTitle setTextColor:[UIColor blackColor]];
     [self addSubview:lblTitle];
     
+    /*
     CGRect frmClose = CGRectMake(frame.size.width-32, frame.origin.y, 32, 32);
     UIButton* btnClose = [[UIButton alloc] initWithFrame:frmClose];
     [btnClose setTitle:@"X" forState:UIControlStateNormal];
     [btnClose setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btnClose addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:btnClose];
+    */
     
     CGRect frmTable = frame;
     frmTable.origin.y += 32;
@@ -50,6 +55,9 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
 #ifdef OODLES
     getskins = [NSString stringWithFormat:@"%@?edition=91", urlGetSkins];
 #endif
+#ifdef NRCC
+    getskins = [NSString stringWithFormat:@"%@?edition=115", urlGetSkins];
+#endif
     NSURL* url = [NSURL URLWithString:getskins];
     NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
     
@@ -59,16 +67,18 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [activityView setHidesWhenStopped:YES];
     [activityView startAnimating];
     [self addSubview:activityView];
+    
+    if (Tour != nil) {
+        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour Intro]] forFrame:[self frame]];
+        [self addSubview:gv];
+        [self bringSubviewToFront:gv];
+    }
 
     NSURLConnection* conn = [[NSURLConnection alloc] initWithRequest:req
                                                             delegate:self
                                                     startImmediately:YES];
 
     return self;
-}
-
--(IBAction)close:(id)sender {
-    [self removeFromSuperview];
 }
 
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
@@ -118,7 +128,7 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [cell addSubview:img];
     
     UILabel* lbl = [[UILabel alloc] initWithFrame:CGRectMake(70, 4, [self frame].size.width-74, 40)];
-    [lbl setFont:[UIFont fontWithName:@"Lato-Regular" size:24.0]];
+    [lbl setFont:[TextUtil GetDefaultFontForSize:24]];
     [lbl setText:[skinNames objectAtIndex:[indexPath row]]];
     [lbl setTextColor:[SkinInfo createColor:[skinColors objectAtIndex:[indexPath row]]]];
     [cell addSubview:lbl];
@@ -140,27 +150,37 @@ NSString* urlGetSkins = @"http://www.textmuse.com/admin/getskins.php";
     [Data reloadData];
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate registerRemoteNotificationWithAzure];
-    
-    [self close:nil];
+
+    if (Tour != nil) {
+        GuidedTourStepView* gv = [[GuidedTourStepView alloc] initWithStep:[Tour getStepForKey:[Tour ChooseContent]] forFrame:[self frame]];
+        [[self superview] addSubview:gv];
+        [[self superview] bringSubviewToFront:gv];
+    }
+
+    [self removeFromSuperview];
+    if (completion)
+        completion();
 }
 
 
 -(void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-    
+    NSLog(@"Error parsing skins");
 }
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI
 qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if (skinNames == nil) {
         skinNames = [[NSMutableArray alloc] init];
-#ifndef OODLES
-        [skinNames addObject:@"Main"];
         skinIcons = [[NSMutableArray alloc] init];
-        [skinIcons addObject:@"TransparentButterfly.png"];
         skinIDs = [[NSMutableArray alloc] init];
-        [skinIDs addObject:@"-1"];
         skinColors = [[NSMutableArray alloc] init];
+#ifdef UNIVERSITY
+        /*
+        [skinNames addObject:@"Main"];
+        [skinIcons addObject:@"TransparentButterfly.png"];
+        [skinIDs addObject:@"-1"];
         [skinColors addObject:@"000000"];
+         */
 #endif
     }
     

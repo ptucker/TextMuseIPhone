@@ -12,6 +12,7 @@
 #import "ImageDownloader.h"
 #import "UICaptionButton.h"
 #import "SendMessage.h"
+#import "RndMessagesViewController.h"
 
 @interface MessageTableViewCell : UITableViewCell {
     ImageDownloader* downloader;
@@ -19,14 +20,13 @@
     CGRect frmParent;
     CGRect frmLogo;
     CGRect frmTitle;
-    CGRect frmSeeAll;
     CGRect frmLike;
     CGRect frmPin;
     CGRect frmSend;
     CGRect frmContent;
     UIView* viewParent;
     Message* _msg;
-    UINavigationController* _nav;
+    RndMessagesViewController* _nav;
     SendMessage* sendMessage;
     
     UITableView* _tableView;
@@ -34,13 +34,11 @@
     IBOutlet UILabel* lblContent;
     IBOutlet UILabel* lblTitle;
     IBOutlet UIImageView* imgLogo;
-    IBOutlet UIButton* btnSeeAll;
-    IBOutlet UICaptionButton* btnLike;
-    IBOutlet UICaptionButton* btnPin;
-    IBOutlet UICaptionButton* btnSend;
+    IBOutlet UIButton* btnLike;
+    //IBOutlet UICaptionButton* btnPin;
+    IBOutlet UIButton* btnSend;
 }
 
-+(CGSize) GetContentSizeForImage:(UIImage*) img inSize:(CGSize)sizeParent;
 +(CGFloat) GetCellHeightForMessage:(Message*)msg inSize:(CGSize)size;
 
 -(void)showForSize:(CGSize)size

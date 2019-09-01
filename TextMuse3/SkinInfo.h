@@ -34,6 +34,9 @@
 @property NSString* HomeURL;
 
 +(UIColor*)createColor:(NSString*)color;
++(NSString*) Color1TextMuse;
++(NSString*) Color2TextMuse;
++(NSString*) Color3TextMuse;
 
 -(NSData*)getBadgeImage;
 

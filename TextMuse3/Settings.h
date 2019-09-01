@@ -10,6 +10,7 @@
 #import "DataAccess.h"
 #import "SkinInfo.h"
 #import "UserInfo.h"
+#import "GuidedTour.h"
 #import <Foundation/Foundation.h>
 
 @interface Settings : NSObject
@@ -66,7 +67,10 @@ extern NSString* SettingNotificationMsgs;
 extern NSString* SettingPreamble;
 extern NSString* SettingInquiry;
 extern NSString* SettingShowIntro;
+extern NSString* SettingShowSponsor;
+extern NSString* SettingShowBadge;
 extern NSString* SettingAskRegistration;
+extern NSString* SettingGroupMessages;
 extern NSString* SettingNamedGroups;
 extern NSString* SettingChosenCategories;
 extern NSString* SettingKnownCategories;
@@ -95,12 +99,15 @@ extern NSString* Preamble;
 extern NSString* Inquiry;
 extern BOOL NotificationOn;
 extern BOOL NotificationRegistered;
+extern BOOL GroupMessages;
 extern NSMutableDictionary* NamedGroups;
 extern BOOL SortLastName;
 //extern NSMutableArray* ChosenCategories;
 //extern NSMutableDictionary* KnownCategories;
 extern NSMutableDictionary* CategoryList;
 extern BOOL ShowIntro;
+extern BOOL ShowSponsor;
+extern BOOL ShowBadge;
 extern BOOL AskRegistration;
 extern UserInfo* CurrentUser;
 extern NSString* AppID;

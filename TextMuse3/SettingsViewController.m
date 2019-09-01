@@ -22,12 +22,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UIBarButtonItem* rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
-                                                                    style:UIBarButtonItemStylePlain
-                                                                   target:self
-                                                                   action:@selector(saveSettings)];
-    [[self navigationItem] setRightBarButtonItem: rightButton];
-    
     [sortContacts setOn:SortLastName];
     [notifications setOn:NotificationOn];
     [contacts setOn:SaveRecentContacts];
@@ -46,7 +40,13 @@
 #ifdef HUMANIX
     [btnVersions setHidden:true];
 #endif
+#ifdef YOUTHREACH
+    [btnVersions setHidden:true];
+#endif
 #ifdef OODLES
+    [btnVersions setHidden:true];
+#endif
+#ifdef NRCC
     [btnVersions setHidden:true];
 #endif
     
@@ -65,8 +65,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    if (discardChanges)
-        CategoryList = [NSMutableDictionary dictionaryWithDictionary:tmpCategoryList];
+    [self saveSettings];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -180,7 +179,7 @@
 }
 
 -(IBAction)registerUser:(id)sender {
-    
+
 }
 
 -(IBAction)feedback:(id)sender {

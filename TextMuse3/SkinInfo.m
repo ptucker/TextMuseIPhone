@@ -22,6 +22,40 @@
  @property(nonatomic)  NSString* HomeURL;
  */
 
++(NSString*) Color1TextMuse {
+    NSString* ret = @"ed6923";//  @"00ac65";
+#ifdef NRCC
+    ret = @"eb181f";
+#endif
+#ifdef YOUTHREACH
+    ret = @"000000";
+#endif
+    return ret;
+}
+
++(NSString*) Color2TextMuse {
+    NSString* ret = @"1c9a9e";// @"e9662c"; //[UIColor colorWithRed:233/255.0 green:102/255.0 blue:44/255.0 alpha:1.0];
+#ifdef NRCC
+    ret = @"2b388a";
+#endif
+#ifdef YOUTHREACH
+    ret = @"be1009";
+#endif
+    return ret;
+}
+
++(NSString*) Color3TextMuse {
+    NSString* ret = @"0d395d";//  @"16c2ef"; //[UIColor colorWithRed:22/255.0 green:194/255.0 blue:239/255.0 alpha:1.0];
+#ifdef NRCC
+    ret = @"ffffff";
+#endif
+#ifdef YOUTHREACH
+    ret = @"00009a";
+#endif
+
+    return ret;
+}
+
 - (id)initWithCoder:(NSCoder *)decoder {
     
     

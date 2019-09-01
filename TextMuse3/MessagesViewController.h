@@ -11,7 +11,7 @@
 #import "MessageView.h"
 #import "UICaptionButton.h"
 
-@interface MessagesViewController : UIViewController<UIScrollViewDelegate, NSURLConnectionDelegate> {
+@interface MessagesViewController : UIViewController<NSURLConnectionDelegate, UIScrollViewDelegate> {
     IBOutlet UIView* header;
     IBOutlet UILabel* headerLabel;
     IBOutlet UICaptionButton* selectButton;

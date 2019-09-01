@@ -20,23 +20,23 @@
     for (int i=0; i<[ps count]; i++) {
         UserPhone* up = [ps objectAtIndex:i];
         
-        if ([[up label] isEqualToString:@"iphone"]) {
+        if ([[up label] containsString:@"iphone"]) {
             numberToUse = [up number];
             ilabel = 1;
         }
-        if ([[up label] isEqualToString:@"mobile"] && (numberToUse == nil || ilabel > 2)) {
+        if ([[up label] containsString:@"mobile"] && (numberToUse == nil || ilabel > 2)) {
             numberToUse = [up number];
             ilabel = 2;
         }
-        if ([[up label] isEqualToString:@"main"] && (numberToUse == nil || ilabel > 3)) {
+        if ([[up label] containsString:@"main"] && (numberToUse == nil || ilabel > 3)) {
             numberToUse = [up number];
             ilabel = 3;
         }
-        if ([[up label] isEqualToString:@"home"] && (numberToUse == nil || ilabel > 4)) {
+        if ([[up label] containsString:@"home"] && (numberToUse == nil || ilabel > 4)) {
             numberToUse = [up number];
             ilabel = 4;
         }
-        if ([[up label] isEqualToString:@"work"] && (numberToUse == nil || ilabel > 5)) {
+        if ([[up label] containsString:@"work"] && (numberToUse == nil || ilabel > 5)) {
             numberToUse = [up number];
             ilabel = 5;
         }
