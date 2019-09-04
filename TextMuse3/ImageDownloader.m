@@ -151,7 +151,8 @@ NSObject* lockDownloading;
     
     if (ytid != nil)
         u = [NSString stringWithFormat:@"http://img.youtube.com/vi/%@/default.jpg", ytid];
-    [ActiveURLs setValue:@"" forKey:u];
+    if (u != nil) //setObject:forKey: throws exception if key is nil
+        [ActiveURLs setValue:@"" forKey:u];
     
     NSString* cachedFile = nil;
     @synchronized(CachedMediaMapping) {
