@@ -68,22 +68,5 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            condition = "[[_msg text] containsString:@&quot;Lavender&quot;]"
-            continueAfterRunningActions = "No"
-            filePath = "TextMuse3/MessageTableViewCell.m"
-            timestampString = "578289844.26987"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "-showForSize:usingParent:withColor:textColor:titleColor:title:sponsor:message:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

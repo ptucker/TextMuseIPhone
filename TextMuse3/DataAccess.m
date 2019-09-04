@@ -184,8 +184,11 @@ const int HIDEMESSAGE = 1000;
     sponsor = @"&sponsor=171";
 #endif
     //24 Sept 2018 -- added "address" to conditionally bring addresses in XML.
-    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@&address=1%@",
-                      urlNotes, lastDownload, appid, notif, sponsor, prayer];
+    //04 Sept 2019 -- added timezone to be more accurate with note live and expire dates
+    NSTimeZone* tz = [NSTimeZone localTimeZone];
+    //Convert from seconds to milliseconds
+    NSString* surl = [NSString stringWithFormat:@"%@?ts=%@%@%@&highlight=1%@&address=1%@&tz=%ld",
+                      urlNotes, lastDownload, appid, notif, sponsor, prayer, [tz secondsFromGMT] * 1000];
     
     if (!notificationOnly)
         LastNoteDownload = [dateformat stringFromDate:[NSDate date]];
